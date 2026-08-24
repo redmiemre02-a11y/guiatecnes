@@ -85,9 +85,12 @@ function getTagColor(tag: string) {
       <div class="article-main">
         <header class="article-header">
           <div class="article-meta-top">
-            <a href={`/categoria/${primaryTag.toLowerCase()}`} class={`tag ${getTagColor(primaryTag)}`}>
-              {primaryTag}
-            </a>
+            <div style="display:flex; gap:1rem; align-items:center;">
+              <a href={`/categoria/${primaryTag.toLowerCase()}`} class={`tag ${getTagColor(primaryTag)}`}>
+                {primaryTag}
+              </a>
+              <button id="tts-btn" class="tts-btn" title="Escuchar artículo">🎧 Escuchar</button>
+            </div>
             {post.data.readingTime && (
               <span class="reading-time">⏱ {post.data.readingTime} min de lectura</span>
             )}
@@ -482,6 +485,20 @@ function getTagColor(tag: string) {
   :global(.clap-float) { position: absolute; font-size: 1.2rem; font-weight: bold; color: var(--primary); pointer-events: none; animation: floatUp 1s ease-out forwards; }
   @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-50px) scale(1.5); } }
 
+  /* TTS Button */
+  .tts-btn {
+    background: rgba(99, 102, 241, 0.1); color: var(--primary); border: 1px solid var(--primary);
+    padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    display: flex; align-items: center; transition: all 0.2s;
+  }
+  .tts-btn:hover { background: var(--primary); color: white; }
+  .tts-btn.playing { background: #ef4444; border-color: #ef4444; color: white; animation: pulse 2s infinite; }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+  }
+
   /* Lightbox Styles */
   .prose img, .hero-image { cursor: zoom-in; transition: opacity 0.2s; }
   .prose img:hover, .hero-image:hover { opacity: 0.9; }
@@ -555,6 +572,47 @@ function getTagColor(tag: string) {
         
         setTimeout(() => float.remove(), 1000);
       });
+    }
+
+    // TTS Logic (Escuchar Artículo)
+    const ttsBtn = document.getElementById('tts-btn');
+    if (ttsBtn) {
+      let isPlaying = false;
+      let utterance: SpeechSynthesisUtterance | null = null;
+
+      ttsBtn.addEventListener('click', () => {
+        if (isPlaying) {
+          window.speechSynthesis.cancel();
+          isPlaying = false;
+          ttsBtn.innerHTML = '🎧 Escuchar';
+          ttsBtn.classList.remove('playing');
+          return;
+        }
+        
+        const prose = document.querySelector('.prose');
+        if (!prose) return;
+        
+        const text = (prose as HTMLElement).innerText;
+        utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-ES'; // İspanyolca
+        utterance.rate = 1.0;
+        
+        utterance.onend = () => {
+          isPlaying = false;
+          ttsBtn.innerHTML = '🎧 Escuchar';
+          ttsBtn.classList.remove('playing');
+        };
+        
+        window.speechSynthesis.speak(utterance);
+        isPlaying = true;
+        ttsBtn.innerHTML = '⏹ Detener';
+        ttsBtn.classList.add('playing');
+      });
+      
+      // Navigate away: Stop reading
+      document.addEventListener('astro:before-swap', () => {
+         window.speechSynthesis.cancel();
+      }, { once: true });
     }
   });
 </script>
