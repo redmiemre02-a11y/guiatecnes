@@ -194,7 +194,11 @@ const schemaArticle = type === 'article' ? {
   img, video, svg, iframe { max-width: 100%; height: auto; display: block; border-radius: var(--radius); }
   h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; word-wrap: break-word; hyphens: auto; }
 
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+  }
 
   body {
     font-family: var(--font);
@@ -204,21 +208,25 @@ const schemaArticle = type === 'article' ? {
     transition: background-color 0.3s, color 0.3s;
     overflow-x: hidden;
     width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
   }
 
   a { color: var(--primary); text-decoration: none; }
   a:hover { text-decoration: underline; }
 
   /* Prose styles for blog content */
+  .prose { overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; }
   .prose h2 { font-size: 1.6rem; font-weight: 700; margin: 2rem 0 1rem; color: var(--text); }
   .prose h3 { font-size: 1.25rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--text); }
   .prose p { margin-bottom: 1.25rem; color: var(--text); }
   .prose ul, .prose ol { margin: 1rem 0 1.25rem 1.5rem; }
   .prose li { margin-bottom: 0.4rem; }
   .prose strong { color: var(--primary); }
-  .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
-  .prose th { background: var(--primary); color: white; padding: 0.75rem 1rem; text-align: left; }
-  .prose td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); }
+  .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; display: block; overflow-x: auto; }
+  .prose th { background: var(--primary); color: white; padding: 0.75rem 1rem; text-align: left; white-space: nowrap; }
+  .prose td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); min-width: 120px; }
   .prose tr:hover td { background: var(--bg-card-hover); }
   .prose blockquote {
     border-left: 4px solid var(--primary);
