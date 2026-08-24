@@ -1,4 +1,5 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
 import CookieBanner from '../components/CookieBanner.astro';
 import ProgressBar from '../components/ProgressBar.astro';
 import BackToTop from '../components/BackToTop.astro';
@@ -34,7 +35,7 @@ const schemaWebSite = {
   "inLanguage": "es",
   "potentialAction": {
     "@type": "SearchAction",
-    "target": `${siteURL}/?q={search_term_string}`,
+    "target": `${siteURL}/buscar?q={search_term_string}`,
     "query-input": "required name=search_term_string"
   }
 };
@@ -105,6 +106,8 @@ const schemaArticle = type === 'article' ? {
   <script type="application/ld+json" set:html={JSON.stringify(schemaWebSite)} />
   {schemaArticle && <script type="application/ld+json" set:html={JSON.stringify(schemaArticle)} />}
 
+  <ViewTransitions />
+
   <!-- Google AdSense (Alan adını aldıktan sonra buraya kodunu ekle) -->
   <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXX" crossorigin="anonymous"></script> -->
 </head>
@@ -127,10 +130,15 @@ const schemaArticle = type === 'article' ? {
       return 'dark';
     })();
     document.documentElement.setAttribute('data-theme', theme);
-    window.onload = () => {
+  </script>
+
+  <script>
+    document.addEventListener('astro:page-load', () => {
       const toggle = document.getElementById('theme-toggle');
       if(toggle) {
+        const theme = document.documentElement.getAttribute('data-theme');
         document.getElementById('theme-icon').textContent = theme === 'dark' ? '☀️' : '🌙';
+        
         toggle.addEventListener('click', () => {
           const current = document.documentElement.getAttribute('data-theme');
           const next = current === 'dark' ? 'light' : 'dark';
@@ -139,7 +147,7 @@ const schemaArticle = type === 'article' ? {
           document.getElementById('theme-icon').textContent = next === 'dark' ? '☀️' : '🌙';
         });
       }
-    };
+    });
   </script>
   
   <BackToTop />

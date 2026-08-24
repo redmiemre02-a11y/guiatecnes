@@ -1,4 +1,4 @@
----
+﻿---
 ---
 <button id="back-to-top" title="Volver arriba">↑</button>
 
@@ -43,7 +43,7 @@
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('astro:page-load', () => {
     const btt = document.getElementById('back-to-top');
     if(btt) {
       window.addEventListener('scroll', () => {

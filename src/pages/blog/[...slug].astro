@@ -472,6 +472,16 @@ function getTagColor(tag: string) {
     margin: 0;
   }
 
+  /* Clap Button Styles */
+  .clap-wrapper { display: flex; align-items: center; gap: 1rem; margin: 2rem 0; justify-content: center; position: relative; }
+  .clap-btn { background: var(--bg-card); border: 2px solid var(--border); width: 65px; height: 65px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+  .clap-btn:hover { border-color: var(--primary); transform: scale(1.05); }
+  .clap-icon { font-size: 2rem; transition: transform 0.1s; }
+  .clap-btn:active .clap-icon { transform: scale(0.9); }
+  .clap-count { font-size: 1.2rem; font-weight: 700; color: var(--text-muted); min-width: 30px; }
+  :global(.clap-float) { position: absolute; font-size: 1.2rem; font-weight: bold; color: var(--primary); pointer-events: none; animation: floatUp 1s ease-out forwards; }
+  @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-50px) scale(1.5); } }
+
   /* Lightbox Styles */
   .prose img, .hero-image { cursor: zoom-in; transition: opacity 0.2s; }
   .prose img:hover, .hero-image:hover { opacity: 0.9; }
@@ -520,5 +530,31 @@ function getTagColor(tag: string) {
     overlay.addEventListener('click', () => {
       overlay.classList.remove('active');
     });
+
+    // Clap Button Logic
+    const clapBtn = document.getElementById('clap-btn');
+    const clapCount = document.getElementById('clap-count');
+    if (clapBtn && clapCount) {
+      const slug = clapBtn.getAttribute('data-slug');
+      let claps = parseInt(localStorage.getItem(`claps_${slug}`) || Math.floor(Math.random() * 40 + 10).toString());
+      clapCount.textContent = claps.toString();
+
+      clapBtn.addEventListener('click', (e) => {
+        claps++;
+        localStorage.setItem(`claps_${slug}`, claps.toString());
+        clapCount.textContent = claps.toString();
+
+        const float = document.createElement('div');
+        float.className = 'clap-float';
+        float.textContent = '👏 +1';
+        document.body.appendChild(float);
+        
+        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        float.style.left = (rect.left + rect.width / 2 - 20) + 'px';
+        float.style.top = rect.top + 'px';
+        
+        setTimeout(() => float.remove(), 1000);
+      });
+    }
   });
 </script>
