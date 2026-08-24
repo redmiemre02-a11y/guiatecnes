@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import CookieBanner from '../components/CookieBanner.astro';
 import ProgressBar from '../components/ProgressBar.astro';
 import BackToTop from '../components/BackToTop.astro';
@@ -106,7 +106,7 @@ const schemaArticle = type === 'article' ? {
   <script type="application/ld+json" set:html={JSON.stringify(schemaWebSite)} />
   {schemaArticle && <script type="application/ld+json" set:html={JSON.stringify(schemaArticle)} />}
 
-  <ViewTransitions />
+  <ClientRouter />
 
   <!-- Google AdSense (Alan adını aldıktan sonra buraya kodunu ekle) -->
   <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXX" crossorigin="anonymous"></script> -->
