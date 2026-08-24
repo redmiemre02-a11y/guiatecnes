@@ -1,4 +1,4 @@
-﻿---
+---
 const mainLinks = [
   { href: '/', label: 'Inicio' },
   { href: '/categoria/ia', label: '🤖 IA' },
@@ -56,6 +56,9 @@ const currentPath = Astro.url.pathname;
     </nav>
 
     <div class="header-actions">
+      <button class="search-trigger theme-toggle" aria-label="Buscar artículos">
+        <span>🔍</span>
+      </button>
       <button class="theme-toggle" onclick="window.toggleTheme()" aria-label="Cambiar tema">
         <span id="theme-icon">☀️</span>
       </button>

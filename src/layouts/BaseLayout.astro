@@ -3,6 +3,7 @@ import { ClientRouter } from 'astro:transitions';
 import CookieBanner from '../components/CookieBanner.astro';
 import ProgressBar from '../components/ProgressBar.astro';
 import BackToTop from '../components/BackToTop.astro';
+import Search from '../components/Search.astro';
 interface Props {
   title: string;
   description: string;
@@ -113,6 +114,7 @@ const schemaArticle = type === 'article' ? {
 </head>
 <body>
   <ProgressBar />
+  <Search />
   <slot name="header" />
   <main>
     <slot />

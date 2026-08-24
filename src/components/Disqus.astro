@@ -1,0 +1,57 @@
+---
+interface Props {
+  url: string;
+  identifier: string;
+  title: string;
+}
+
+const { url, identifier, title } = Astro.props;
+---
+<div class="comments-wrapper">
+  <h3>💬 Comentarios</h3>
+  <div id="disqus_thread"></div>
+</div>
+
+<style>
+  .comments-wrapper {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .comments-wrapper h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--heading);
+  }
+</style>
+
+<script is:inline define:vars={{ url, identifier, title }}>
+  document.addEventListener('astro:page-load', () => {
+    const d = document;
+    const thread = d.getElementById('disqus_thread');
+    
+    if (thread && !window.disqusLoaded) {
+      window.disqus_config = function () {
+        this.page.url = url;
+        this.page.identifier = identifier;
+        this.page.title = title;
+      };
+      
+      const s = d.createElement('script');
+      // NOTA: 'guiatecnes' kısa adını Disqus hesabından oluşturup değiştirebilirsiniz
+      s.src = 'https://guiatecnes.disqus.com/embed.js'; 
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      window.disqusLoaded = true;
+    } else if (window.DISQUS && thread) {
+      window.DISQUS.reset({
+        reload: true,
+        config: function () {
+          this.page.url = url;
+          this.page.identifier = identifier;
+          this.page.title = title;
+        }
+      });
+    }
+  });
+</script>

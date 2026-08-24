@@ -1,0 +1,170 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PostCard from '../../components/PostCard.astro';
+import AdSenseBanner from '../../components/AdSenseBanner.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  
+  // Get unique authors
+  const authors = [...new Set(posts.map(post => post.data.author || 'Experto Tech'))];
+  
+  return authors.map(author => {
+    const slug = author.toLowerCase().replace(/\s+/g, '-');
+    const authorPosts = posts.filter(p => (p.data.author || 'Experto Tech') === author);
+    
+    return {
+      params: { author: slug },
+      props: { 
+        authorName: author,
+        posts: authorPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+      },
+    };
+  });
+}
+
+const { authorName, posts } = Astro.props;
+---
+
+<BaseLayout 
+  title={`${authorName} - GuíaTecnes`}
+  description={`Artículos sobre tecnología e inteligencia artificial escritos por ${authorName}.`}
+>
+  <Header slot="header" />
+
+  <div class="author-header">
+    <div class="container-sm">
+      <div class="author-profile">
+        <div class="avatar">
+          <span class="emoji">👨‍💻</span>
+        </div>
+        <div class="author-details">
+          <h1>{authorName}</h1>
+          <p class="author-role">Especialista en IA y Ciberseguridad</p>
+          <p class="author-bio">
+            Más de 10 años de experiencia analizando herramientas digitales, optimizando flujos de trabajo con inteligencia artificial y protegiendo la privacidad online. Apasionado por democratizar el acceso a la tecnología.
+          </p>
+          <div class="author-social">
+            <a href="#" target="_blank" rel="noopener noreferrer">𝕏 Twitter</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">in LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Artículos de {authorName}</h2>
+        <p>({posts.length} artículos publicados)</p>
+      </div>
+
+      <div class="posts-grid">
+        {posts.map(post => (
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            slug={post.id.replace(/\.[^/.]+$/, "")}
+            pubDate={post.data.pubDate}
+            tags={post.data.tags}
+            author={post.data.author}
+            readingTime={post.data.readingTime || 5}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <AdSenseBanner variant="banner" />
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .author-header {
+    background: linear-gradient(135deg, rgba(99,102,241,0.05) 0%, rgba(6,182,212,0.05) 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 4rem 0;
+  }
+  
+  .author-profile {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+  
+  .avatar {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, var(--primary) 0%, #06b6d4 100%);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+  }
+  
+  .emoji { font-size: 3.5rem; }
+  
+  .author-details h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+    color: var(--heading);
+  }
+  
+  .author-role {
+    font-size: 1.1rem;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .author-bio {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  
+  .author-social {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .author-social a {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  
+  .author-social a:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .section-header { text-align: center; margin-bottom: 3rem; }
+  .section-header h2 { font-size: 2rem; font-weight: 800; }
+  .section-header p { color: var(--text-muted); }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .author-profile { flex-direction: column; text-align: center; }
+    .author-social { justify-content: center; }
+  }
+</style>

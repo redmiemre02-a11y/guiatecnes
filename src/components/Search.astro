@@ -1,0 +1,105 @@
+---
+---
+<div id="search-modal" class="search-modal">
+  <div class="search-overlay" id="search-overlay"></div>
+  <div class="search-content">
+    <button id="close-search" class="close-search" aria-label="Cerrar búsqueda">&times;</button>
+    <div id="search-container"></div>
+  </div>
+</div>
+
+<style>
+  .search-modal {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 100000;
+    display: flex; justify-content: center; align-items: flex-start;
+    padding-top: 10vh;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .search-modal.active { opacity: 1; pointer-events: all; }
+  .search-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px);
+  }
+  .search-content {
+    position: relative;
+    width: 90%; max-width: 650px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    z-index: 1;
+    max-height: 80vh; overflow-y: auto;
+  }
+  .close-search {
+    position: absolute; top: 1rem; right: 1.5rem;
+    background: none; border: none; font-size: 2.5rem;
+    color: var(--text-muted); cursor: pointer;
+    line-height: 1; padding: 0; margin: 0;
+  }
+  .close-search:hover { color: var(--primary); }
+  
+  /* Pagefind UI overrides for Dark Theme */
+  :global(.pagefind-ui) {
+    --pagefind-ui-scale: 1;
+    --pagefind-ui-primary: var(--primary);
+    --pagefind-ui-text: var(--text);
+    --pagefind-ui-background: var(--bg-card);
+    --pagefind-ui-border: var(--border);
+    --pagefind-ui-tag: rgba(99, 102, 241, 0.15);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 8px;
+    --pagefind-ui-font: var(--font);
+  }
+  
+  :global(.pagefind-ui .pagefind-ui__result-excerpt) { color: var(--text-muted); }
+  :global(.pagefind-ui .pagefind-ui__drawer) { max-height: 50vh; overflow-y: auto; padding-right: 1rem; }
+  :global(.pagefind-ui .pagefind-ui__message) { color: var(--text-muted); font-size: 0.9rem; }
+</style>
+
+<script is:inline>
+  document.addEventListener('astro:page-load', () => {
+    const modal = document.getElementById('search-modal');
+    const overlay = document.getElementById('search-overlay');
+    const closeBtn = document.getElementById('close-search');
+    const searchTriggers = document.querySelectorAll('.search-trigger');
+
+    searchTriggers.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal.classList.add('active');
+        
+        // Dynamic load pagefind if not loaded yet
+        if (!window.pagefindLoaded) {
+          const link = document.createElement('link');
+          link.rel = "stylesheet";
+          link.href = "/pagefind/pagefind-ui.css";
+          document.head.appendChild(link);
+          
+          const script = document.createElement('script');
+          script.src = "/pagefind/pagefind-ui.js";
+          script.onload = () => {
+            new PagefindUI({ element: "#search-container", showSubResults: true, baseUrl: "/" });
+            window.pagefindLoaded = true;
+            setTimeout(() => { document.querySelector('.pagefind-ui__search-input')?.focus(); }, 100);
+          };
+          document.head.appendChild(script);
+        } else {
+          setTimeout(() => { document.querySelector('.pagefind-ui__search-input')?.focus(); }, 100);
+        }
+      });
+    });
+
+    const closeModal = () => modal.classList.remove('active');
+    overlay?.addEventListener('click', closeModal);
+    closeBtn?.addEventListener('click', closeModal);
+    
+    // Close on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+    });
+  });
+</script>
