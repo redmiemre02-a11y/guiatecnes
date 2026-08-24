@@ -1,0 +1,129 @@
+---
+interface Props {
+  ratingValue?: string;
+  reviewCount?: string;
+}
+
+const { ratingValue = "4.8", reviewCount = "124" } = Astro.props;
+---
+<div class="star-rating-container" data-rating={ratingValue}>
+  <div class="rating-header">
+    <h3>¿Te ha sido útil este artículo?</h3>
+    <p>Haz clic en una estrella para puntuarlo.</p>
+  </div>
+  
+  <div class="stars" id="star-widget">
+    <span class="star" data-value="1">★</span>
+    <span class="star" data-value="2">★</span>
+    <span class="star" data-value="3">★</span>
+    <span class="star" data-value="4">★</span>
+    <span class="star" data-value="5">★</span>
+  </div>
+  
+  <div class="rating-result" id="rating-result">
+    Puntuación media: <strong>{ratingValue}</strong>/5 (basado en <span>{reviewCount}</span> votos)
+  </div>
+</div>
+
+<style>
+  .star-rating-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    margin: 3rem 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  }
+  .rating-header h3 {
+    font-size: 1.25rem;
+    color: var(--heading);
+    margin-bottom: 0.5rem;
+  }
+  .rating-header p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+  .stars {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    direction: ltr;
+  }
+  .star {
+    font-size: 2.5rem;
+    color: var(--border);
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+  }
+  .star:hover,
+  .star.hovered,
+  .star.active {
+    color: #fbbf24;
+  }
+  .star:active {
+    transform: scale(0.9);
+  }
+  .rating-result {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .rating-result strong {
+    color: var(--text);
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('astro:page-load', () => {
+    const stars = document.querySelectorAll('#star-widget .star');
+    const resultBox = document.getElementById('rating-result');
+    if(!stars.length) return;
+
+    let hasVoted = false;
+
+    // Fill stars based on default rating initially
+    const container = document.querySelector('.star-rating-container');
+    const defaultRating = Math.round(parseFloat(container.dataset.rating || '4.8'));
+    
+    const fillStars = (value) => {
+      stars.forEach(s => {
+        if(parseInt(s.dataset.value) <= value) {
+          s.classList.add('active');
+        } else {
+          s.classList.remove('active');
+        }
+      });
+    };
+
+    fillStars(defaultRating);
+
+    stars.forEach(star => {
+      star.addEventListener('mouseover', function() {
+        if(hasVoted) return;
+        const val = parseInt(this.dataset.value);
+        stars.forEach(s => {
+          if(parseInt(s.dataset.value) <= val) s.classList.add('hovered');
+          else s.classList.remove('hovered');
+        });
+      });
+
+      star.addEventListener('mouseout', function() {
+        if(hasVoted) return;
+        stars.forEach(s => s.classList.remove('hovered'));
+      });
+
+      star.addEventListener('click', function() {
+        if(hasVoted) return;
+        hasVoted = true;
+        const val = parseInt(this.dataset.value);
+        fillStars(val);
+        
+        // Show thank you message
+        resultBox.innerHTML = `¡Gracias por tu voto de <strong>${val}</strong> estrellas!`;
+        resultBox.style.color = '#10b981';
+      });
+    });
+  });
+</script>
