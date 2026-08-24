@@ -69,6 +69,7 @@ jobs:
           git config user.email "bot@teches.com"
           git add src/content/blog/ progress.json
           git diff --staged --quiet || git commit -m "🤖 $(date '+%Y-%m-%d') — Günlük içerik güncellendi"
+          git pull --rebase origin main
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

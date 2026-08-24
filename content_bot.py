@@ -163,7 +163,10 @@ def fetch_image(keyword: str, tag: str) -> dict:
     encoded = urllib.parse.quote(query)
     url     = f"https://api.pexels.com/v1/search?query={encoded}&per_page=5&orientation=landscape&size=large"
     try:
-        req = urllib.request.Request(url, headers={"Authorization": PEXELS_API_KEY})
+        req = urllib.request.Request(url, headers={
+            "Authorization": PEXELS_API_KEY,
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        })
         with urllib.request.urlopen(req, timeout=8) as r:
             data   = json.loads(r.read().decode())
             photos = data.get("photos", [])
