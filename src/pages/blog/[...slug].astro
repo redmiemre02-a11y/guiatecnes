@@ -471,6 +471,24 @@ function getTagColor(tag: string) {
     line-height: 1.6;
     margin: 0;
   }
+
+  /* Lightbox Styles */
+  .prose img, .hero-image { cursor: zoom-in; transition: opacity 0.2s; }
+  .prose img:hover, .hero-image:hover { opacity: 0.9; }
+  :global(.lightbox-overlay) {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(15,23,42,0.95); backdrop-filter: blur(5px);
+    z-index: 999999; display: flex; justify-content: center; align-items: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease; cursor: zoom-out;
+  }
+  :global(.lightbox-overlay.active) { opacity: 1; pointer-events: all; }
+  :global(.lightbox-img) {
+    max-width: 90%; max-height: 90vh; border-radius: 12px;
+    transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  }
+  :global(.lightbox-overlay.active .lightbox-img) { transform: scale(1); }
+
   @media (max-width: 600px) {
     .author-box { flex-direction: column; gap: 1rem; padding: 1.5rem; }
   }
@@ -481,3 +499,26 @@ function getTagColor(tag: string) {
     .article-sidebar .adsense-sidebar { display: none; }
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Lightbox Logic
+    const overlay = document.createElement('div');
+    overlay.className = 'lightbox-overlay';
+    const imgClone = document.createElement('img');
+    imgClone.className = 'lightbox-img';
+    overlay.appendChild(imgClone);
+    document.body.appendChild(overlay);
+
+    document.querySelectorAll('.prose img, .hero-image').forEach(img => {
+      img.addEventListener('click', () => {
+        imgClone.src = (img as HTMLImageElement).src;
+        overlay.classList.add('active');
+      });
+    });
+
+    overlay.addEventListener('click', () => {
+      overlay.classList.remove('active');
+    });
+  });
+</script>

@@ -1,5 +1,7 @@
 ---
 import CookieBanner from '../components/CookieBanner.astro';
+import ProgressBar from '../components/ProgressBar.astro';
+import BackToTop from '../components/BackToTop.astro';
 interface Props {
   title: string;
   description: string;
@@ -106,28 +108,41 @@ const schemaArticle = type === 'article' ? {
   <!-- Google AdSense (Alan adını aldıktan sonra buraya kodunu ekle) -->
   <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXX" crossorigin="anonymous"></script> -->
 </head>
-
 <body>
+  <ProgressBar />
   <slot name="header" />
   <main>
     <slot />
   </main>
   <slot name="footer" />
 
-  <script>
-    // Dark/Light mode toggle
-    const theme = localStorage.getItem('theme') || 'dark';
+  <script is:inline>
+    const theme = (() => {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+        return localStorage.getItem('theme');
+      }
+      if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+        return 'light';
+      }
+      return 'dark';
+    })();
     document.documentElement.setAttribute('data-theme', theme);
-
-    window.toggleTheme = function() {
-      const current = document.documentElement.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-      document.getElementById('theme-icon').textContent = next === 'dark' ? '☀️' : '🌙';
+    window.onload = () => {
+      const toggle = document.getElementById('theme-toggle');
+      if(toggle) {
+        document.getElementById('theme-icon').textContent = theme === 'dark' ? '☀️' : '🌙';
+        toggle.addEventListener('click', () => {
+          const current = document.documentElement.getAttribute('data-theme');
+          const next = current === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', next);
+          localStorage.setItem('theme', next);
+          document.getElementById('theme-icon').textContent = next === 'dark' ? '☀️' : '🌙';
+        });
+      }
     };
   </script>
-  <!-- BaseLayout footer tag ends around here normally, let's inject before closing body -->
+  
+  <BackToTop />
   <CookieBanner />
 </body>
 </html>
