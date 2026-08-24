@@ -1,4 +1,4 @@
----
+﻿---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
@@ -109,7 +109,7 @@ const categories = [
             <PostCard
               title={post.data.title}
               description={post.data.description}
-              slug={post.slug}
+              slug={post.slug || post.id}
               pubDate={post.data.pubDate}
               tags={post.data.tags}
               author={post.data.author}
