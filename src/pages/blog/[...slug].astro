@@ -8,22 +8,23 @@ import PostCard from '../../components/PostCard.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts
-    .filter(post => post.slug && post.slug.length > 0)
-    .map(post => ({
-      params: { slug: post.slug },
+  return posts.map(post => {
+    // Astro 5 glob loader uses full filename as ID. Remove extension for the URL slug.
+    const slug = post.id.replace(/\.[^/.]+$/, "");
+    return {
+      params: { slug },
       props: post,
-    }));
+    };
+  });
 }
 
 type Props = CollectionEntry<'blog'>;
 const post = Astro.props;
 const { Content } = await render(post);
 
-
 const allPosts = await getCollection('blog');
 const relatedPosts = allPosts
-  .filter(p => p.slug !== post.slug && p.data.tags.some(t => post.data.tags.includes(t)))
+  .filter(p => p.id !== post.id && p.data.tags.some(t => post.data.tags.includes(t)))
   .slice(0, 3);
 
 const dateStr = post.data.pubDate.toLocaleDateString('es-ES', {
