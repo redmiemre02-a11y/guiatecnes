@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Sobre Nosotros - GuíaTecnes"
+  description="Conoce al equipo detrás de GuíaTecnes, tu guía de confianza sobre herramientas de IA, alternativas de software y tecnología en español."
+>
+  <Header slot="header" />
+
+  <div class="container-sm" style="padding: 3rem 1.5rem;">
+    <h1>Sobre Nosotros</h1>
+    <p class="lead">Somos un equipo de apasionados por la tecnología con el objetivo de hacer el mundo digital más accesible para todos los hispanohablantes.</p>
+
+    <h2>¿Qué es GuíaTecnes?</h2>
+    <p>GuíaTecnes nació de una necesidad real: la mayoría del contenido de calidad sobre herramientas de IA, software y tecnología está escrito en inglés. Nosotros queremos cambiar eso.</p>
+    <p>Analizamos, probamos y comparamos herramientas digitales para que tú no tengas que hacerlo. Nuestras reseñas son honestas, nuestras guías son prácticas y siempre buscamos las mejores alternativas gratuitas.</p>
+
+    <h2>Nuestra Misión</h2>
+    <p>Democratizar el acceso a la información tecnológica en español. Creemos que no deberías necesitar hablar inglés para aprovechar las mejores herramientas del mundo digital.</p>
+
+    <h2>¿Por Qué Confiar en Nosotros?</h2>
+    <ul>
+      <li>✅ Probamos personalmente todas las herramientas que recomendamos</li>
+      <li>✅ No aceptamos reseñas pagadas que no estén claramente marcadas</li>
+      <li>✅ Actualizamos nuestro contenido regularmente</li>
+      <li>✅ Somos transparentes sobre nuestros afiliados y patrocinadores</li>
+    </ul>
+
+    <h2>Contacto</h2>
+    <p>¿Tienes alguna pregunta, sugerencia o quieres que analicemos una herramienta en concreto? <a href="/contacto">Escríbenos aquí</a>.</p>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>

@@ -1,0 +1,176 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  slug: string;
+  pubDate: Date;
+  tags: string[];
+  author?: string;
+  readingTime?: number;
+  heroImage?: string;
+}
+
+const { title, description, slug, pubDate, tags = [], author = 'Experto Tech', readingTime = 5, heroImage } = Astro.props;
+
+const safeTags = Array.isArray(tags) ? tags : [];
+const primaryTag = safeTags[0] || 'tecnologia';
+const tagSlug = primaryTag.toLowerCase().replace(/\s+/g, '-');
+
+function getTagColor(tag: string) {
+  const t = tag.toLowerCase();
+  if (t.includes('ia') || t.includes('inteligencia')) return 'tag-ia';
+  if (t.includes('alternativ'))  return 'tag-alternativas';
+  if (t.includes('tecnolog'))    return 'tag-tecnologia';
+  if (t.includes('guia'))        return 'tag-guias';
+  if (t.includes('finanz'))      return 'tag-finanzas';
+  if (t.includes('ciber') || t.includes('segur')) return 'tag-ciberseguridad';
+  if (t.includes('emprend') || t.includes('diner')) return 'tag-emprendimiento';
+  if (t.includes('salud'))       return 'tag-salud';
+  if (t.includes('hogar'))       return 'tag-hogar';
+  if (t.includes('gaming') || t.includes('pc')) return 'tag-gaming';
+  if (t.includes('movil') || t.includes('app')) return 'tag-movil';
+  if (t.includes('famil') || t.includes('nino')) return 'tag-familia';
+  if (t.includes('educa') || t.includes('curso')) return 'tag-educacion';
+  if (t.includes('product'))     return 'tag-productividad';
+  return 'tag-default';
+}
+
+const tagColor = getTagColor(primaryTag);
+const dateStr = pubDate.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<article class="post-card">
+  {heroImage && (
+    <a href={`/blog/${slug}`} class="card-image-wrap">
+      <img src={heroImage} alt={title} class="card-image" loading="lazy" width="400" height="210" />
+    </a>
+  )}
+
+  <div class="card-body">
+    <div class="card-header">
+      <a href={`/categoria/${tagSlug}`} class={`tag ${tagColor}`}>{primaryTag}</a>
+      <span class="reading-time">⏱ {readingTime} min</span>
+    </div>
+
+    <h2 class="card-title">
+      <a href={`/blog/${slug}`}>{title}</a>
+    </h2>
+
+    <p class="card-desc">{description}</p>
+
+    <div class="card-footer">
+      <span class="card-meta">
+        <span class="card-author">✍️ {author}</span>
+        <span class="card-date">{dateStr}</span>
+      </span>
+      <a href={`/blog/${slug}`} class="read-more">Leer más →</a>
+    </div>
+  </div>
+</article>
+
+
+<style>
+  .post-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .card-image-wrap {
+    display: block;
+    overflow: hidden;
+    height: 200px;
+    flex-shrink: 0;
+  }
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    display: block;
+  }
+  .post-card:hover .card-image { transform: scale(1.05); }
+
+  .card-body {
+    padding: 1.25rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+  }
+
+  .post-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    border-color: var(--primary);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .reading-time {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .card-title a {
+    color: var(--text);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .card-title a:hover { color: var(--primary); }
+
+  .card-desc {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.25rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .read-more {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+    transition: gap 0.2s;
+    white-space: nowrap;
+  }
+
+  .read-more:hover { text-decoration: none; letter-spacing: 0.02em; }
+</style>

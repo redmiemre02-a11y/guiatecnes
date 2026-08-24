@@ -1,0 +1,74 @@
+name: 🤖 GuíaTecnes — Günlük İçerik Üretimi
+
+on:
+  # Her gece saat 02:00 (Türkiye saati 05:00) otomatik çalışır
+  schedule:
+    - cron: '0 23 * * *'   # UTC 23:00 = Türkiye 02:00
+
+  # İstersen GitHub panelinden elle de başlatabilirsin
+  workflow_dispatch:
+    inputs:
+      count:
+        description: 'Kaç yazı üretilsin?'
+        required: false
+        default: '2'
+      mode:
+        description: 'Mod: daily veya init'
+        required: false
+        default: 'daily'
+
+jobs:
+  generate-content:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # Dosyaları commit edebilmek için
+
+    steps:
+      - name: 📥 Kodu indir
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🐍 Python kur
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Bağımlılıkları kur
+        run: pip install openai
+
+      - name: ⚙️ config.py oluştur
+        run: |
+          cat > config.py << 'EOF'
+          DEEPSEEK_API_KEY = "${{ secrets.DEEPSEEK_API_KEY }}"
+          DEEPSEEK_MODEL   = "deepseek-chat"
+          PEXELS_API_KEY   = "${{ secrets.PEXELS_API_KEY }}"
+          SITE_URL         = "${{ secrets.SITE_URL }}"
+          SITE_NAME        = "TechES"
+          AUTHOR_NAME      = "Experto Tech"
+          OUTPUT_PATH      = "./src/content/blog/"
+          EOF
+
+      - name: 🤖 İçerik üret
+        run: |
+          MODE="${{ github.event.inputs.mode || 'daily' }}"
+          COUNT="${{ github.event.inputs.count || '2' }}"
+
+          if [ "$MODE" = "init" ]; then
+            python content_bot.py --init
+          else
+            python content_bot.py --daily --count $COUNT
+          fi
+
+      - name: 📊 Durum raporu
+        run: python content_bot.py --status
+
+      - name: 📤 Yazıları GitHub'a gönder
+        run: |
+          git config user.name  "TechES Bot"
+          git config user.email "bot@teches.com"
+          git add src/content/blog/ progress.json
+          git diff --staged --quiet || git commit -m "🤖 $(date '+%Y-%m-%d') — Günlük içerik güncellendi"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,172 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PostCard from '../../components/PostCard.astro';
+import AdSenseBanner from '../../components/AdSenseBanner.astro';
+
+export async function getStaticPaths() {
+  const defaultTags = ['ia', 'alternativas', 'tecnologia', 'guias'];
+
+  let allPosts: any[] = [];
+  try {
+    allPosts = await getCollection('blog') || [];
+  } catch {
+    allPosts = [];
+  }
+
+  // Her post'un tags alanını güvenli şekilde al
+  const postTags: string[] = [];
+  for (const p of allPosts) {
+    const tags = p?.data?.tags;
+    if (Array.isArray(tags)) {
+      for (const t of tags) {
+        if (typeof t === 'string') {
+          postTags.push(t.toLowerCase());
+        }
+      }
+    }
+  }
+
+  const allTags = [...new Set([...postTags, ...defaultTags])];
+
+  return allTags.map(tag => ({
+    params: { tag },
+    props: {
+      posts: allPosts.filter(p => {
+        const tags = p?.data?.tags;
+        return Array.isArray(tags) && tags.map((t: string) => t.toLowerCase()).includes(tag);
+      })
+    },
+  }));
+}
+
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+const safePosts = Array.isArray(posts) ? posts : [];
+const sortedPosts = [...safePosts].sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+
+
+const tagLabels: Record<string, string> = {
+  ia:             '🤖 IA Herramientas',
+  alternativas:   '🔄 Alternativas de Software',
+  tecnologia:     '💻 Tecnología y Vida Cotidiana',
+  guias:          '📖 Guías y Tutoriales',
+  finanzas:       '💰 Finanzas Digitales',
+  ciberseguridad: '🔒 Ciberseguridad y Privacidad',
+  emprendimiento: '🚀 Ganar Dinero Online',
+  salud:          '🏥 Salud Digital',
+  hogar:          '🏠 Hogar Inteligente',
+  gaming:         '🎮 Gaming y PC',
+  movil:          '📱 Apps Móviles',
+  familia:        '👶 Familia y Niños Online',
+  educacion:      '🎓 Educación Online',
+  productividad:  '⚡ Productividad',
+};
+
+const tagDescs: Record<string, string> = {
+  ia:             'Análisis y comparativas de las mejores herramientas de inteligencia artificial. Probadas y honestas.',
+  alternativas:   'Encuentra la mejor alternativa gratuita o de pago a los programas más populares del mercado.',
+  tecnologia:     'Noticias, análisis y trucos de tecnología para mejorar tu vida cotidiana.',
+  guias:          'Tutoriales paso a paso para dominar la tecnología y las herramientas digitales.',
+  finanzas:       'Inversión, criptomonedas, bancos digitales y apps para gestionar tu dinero mejor.',
+  ciberseguridad: 'VPNs, antivirus, privacidad online y cómo protegerte de hackers y estafas.',
+  emprendimiento: 'Formas reales de ganar dinero online: freelance, blogs, afiliados y negocios digitales.',
+  salud:          'Apps de bienestar, smartwatches, meditación y tecnología para vivir más sano.',
+  hogar:          'Gadgets inteligentes, domótica barata y cómo automatizar tu casa sin gastar una fortuna.',
+  gaming:         'Juegos, hardware, optimización de PC y guías para gamers de todos los niveles.',
+  movil:          'Las mejores apps para Android e iPhone, análisis de móviles y trucos para tu smartphone.',
+  familia:        'Internet seguro para niños, control parental, apps educativas y tecnología familiar.',
+  educacion:      'Cursos online gratuitos, plataformas de aprendizaje y cómo usar la IA para estudiar.',
+  productividad:  'Herramientas, técnicas y apps para trabajar más inteligente y rendir al máximo.',
+};
+
+const label = tagLabels[tag!] || `📂 ${tag}`;
+const desc  = tagDescs[tag!]  || `Todos los artículos sobre ${tag} en TechES.`;
+
+---
+
+<BaseLayout
+  title={`${label} - TechES`}
+  description={desc}
+>
+  <Header slot="header" />
+
+  <section class="cat-page">
+    <div class="container">
+      <div class="cat-header">
+        <h1>{label}</h1>
+        <p>{desc}</p>
+        <span class="post-count">{sortedPosts.length} artículo{sortedPosts.length !== 1 ? 's' : ''}</span>
+      </div>
+
+      <AdSenseBanner variant="banner" />
+
+      {sortedPosts.length > 0 ? (
+        <div class="posts-grid">
+          {sortedPosts.map((post: any) => (
+            <PostCard
+              title={post.data.title}
+              description={post.data.description}
+              slug={post.slug}
+              pubDate={post.data.pubDate}
+              tags={post.data.tags}
+              author={post.data.author}
+              readingTime={post.data.readingTime || 5}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <p>🚀 Artículos en preparación. ¡Vuelve pronto!</p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .cat-page { padding: 3rem 0; }
+
+  .cat-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding: 2.5rem;
+    background: var(--bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .cat-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .cat-header p { color: var(--text-muted); max-width: 500px; margin: 0 auto 1rem; }
+  .post-count {
+    display: inline-block;
+    background: rgba(99,102,241,0.1);
+    color: var(--primary);
+    border: 1px solid rgba(99,102,241,0.2);
+    padding: 0.25rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-muted);
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    border: 1px dashed var(--border);
+  }
+</style>

@@ -1,0 +1,54 @@
+﻿---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Política de Privacidad - GuíaTecnes"
+  description="Política de privacidad de GuíaTecnes. Información sobre cómo recopilamos, usamos y protegemos tus datos personales."
+>
+  <Header slot="header" />
+
+  <div class="container-sm" style="padding: 3rem 1.5rem;">
+    <h1>Política de Privacidad</h1>
+    <p><em>Última actualización: {new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</em></p>
+
+    <h2>1. Información que Recopilamos</h2>
+    <p>En GuíaTecnes recopilamos información limitada para mejorar tu experiencia. Esto incluye datos de uso anónimos a través de herramientas de análisis como Google Analytics.</p>
+
+    <h2>2. Uso de Cookies</h2>
+    <p>Utilizamos cookies propias y de terceros para analizar el tráfico del sitio y personalizar el contenido. Entre ellas:</p>
+    <ul>
+      <li><strong>Google Analytics:</strong> Para analizar el comportamiento de los visitantes de forma anónima.</li>
+      <li><strong>Google AdSense:</strong> Para mostrar anuncios relevantes y personalizados.</li>
+    </ul>
+    <p>Puedes desactivar las cookies en la configuración de tu navegador en cualquier momento.</p>
+
+    <h2>3. Google AdSense y Publicidad</h2>
+    <p>Este sitio utiliza Google AdSense para mostrar publicidad. Google, como proveedor externo, utiliza cookies para mostrar anuncios basados en las visitas previas del usuario a este y otros sitios web.</p>
+    <p>Los usuarios pueden inhabilitar el uso de la cookie de DoubleClick para la publicidad basada en intereses visitando <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Configuración de anuncios de Google</a>.</p>
+
+    <h2>4. Links a Terceros</h2>
+    <p>Nuestro sitio puede contener enlaces a otros sitios web. No somos responsables de las prácticas de privacidad de esos sitios.</p>
+
+    <h2>5. Tus Derechos (RGPD)</h2>
+    <p>Si eres residente en la Unión Europea, tienes derecho a acceder, rectificar o eliminar tus datos personales. Para ejercer estos derechos, <a href="/contacto">contáctanos</a>.</p>
+
+    <h2>6. Contacto</h2>
+    <p>Si tienes preguntas sobre esta política de privacidad, puedes <a href="/contacto">escribirnos aquí</a>.</p>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+  h2 { font-size: 1.3rem; font-weight: 700; margin: 2rem 0 0.75rem; }
+  p { color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; }
+  em { color: var(--text-muted); font-size: 0.9rem; }
+  ul { color: var(--text-muted); line-height: 1.8; padding-left: 1.5rem; margin-bottom: 1rem; }
+  li { margin-bottom: 0.4rem; }
+  a { color: var(--primary); }
+  strong { color: var(--text); }
+</style>

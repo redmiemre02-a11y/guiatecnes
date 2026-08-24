@@ -1,0 +1,385 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import AdSenseBanner from '../../components/AdSenseBanner.astro';
+import PostCard from '../../components/PostCard.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts
+    .filter(post => post.slug && post.slug.length > 0)
+    .map(post => ({
+      params: { slug: post.slug },
+      props: post,
+    }));
+}
+
+type Props = CollectionEntry<'blog'>;
+const post = Astro.props;
+const { Content } = await render(post);
+
+
+const allPosts = await getCollection('blog');
+const relatedPosts = allPosts
+  .filter(p => p.slug !== post.slug && p.data.tags.some(t => post.data.tags.includes(t)))
+  .slice(0, 3);
+
+const dateStr = post.data.pubDate.toLocaleDateString('es-ES', {
+  year: 'numeric', month: 'long', day: 'numeric'
+});
+
+const primaryTag = post.data.tags[0] || 'tecnologia';
+
+function getTagColor(tag: string) {
+  const t = tag.toLowerCase();
+  if (t.includes('ia') || t.includes('inteligencia')) return 'tag-ia';
+  if (t.includes('alternativ')) return 'tag-alternativas';
+  if (t.includes('tecnolog')) return 'tag-tecnologia';
+  if (t.includes('guia') || t.includes('guías')) return 'tag-guias';
+  return 'tag-default';
+}
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  type="article"
+  pubDate={post.data.pubDate}
+  author={post.data.author}
+>
+  <Header slot="header" />
+
+  <article class="article-page">
+    <div class="container breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href={`/categoria/${primaryTag.toLowerCase()}`}>{primaryTag}</a>
+      <span>›</span>
+      <span>{post.data.title.slice(0, 40)}...</span>
+    </div>
+
+    <!-- HERO IMAGE -->
+    {post.data.heroImage && (
+      <div class="hero-image-wrap container">
+        <img
+          src={post.data.heroImage}
+          alt={post.data.heroImageAlt || post.data.title}
+          class="hero-image"
+          loading="eager"
+          width="1200"
+          height="630"
+        />
+        {post.data.photographer && (
+          <p class="photo-credit">
+            📷 Foto: <a href={post.data.photographerUrl || '#'} target="_blank" rel="noopener noreferrer">{post.data.photographer}</a> vía Pexels
+          </p>
+        )}
+      </div>
+    )}
+
+    <div class="container article-layout">
+      <div class="article-main">
+        <header class="article-header">
+          <div class="article-meta-top">
+            <a href={`/categoria/${primaryTag.toLowerCase()}`} class={`tag ${getTagColor(primaryTag)}`}>
+              {primaryTag}
+            </a>
+            {post.data.readingTime && (
+              <span class="reading-time">⏱ {post.data.readingTime} min de lectura</span>
+            )}
+          </div>
+
+          <h1 class="article-title">{post.data.title}</h1>
+          <p class="article-desc">{post.data.description}</p>
+
+
+          <div class="article-meta">
+            <span>✍️ {post.data.author || 'Experto Tech'}</span>
+            <span>📅 {dateStr}</span>
+            {post.data.updatedDate && (
+              <span>🔄 Actualizado: {post.data.updatedDate.toLocaleDateString('es-ES')}</span>
+            )}
+          </div>
+
+          <div class="share-bar">
+            <span>Compartir:</span>
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(Astro.url.toString())}`}
+              target="_blank" rel="noopener noreferrer" class="share-btn share-x"
+            >𝕏 Twitter</a>
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent(post.data.title + ' ' + Astro.url.toString())}`}
+              target="_blank" rel="noopener noreferrer" class="share-btn share-wa"
+            >💬 WhatsApp</a>
+            <a
+              href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(Astro.url.toString())}`}
+              target="_blank" rel="noopener noreferrer" class="share-btn share-li"
+            >in LinkedIn</a>
+          </div>
+        </header>
+
+        <AdSenseBanner variant="in-article" />
+
+        <div class="prose">
+          <Content />
+        </div>
+
+        <AdSenseBanner variant="in-article" />
+
+        <div class="article-tags">
+          <strong>Etiquetas:</strong>
+          {post.data.tags.map(tag => (
+            <a href={`/categoria/${tag.toLowerCase()}`} class={`tag ${getTagColor(tag)}`}>{tag}</a>
+          ))}
+        </div>
+
+        {relatedPosts.length > 0 && (
+          <section class="related-posts">
+            <h2>Artículos Relacionados</h2>
+            <div class="related-grid">
+              {relatedPosts.map(p => (
+                <PostCard
+                  title={p.data.title}
+                  description={p.data.description}
+                  slug={p.slug}
+                  pubDate={p.data.pubDate}
+                  tags={p.data.tags}
+                  author={p.data.author}
+                  readingTime={p.data.readingTime || 5}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+
+      <aside class="article-sidebar">
+        <AdSenseBanner variant="sidebar" />
+
+        <div class="sidebar-card">
+          <h3>📂 Categorías</h3>
+          <a href="/categoria/ia">🤖 IA Herramientas</a>
+          <a href="/categoria/alternativas">🔄 Alternativas</a>
+          <a href="/categoria/finanzas">💰 Finanzas</a>
+          <a href="/categoria/ciberseguridad">🔒 Ciberseguridad</a>
+          <a href="/categoria/emprendimiento">🚀 Ganar Dinero</a>
+          <a href="/categoria/salud">🏥 Salud Digital</a>
+          <a href="/categoria/hogar">🏠 Hogar Inteligente</a>
+          <a href="/categoria/gaming">🎮 Gaming y PC</a>
+          <a href="/categoria/movil">📱 Apps Móviles</a>
+          <a href="/categoria/familia">👶 Familia</a>
+          <a href="/categoria/educacion">🎓 Educación</a>
+          <a href="/categoria/productividad">⚡ Productividad</a>
+          <a href="/categoria/tecnologia">💻 Tecnología</a>
+          <a href="/categoria/guias">📖 Guías</a>
+        </div>
+
+        <div class="sidebar-card newsletter-mini">
+          <h3>📬 Newsletter</h3>
+          <p>Recibe lo mejor en tecnología cada semana.</p>
+          <form action="https://formspree.io/f/XXXXX" method="POST">
+            <input type="email" name="email" placeholder="tu@email.com" required />
+            <button type="submit">Suscribirme</button>
+          </form>
+        </div>
+      </aside>
+    </div>
+  </article>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .article-page { padding: 1.5rem 0 3rem; }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary); }
+
+  /* HERO IMAGE */
+  .hero-image-wrap {
+    margin: 1.5rem auto 0;
+    border-radius: 16px;
+    overflow: hidden;
+    max-height: 480px;
+  }
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 16px;
+  }
+  .photo-credit {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-align: right;
+    margin-top: 0.4rem;
+    padding: 0 0.25rem;
+  }
+  .photo-credit a { color: var(--text-muted); text-decoration: underline; }
+
+  .article-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .article-header { margin-bottom: 1.5rem; }
+
+  .article-meta-top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .reading-time { font-size: 0.82rem; color: var(--text-muted); }
+
+  .article-title {
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .article-desc {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    border-left: 3px solid var(--primary);
+    padding-left: 1rem;
+  }
+
+  .article-meta {
+    display: flex;
+    gap: 1.25rem;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .share-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .share-btn {
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .share-btn:hover { opacity: 0.8; text-decoration: none; }
+  .share-x { background: #000; color: white; }
+  .share-wa { background: #25D366; color: white; }
+  .share-li { background: #0A66C2; color: white; }
+
+  .article-tags {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+
+  .related-posts { margin-top: 3rem; }
+  .related-posts h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1.25rem; }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  .article-sidebar {
+    position: sticky;
+    top: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .sidebar-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+
+  .sidebar-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; }
+
+  .sidebar-card a {
+    display: block;
+    padding: 0.4rem 0;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.2s;
+  }
+
+  .sidebar-card a:last-child { border-bottom: none; }
+  .sidebar-card a:hover { color: var(--primary); }
+
+  .newsletter-mini p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem; line-height: 1.5; }
+
+  .newsletter-mini input {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .newsletter-mini button {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.65rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: background 0.2s;
+  }
+
+  .newsletter-mini button:hover { background: var(--primary-dark); }
+
+  @media (max-width: 900px) {
+    .article-layout { grid-template-columns: 1fr; }
+    .article-sidebar { position: static; order: -1; }
+    .article-sidebar .adsense-sidebar { display: none; }
+  }
+</style>

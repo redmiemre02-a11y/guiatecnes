@@ -1,0 +1,299 @@
+﻿---
+const mainLinks = [
+  { href: '/', label: 'Inicio' },
+  { href: '/categoria/ia', label: '🤖 IA' },
+  { href: '/categoria/alternativas', label: '🔄 Alternativas' },
+  { href: '/categoria/finanzas', label: '💰 Finanzas' },
+  { href: '/categoria/ciberseguridad', label: '🔒 Seguridad' },
+  { href: '/categoria/emprendimiento', label: '🚀 Ganar Dinero' },
+];
+
+const moreLinks = [
+  { href: '/categoria/tecnologia', label: '💻 Tecnología', desc: 'Apps, gadgets y trucos' },
+  { href: '/categoria/guias', label: '📖 Guías', desc: 'Tutoriales paso a paso' },
+  { href: '/categoria/salud', label: '🏥 Salud Digital', desc: 'Bienestar y tecnología' },
+  { href: '/categoria/hogar', label: '🏠 Hogar Inteligente', desc: 'Smart home y gadgets' },
+  { href: '/categoria/gaming', label: '🎮 Gaming y PC', desc: 'Juegos y hardware' },
+  { href: '/categoria/movil', label: '📱 Apps Móviles', desc: 'Android e iOS' },
+  { href: '/categoria/familia', label: '👶 Familia y Niños', desc: 'Internet seguro' },
+  { href: '/categoria/educacion', label: '🎓 Educación Online', desc: 'Cursos y aprendizaje' },
+  { href: '/categoria/productividad', label: '⚡ Productividad', desc: 'Trabaja más inteligente' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo">
+      <span class="logo-icon">⚡</span>
+      <span class="logo-text">GuíaTecnes</span>
+    </a>
+
+    <nav class="main-nav" id="main-nav">
+      {mainLinks.map(link => (
+        <a href={link.href} class={`nav-link ${currentPath === link.href ? 'active' : ''}`}>
+          {link.label}
+        </a>
+      ))}
+
+      <!-- Dropdown: Más categorías -->
+      <div class="dropdown">
+        <button class="nav-link dropdown-btn" aria-haspopup="true" aria-expanded="false" id="dropdown-btn">
+          Más ▾
+        </button>
+        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+          <div class="dropdown-grid">
+            {moreLinks.map(link => (
+              <a href={link.href} class="dropdown-item" role="menuitem">
+                <span class="di-label">{link.label}</span>
+                <span class="di-desc">{link.desc}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="header-actions">
+      <button class="theme-toggle" onclick="window.toggleTheme()" aria-label="Cambiar tema">
+        <span id="theme-icon">☀️</span>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Menú" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav (all links) -->
+  <nav class="mobile-nav" id="mobile-nav">
+    {[...mainLinks, ...moreLinks].map(link => (
+      <a href={link.href} class="mobile-link">{link.label}</a>
+    ))}
+  </nav>
+</header>
+
+<script>
+  // Theme toggle
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  const icon = document.getElementById('theme-icon');
+  if (icon) icon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+  window.toggleTheme = function() {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    const i = document.getElementById('theme-icon');
+    if (i) i.textContent = next === 'dark' ? '☀️' : '🌙';
+  };
+
+  // Hamburger
+  function toggleMenu() {
+    document.getElementById('mobile-nav')?.classList.toggle('open');
+    document.getElementById('hamburger')?.classList.toggle('active');
+  }
+  window.toggleMenu = toggleMenu;
+
+  // Dropdown
+  const btn = document.getElementById('dropdown-btn');
+  const menu = document.getElementById('dropdown-menu');
+
+  btn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = menu?.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  document.addEventListener('click', () => {
+    menu?.classList.remove('open');
+    btn?.setAttribute('aria-expanded', 'false');
+  });
+
+  menu?.addEventListener('click', (e) => e.stopPropagation());
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--header-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    gap: 1rem;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: var(--text);
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .logo-text { color: var(--primary); }
+
+  .main-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .nav-link {
+    padding: 0.4rem 0.7rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font);
+  }
+  .nav-link:hover, .nav-link.active {
+    color: var(--primary);
+    background: rgba(99,102,241,0.1);
+    text-decoration: none;
+  }
+
+  /* DROPDOWN */
+  .dropdown { position: relative; }
+
+  .dropdown-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 0.75rem;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+    min-width: 520px;
+    z-index: 200;
+  }
+  .dropdown-menu.open { display: block; }
+
+  .dropdown-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.35rem;
+  }
+
+  .dropdown-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .dropdown-item:hover {
+    background: rgba(99,102,241,0.1);
+    text-decoration: none;
+  }
+  .di-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .di-desc {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  /* HEADER ACTIONS */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .theme-toggle {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+  }
+  .theme-toggle:hover { background: var(--bg-card-hover); }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.4rem;
+  }
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  /* MOBILE NAV */
+  .mobile-nav {
+    display: none;
+    flex-direction: column;
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+    gap: 0.2rem;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  .mobile-nav.open { display: flex; }
+
+  .mobile-link {
+    padding: 0.55rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .mobile-link:hover {
+    color: var(--primary);
+    background: rgba(99,102,241,0.1);
+    text-decoration: none;
+  }
+
+  @media (max-width: 900px) {
+    .hamburger { display: flex; }
+    .main-nav { display: none; }
+    .dropdown-menu { min-width: 300px; right: -60px; }
+    .dropdown-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

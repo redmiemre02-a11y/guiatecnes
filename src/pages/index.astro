@@ -1,0 +1,392 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PostCard from '../components/PostCard.astro';
+import AdSenseBanner from '../components/AdSenseBanner.astro';
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const recentPosts = sortedPosts.slice(0, 9);
+
+const categories = [
+  {
+    name: 'IA Herramientas',     slug: 'ia',             icon: '🤖', desc: 'Las mejores herramientas de IA analizadas y comparadas.',        color: '#6366f1', bg: 'rgba(99,102,241,0.1)',
+  },
+  { name: 'Alternativas',         slug: 'alternativas',   icon: '🔄', desc: 'Alternativas gratis a los programas más populares.',              color: '#10b981', bg: 'rgba(16,185,129,0.1)',
+  },
+  { name: 'Finanzas Digitales',   slug: 'finanzas',       icon: '💰', desc: 'Inversión, cripto y apps para gestionar tu dinero.',             color: '#eab308', bg: 'rgba(234,179,8,0.1)',
+  },
+  { name: 'Ciberseguridad',       slug: 'ciberseguridad', icon: '🔒', desc: 'VPNs, antivirus y cómo protegerte de hackers.',                  color: '#ef4444', bg: 'rgba(239,68,68,0.1)',
+  },
+  { name: 'Ganar Dinero Online',  slug: 'emprendimiento', icon: '🚀', desc: 'Formas reales de generar ingresos desde casa.',                  color: '#f97316', bg: 'rgba(249,115,22,0.1)',
+  },
+  { name: 'Salud Digital',        slug: 'salud',          icon: '🏥', desc: 'Apps de bienestar, smartwatches y tecnología para vivir sano.',  color: '#14b8a6', bg: 'rgba(20,184,166,0.1)',
+  },
+  { name: 'Hogar Inteligente',    slug: 'hogar',          icon: '🏠', desc: 'Gadgets y domótica barata para automatizar tu casa.',            color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)',
+  },
+  { name: 'Gaming y PC',          slug: 'gaming',         icon: '🎮', desc: 'Juegos, hardware y optimización de PC para gamers.',             color: '#ec4899', bg: 'rgba(236,72,153,0.1)',
+  },
+  { name: 'Apps Móviles',         slug: 'movil',          icon: '📱', desc: 'Las mejores apps para Android e iPhone en 2026.',                color: '#06b6d4', bg: 'rgba(6,182,212,0.1)',
+  },
+  { name: 'Familia y Niños',      slug: 'familia',        icon: '👶', desc: 'Internet seguro para niños, control parental y apps edu.',       color: '#f59e0b', bg: 'rgba(245,158,11,0.1)',
+  },
+  { name: 'Educación Online',     slug: 'educacion',      icon: '🎓', desc: 'Cursos gratis con certificado y aprende con IA.',                color: '#3b82f6', bg: 'rgba(59,130,246,0.1)',
+  },
+  { name: 'Productividad',        slug: 'productividad',  icon: '⚡', desc: 'Apps y técnicas para trabajar más inteligente.',                 color: '#10b981', bg: 'rgba(16,185,129,0.1)',
+  },
+  { name: 'Tecnología',           slug: 'tecnologia',     icon: '💻', desc: 'Noticias y trucos de tecnología para tu vida cotidiana.',        color: '#64748b', bg: 'rgba(100,116,139,0.1)',
+  },
+  { name: 'Guías y Tutoriales',   slug: 'guias',          icon: '📖', desc: 'Paso a paso para dominar cualquier herramienta digital.',        color: '#a855f7', bg: 'rgba(168,85,247,0.1)',
+  },
+];
+---
+
+<BaseLayout
+  title="GuíaTecnes - Herramientas de IA, Tecnología y Alternativas en Español"
+  description="Descubre las mejores herramientas de inteligencia artificial, alternativas de software gratuitas y guías de tecnología. Todo en español, actualizado cada día en guiatecnes.com"
+>
+  <Header slot="header" />
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">🚀 La guía de tecnología más completa en español</div>
+      <h1 class="hero-title">
+        Domina la <span class="gradient-text">Inteligencia Artificial</span><br />
+        y la Tecnología Moderna
+      </h1>
+      <p class="hero-subtitle">
+        Análisis honestos, alternativas gratuitas y guías paso a paso.<br />
+        Sin tecnicismos innecesarios, directo al grano.
+      </p>
+      <div class="hero-actions">
+        <a href="/categoria/ia" class="btn-primary">Ver Herramientas de IA →</a>
+        <a href="/categoria/alternativas" class="btn-secondary">Alternativas Gratuitas</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><strong>50+</strong><span>Artículos</span></div>
+        <div class="stat"><strong>100%</strong><span>En Español</span></div>
+        <div class="stat"><strong>Free</strong><span>Siempre gratis</span></div>
+      </div>
+    </div>
+  </section>
+
+  <AdSenseBanner variant="banner" />
+
+  <!-- CATEGORIES SECTION -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Explora por Categoría</h2>
+        <p>Todo lo que necesitas saber, organizado para ti</p>
+      </div>
+      <div class="categories-grid">
+        {categories.map(cat => (
+          <a href={`/categoria/${cat.slug}`} class="category-card" style={`--cat-color: ${cat.color}; --cat-bg: ${cat.bg}`}>
+            <span class="cat-icon">{cat.icon}</span>
+            <h3>{cat.name}</h3>
+            <p>{cat.desc}</p>
+            <span class="cat-link">Ver artículos →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- RECENT POSTS SECTION -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Artículos Recientes</h2>
+        <p>Actualizados semanalmente con lo último en tecnología</p>
+      </div>
+
+      {recentPosts.length > 0 ? (
+        <div class="posts-grid">
+          {recentPosts.map(post => (
+            <PostCard
+              title={post.data.title}
+              description={post.data.description}
+              slug={post.slug}
+              pubDate={post.data.pubDate}
+              tags={post.data.tags}
+              author={post.data.author}
+              readingTime={post.data.readingTime || 5}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <p>🚀 Los artículos están en camino. ¡Vuelve pronto!</p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <AdSenseBanner variant="banner" />
+
+  <!-- NEWSLETTER SECTION -->
+  <section class="section newsletter-section">
+    <div class="container-sm">
+      <div class="newsletter-card">
+        <span class="nl-emoji">📬</span>
+        <h2>Suscríbete al boletín semanal</h2>
+        <p>Recibe las mejores herramientas de IA y alternativas gratuitas directamente en tu bandeja de entrada. Sin spam, solo lo mejor.</p>
+        <form class="nl-form" action="https://formspree.io/f/XXXXX" method="POST">
+          <input type="email" name="email" placeholder="tu@email.com" required />
+          <button type="submit">Suscribirme gratis →</button>
+        </form>
+        <small>✅ Más de 1.000 lectores. Cancela cuando quieras.</small>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  /* HERO */
+  .hero {
+    padding: 5rem 1.5rem 4rem;
+    text-align: center;
+    background: radial-gradient(ellipse at top, rgba(99,102,241,0.12) 0%, transparent 60%);
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(99,102,241,0.12);
+    color: var(--primary);
+    border: 1px solid rgba(99,102,241,0.3);
+    border-radius: 50px;
+    padding: 0.35rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.02em;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 560px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+    padding: 0.8rem 1.75rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover {
+    background: var(--primary-dark);
+    text-decoration: none;
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: var(--bg-card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 0.8rem 1.75rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    text-decoration: none;
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+  }
+
+  .stat { display: flex; flex-direction: column; align-items: center; }
+  .stat strong { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+  .stat span { font-size: 0.8rem; color: var(--text-muted); }
+
+  /* SECTION */
+  .section { padding: 4rem 0; }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-header p { color: var(--text-muted); }
+
+  /* CATEGORIES */
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .category-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    text-decoration: none;
+    transition: all 0.25s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .category-card:hover {
+    border-color: var(--cat-color);
+    background: var(--cat-bg);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    text-decoration: none;
+  }
+
+  .cat-icon { font-size: 2rem; }
+
+  .category-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .category-card p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .cat-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--cat-color);
+    margin-top: 0.25rem;
+  }
+
+  /* POSTS GRID */
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-muted);
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    border: 1px dashed var(--border);
+  }
+
+  /* NEWSLETTER */
+  .newsletter-section { padding: 3rem 0 5rem; }
+
+  .newsletter-card {
+    background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(6,182,212,0.08) 100%);
+    border: 1px solid rgba(99,102,241,0.2);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .nl-emoji { font-size: 2.5rem; }
+
+  .newsletter-card h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin: 0.75rem 0 0.5rem;
+  }
+
+  .newsletter-card p {
+    color: var(--text-muted);
+    max-width: 480px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+  }
+
+  .nl-form {
+    display: flex;
+    gap: 0.75rem;
+    max-width: 420px;
+    margin: 0 auto 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .nl-form input {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-card);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 0.9rem;
+  }
+
+  .nl-form input:focus { outline: 2px solid var(--primary); border-color: transparent; }
+
+  .nl-form button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+
+  .nl-form button:hover { background: var(--primary-dark); }
+
+  .newsletter-card small { font-size: 0.8rem; color: var(--text-muted); }
+</style>

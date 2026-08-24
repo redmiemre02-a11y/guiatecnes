@@ -1,0 +1,233 @@
+﻿---
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  canonicalURL?: string;
+  type?: 'website' | 'article';
+  pubDate?: Date;
+  author?: string;
+}
+
+const {
+  title,
+  description,
+  image = '/og-default.png',
+  canonicalURL = new URL(Astro.url.pathname, Astro.site).toString(),
+  type = 'website',
+  pubDate,
+  author = 'Experto Tech',
+} = Astro.props;
+
+const siteName = 'GuíaTecnes';
+const siteURL = Astro.site?.toString() || 'https://guiatecnes.com';
+
+const schemaWebSite = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": siteName,
+  "url": siteURL,
+  "description": "Tu guía definitiva de herramientas de IA, alternativas de software y tecnología en español.",
+  "inLanguage": "es",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": `${siteURL}/?q={search_term_string}`,
+    "query-input": "required name=search_term_string"
+  }
+};
+
+const schemaArticle = type === 'article' ? {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "image": new URL(image, siteURL).toString(),
+  "author": {
+    "@type": "Person",
+    "name": author
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": siteName,
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${siteURL}/logo.png`
+    }
+  },
+  "datePublished": pubDate?.toISOString(),
+  "dateModified": pubDate?.toISOString(),
+  "mainEntityOfPage": canonicalURL,
+  "inLanguage": "es"
+} : null;
+---
+
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="generator" content={Astro.generator} />
+
+  <!-- SEO Primary -->
+  <title>{title} | {siteName}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content={type} />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(image, siteURL).toString()} />
+  <meta property="og:site_name" content={siteName} />
+  <meta property="og:locale" content="es_ES" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(image, siteURL).toString()} />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json" set:html={JSON.stringify(schemaWebSite)} />
+  {schemaArticle && <script type="application/ld+json" set:html={JSON.stringify(schemaArticle)} />}
+
+  <!-- Google AdSense (Alan adını aldıktan sonra buraya kodunu ekle) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+
+<body>
+  <slot name="header" />
+  <main>
+    <slot />
+  </main>
+  <slot name="footer" />
+
+  <script>
+    // Dark/Light mode toggle
+    const theme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+
+    window.toggleTheme = function() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      document.getElementById('theme-icon').textContent = next === 'dark' ? '☀️' : '🌙';
+    };
+  </script>
+</body>
+</html>
+
+<style is:global>
+  :root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --accent: #06b6d4;
+    --cat-ia: #6366f1;
+    --cat-alt: #10b981;
+    --cat-tech: #f59e0b;
+    --cat-guide: #ef4444;
+    --radius: 12px;
+    --font: 'Inter', system-ui, sans-serif;
+  }
+
+  [data-theme="dark"] {
+    --bg: #0f172a;
+    --bg-card: #1e293b;
+    --bg-card-hover: #263347;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --header-bg: rgba(15, 23, 42, 0.92);
+  }
+
+  [data-theme="light"] {
+    --bg: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f1f5f9;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --header-bg: rgba(248, 250, 252, 0.92);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+  /* Prose styles for blog content */
+  .prose h2 { font-size: 1.6rem; font-weight: 700; margin: 2rem 0 1rem; color: var(--text); }
+  .prose h3 { font-size: 1.25rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--text); }
+  .prose p { margin-bottom: 1.25rem; color: var(--text); }
+  .prose ul, .prose ol { margin: 1rem 0 1.25rem 1.5rem; }
+  .prose li { margin-bottom: 0.4rem; }
+  .prose strong { color: var(--primary); }
+  .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+  .prose th { background: var(--primary); color: white; padding: 0.75rem 1rem; text-align: left; }
+  .prose td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); }
+  .prose tr:hover td { background: var(--bg-card-hover); }
+  .prose blockquote {
+    border-left: 4px solid var(--primary);
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0;
+    background: var(--bg-card);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  .prose code {
+    background: var(--bg-card);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.88em;
+    color: var(--accent);
+  }
+  .prose pre {
+    background: #1a1a2e;
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+  .prose pre code { background: none; color: #e2e8f0; padding: 0; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+  .container-sm { max-width: 800px; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* Tag colors */
+  .tag { display: inline-block; padding: 0.2rem 0.7rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tag-ia { background: rgba(99,102,241,0.15); color: var(--cat-ia); }
+  .tag-alternativas { background: rgba(16,185,129,0.15); color: var(--cat-alt); }
+  .tag-tecnologia { background: rgba(245,158,11,0.15); color: var(--cat-tech); }
+  .tag-guias { background: rgba(239,68,68,0.15); color: var(--cat-guide); }
+  .tag-default { background: rgba(99,102,241,0.15); color: var(--primary); }
+
+  @media (max-width: 768px) {
+    .prose h2 { font-size: 1.3rem; }
+    .prose h3 { font-size: 1.1rem; }
+    .prose table { display: block; overflow-x: auto; }
+  }
+</style>
