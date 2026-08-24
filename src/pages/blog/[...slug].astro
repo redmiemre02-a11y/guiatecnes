@@ -20,7 +20,8 @@ export async function getStaticPaths() {
 
 type Props = CollectionEntry<'blog'>;
 const post = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const toc = headings.filter(h => h.depth === 2 || h.depth === 3);
 
 const allPosts = await getCollection('blog');
 const relatedPosts = allPosts
@@ -123,6 +124,19 @@ function getTagColor(tag: string) {
 
         <AdSenseBanner variant="in-article" />
 
+        {toc.length > 0 && (
+          <div class="toc-container">
+            <h3>📑 Índice de Contenidos</h3>
+            <ul>
+              {toc.map(heading => (
+                <li class={`toc-level-${heading.depth}`}>
+                  <a href={`#${heading.slug}`}>{heading.text}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         <div class="prose">
           <Content />
         </div>
@@ -134,6 +148,17 @@ function getTagColor(tag: string) {
           {post.data.tags.map(tag => (
             <a href={`/categoria/${tag.toLowerCase()}`} class={`tag ${getTagColor(tag)}`}>{tag}</a>
           ))}
+        </div>
+
+        <!-- AUTHOR BOX FOR EEAT -->
+        <div class="author-box">
+          <div class="author-avatar">
+            <span class="avatar-emoji">👨‍💻</span>
+          </div>
+          <div class="author-info">
+            <h4>{post.data.author || 'Experto Tech'}</h4>
+            <p>Especialista en tecnología y herramientas digitales con más de 10 años de experiencia. Apasionado por descubrir y analizar las mejores alternativas de software, inteligencia artificial y productividad para hacer tu vida más fácil.</p>
+          </div>
         </div>
 
         {relatedPosts.length > 0 && (
@@ -377,6 +402,78 @@ function getTagColor(tag: string) {
   }
 
   .newsletter-mini button:hover { background: var(--primary-dark); }
+
+  /* TOC Styles */
+  .toc-container {
+    background: rgba(99, 102, 241, 0.05);
+    border-left: 4px solid var(--primary);
+    padding: 1.5rem;
+    border-radius: 0 12px 12px 0;
+    margin-bottom: 2.5rem;
+  }
+  .toc-container h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--heading);
+  }
+  .toc-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .toc-level-2 { margin-left: 0; }
+  .toc-level-3 { margin-left: 1.5rem; font-size: 0.9em; }
+  .toc-container a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .toc-container a:hover {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+
+  /* Author Box Styles */
+  .author-box {
+    display: flex;
+    gap: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    border-radius: 16px;
+    margin: 3rem 0;
+    align-items: flex-start;
+  }
+  .author-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary) 0%, #06b6d4 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .avatar-emoji { font-size: 1.8rem; }
+  .author-info h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--heading);
+  }
+  .author-info p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+  @media (max-width: 600px) {
+    .author-box { flex-direction: column; gap: 1rem; padding: 1.5rem; }
+  }
 
   @media (max-width: 900px) {
     .article-layout { grid-template-columns: 1fr; }

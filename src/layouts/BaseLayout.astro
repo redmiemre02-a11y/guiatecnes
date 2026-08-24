@@ -1,4 +1,5 @@
 ---
+import CookieBanner from '../components/CookieBanner.astro';
 interface Props {
   title: string;
   description: string;
@@ -126,6 +127,8 @@ const schemaArticle = type === 'article' ? {
       document.getElementById('theme-icon').textContent = next === 'dark' ? '☀️' : '🌙';
     };
   </script>
+  <!-- BaseLayout footer tag ends around here normally, let's inject before closing body -->
+  <CookieBanner />
 </body>
 </html>
 
