@@ -111,7 +111,7 @@ const desc  = tagDescs[tag!]  || `Todos los artículos sobre ${tag} en TechES.`;
             <PostCard
               title={post.data.title}
               description={post.data.description}
-              slug={post.slug}
+              slug={post.slug || (post as any).id}
               pubDate={post.data.pubDate}
               tags={post.data.tags}
               author={post.data.author}
