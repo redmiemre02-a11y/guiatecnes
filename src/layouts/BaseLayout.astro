@@ -189,6 +189,10 @@ const schemaArticle = type === 'article' ? {
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  /* Bulletproof Responsive Resets */
+  img, video, svg, iframe { max-width: 100%; height: auto; display: block; border-radius: var(--radius); }
+  h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; word-wrap: break-word; hyphens: auto; }
 
   html { scroll-behavior: smooth; }
 
@@ -196,14 +200,14 @@ const schemaArticle = type === 'article' ? {
     font-family: var(--font);
     background-color: var(--bg);
     color: var(--text);
-    line-height: 1.7;
+    line-height: 1.6;
     transition: background-color 0.3s, color 0.3s;
+    overflow-x: hidden;
+    width: 100%;
   }
 
   a { color: var(--primary); text-decoration: none; }
   a:hover { text-decoration: underline; }
-
-  img { max-width: 100%; height: auto; border-radius: var(--radius); }
 
   /* Prose styles for blog content */
   .prose h2 { font-size: 1.6rem; font-weight: 700; margin: 2rem 0 1rem; color: var(--text); }
