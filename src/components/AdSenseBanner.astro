@@ -10,9 +10,6 @@ const { variant = 'banner' } = Astro.props;
   <div class="adsense-banner">
     <!-- Google AdSense Banner (728x90) -->
     <!-- BURAYA ADSENSE KODUNU EKLE -->
-    <div class="ad-placeholder">
-      <span>Publicidad</span>
-    </div>
   </div>
 )}
 
@@ -20,9 +17,6 @@ const { variant = 'banner' } = Astro.props;
   <div class="adsense-in-article">
     <!-- Google AdSense In-Article Ad -->
     <!-- BURAYA IN-ARTICLE ADSENSE KODUNU EKLE -->
-    <div class="ad-placeholder in-article">
-      <span>Publicidad</span>
-    </div>
   </div>
 )}
 
@@ -30,39 +24,5 @@ const { variant = 'banner' } = Astro.props;
   <div class="adsense-sidebar">
     <!-- Google AdSense Sidebar (300x250) -->
     <!-- BURAYA SIDEBAR ADSENSE KODUNU EKLE -->
-    <div class="ad-placeholder sidebar">
-      <span>Publicidad</span>
-    </div>
   </div>
 )}
-
-<style>
-  .ad-placeholder {
-    background: var(--bg-card);
-    border: 1px dashed var(--border);
-    border-radius: var(--radius);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    min-height: 90px;
-    width: 100%;
-  }
-
-  .ad-placeholder.in-article {
-    min-height: 250px;
-    margin: 2rem 0;
-  }
-
-  .ad-placeholder.sidebar {
-    min-height: 250px;
-    max-width: 300px;
-  }
-
-  .adsense-banner { margin: 1.5rem 0; }
-  .adsense-in-article { margin: 2rem 0; }
-  .adsense-sidebar { margin-bottom: 1.5rem; }
-</style>
