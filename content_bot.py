@@ -28,6 +28,8 @@ import urllib.parse
 from datetime import datetime
 from pathlib import Path
 
+sys.stdout.reconfigure(encoding='utf-8')
+
 try:
     from openai import OpenAI
 except ImportError:
