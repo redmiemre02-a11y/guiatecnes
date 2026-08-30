@@ -74,3 +74,9 @@ jobs:
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🚀 Vercel'i Tetikle (Sitenin güncellenmesi için)
+        if: env.VERCEL_HOOK != ''
+        run: curl -X POST "$VERCEL_HOOK"
+        env:
+          VERCEL_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
