@@ -25,8 +25,6 @@ Llevo una década probando apps infantiles y te lo digo claro: YouTube Kids ya n
 
 Los padres no estamos locos. El algoritmo de Google sigue fallando, y por eso he analizado a fondo las mejores alternativas youtube kids seguras ninos que existen hoy. He probado cada una con niños reales, he medido tiempos de carga, calidad de filtrado y, sobre todo, he comprobado si cumplen la normativa COPPA y GDPR.
 
-Aquí tienes el resultado de meses de pruebas, con pros, contras y precios reales. Sin humo, sin marketing.
-
 ## ¿Por qué buscar alternativas a YouTube Kids?
 
 ### Riesgos de YouTube Kids

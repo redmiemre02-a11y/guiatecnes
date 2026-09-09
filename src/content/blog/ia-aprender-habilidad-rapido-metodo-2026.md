@@ -51,8 +51,6 @@ Además, pídele que incluya **hitos semanales** y formas de autoevaluación. No
 
 ### Ejemplo de prompt para aprender programación, inglés o diseño
 
-Aquí tienes tres ejemplos que he ajustado con usuarios reales para que veas la estructura:
-
 **Programación (Python):** "Eres un mentor senior de Python. Nivel actual: sé loops y condicionales. Objetivo: crear una API REST funcional en 30 días. Disponibilidad: 1 hora diaria. Dame un plan día a día con 3 ejercicios prácticos por sesión, un mini-proyecto semanal y los errores comunes que debo evitar. Al final de cada semana, incluye un test de 10 preguntas."
 
 **Inglés (B1 a B2):** "Eres un coach de conversación. Nivel: B1 (entiendo pero me trabo al hablar). Objetivo: mantener una entrevista laboral de 15 minutos en inglés en 4 semanas. Practica diaria: 45 minutos. Crea un plan con 2 diálogos simulados por día, vocabulario específico de entrevistas y ejercicios de pronunciación con feedback."

@@ -18,11 +18,11 @@ readingTime: 12
 
 ---
 
-## H2: Herramientas Esenciales de IA para tu Canal
+## Herramientas Esenciales de IA para tu Canal
 
 La clave de un canal sin rostro no es solo la IA, es la combinación correcta de herramientas que trabajan juntas. Te voy a contar las que realmente usamos en el día a día, las que han sobrevivido a nuestras pruebas más exigentes.
 
-### H3: Generadores de Guiones y Contenido
+### Generadores de Guiones y Contenido
 
 El guion es el esqueleto de tu video. Sin un buen guion, ni la mejor voz en off ni el mejor avatar te salvarán. Aquí es donde la IA brilla con luz propia.
 
@@ -36,7 +36,7 @@ El guion es el esqueleto de tu video. Sin un buen guion, ni la mejor voz en off 
 ❌ **Contras:** A veces los guiones suenan genéricos, requiere revisión humana, la versión gratuita es muy limitada.
 💰 **Precio:** Jasper desde $49/mes; ChatGPT Plus $20/mes.
 
-### H3: Voces en Off Realistas con IA
+### Voces en Off Realistas con IA
 
 La voz es el 50% del éxito en un canal sin cámara. Una voz robótica mata cualquier video, por bueno que sea el contenido. En nuestras pruebas, **ElevenLabs** es la reina indiscutible.
 
@@ -50,7 +50,7 @@ Lo que nos sorprendió fue la naturalidad de sus voces. Hay pausas, entonaciones
 ❌ **Contras:** El plan gratuito tiene límites de caracteres, las voces premium son caras, requiere ajustes en palabras técnicas.
 💰 **Precio:** ElevenLabs desde $22/mes; Murf desde $19/mes.
 
-### H3: Editores de Video Automatizados
+### Editores de Video Automatizados
 
 Aquí es donde ahorras horas de trabajo. **Pictory** es la herramienta que más nos ha impresionado para automatizar la edición. Le das el guion, elige el stock footage y te genera un video con subtítulos, transiciones y música.
 
@@ -64,11 +64,11 @@ Aquí es donde ahorras horas de trabajo. **Pictory** es la herramienta que más 
 
 ---
 
-## H2: Estrategias de Contenido sin Rostro
+## Estrategias de Contenido sin Rostro
 
 No todos los nichos funcionan igual para canales anónimos. Hemos probado varios y hay algunos que claramente tienen más potencial que otros.
 
-### H3: Nichos Rentables para Canales Anónimos
+### Nichos Rentables para Canales Anónimos
 
 Los mejores nichos son aquellos donde el valor está en la información, no en la persona. En nuestras pruebas, estos son los que mejor han funcionado:
 
@@ -84,7 +84,7 @@ Los mejores nichos son aquellos donde el valor está en la información, no en l
 ❌ **Contras:** Competencia alta en nichos populares, requiere investigación constante, la confianza se construye más lento.
 💰 **Precio:** Gratis (solo tu tiempo).
 
-### H3: Formatos de Video que Funcionan (Listicles, Tutoriales, Reviews)
+### Formatos de Video que Funcionan (Listicles, Tutoriales, Reviews)
 
 La estructura del video importa tanto como el nicho. Nuestros formatos probados:
 
@@ -100,7 +100,7 @@ La estructura del video importa tanto como el nicho. Nuestros formatos probados:
 ❌ **Contras:** Pueden sentirse genéricos si no añades tu toque, la competencia es feroz en estos formatos.
 💰 **Precio:** Gratis.
 
-### H3: Planificación de Contenido con IA
+### Planificación de Contenido con IA
 
 No se trata solo de generar videos, sino de planificar un calendario coherente. Herramientas como **Notion + AI** o **Trello con automatizaciones** nos ayudan a organizar el flujo.
 
@@ -114,11 +114,11 @@ Lo que notamos fue que la IA puede sugerirte temas basados en tendencias de tu n
 
 ---
 
-## H2: Creación de Avatares y Visuales con IA
+## Creación de Avatares y Visuales con IA
 
 Aquí es donde tu canal cobra identidad visual. No necesitas mostrar tu cara, pero sí necesitas algo que la gente reconozca.
 
-### H3: Avatares Animados y Realistas
+### Avatares Animados y Realistas
 
 **Synthesia** es la herramienta estrella para esto. Creas un avatar digital que habla, gesticula y se mueve como una persona real. Lo loco es que puedes elegir entre decenas de modelos predefinidos o crear el tuyo propio.
 
@@ -132,7 +132,7 @@ En nuestras pruebas, los avatares de Synthesia son tan realistas que en algunos 
 ❌ **Contras:** Los avatares más realistas son caros, los movimientos pueden ser limitados, el costo por video puede aumentar.
 💰 **Precio:** Synthesia desde $30/mes; HeyGen desde $29/mes.
 
-### H3: Animación de Texto y Gráficos Dinámicos
+### Animación de Texto y Gráficos Dinámicos
 
 **Animaker** y **Renderforest** son nuestras herramientas para animar texto, gráficos y transiciones. Son como Canva pero orientadas a video.
 
@@ -144,7 +144,7 @@ Lo que nos gusta es que puedes crear intros animadas, lower thirds y gráficos e
 ❌ **Contras:** Las plantillas se repiten entre usuarios, la personalización profunda es limitada.
 💰 **Precio:** Animaker desde $10/mes; Renderforest desde $9.99/mes.
 
-### H3: Uso de Stock Footage y Bancos de Imágenes
+### Uso de Stock Footage y Bancos de Imágenes
 
 El stock footage es el pan de cada día de los canales sin rostro. **Pixabay** y **Pexels** son gratuitos y tienen miles de videos en alta calidad.
 
@@ -158,11 +158,11 @@ El stock footage es el pan de cada día de los canales sin rostro. **Pixabay** y
 
 ---
 
-## H2: Optimización SEO para tu Canal de IA
+## Optimización SEO para tu Canal de IA
 
 De nada sirve un video perfecto si nadie lo encuentra. El SEO es el 50% del éxito en YouTube, y la IA también te ayuda aquí.
 
-### H3: Keyword Research con Herramientas de IA
+### Keyword Research con Herramientas de IA
 
 **TubeBuddy** y **vidIQ** son las dos grandes. Ambas usan IA para analizar la competencia, sugerir keywords y predecir el rendimiento de tus videos.
 
@@ -174,7 +174,7 @@ En nuestras pruebas, vidIQ tiene un mejor motor de sugerencias de keywords, mien
 ❌ **Contras:** Las funciones avanzadas son de pago, puede ser abrumador al principio.
 💰 **Precio:** TubeBuddy desde $4.99/mes; vidIQ desde $10/mes.
 
-### H3: Títulos, Descripciones y Tags Efectivos
+### Títulos, Descripciones y Tags Efectivos
 
 La IA te ayuda a generar títulos con gancho y descripciones optimizadas. Lo que hacemos es: le damos a ChatGPT el tema y le pedimos 10 títulos con diferentes enfoques (curiosidad, urgencia, valor).
 
@@ -186,7 +186,7 @@ Para las descripciones, la IA genera un resumen con keywords naturales y una lla
 ❌ **Contras:** A veces los títulos suenan clickbait, hay que ajustar el tono manualmente.
 💰 **Precio:** Gratis con ChatGPT.
 
-### H3: Estrategias de Miniaturas (Thumbnails) Atractivas
+### Estrategias de Miniaturas (Thumbnails) Atractivas
 
 La miniatura es el primer punto de contacto con tu audiencia. **Canva AI** tiene una función de diseño automático que analiza tu video y sugiere plantillas, colores y textos.
 
@@ -200,11 +200,11 @@ Lo que notamos fue que las miniaturas con texto de 3-4 palabras y colores contra
 
 ---
 
-## H2: Monetización y Escalado del Canal
+## Monetización y Escalado del Canal
 
 El objetivo final es generar ingresos. Aquí te cuento cómo convertir tu canal de IA en una máquina de dinero.
 
-### H3: Programas de Afiliados y Patrocinios
+### Programas de Afiliados y Patrocinios
 
 Con un canal sin rostro, los patrocinios directos son más difíciles de conseguir porque las marcas quieren asociar su producto a una persona. Pero los programas de afiliados son perfectos.
 
@@ -218,7 +218,7 @@ Con un canal sin rostro, los patrocinios directos son más difíciles de consegu
 ❌ **Contras:** Requiere tráfico constante, los ingresos iniciales son bajos.
 💰 **Precio:** Gratis.
 
-### H3: Automatización del Proceso de Publicación
+### Automatización del Proceso de Publicación
 
 La constancia es clave en YouTube, pero no tienes que publicar manualmente todos los días. Herramientas como **Buffer** o **Hootsuite** te permiten programar tus videos, aunque YouTube ya tiene su propia programación.
 
@@ -230,7 +230,7 @@ Lo que realmente automatizamos es el flujo de trabajo: la IA genera el guion, ot
 ❌ **Contras:** Requiere un sistema bien definido, la revisión humana sigue siendo necesaria.
 💰 **Precio:** Buffer gratis con limitaciones; Hootsuite desde $49/mes.
 
-### H3: Análisis de Métricas con IA
+### Análisis de Métricas con IA
 
 No puedes mejorar lo que no mides. **YouTube Analytics** es la base, pero la IA te da insights que no ves a simple vista.
 
@@ -244,7 +244,7 @@ No puedes mejorar lo que no mides. **YouTube Analytics** es la base, pero la IA 
 
 ---
 
-## H2: Tabla Comparativa: Herramientas de IA para YouTube
+## Tabla Comparativa: Herramientas de IA para YouTube
 
 | Herramienta | Función Principal | Precio Mensual | Facilidad de Uso | Calidad de Salida | Ideal para |
 |-------------|-------------------|----------------|------------------|-------------------|------------|

@@ -205,12 +205,12 @@ def chat(client, system: str, user: str, temperature: float = 0.7) -> str:
 def gen_outline(client, topic: str, keyword: str) -> str:
     step("1/4 → Outline oluşturuluyor...")
     return chat(client,
-        "Eres experto en SEO de tecnología. Responde SOLO con el esquema solicitado, sin explicaciones.",
+        "Eres experto en SEO de tecnología. Responde SOLO con el esquema solicitado en formato Markdown puro. NUNCA uses prefijos literales como 'H2:' o 'H3:', usa únicamente los símbolos de Markdown (## y ###).",
         f"""Crea un esquema para un artículo sobre:
 TEMA: "{topic}" | KEYWORD: "{keyword}"
 
-Incluye: título H1 SEO (máx 65 chars), TL;DR con 3 puntos, 4-6 secciones H2 con H3,
-tabla comparativa (5+ columnas), FAQ con 3 preguntas específicas.""",
+Incluye: TL;DR con 3 puntos (##), 4-6 secciones principales (##) con subsecciones (###),
+tabla comparativa (5+ columnas), FAQ con 3 preguntas específicas. No incluyas un título H1 en el esquema, el título SEO se manejará por separado.""",
         temperature=0.4)
 
 
@@ -221,13 +221,15 @@ def gen_article(client, topic: str, keyword: str, outline: str) -> str:
 REGLAS: 1) NUNCA empieces con "En el mundo digital actual" o similares.
 2) Usa "En nuestras pruebas...", "Lo que notamos fue...".
 3) Párrafos máx 3 líneas. 4) Para cada herramienta: ¿Para quién?, ✅Pros, ❌Contras, 💰Precio.
-5) Tabla comparativa. 6) FAQ con respuestas de 2-4 líneas. 7) 1.200-1.800 palabras.""",
+5) Tabla comparativa. 6) FAQ con respuestas de 2-4 líneas. 7) 1.200-1.800 palabras.
+8) NO incluyas introducciones conversacionales (ej. "Aquí tienes el artículo"). Escribe SOLO el contenido en Markdown.
+9) NUNCA escribas literalmente la palabra "H1:", "H2:" o "H3:" en los títulos. Usa los símbolos #, ## y ### directamente.""",
         f"""Escribe el artículo completo siguiendo este esquema:
 {outline}
 
 TEMA: "{topic}" | KEYWORD: "{keyword}"
 
-SALIDA: Solo Markdown. Empieza con ## ⚡ TL;DR""",
+SALIDA: Devuelve ÚNICAMENTE código Markdown puro. Empieza directamente con ## ⚡ TL;DR""",
         temperature=0.75)
 
 

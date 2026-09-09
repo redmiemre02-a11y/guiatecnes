@@ -19,9 +19,9 @@ En nuestras pruebas, lo que notamos fue que cada herramienta resuelve un problem
 
 ---
 
-## H2: Comparativa rápida: Notion vs Obsidian vs Logseq en 2026
+## Comparativa rápida: Notion vs Obsidian vs Logseq en 2026
 
-### H3: Enfoque principal de cada herramienta
+### Enfoque principal de cada herramienta
 
 **Notion** es un espacio de trabajo todo-en-uno. No solo tomas notas; gestionas proyectos, creas wikis de empresa, dashboards de clientes y hasta bases de datos relacionales que parecen hojas de cálculo con esteroides. Su ADN es la colaboración y la estructura.
 
@@ -29,7 +29,7 @@ En nuestras pruebas, lo que notamos fue que cada herramienta resuelve un problem
 
 **Logseq** es un outliner que organiza todo en bloques jerárquicos. Está diseñado para el flujo diario: abres una página de hoy, vas añadiendo pensamientos, y luego los conectas mediante backlinks y referencias. Es perfecto para capturar ideas rápidas sin preocuparte por la estructura.
 
-### H3: Curva de aprendizaje y facilidad de uso
+### Curva de aprendizaje y facilidad de uso
 
 En nuestras pruebas, lo que notamos fue que **Notion** tiene la curva más suave al principio, pero se complica cuando quieres dominar las bases de datos relacionales. La interfaz es intuitiva y visual, pero la sobrecarga de opciones puede abrumar.
 
@@ -37,7 +37,7 @@ En nuestras pruebas, lo que notamos fue que **Notion** tiene la curva más suave
 
 **Logseq** parece simple por fuera, pero tiene una lógica de bloques y comandos slash que requiere un cambio de mentalidad. Al principio te pierdes entre páginas diarias, referencias y propiedades. Tras una semana de uso continuado, la mecánica interioriza y fluye.
 
-### H3: Precios y modelos de suscripción
+### Precios y modelos de suscripción
 
 Aquí hay sorpresas. **Notion** tiene un plan gratis generoso para uso personal, pero el plan Pro cuesta 10$/mes (o 8$ anual) y el plan Business para equipos sube a 15-20$/usuario/mes. El gratis limita el historial de versiones y el tamaño de archivos subidos.
 
@@ -59,21 +59,21 @@ Aquí hay sorpresas. **Notion** tiene un plan gratis generoso para uso personal,
 
 ---
 
-## H2: Notion: el todoterreno para equipos y proyectos
+## Notion: el todoterreno para equipos y proyectos
 
-### H3: Bases de datos relacionales y vistas personalizadas
+### Bases de datos relacionales y vistas personalizadas
 
 En nuestras pruebas, lo que notamos fue que las bases de datos de Notion son su arma secreta. Puedes crear una tabla de tareas, vincularla con una base de clientes, y luego ver todo como kanban, calendario o galería sin duplicar información. Es como tener Airtable integrado en tu app de notas.
 
 La capacidad de crear relaciones entre tablas (una entrada en "Proyectos" puede referenciar varias entradas en "Tareas") hace que Notion sea ideal para gestionar proyectos complejos. Los filtros y vistas guardadas te permiten crear dashboards personalizados que se actualizan solos. Es una pasada para el trabajo profesional.
 
-### H3: Colaboración en tiempo real y plantillas
+### Colaboración en tiempo real y plantillas
 
 La colaboración en Notion es de otro nivel. Varios usuarios pueden editar la misma página simultáneamente, ver los cursores de los demás y comentar en bloques específicos. Esto lo convierte en una herramienta perfecta para equipos remotos.
 
 Además, su mercado de plantillas es enorme. Desde sistemas de gestión de proyectos hasta planificadores de estudio, hay una plantilla para casi todo. La comunidad comparte constantemente, así que nunca empiezas de cero.
 
-### H3: Desventajas: dependencia de la nube y rendimiento
+### Desventajas: dependencia de la nube y rendimiento
 
 Aquí van las pegas. **Notion** depende completamente de la nube. Sin conexión, solo ves una caché de páginas recientes y no puedes editar nada nuevo. Si la empresa tiene un día malo (ha pasado), te quedas sin acceso a tu información.
 
@@ -81,21 +81,21 @@ El rendimiento también flaquea con bases de datos grandes. Cuando tienes miles 
 
 ---
 
-## H2: Obsidian: el rey del conocimiento interconectado
+## Obsidian: el rey del conocimiento interconectado
 
-### H3: Archivos Markdown locales y control total de datos
+### Archivos Markdown locales y control total de datos
 
 Obsidian guarda todo en archivos `.md` que viven en una carpeta local. Esto significa que tus notas son tuyas de verdad. Puedes abrirlas con cualquier editor, hacer copias de seguridad con tus herramientas favoritas, y usarlas incluso si Obsidian desapareciera mañana.
 
 En nuestras pruebas, lo que notamos fue que esta sensación de propiedad cambia tu relación con las notas. Saber que no dependes de un servidor externo te da tranquilidad. Y como son archivos planos, puedes usar Git para versionar, sincronizar con Syncthing o incluso automatizar tareas con scripts.
 
-### H3: Grafos y enlaces bidireccionales para PKM
+### Grafos y enlaces bidireccionales para PKM
 
 El grafo de Obsidian es su joya visual. Cada vez que enlazas dos notas con `[[...]]`, aparece una conexión en el grafo. Con el tiempo, ves clusters de ideas que se forman solos, y eso te ayuda a descubrir relaciones que no habías considerado.
 
 Los enlaces bidireccionales funcionan en ambas direcciones: si la nota A enlaza a la B, la B muestra automáticamente que es referenciada desde A. Esto crea una red de conocimiento que crece orgánicamente. Es la herramienta perfecta para investigación, escritura académica o simplemente para construir un segundo cerebro.
 
-### H3: Ecosistema de plugins y temas personalizados
+### Ecosistema de plugins y temas personalizados
 
 Obsidian tiene más de 1.500 plugins comunitarios. Desde *Dataview* (que convierte tus notas en bases de datos consultables) hasta *Excalidraw* para dibujar diagramas, pasando por *Kanban*, *Calendar* y *Spaced Repetition* para estudiar. La personalización es casi infinita.
 
@@ -103,21 +103,21 @@ Los temas también permiten cambiar la apariencia por completo. Puedes hacer que
 
 ---
 
-## H2: Logseq: el outliner para pensamiento incremental
+## Logseq: el outliner para pensamiento incremental
 
-### H3: Flujo de trabajo diario con bloques y referencias
+### Flujo de trabajo diario con bloques y referencias
 
 Logseq organiza todo en bloques. Cada párrafo, cada idea, cada tarea es un bloque que puedes mover, anidar y referenciar. El flujo diario es su corazón: abres la página de hoy, empiezas a escribir lo que piensas, y luego puedes vincular bloques a temas o proyectos.
 
 En nuestras pruebas, lo que notamos fue que este enfoque de outliner es liberador. No necesitas decidir dónde va cada nota antes de escribirla. Simplemente capturas, y luego conectas los bloques con `[[referencias]]` o hashtags. Es ideal para toma de notas rápidas, lluvias de ideas y desarrollo de pensamiento incremental.
 
-### H3: Grafos y backlinks para conectar ideas
+### Grafos y backlinks para conectar ideas
 
 Logseq también tiene grafos, aunque menos vistosos que los de Obsidian. Su grafo diario muestra las conexiones del día, y el grafo global te da una visión general de tu red de conocimiento. Los backlinks aparecen al final de cada página, mostrando qué bloques referencian a esa nota.
 
 La integración con bloques es más granular que en Obsidian. Puedes referenciar un bloque específico dentro de una página, no solo la página entera. Esto permite construir argumentos complejos donde cada idea se conecta con la precisión de un cirujano.
 
-### H3: Limitaciones: curva de aprendizaje y UI menos pulida
+### Limitaciones: curva de aprendizaje y UI menos pulida
 
 Logseq tiene sus defectos. La interfaz se siente menos pulida que Notion u Obsidian, con opciones que a veces parecen escondidas. La curva de aprendizaje es real: los comandos slash, las propiedades `key:: value`, y la lógica de bloques requieren práctica.
 
@@ -125,21 +125,21 @@ Además, la versión móvil es más limitada que la de escritorio, y la sincroni
 
 ---
 
-## H2: ¿Cuál elegir según tu caso de uso en 2026?
+## ¿Cuál elegir según tu caso de uso en 2026?
 
-### H3: Para estudiantes y toma de notas académicas
+### Para estudiantes y toma de notas académicas
 
 Si eres estudiante y necesitas organizar apuntes, trabajos y fechas de exámenes, **Notion** es tu mejor aliado. Las bases de datos te permiten crear un sistema de asignaturas, tareas y notas de clase con vistas de calendario y kanban. Las plantillas educativas abundan.
 
 Eso sí, si estudias en zonas sin wifi o prefieres que tus apuntes queden en tu portátil, **Obsidian** es mejor opción. Puedes crear notas por asignatura, enlazar conceptos entre ellas y usar *Spaced Repetition* para memorizar. La privacidad de tener todo local también es un plus.
 
-### H3: Para profesionales y gestión de proyectos
+### Para profesionales y gestión de proyectos
 
 Para profesionales que gestionan proyectos, clientes y equipos, **Notion** es la elección obvia. La colaboración en tiempo real, las bases de datos relacionales y las vistas personalizadas son difíciles de superar. Es básicamente un CRM + gestor de proyectos + wiki en una sola herramienta.
 
 Si trabajas solo o en un equipo pequeño y valoras la portabilidad, **Obsidian** con plugins puede replicar parte de esa funcionalidad, pero requiere más configuración. **Logseq** se queda corto aquí: su enfoque diario no es ideal para gestionar proyectos con múltiples entregables.
 
-### H3: Para escritores e investigadores con PKM avanzado
+### Para escritores e investigadores con PKM avanzado
 
 Aquí **Obsidian** es el rey indiscutible. Su sistema de enlaces bidireccionales, grafos y plugins de escritura (como *Longform* o *Obsidian Linter*) lo convierten en la herramienta perfecta para construir un segundo cerebro. La capacidad de conectar ideas y ver patrones emergentes es inigualable.
 
@@ -147,7 +147,7 @@ Aquí **Obsidian** es el rey indiscutible. Su sistema de enlaces bidireccionales
 
 ---
 
-## H2: Preguntas frecuentes (FAQ)
+## Preguntas frecuentes (FAQ)
 
 ### ¿Puedo migrar mis notas entre Notion, Obsidian y Logseq fácilmente?
 

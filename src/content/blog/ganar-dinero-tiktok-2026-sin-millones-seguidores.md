@@ -21,9 +21,9 @@ Mira, llevo una década en esto y te lo digo claro: el mito de que necesitas un 
 
 Lo que notamos fue que las marcas ya no buscan alcance, buscan confianza. Y esa confianza se construye en comunidades pequeñas, no en masas anónimas. En este artículo te voy a mostrar los métodos que realmente funcionan, con datos concretos y ejemplos que hemos probado en nuestras propias cuentas.
 
-## H2: 1. Estrategias de monetización directa (sin depender de marcas)
+## 1. Estrategias de monetización directa (sin depender de marcas)
 
-### H3: Regalos y monedas en Lives (Streaming interactivo)
+### Regalos y monedas en Lives (Streaming interactivo)
 
 El programa de regalos de TikTok se activa con solo 1,000 seguidores y 16 años cumplidos. En nuestras pruebas, los Lives de 60-90 minutos generan entre $20 y $50 por sesión si haces las cosas bien.
 
@@ -31,7 +31,7 @@ La técnica que mejor funciona: retos interactivos. Por ejemplo, "si llegamos a 
 
 También probamos los sorteos en vivo. Funcionan porque crean urgencia: "el próximo regalo entra en el sorteo de mi curso gratuito". Eso sí, no seas tramposo. La audiencia pequeña perdona errores, pero no la falta de autenticidad.
 
-### H3: Membresías y contenido exclusivo (Suscripciones)
+### Membresías y contenido exclusivo (Suscripciones)
 
 Las suscripciones requieren 10K seguidores y ser mayor de 18 años. Pero aquí está el truco: no necesitas tenerlos todos a la vez. En nuestras cuentas de prueba, llegamos a 10K en 3 meses con contenido de nicho.
 
@@ -39,7 +39,7 @@ El formato que más convierte: "detrás de cámaras" de tu proceso creativo. La 
 
 Lo que notamos fue que el 2-3% de tu audiencia está dispuesta a pagar. Con 10K seguidores, eso son 200-300 suscriptores. A $4.99, hablamos de $1,000-$1,500 al mes solo de suscripciones.
 
-### H3: Venta de productos digitales (E-books, plantillas, presets)
+### Venta de productos digitales (E-books, plantillas, presets)
 
 Este es el método más infravalorado para cuentas pequeñas. Con el enlace en bio y TikTok Shop, puedes vender productos digitales sin stock, sin envíos, sin complicaciones.
 
@@ -47,9 +47,9 @@ En nuestras pruebas, los e-books de nicho (recetas keto, rutinas de gym, guías 
 
 La clave está en el micro-nicho. No hagas un e-book genérico de "cómo ganar dinero". Haz uno de "cómo ganar tu primer $1,000 con dropshipping en España". Cuanto más específico, más dispuesta está la gente a pagar.
 
-## H2: 2. Marketing de afiliados con micro-audiencias
+## 2. Marketing de afiliados con micro-audiencias
 
-### H3: Selección de productos de alta comisión (30-50%)
+### Selección de productos de alta comisión (30-50%)
 
 Los nichos que mejor pagan comisiones son software, cursos online, suplementos y gadgets. El TikTok Shop Affiliate paga entre 10-30%, pero los programas propios de empresas SaaS pagan 30-50% recurrente.
 
@@ -57,7 +57,7 @@ En nuestras pruebas, el mejor rendimiento lo vimos con herramientas de IA y auto
 
 Amazon Associates es más fácil de empezar pero paga solo 1-4%. Nuestro consejo: busca programas de afiliados directos en tu nicho, no uses intermediarios.
 
-### H3: Contenido de "prueba/opinión" que convierte
+### Contenido de "prueba/opinión" que convierte
 
 El formato que mejor funciona en cuentas pequeñas es el de "3 usos reales + 1 objeción resuelta". Por ejemplo, "3 formas de usar esta herramienta de diseño que nadie te enseñó + por qué no es para principiantes".
 
@@ -65,9 +65,9 @@ Lo que notamos fue que poner el enlace en los comentarios (no en el caption) red
 
 La clave es la honestidad. Si el producto tiene fallos, dilo. Eso aumenta tu credibilidad y, paradójicamente, las conversiones. Las micro-audiencias compran a personas, no a marcas.
 
-## H2: 3. Comercio social (TikTok Shop) sin stock
+## 3. Comercio social (TikTok Shop) sin stock
 
-### H3: Dropshipping con proveedores locales (EU/EE. UU.)
+### Dropshipping con proveedores locales (EU/EE. UU.)
 
 TikTok Shop permite conectar con AliExpress o CJ Dropshipping, pero el envío tarda 2-3 semanas. En nuestras pruebas, eso mata la conversión. La solución: usar proveedores locales con almacenes en España o EE. UU.
 
@@ -75,7 +75,7 @@ El formato que funciona: vídeos de "unboxing" con CTA directo a la tienda. No n
 
 Eso sí, requiere inversión inicial de $500+ para probar productos y ads. Es el método con mayor riesgo pero también con mayor potencial. Si no tienes presupuesto, mejor empieza con afiliados.
 
-### H3: Venta de productos hechos a mano o servicios locales
+### Venta de productos hechos a mano o servicios locales
 
 Este es el método más rentable para cuentas pequeñas. En nuestras pruebas, vender servicios locales (clases de idiomas, diseño gráfico, reparaciones) genera $50-$100 por cliente con cero inversión.
 
@@ -83,9 +83,9 @@ El truco está en el TikTok SEO. Usa palabras clave locales en tus vídeos: "dis
 
 Lo que notamos fue que los vídeos con testimonios de clientes reales convierten 3 veces más que cualquier otro formato. La gente no compra servicios, compra resultados.
 
-## H2: 4. Creación de contenido patrocinado para micro-influencers
+## 4. Creación de contenido patrocinado para micro-influencers
 
-### H3: Plataformas que conectan marcas con cuentas pequeñas (5K-50K)
+### Plataformas que conectan marcas con cuentas pequeñas (5K-50K)
 
 Las plataformas que mejor funcionan para cuentas pequeñas son Heepsy, Upfluence, Collabstr y el TikTok Creator Marketplace. En nuestras pruebas, las marcas pagan entre $10-$50 por cada 10K seguidores, más un extra por engagement alto.
 
@@ -93,7 +93,7 @@ El truco está en tu media de engagement. Si tienes 10K seguidores pero 1,000 li
 
 Nuestro consejo: crea un media kit con tus métricas reales y ofrécelo directamente a marcas de tu nicho. Las plataformas se llevan 10-20% de comisión, pero si negocias directo, te quedas todo.
 
-### H3: Paquetes de contenido (bundles) para marcas
+### Paquetes de contenido (bundles) para marcas
 
 En lugar de vender vídeos sueltos, ofrecemos paquetes completos: 3 vídeos + 1 historia + derechos de uso por $200-$500. Este formato funciona porque las marcas necesitan contenido constante, no piezas aisladas.
 
@@ -101,9 +101,9 @@ Lo que notamos fue que las marcas de nicho (menos de 100K seguidores) son más f
 
 La clave es demostrar resultados pasados. Si tienes un caso de éxito con otra marca, úsalo como prueba social. No necesitas miles de seguidores, necesitas un caso real de conversión.
 
-## H2: 5. Monetización con IA y automatización
+## 5. Monetización con IA y automatización
 
-### H3: Creación de avatares virtuales y voces clonadas
+### Creación de avatares virtuales y voces clonadas
 
 Este es el método más innovador de 2026. Con herramientas como HeyGen, D-ID y ElevenLabs, puedes crear un avatar virtual que hable por ti y vender la licencia de uso a marcas para anuncios o vídeos corporativos.
 
@@ -111,7 +111,7 @@ En nuestras pruebas, las marcas pagan $500-$5,000 por usar un avatar realista en
 
 Eso sí, requiere inversión de $100/mes en herramientas de IA. Pero con un solo cliente al mes, ya estás en positivo.
 
-### H3: Canales de "faceless content" (sin rostro) con IA
+### Canales de "faceless content" (sin rostro) con IA
 
 Los canales sin rostro han explotado en 2026. Nichos como curiosidades, historia, motivación y noticias de cripto generan millones de vistas sin mostrar la cara. La IA genera los guiones, las imágenes y hasta la voz.
 
@@ -119,7 +119,7 @@ Para monetizar, necesitas 10K seguidores y 100K vistas en 30 días para activar 
 
 El truco está en la consistencia. Publicar 2-3 vídeos diarios con IA cuesta 2 horas de trabajo. Es el método con mejor ratio tiempo/dinero para cuentas pequeñas.
 
-## H2: 6. Tabla comparativa de métodos (2026)
+## 6. Tabla comparativa de métodos (2026)
 
 | Método | Seguidores mínimos | Ingreso potencial/mes | Tiempo de setup | Riesgo | Requiere inversión |
 |--------|-------------------|-----------------------|-----------------|--------|--------------------|

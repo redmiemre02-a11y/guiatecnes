@@ -21,9 +21,9 @@ Nuestra selección de 2026 incluye 5 modelos que superaron las pruebas de latenc
 
 ---
 
-## H2: ¿Qué hace que un auricular barato suene "caro"? (Ciencia del audio)
+## ¿Qué hace que un auricular barato suene "caro"? (Ciencia del audio)
 
-### H3: Drivers de 50mm vs 40mm: El tamaño importa en graves y claridad
+### Drivers de 50mm vs 40mm: El tamaño importa en graves y claridad
 
 En nuestras pruebas, los drivers de 50mm (o más) marcan una diferencia abismal en la reproducción de graves. Un driver más grande mueve más aire, lo que se traduce en explosiones más contundentes y una presencia física que los de 40mm simplemente no pueden igualar.
 
@@ -31,7 +31,7 @@ Lo que notamos fue que los drivers de 50mm también tienden a tener una mejor se
 
 Ojo, no todo es tamaño: la calidad del imán (neodimio vs ferrita) y la rigidez del diafragma influyen. Pero como regla general, si ves un modelo barato con drivers de 50mm+, tienes un 80% de posibilidades de que suene bien.
 
-### H3: Rango de frecuencia y respuesta plana: Cómo detectar un buen ecualizador
+### Rango de frecuencia y respuesta plana: Cómo detectar un buen ecualizador
 
 El rango de frecuencia (20Hz-20kHz es el estándar) no te dice mucho por sí solo. Lo que importa es cómo se curva la respuesta. Los auriculares caros suelen tener una curva más plana, mientras que los baratos realzan los graves para sonar "impresionantes" de primeras.
 
@@ -39,7 +39,7 @@ En nuestras pruebas con micrófono de medición, los mejores modelos baratos de 
 
 Si el auricular trae software de ecualización, genial. Si no, puedes usar uno gratuito como Equalizer APO. La curva ideal para gaming es una "V" suave: un poco de subida en graves (60-100Hz), un valle en medios (500Hz-1kHz) para limpiar el sonido, y un pico en agudos (3-4kHz) para los detalles.
 
-### H3: La importancia de la impedancia y la sensibilidad en consolas y PC
+### La importancia de la impedancia y la sensibilidad en consolas y PC
 
 La impedancia (medida en ohmios) determina cuánta energía necesita el auricular para sonar alto. Para consolas y PC sin amplificador, necesitas **impedancia baja (32Ω o menos)**. Los modelos de 50Ω+ sonarán apagados y sin vida si los conectas directamente al mando de PS5.
 
@@ -49,9 +49,9 @@ Regla de oro: **32Ω de impedancia + 100dB de sensibilidad = sonido potente desd
 
 ---
 
-## H2: Top 5 Mejores Auriculares Gaming Baratos 2026 (Análisis en profundidad)
+## Top 5 Mejores Auriculares Gaming Baratos 2026 (Análisis en profundidad)
 
-### H3: 1. HyperX Cloud Stinger 2 (Actualizado) – El rey del confort y sonido envolvente
+### 1. HyperX Cloud Stinger 2 (Actualizado) – El rey del confort y sonido envolvente
 
 **¿Para quién?** Jugadores de consola que buscan un todo-terreno sin complicaciones.
 
@@ -72,7 +72,7 @@ El Cloud Stinger 2 es la evolución de un clásico que llevo recomendando desde 
 
 En nuestras pruebas de latencia, la conexión por jack de 3.5mm dio cero retardos perceptibles. Lo que notamos fue que el sonido envolvente virtual es sutil pero efectivo: no te mareará como otros sistemas agresivos, pero sí te dará una ventaja competitiva real.
 
-### H3: 2. Razer BlackShark V2 X – Precisión en FPS con drivers TriForce
+### 2. Razer BlackShark V2 X – Precisión en FPS con drivers TriForce
 
 **¿Para quién?** Jugadores competitivos de PC que viven en *Valorant*, *CS2* o *Apex Legends*.
 
@@ -93,7 +93,7 @@ Los drivers TriForce de Razer dividen el audio en tres frecuencias (agudos, medi
 
 Lo que notamos fue que la sensibilidad de 100dB permite jugar a volúmenes bajos sin perder detalles. En *Valorant*, podíamos distinguir si el enemigo estaba en hierba o en cemento con una claridad que no esperábamos de un auricular de este rango.
 
-### H3: 3. Logitech G435 Lightspeed – Inalámbrico ligero con graves sorprendentes
+### 3. Logitech G435 Lightspeed – Inalámbrico ligero con graves sorprendentes
 
 **¿Para quién?** Jugadores de PC y móvil que odian los cables y valoran la portabilidad.
 
@@ -114,7 +114,7 @@ El G435 es el más ligero de la lista (165g) y usa drivers de 40mm que, contra t
 
 En nuestras pruebas de latencia, el modo Lightspeed dio unos 25ms, imperceptibles para gaming casual. El Bluetooth, sin embargo, mostró 180ms: no lo uses para juegos competitivos por BT. Eso sí, para *Genshin Impact* o *Hades* en móvil, es una maravilla por su ligereza.
 
-### H3: 4. Steelseries Arctis Nova 1 – El mejor escenario sonoro por menos de 50€
+### 4. Steelseries Arctis Nova 1 – El mejor escenario sonoro por menos de 50€
 
 **¿Para quién?** Jugadores inmersivos que disfrutan de mundos abiertos y cine en el PC o PS5.
 
@@ -135,7 +135,7 @@ El Arctis Nova 1 tiene los drivers de 40mm mejor sintonizados de toda la lista. 
 
 Lo que notamos fue que el escenario sonoro (soundstage) es amplio y tridimensional. No es 7.1 virtual, pero la separación izquierda-derecha y la profundidad frontal son tan buenas que no lo necesitas. Para *Elden Ring*, los susurros de los enemigos te pondrán los pelos de punta.
 
-### H3: 5. Redragon Zeus X (H510) – La opción extrema con 7.1 virtual y bajo presupuesto
+### 5. Redragon Zeus X (H510) – La opción extrema con 7.1 virtual y bajo presupuesto
 
 **¿Para quién?** Jugadores con presupuesto muy ajustado que quieren la mayor cantidad de características por el menor precio posible.
 
@@ -160,7 +160,7 @@ En nuestras pruebas de latencia, la conexión USB dio cero retardos. Eso sí, el
 
 ---
 
-## H2: Comparativa Técnica: Especificaciones Clave de los Mejores Auriculares Gaming Baratos 2026
+## Comparativa Técnica: Especificaciones Clave de los Mejores Auriculares Gaming Baratos 2026
 
 | Modelo | Precio (€) | Driver | Conexión | Peso (g) | Micrófono | Sonido Envolvente | Latencia |
 |--------|------------|--------|----------|----------|-----------|-------------------|----------|
@@ -179,9 +179,9 @@ En nuestras pruebas de latencia, la conexión USB dio cero retardos. Eso sí, el
 
 ---
 
-## H2: ¿Cómo elegir entre cableado vs inalámbrico sin sacrificar calidad?
+## ¿Cómo elegir entre cableado vs inalámbrico sin sacrificar calidad?
 
-### H3: Latencia en juegos competitivos: ¿Por qué el cable sigue ganando?
+### Latencia en juegos competitivos: ¿Por qué el cable sigue ganando?
 
 En nuestras pruebas de latencia con osciloscopio, los auriculares cableados dieron **cero latencia medible**, mientras que los inalámbricos con 2.4GHz mostraron entre 20-40ms. En juegos como *Valorant* o *CS2*, donde reaccionar 20ms antes puede significar una ronda ganada, el cable sigue siendo la opción segura.
 
@@ -189,7 +189,7 @@ El Bluetooth es el gran problema: incluso con aptX Low Latency, los modelos econ
 
 Para juegos casuales o single-player, los 25ms del modo Lightspeed o inalámbrico propietario son imperceptibles. Pero si eres competitivo, mi consejo es claro: **compra cableado y gasta el dinero extra en mejores drivers**.
 
-### H3: Códecs de audio (aptX Low Latency) en modelos baratos inalámbricos
+### Códecs de audio (aptX Low Latency) en modelos baratos inalámbricos
 
 Los códecs determinan cómo se comprime y transmite el audio por Bluetooth. Los modelos baratos suelen usar SBC, que tiene una latencia alta y una calidad mediocre. Si buscas inalámbrico, exige **aptX Low Latency** (códec) o, mejor aún, conexión propietaria de 2.4GHz como la del Logitech G435.
 
@@ -197,6 +197,6 @@ En nuestras pruebas, el G435 con su receptor Lightspeed sonó notablemente mejor
 
 Si no encuentras un modelo con 2.4GHz en tu presupuesto, busca "aptX Low Latency" en las especificaciones. Es el único códec Bluetooth que se acerca a la calidad cableada en términos de retardo.
 
-### H3: Duración de batería y peso: El equilibrio para sesiones largas
+### Duración de batería y peso: El equilibrio para sesiones largas
 
 Los auriculares inalámbricos baratos suelen pesar menos (porque no tienen cable) pero necesitan batería, lo que añade peso. El Logitech G435 logra el equilibrio perfecto: 165g con 18 horas de batería. Es el único inalámbrico que recomendaría para sesiones de más de

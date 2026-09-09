@@ -17,23 +17,23 @@ readingTime: 10
 - Todas funcionan al instante en cualquier navegador, sin pedir correo, contraseña ni datos personales. Perfectas para usar en clase o en casa sin complicaciones.
 - Nuestra favorita por equilibrio entre calidad y cero fricción es **Smile and Learn** (sin anuncios) y **ABCya!** para los más peques.
 
-## H2: ¿Por qué elegir juegos educativos sin registro? Ventajas para padres y niños
+## ¿Por qué elegir juegos educativos sin registro? Ventajas para padres y niños
 
-### H3: Privacidad y seguridad infantil
+### Privacidad y seguridad infantil
 
 Lo que más nos preocupa como padres es que los pequeños naveguen sin exponer su identidad. Al no pedir registro, eliminamos de golpe el riesgo de filtración de datos, correos basura o que un tercero acceda a información sensible. Estas plataformas funcionan en modo "invitado", así que el niño solo interactúa con el juego, nada más.
 
-### H3: Acceso inmediato
+### Acceso inmediato
 
 En nuestras pruebas, el tiempo medio desde que abres la web hasta que el niño está jugando es de menos de 10 segundos. Eso es oro puro en situaciones como la sala de espera del pediatra, un viaje en coche o los últimos minutos de clase. No hay excusas de "es que no me acuerdo de la contraseña" ni pérdidas de tiempo configurando perfiles.
 
-### H3: Compatibilidad universal
+### Compatibilidad universal
 
 Olvídate de instalar apps o de que "solo funciona en tablets". Todas las opciones que listamos corren en cualquier navegador moderno, ya sea un PC viejo del colegio, un móvil Android o un iPad. Esto las hace ideales para bibliotecas públicas o aulas con equipos heterogéneos.
 
-## H2: Top 5 plataformas imprescindibles (análisis detallado)
+## Top 5 plataformas imprescindibles (análisis detallado)
 
-### H3: 1. ABCya!
+### 1. ABCya!
 
 **¿Para quién?** Niños de 4 a 12 años que necesitan reforzar matemáticas y lógica en inglés.
 
@@ -50,7 +50,7 @@ Llevamos años recomendándola y sigue siendo la reina en contenido por grados e
 
 💰 **Precio:** Gratis (con opción de suscripción familiar a 5,99€/mes para desbloquear todo, pero no es necesaria).
 
-### H3: 2. Educaplay
+### 2. Educaplay
 
 **¿Para quién?** Profesores y niños de 6 a 14 años que buscan actividades personalizadas.
 
@@ -67,7 +67,7 @@ Esta es la herramienta más versátil de la lista. En nuestras pruebas, creamos 
 
 💰 **Precio:** Gratis (la versión premium, 3,50€/mes, elimina anuncios y permite descargar actividades).
 
-### H3: 3. Árbol ABC
+### 3. Árbol ABC
 
 **¿Para quién?** Niños de 3 a 10 años que están aprendiendo a leer y escribir en español.
 
@@ -84,7 +84,7 @@ Es la opción que más nos sorprendió por su enfoque en lectoescritura. Lo que 
 
 💰 **Precio:** Gratis, sin opción premium.
 
-### H3: 4. Smile and Learn
+### 4. Smile and Learn
 
 **¿Para quién?** Niños de 3 a 12 años que quieren explorar ciencias, arte y emociones.
 
@@ -101,7 +101,7 @@ Esta es nuestra joya secreta. Lo que notamos fue que tiene una biblioteca enorme
 
 💰 **Precio:** Gratis (suscripción premium a 4,99€/mes para acceso completo, pero la versión gratis ya vale mucho).
 
-### H3: 5. Mundo Primaria
+### 5. Mundo Primaria
 
 **¿Para quién?** Niños de 6 a 12 años que necesitan repasar cálculo mental y comprensión lectora.
 
@@ -118,7 +118,7 @@ Es la web más completa en español para primaria. En nuestras pruebas, los mini
 
 💰 **Precio:** Gratis, sin opción premium (se financia con publicidad).
 
-## H2: Tabla comparativa de las mejores opciones (2025)
+## Tabla comparativa de las mejores opciones (2025)
 
 | Plataforma | Edad recomendada | Materias principales | Dispositivos | Tiempo de carga | Idioma | Publicidad |
 |------------|------------------|----------------------|--------------|-----------------|--------|------------|
@@ -128,39 +128,39 @@ Es la web más completa en español para primaria. En nuestras pruebas, los mini
 | Smile and Learn | 3-12 años | Ciencias, Arte, Emociones | PC, Tablet, Móvil | <6 seg | Español/Inglés | Nula (sin anuncios) |
 | Mundo Primaria | 6-12 años | Matemáticas, Lengua, Naturales | PC, Tablet | <5 seg | Español | Media (pop-ups ocasionales) |
 
-## H2: Cómo seleccionar el juego perfecto según la edad y objetivo
+## Cómo seleccionar el juego perfecto según la edad y objetivo
 
-### H3: Para preescolar (3-5 años)
+### Para preescolar (3-5 años)
 
 Lo que notamos fue que los peques responden mejor a estímulos visuales y sonoros simples. **Árbol ABC** y **Smile and Learn** son las mejores aquí porque sus juegos de colores, formas y sonidos no requieren leer instrucciones. Busca actividades con recompensas inmediatas (estrellas, sonidos alegres) para mantener su atención.
 
-### H3: Para primaria baja (6-8 años)
+### Para primaria baja (6-8 años)
 
 Aquí ya pueden leer instrucciones sencillas. **ABCya!** es ideal para sumas y restas mientras que **Mundo Primaria** tiene buenos ejercicios de comprensión lectora. Combina ambas plataformas en una misma sesión: 10 minutos de matemáticas y 10 de lectura para variar.
 
-### H3: Para primaria alta (9-12 años)
+### Para primaria alta (9-12 años)
 
 Los retos de lógica y fracciones son el plato fuerte de **Educaplay** (busca actividades de otros usuarios sobre fracciones o geografía). **Smile and Learn** también tiene juegos de ciencias más avanzados que sorprenden a esta edad. Si les gusta competir, los minijuegos de cálculo mental de **Mundo Primaria** tienen modo contrarreloj.
 
-### H3: Para necesidades especiales
+### Para necesidades especiales
 
 Todas las opciones listadas permiten ajustar la dificultad, pero **Smile and Learn** destaca por su modo "sin distracciones" que elimina elementos visuales innecesarios. **Árbol ABC** también tiene juegos de asociación muy útiles para niños con TDAH porque son cortos y con recompensas frecuentes.
 
-## H2: Consejos de seguridad y control parental (sin registro)
+## Consejos de seguridad y control parental (sin registro)
 
-### H3: Verifica la ausencia de chat y foros
+### Verifica la ausencia de chat y foros
 
 En nuestras pruebas, ninguna de las 5 plataformas tiene chat, foros ni comentarios entre usuarios. Eso elimina el riesgo de contacto con desconocidos, que es el principal peligro en juegos online. Si algún día pruebas otra web, asegúrate de que no haya sección de "comunidad" o "comentarios".
 
-### H3: Configura el modo "solo juegos"
+### Configura el modo "solo juegos"
 
 En plataformas como **Educaplay**, hay sección de creación de contenido que un niño podría usar sin querer. Activa el modo "solo jugar" en la configuración del navegador (o usa el control parental de Chrome/Firefox) para bloquear esa parte. En **Mundo Primaria**, evita que hagan clic en la sección de "descargar fichas".
 
-### H3: Establece límites de tiempo
+### Establece límites de tiempo
 
 Como no hay registro, no hay control de tiempo integrado. Usa un temporizador físico o la función de "bienestar digital" del móvil/tablet. Nuestra recomendación: sesiones de 20-30 minutos máximo, y luego un descanso activo. La Organización Mundial de la Salud recomienda que los niños de 6-12 años no pasen más de 1 hora diaria frente a pantallas recreativas.
 
-## H2: Preguntas frecuentes (FAQ)
+## Preguntas frecuentes (FAQ)
 
 ### 1. ¿Estos juegos funcionan sin conexión a internet?
 

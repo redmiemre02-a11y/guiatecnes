@@ -28,25 +28,25 @@ En nuestras pruebas con decenas de apps y asistentes, lo que notamos fue un camb
 
 ---
 
-## H2: ¿Cómo funciona la IA para romper adicciones?
+## ¿Cómo funciona la IA para romper adicciones?
 
 La clave está en que un mal hábito no es solo química, es un patrón aprendido. Tu cerebro asocia el cigarrillo con el café, el estrés o la cerveza. La IA no borra esos circuitos, pero los mapea con precisión quirúrgica.
 
 En nuestras pruebas, el primer paso siempre es el mismo: la app te pide registrar cada episodio (¿cuándo? ¿dónde? ¿qué sentías?). Con esos datos, el algoritmo construye tu "mapa de recaídas". A la semana ya sabe que los lunes a las 10:30, después de la reunión con tu jefe, tu craving sube un 80%.
 
-### H3: Análisis predictivo de patrones de recaída
+### Análisis predictivo de patrones de recaída
 
 Esto es lo más impresionante que hemos probado. La IA no reacciona: anticipa. Usando regresión logística y redes neuronales, cruza variables como hora, ubicación (GPS), estado de ánimo (autoreportado) e incluso datos biométricos de tu wearable.
 
 Ejemplo real: un compañero de redacción dejó de fumar en marzo. La app le avisaba "mañana a las 18:00 tendrás un pico de ansiedad, probablemente por la llamada con tu cliente". Él no lo sabía conscientemente, pero el patrón estaba ahí. Preparó estrategias y no recayó. Eso es lo que diferencia a la IA de un simple calendario.
 
-### H3: Chatbots de apoyo emocional 24/7
+### Chatbots de apoyo emocional 24/7
 
 ¿A las 3 de la mañana con un craving brutal y sin nadie a quien escribir? Los chatbots actuales (QuitGenius, por ejemplo) no te sueltan frases hechas. Mantienen conversaciones contextuales: te preguntan qué intensidad tiene el deseo (1-10), qué emoción predomina, y responden con técnicas de reestructuración cognitiva.
 
 Lo que notamos fue que la calidad del lenguaje ha mejorado muchísimo. Ya no parece un robot. Te hace preguntas socráticas tipo "¿qué te prometiste a ti mismo cuando empezaste?" y eso, sorprendentemente, funciona mejor que un mensaje motivacional genérico.
 
-### H3: Personalización dinámica de estrategias
+### Personalización dinámica de estrategias
 
 Cada persona recae por razones distintas. Para uno es el estrés, para otro el aburrimiento social. La IA ajusta tu plan semanalmente según tus progresos y fallos.
 
@@ -54,11 +54,11 @@ Si detecta que fallas siempre después de comer, te cambia la estrategia: te pro
 
 ---
 
-## H2: Mejores herramientas de IA para dejar de fumar
+## Mejores herramientas de IA para dejar de fumar
 
 No todo lo que brilla es oro. Hemos probado más de 20 aplicaciones y servicios, y solo unas pocas merecen tu tiempo. Aquí va el análisis honesto.
 
-### H3: Apps móviles con IA (QuitGenius, Smoke Free)
+### Apps móviles con IA (QuitGenius, Smoke Free)
 
 **QuitGenius** es la más avanzada en IA conversacional. Su chatbot aprende de cada interacción y te hace micro-retos diarios. Tiene un módulo de "prevención de recaídas" que se activa cuando llevas 3 días sin registrar actividad (señal de riesgo).
 
@@ -70,7 +70,7 @@ No todo lo que brilla es oro. Hemos probado más de 20 aplicaciones y servicios,
 ❌ **Contras**: Requieren registro constante (si no, pierden precisión), pueden generar dependencia del móvil, la privacidad de tus datos de salud es una incógnita.
 💰 **Precio**: Smoke Free: gratis con premium 4,99€/mes. QuitGenius: prueba 7 días, luego 14,99€/mes (hay plan anual a 89€).
 
-### H3: Asistentes virtuales integrados en wearables
+### Asistentes virtuales integrados en wearables
 
 Aquí hablamos de Apple Watch con Siri, Fitbit con su coach de IA, y el nuevo Oura Ring con su "Resilience Score". Estos dispositivos miden tu ritmo cardíaco, variabilidad y estrés.
 
@@ -82,7 +82,7 @@ Lo que notamos fue que la IA de estos wearables detecta un pico de ansiedad ANTE
 ❌ **Contras**: Costo alto del hardware, la IA es menos específica para tabaquismo (es generalista), precisión variable según el sensor.
 💰 **Peso**: Wearable desde 150€ (Fitbit) hasta 450€ (Apple Watch). La mayoría de funciones de IA vienen incluidas o con suscripción de 2,99€/mes (Fitbit Premium).
 
-### H3: Terapia cognitivo-conductual generada por IA
+### Terapia cognitivo-conductual generada por IA
 
 Esta es la joya oculta. Servicios como **Cognea** o **Woebot** (adaptado a adicciones) generan sesiones de TCC personalizadas. No es un chatbot genérico: te guía a través de ejercicios de reestructuración de pensamientos, exposición gradual y activación conductual.
 
@@ -96,7 +96,7 @@ En nuestras pruebas, lo más potente fue el "diario de pensamientos automáticos
 
 ---
 
-## H2: IA vs. Métodos tradicionales: Comparativa de eficacia
+## IA vs. Métodos tradicionales: Comparativa de eficacia
 
 | Método | Personalización | Intervención en tiempo real | Costo | Tasa de éxito (12 meses) | Soporte emocional |
 |--------|----------------|---------------------------|-------|--------------------------|-------------------|
@@ -110,23 +110,23 @@ Los datos salen de metaanálisis recientes (Cochrane 2023) y de nuestras propias
 
 ---
 
-## H2: Cómo usar IA para controlar otros malos hábitos
+## Cómo usar IA para controlar otros malos hábitos
 
 La misma tecnología que ayuda con el tabaco sirve para otros comportamientos compulsivos. Hemos probado y esto es lo que funciona.
 
-### H3: Comer compulsivamente: IA que monitorea emociones
+### Comer compulsivamente: IA que monitorea emociones
 
 Apps como **Eat Right AI** o **Noom** usan IA para detectar patrones de "comer emocional". Registras qué comes y cómo te sientes, y la app te avisa: "detecto que comes cuando estás aburrido, no cuando tienes hambre. Prueba con un vaso de agua y 10 minutos de espera".
 
 Lo que notamos fue que la IA es especialmente buena identificando disparadores que tú no ves. Un usuario comía chocolate cada vez que revisaba el email de su exjefe. La IA lo detectó en dos semanas. Nadie lo habría visto sin datos.
 
-### H3: Procrastinación: Asistentes que bloquean distracciones
+### Procrastinación: Asistentes que bloquean distracciones
 
 **Freedom** y **Cold Turkey** con IA integrada no solo bloquean webs: aprenden cuándo tiendes a procrastinar (suele ser después de tareas difíciles) y te proponen "micro-pausas" o te cambian la lista de tareas.
 
 La IA también detecta si estás en "modo foco" real (escribiendo activamente) y adapta el nivel de bloqueo. No es lo mismo bloquear Twitter a las 10am que a las 4pm cuando estás agotado mentalmente.
 
-### H3: Adicción al móvil: IA que limita uso según contexto
+### Adicción al móvil: IA que limita uso según contexto
 
 **Digital Wellbeing** de Google y **Screen Time** de Apple usan IA para entender el contexto. No es un límite tonto de "2 horas al día". Si estás en el gimnasio, te bloquea redes. Si estás en una reunión (detecta calendario y ubicación), silencia todo. Si es domingo por la mañana, te permite más flexibilidad.
 
@@ -134,23 +134,23 @@ La clave está en que la IA entiende intención, no solo tiempo de pantalla.
 
 ---
 
-## H2: Pasos prácticos para implementar IA en tu rutina
+## Pasos prácticos para implementar IA en tu rutina
 
 No basta con descargar una app. Tienes que configurarla bien. Aquí va el proceso que seguimos en nuestras pruebas y que mejor resultado dio.
 
-### H3: Configuración inicial y registro de datos
+### Configuración inicial y registro de datos
 
 Primera semana: registra TODO sin cambiar tu comportamiento. Cigarrillos, antojos, emociones, hora, lugar. La IA necesita una línea base. Si empiezas a cambiar conducta antes de que la IA aprenda, los datos serán inútiles.
 
 Consejo: configura recordatorios cada 3 horas para registrar tu estado. Las mejores apps lo hacen automáticamente, pero si no, pon alarmas. Sin datos, no hay IA.
 
-### H3: Establecer metas y alertas inteligentes
+### Establecer metas y alertas inteligentes
 
 No digas "quiero dejar de fumar". Eso es vago. Configura: "reducir de 15 a 10 cigarrillos esta semana", "no fumar en el coche", "retrasar el primer cigarrillo 30 minutos cada día".
 
 La IA te enviará alertas cuando detecte que estás a punto de romper una meta. Por ejemplo, si llevas 6 horas sin fumar y tu patrón dice que a las 7 recaes, te avisará a las 6:30 con una estrategia concreta.
 
-### H3: Medir progreso con informes generados por IA
+### Medir progreso con informes generados por IA
 
 Cada domingo, la app te genera un informe: días sin fumar, momentos críticos superados, dinero ahorrado, y lo más importante: patrones que has roto. Ver que ya no fumas después de comer (pero sí cuando bebes) te da información accionable.
 
@@ -158,23 +158,23 @@ Nosotros recomendamos revisar estos informes con un amigo o familiar. La rendici
 
 ---
 
-## H2: Limitaciones y consideraciones éticas
+## Limitaciones y consideraciones éticas
 
 No todo es color de rosa. La IA tiene límites claros y problemas que debes conocer antes de confiarle tu salud.
 
-### H3: Privacidad de datos de salud
+### Privacidad de datos de salud
 
 Estás compartiendo información íntima: tus momentos de debilidad, tus emociones, tu ubicación exacta cuando sientes craving. ¿Quién tiene acceso? Muchas apps venden datos anonimizados a aseguradoras o farmacéuticas.
 
 Lee la política de privacidad. Si dice "compartimos datos con terceros para mejorar servicios", huye. Busca apps con cifrado de extremo a extremo y que no vendan datos. En nuestras pruebas, **QuitGenius** y **Cognea** fueron las más transparentes.
 
-### H3: Dependencia tecnológica vs. autonomía
+### Dependencia tecnológica vs. autonomía
 
 ¿Qué pasa cuando dejas la app? Si has construido tu cesación alrededor de la IA, al quitarla puede venir el rebote. La tecnología debe ser un andamiaje, no una muleta permanente.
 
 Nuestra recomendación: usa la IA intensivamente los primeros 3-6 meses, y luego ve espaciando su uso. El objetivo es que internalices las estrategias. La app no puede estar contigo toda la vida.
 
-### H3: Casos donde la IA no es suficiente (adicciones severas)
+### Casos donde la IA no es suficiente (adicciones severas)
 
 Si fumas más de 30 cigarrillos al día desde hace 20 años, o si tienes depresión mayor o trastorno bipolar, la IA no bastará. Es un complemento, no un tratamiento.
 

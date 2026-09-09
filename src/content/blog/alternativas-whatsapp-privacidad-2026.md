@@ -24,21 +24,21 @@ Lo que notamos en nuestras pruebas es que la mayoría de la gente no cambia de a
 
 ---
 
-## H2: ¿Por qué buscar alternativas a WhatsApp en 2026?
+## ¿Por qué buscar alternativas a WhatsApp en 2026?
 
-### H3: Cambios en políticas de privacidad y compartición de datos con Meta
+### Cambios en políticas de privacidad y compartición de datos con Meta
 
 No es ningún secreto: WhatsApp comparte metadatos con Meta. Hablamos de tu IP, modelo de dispositivo, duración de las llamadas, con quién hablas y cuándo. En 2026, esto se ha intensificado con nuevos acuerdos de datos que alimentan los algoritmos publicitarios de Facebook e Instagram.
 
 En nuestras pruebas, verificamos que aunque WhatsApp cifra el contenido, los metadatos son oro puro para las corporaciones. Y con la inteligencia artificial generativa integrada en Meta, esos datos se usan para entrenar modelos que luego te venden productos. No gracias.
 
-### H3: Riesgos de seguridad: malware, phishing y vulnerabilidades conocidas
+### Riesgos de seguridad: malware, phishing y vulnerabilidades conocidas
 
 WhatsApp ha tenido agujeros de seguridad graves, como el famoso spyware Pegasus que se colaba por llamadas perdidas. En 2026, los vectores de ataque han evolucionado: enlaces maliciosos en grupos, archivos PDF camuflados y estafas de verificación en dos pasos.
 
 Lo que notamos fue que la app de Meta es un objetivo constante por su base de usuarios masiva. Los ciberdelincuentes saben que ahí está el dinero. Las alternativas con código abierto y auditorías constantes cierran esas puertas mucho más rápido.
 
-### H3: El auge de la mensajería descentralizada y soberanía digital
+### El auge de la mensajería descentralizada y soberanía digital
 
 La gente ya no quiere depender de un servidor central. En 2026, la descentralización es una tendencia imparable. Apps como Session o Briar usan redes peer-to-peer o blockchain para que no exista un punto único de fallo ni un dueño que mire tus datos.
 
@@ -46,27 +46,27 @@ Esto no es solo para paranoicos. Es para cualquiera que valore su libertad digit
 
 ---
 
-## H2: Criterios para evaluar la privacidad en apps de mensajería
+## Criterios para evaluar la privacidad en apps de mensajería
 
-### H3: Cifrado de extremo a extremo (E2E) por defecto
+### Cifrado de extremo a extremo (E2E) por defecto
 
 Esto no es negociable. Si la app no cifra tus mensajes de forma automática, no la consideres. Signal, Threema, Session y Briar lo hacen por defecto. Telegram solo en chats secretos, y eso ya es un punto en contra.
 
 En nuestras pruebas, el cifrado E2E por defecto es lo que marca la diferencia entre una app segura y una que solo lo parece. Si tienes que activar el modo seguro manualmente, la mayoría de la gente no lo hará.
 
-### H3: Almacenamiento de metadatos y servidores en jurisdicciones seguras
+### Almacenamiento de metadatos y servidores en jurisdicciones seguras
 
 Los metadatos son el talón de Aquiles de la mensajería moderna. Signal recopila solo lo esencial: tu número y cuándo te conectaste. Threema ni siquiera necesita tu número. Session no guarda nada porque usa una red descentralizada.
 
 Los servidores también importan. Suiza (Threema), Alemania o países nórdicos tienen leyes de privacidad estrictas. Estados Unidos (WhatsApp) y Rusia (Telegram) no son precisamente garantía de protección de datos.
 
-### H3: Código abierto y auditorías independientes
+### Código abierto y auditorías independientes
 
 Si el código no es público, no confíes. El código abierto permite que cualquier experto revise la app y detecte vulnerabilidades. Signal y Threema son auditados constantemente por empresas de seguridad independientes.
 
 Lo que notamos fue que Telegram es un caso raro: su código es parcialmente abierto, pero el cifrado del servidor no es auditable. Eso genera dudas razonables sobre qué pasa con tus datos en la nube.
 
-### H3: Funciones de anonimato: sin número de teléfono, perfiles temporales
+### Funciones de anonimato: sin número de teléfono, perfiles temporales
 
 En 2026, el número de teléfono es un identificador demasiado vulnerable. Threema te da un ID aleatorio, Session usa claves públicas y Briar funciona sin conexión directa. Esto te protege de ingeniería social y de filtraciones de datos.
 
@@ -74,9 +74,9 @@ Si lo que buscas es anonimato total, descarta Signal y Telegram. Aunque Signal e
 
 ---
 
-## H2: Las 5 mejores alternativas a WhatsApp con más privacidad en 2026
+## Las 5 mejores alternativas a WhatsApp con más privacidad en 2026
 
-### H3: Signal: el estándar de oro en seguridad y privacidad
+### Signal: el estándar de oro en seguridad y privacidad
 
 **¿Para quién?** Para usuarios que quieren lo mejor en seguridad sin sacrificar la facilidad de uso. Es la opción recomendada por Edward Snowden y la más fácil de adoptar para tus contactos.
 
@@ -93,7 +93,7 @@ Si lo que buscas es anonimato total, descarta Signal y Telegram. Aunque Signal e
 
 💰 **Precio:** Gratis, financiado por una fundación sin ánimo de lucro.
 
-### H3: Telegram (modo secreto): versatilidad con cifrado opcional
+### Telegram (modo secreto): versatilidad con cifrado opcional
 
 **¿Para quién?** Para los que quieren una app todoterreno con canales, bots y grupos enormes, pero que entienden que el cifrado solo está en los chats secretos.
 
@@ -110,7 +110,7 @@ Si lo que buscas es anonimato total, descarta Signal y Telegram. Aunque Signal e
 
 💰 **Precio:** Gratis, con Telegram Premium por 4,99€/mes que añade funciones extra.
 
-### H3: Threema: privacidad total sin número de teléfono
+### Threema: privacidad total sin número de teléfono
 
 **¿Para quién?** Para profesionales, periodistas y cualquier persona que quiera privacidad absoluta sin vincular su identidad a un número.
 
@@ -127,7 +127,7 @@ Si lo que buscas es anonimato total, descarta Signal y Telegram. Aunque Signal e
 
 💰 **Precio:** Aproximadamente 5€ (pago único) para la versión completa.
 
-### H3: Session: descentralización total y anonimato por defecto
+### Session: descentralización total y anonimato por defecto
 
 **¿Para quién?** Para usuarios avanzados que priorizan el anonimato sobre la comodidad. Perfecta si vives en un país con censura o vigilancia masiva.
 
@@ -144,7 +144,7 @@ Si lo que buscas es anonimato total, descarta Signal y Telegram. Aunque Signal e
 
 💰 **Precio:** Gratis.
 
-### H3: Briar: comunicación offline y resistente a censura
+### Briar: comunicación offline y resistente a censura
 
 **¿Para quién?** Para activistas, periodistas en zonas de conflicto o cualquier persona que necesite comunicarse sin internet o bajo regímenes represivos.
 
@@ -163,7 +163,7 @@ Si lo que buscas es anonimato total, descarta Signal y Telegram. Aunque Signal e
 
 ---
 
-## H2: Comparativa rápida: características clave de cada alternativa
+## Comparativa rápida: características clave de cada alternativa
 
 | App | Cifrado E2E | Metadatos | Código abierto | Sin número teléfono | Almacenamiento nube | Precio |
 |---|---|---|---|---|---|---|
@@ -175,21 +175,21 @@ Si lo que buscas es anonimato total, descarta Signal y Telegram. Aunque Signal e
 
 ---
 
-## H2: Cómo migrar de WhatsApp sin perder tus contactos
+## Cómo migrar de WhatsApp sin perder tus contactos
 
-### H3: Exportar e importar contactos y grupos
+### Exportar e importar contactos y grupos
 
 Lo primero es exportar tus contactos desde WhatsApp. Ve a Ajustes > Chats > Exportar chat y guarda el archivo. Luego, en tu nueva app (Signal o Threema son las más fáciles), importa los contactos desde tu agenda.
 
 Para los grupos, no hay una forma automática. Tendrás que crearlos manualmente en la nueva app y añadir a los miembros. Nuestro consejo: empieza con los grupos más importantes y ve migrando poco a poco.
 
-### H3: Configurar verificación en dos pasos y copias de seguridad cifradas
+### Configurar verificación en dos pasos y copias de seguridad cifradas
 
 Nada más instalar la app, activa la verificación en dos pasos. En Signal, ve a Ajustes > Cuenta > Verificación en dos pasos. En Threema, la opción está en Ajustes > Seguridad. Esto añade una capa extra si alguien roba tu SIM o contraseña.
 
 Para las copias de seguridad, Signal permite cifrarlas con una contraseña local. Threema ofrece copias en tu dispositivo o en tu propio servidor. Evita las copias en la nube sin cifrar, que es lo que hace WhatsApp y te expone.
 
-### H3: Estrategias para convencer a tus contactos de cambiar de app
+### Estrategias para convencer a tus contactos de cambiar de app
 
 La migración es un problema social, no técnico. Lo que funciona es predicar con el ejemplo: instala la app, úsala y comparte capturas de pantalla de las funciones de privacidad. Explica los riesgos de WhatsApp de forma clara y sin alarmismo.
 
@@ -197,7 +197,7 @@ Otra estrategia: crea un grupo en la nueva app y añade a tus contactos más cer
 
 ---
 
-## H2: Preguntas frecuentes (FAQ)
+## Preguntas frecuentes (FAQ)
 
 ### ¿Es Signal realmente más seguro que WhatsApp en 2026?
 

@@ -18,7 +18,7 @@ readingTime: 11
 
 ---
 
-# H1: Ingresos Pasivos desde Casa con Poco Dinero 2026
+# Ingresos Pasivos desde Casa con Poco Dinero 2026
 
 Te voy a ser honesto: llevo una década probando métodos para generar ingresos sin moverme del sofá. He visto de todo, desde esquemas piramidales hasta negocios que sí funcionan. 
 
@@ -28,11 +28,11 @@ Aquí va mi análisis real, basado en pruebas y datos de este año. Nada de humo
 
 ---
 
-## H2: 1. Estrategias Digitales de Bajo Costo (Costo inicial: $0–$30)
+## 1. Estrategias Digitales de Bajo Costo (Costo inicial: $0–$30)
 
 Si tienes cero dólares, este es tu punto de partida. Los productos digitales tienen un margen del 90% y no requieren inventario físico. En nuestras pruebas, la clave está en elegir nichos con demanda constante, no modas pasajeras.
 
-### H3: Venta de plantillas y printables en Etsy/Creative Market
+### Venta de plantillas y printables en Etsy/Creative Market
 
 **¿Para quién?** Personas creativas sin habilidades de diseño avanzadas. Herramientas como Canva (gratis) te permiten crear planners, calendarios o invitaciones en una tarde.
 
@@ -42,7 +42,7 @@ Si tienes cero dólares, este es tu punto de partida. Los productos digitales ti
 
 **Lo que notamos fue:** Los vendedores que publican 20+ plantillas en su primer mes tienen 3x más ventas que los que suben una sola. La visibilidad en Etsy premia la consistencia.
 
-### H3: Ebooks y cursos cortos en Gumroad (sin inventario)
+### Ebooks y cursos cortos en Gumroad (sin inventario)
 
 **¿Para quién?** Expertos en cualquier tema (cocina, finanzas personales, manualidades) que quieren empaquetar su conocimiento. Gumroad cobra solo cuando vendes.
 
@@ -52,7 +52,7 @@ Si tienes cero dólares, este es tu punto de partida. Los productos digitales ti
 
 En nuestras pruebas, un ebook de 30 páginas sobre "inversión en cripto para principiantes" generó $180 en su primer mes con solo publicar en 3 foros de Reddit.
 
-### H3: Marketing de afiliación con contenido generado por IA (SEO long-tail)
+### Marketing de afiliación con contenido generado por IA (SEO long-tail)
 
 **¿Para quién?** Personas pacientes que entienden que el SEO es una carrera de fondo. La IA (ChatGPT, Claude) acelera la producción, pero el criterio humano sigue siendo vital.
 
@@ -64,11 +64,11 @@ En nuestras pruebas, un ebook de 30 páginas sobre "inversión en cripto para pr
 
 ---
 
-## H2: 2. Micro-Inversiones Automatizadas (Costo inicial: $10–$100)
+## 2. Micro-Inversiones Automatizadas (Costo inicial: $10–$100)
 
 Aquí no hay trabajo diario. Configuras una vez y dejas que el interés compuesto haga su magia. El riesgo existe, pero con cantidades pequeñas es tolerable.
 
-### H3: ETFs fraccionados y dividendos DRIP (sin comisiones)
+### ETFs fraccionados y dividendos DRIP (sin comisiones)
 
 **¿Para quién?** Inversores conservadores que quieren exposición al mercado sin comprar acciones completas. Plataformas como Robinhood, eToro o Trade Republic permiten fracciones desde $1.
 
@@ -78,7 +78,7 @@ Aquí no hay trabajo diario. Configuras una vez y dejas que el interés compuest
 
 **En nuestras pruebas:** Invertir $50 en un ETF de S&P 500 con DRIP activado generó $0.45 en dividendos el primer trimestre. No es mucho, pero el hábito importa.
 
-### H3: Staking de criptomonedas estables (USDT/DAI) con 5-8% APY
+### Staking de criptomonedas estables (USDT/DAI) con 5-8% APY
 
 **¿Para quién?** Aventureros digitales que aceptan volatilidad a cambio de rendimientos diarios. Las stablecoins eliminan el riesgo de precio, pero no el de plataforma.
 
@@ -88,7 +88,7 @@ Aquí no hay trabajo diario. Configuras una vez y dejas que el interés compuest
 
 **Lo que notamos fue:** El staking de USDT en Binance (6.2% APY) generó $0.10 diarios con $500. No te harás rico, pero es más que un banco.
 
-### H3: Crowdlending P2P (Mintos, Bondora) con carteras diversificadas
+### Crowdlending P2P (Mintos, Bondora) con carteras diversificadas
 
 **¿Para quién?** Inversores que quieren rentabilidades del 8-12% sin tocar cripto. Prestas dinero a particulares o empresas a través de plataformas reguladas.
 
@@ -100,11 +100,11 @@ Aquí no hay trabajo diario. Configuras una vez y dejas que el interés compuest
 
 ---
 
-## H2: 3. Alquiler de Activos Subutilizados (Costo inicial: $0–$50)
+## 3. Alquiler de Activos Subutilizados (Costo inicial: $0–$50)
 
 Tienes cosas que no usas. Otros pagan por usarlas. Simple. La economía colaborativa sigue viva y coleando en 2026.
 
-### H3: Espacio de almacenamiento (Neighbor, Stow It)
+### Espacio de almacenamiento (Neighbor, Stow It)
 
 **¿Para quién?** Personas con garajes, trasteros o habitaciones vacías. Neighbor es el "Airbnb de los espacios de almacenamiento".
 
@@ -114,7 +114,7 @@ Tienes cosas que no usas. Otros pagan por usarlas. Simple. La economía colabora
 
 **Lo que notamos fue:** Un trastero de 3m² en Madrid se alquiló por $80/mes en menos de 48 horas. El inquilino solo guardaba cajas de mudanza.
 
-### H3: Equipos electrónicos y herramientas (Fat Llama)
+### Equipos electrónicos y herramientas (Fat Llama)
 
 **¿Para quién?** Gente con cámaras, drones, taladros o consolas que usan una vez al año. Fat Llama funciona como un marketplace de alquiler entre particulares.
 
@@ -124,7 +124,7 @@ Tienes cosas que no usas. Otros pagan por usarlas. Simple. La economía colabora
 
 **En nuestras pruebas:** Alquilar una cámara Sony A7III por $45/día cubrió el 60% del coste de la cámara en un año. Solo la alquilamos 8 veces.
 
-### H3: Parqueo privado o cochera (Spacer, JustPark)
+### Parqueo privado o cochera (Spacer, JustPark)
 
 **¿Para quién?** Personas con plazas de garaje en zonas céntricas o cerca de aeropuertos. La demanda de aparcamiento nunca baja.
 
@@ -136,11 +136,11 @@ Tienes cosas que no usas. Otros pagan por usarlas. Simple. La economía colabora
 
 ---
 
-## H2: 4. Contenido Evergreen con Publicidad (Costo inicial: $20–$60)
+## 4. Contenido Evergreen con Publicidad (Costo inicial: $20–$60)
 
 El contenido atemporal es la máquina de ingresos pasivos por excelencia. Creas una vez, cobras durante años. Pero la paciencia es clave, los primeros meses son desiertos.
 
-### H3: Blog nicho con artículos "pillar" y Adsense/Ezoic
+### Blog nicho con artículos "pillar" y Adsense/Ezoic
 
 **¿Para quién?** Escritores pacientes que quieren independencia de plataformas. Un blog es tuyo, nadie te lo quita.
 
@@ -150,7 +150,7 @@ El contenido atemporal es la máquina de ingresos pasivos por excelencia. Creas 
 
 **En nuestras pruebas:** Un blog sobre "jardinería en balcones" con 40 artículos generó $350/mes en Ezoic tras 8 meses. Los ingresos siguen creciendo sin tocar nada.
 
-### H3: Canal de YouTube con videos "how-to" atemporales (sin aparecer)
+### Canal de YouTube con videos "how-to" atemporales (sin aparecer)
 
 **¿Para quién?** Personas que no quieren mostrar su cara pero saben explicar procesos. Tutoriales de software, reparaciones, o recetas con voz en off.
 
@@ -160,7 +160,7 @@ El contenido atemporal es la máquina de ingresos pasivos por excelencia. Creas 
 
 **Lo que notamos fue:** Un canal con 15 videos de "cómo cambiar el aceite de tu coche" generó $120/mes en Adsense tras 4 meses. Los videos tienen 2 años y siguen sumando visitas.
 
-### H3: Podcast con transcripción automática y sponsorships programáticos
+### Podcast con transcripción automática y sponsorships programáticos
 
 **¿Para quién?** Conversadores que quieren contenido en audio sin editar horas. La IA transcribe y genera notas de programa.
 
@@ -172,11 +172,11 @@ El contenido atemporal es la máquina de ingresos pasivos por excelencia. Creas 
 
 ---
 
-## H2: 5. Automatización con IA y Herramientas Freemium (Costo: $0–$15/mes)
+## 5. Automatización con IA y Herramientas Freemium (Costo: $0–$15/mes)
 
 Aquí es donde la tecnología elimina el trabajo manual. Configuras sistemas que operan solos, con mínima supervisión.
 
-### H3: Bots de trading de bajo riesgo (3Commas, Pionex) con grid trading
+### Bots de trading de bajo riesgo (3Commas, Pionex) con grid trading
 
 **¿Para quién?** Personas que quieren exposición al trading sin estar pegadas a la pantalla. El grid trading compra y vende en rangos predeterminados.
 
@@ -186,7 +186,7 @@ Aquí es donde la tecnología elimina el trabajo manual. Configuras sistemas que
 
 **Lo que notamos fue:** Un bot de grid trading en BTC/USDT con $100 generó $2.50 en un mes sin tocar nada. Las comisiones del exchange se comen un 30% de las ganancias.
 
-### H3: Dropshipping con AliExpress + Shopify (solo pago al vender)
+### Dropshipping con AliExpress + Shopify (solo pago al vender)
 
 **¿Para quién?** Emprendedores que quieren vender productos sin tocar inventario. El proveedor envía directamente al cliente.
 
@@ -196,7 +196,7 @@ Aquí es donde la tecnología elimina el trabajo manual. Configuras sistemas que
 
 **En nuestras pruebas:** Una tienda de "accesorios para mascotas" con 15 productos generó $600 en su primer mes. El margen fue del 18% después de publicidad.
 
-### H3: Creación de apps simples con no-code (Bubble) y monetización por anuncios
+### Creación de apps simples con no-code (Bubble) y monetización por anuncios
 
 **¿Para quién?** Personas con ideas de apps pero sin saber programar. Bubble permite crear apps funcionales con arrastrar y soltar.
 
@@ -208,7 +208,7 @@ Aquí es donde la tecnología elimina el trabajo manual. Configuras sistemas que
 
 ---
 
-## H2: 6. Comparativa de Rentabilidad y Esfuerzo (Tabla)
+## 6. Comparativa de Rentabilidad y Esfuerzo (Tabla)
 
 | Estrategia | Inversión inicial | Ingreso mensual estimado | Horas/semana | Riesgo | Tiempo hasta primer ingreso | Escalabilidad |
 |------------|-------------------|--------------------------|--------------|--------|-----------------------------|---------------|
@@ -221,12 +221,12 @@ Aquí es donde la tecnología elimina el trabajo manual. Configuras sistemas que
 
 ---
 
-## H2: FAQ – Preguntas Frecuentes
+## FAQ – Preguntas Frecuentes
 
-### H3: ¿Cuál es el método más rápido para ver ingresos en 2026?
+### ¿Cuál es el método más rápido para ver ingresos en 2026?
 
 El **staking de criptomonedas estables** genera rendimientos diarios desde el día 1 (ej. $30 en USDT → ~$0.15/día). Para ingresos mayores, el **alquiler de espacio** (garaje, bodega) puede generar efectivo en menos de 7 días, pero requiere un activo físico.
 
-### H3: ¿Necesito conocimientos técnicos para automatizar ingresos pasivos?
+### ¿Necesito conocimientos técnicos para automatizar ingresos pasivos?
 
 No. Herramientas como **Gumroad** (venta digital), **Neighbor** (alquiler) y **Pionex** (bots de trading) tienen

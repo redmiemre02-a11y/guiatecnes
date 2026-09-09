@@ -19,9 +19,9 @@ readingTime: 12
 
 ---
 
-## H2: Requisitos de Hardware y Software para Streaming en 2026
+## Requisitos de Hardware y Software para Streaming en 2026
 
-### H3: CPU, GPU y RAM mínimas y recomendadas
+### CPU, GPU y RAM mínimas y recomendadas
 
 En nuestras pruebas durante los últimos meses, el equilibrio entre CPU y GPU ha cambiado drásticamente. Ya no necesitas un monstruo de 16 núcleos para streaming; el códec NVENC de Nvidia y el AV1 de AMD han democratizado el proceso.
 
@@ -34,7 +34,7 @@ Para **1080p60 con NVENC/AV1**:
 
 Lo que notamos fue que la RAM se convierte en el cuello de botella más rápido que la CPU. Si tienes 16 GB y OBS abierto, Chrome con alertas y el juego, los frame drops aparecen antes que con una GPU más modesta.
 
-### H3: OBS Studio vs Streamlabs vs Twitch Studio (2026)
+### OBS Studio vs Streamlabs vs Twitch Studio (2026)
 
 Hemos probado las tres durante semanas y el veredicto es claro: **OBS Studio sigue siendo el rey**, pero no para todo el mundo.
 
@@ -46,7 +46,7 @@ Hemos probado las tres durante semanas y el veredicto es claro: **OBS Studio sig
 
 Mi recomendación personal: empieza con Streamlabs si eres nuevo, pero migra a OBS Studio en cuanto entiendas los conceptos de bitrate y escenas. La diferencia en calidad de imagen y fluidez es notable en conexiones inestables.
 
-### H3: Códecs AV1, HEVC y NVENC: cuál elegir
+### Códecs AV1, HEVC y NVENC: cuál elegir
 
 Aquí va la gran decisión técnica de 2026. En nuestras pruebas con RTX 40 y RX 7000, **AV1 es el claro ganador en calidad por bitrate**, pero tiene un problema: Twitch solo lo permite para partners verificados. YouTube lo acepta para todos desde 2024.
 
@@ -58,9 +58,9 @@ Aquí va la gran decisión técnica de 2026. En nuestras pruebas con RTX 40 y RX
 
 ---
 
-## H2: Configuración Óptima de OBS Studio para Twitch y YouTube
+## Configuración Óptima de OBS Studio para Twitch y YouTube
 
-### H3: Ajustes de video, bitrate y audio (guía paso a paso)
+### Ajustes de video, bitrate y audio (guía paso a paso)
 
 Después de probar docenas de configuraciones, esta es la que nos funciona mejor en una RTX 4070 con conexión de 50 Mbps de subida:
 
@@ -85,7 +85,7 @@ Después de probar docenas de configuraciones, esta es la que nos funciona mejor
 
 En nuestras pruebas, el error más común que vemos en configuraciones ajenas es usar bitrate demasiado alto para la subida real. Haz una prueba en speedtest.net y resta un 10% para margen de seguridad.
 
-### H3: Escenas, fuentes y overlays profesionales
+### Escenas, fuentes y overlays profesionales
 
 La organización de escenas es lo que separa a un streamer amateur de uno profesional. Te propongo esta estructura que usamos en nuestro canal de pruebas:
 
@@ -96,7 +96,7 @@ La organización de escenas es lo que separa a un streamer amateur de uno profes
 
 Para fuentes, usa **Game Capture** en lugar de Display Capture (renderiza mejor y usa menos CPU). Añade una fuente de navegador para el chat y otra para alertas. Los overlays de Streamlabs o StreamElements funcionan bien, pero si quieres algo único, diseña el tuyo en Canva o Photoshop.
 
-### H3: Uso de plugins: filtros, transiciones y alertas
+### Uso de plugins: filtros, transiciones y alertas
 
 OBS Studio brilla por sus plugins. Estos son los que instalamos en cada equipo de streaming:
 
@@ -111,9 +111,9 @@ Para alertas, StreamElements es nuestra elección por su flexibilidad y bajo con
 
 ---
 
-## H2: Streaming desde un Solo PC vs Doble PC (Setup 2026)
+## Streaming desde un Solo PC vs Doble PC (Setup 2026)
 
-### H3: Ventajas del streaming con una sola GPU (NVENC/AV1)
+### Ventajas del streaming con una sola GPU (NVENC/AV1)
 
 En 2026, el streaming de un solo PC ya no es un compromiso, es la opción recomendada para el 90% de los casos. Los motivos:
 
@@ -124,7 +124,7 @@ En 2026, el streaming de un solo PC ya no es un compromiso, es la opción recome
 
 En nuestras pruebas con Cyberpunk 2077 a 1440p ultra, una RTX 4070 + Ryzen 7 7800X3D mantuvo 80-90 FPS mientras streameaba a 1080p60. Sin streaming, eran 95 FPS. La diferencia es imperceptible en la mayoría de juegos.
 
-### H3: Configuración de doble PC con NDI o capture card
+### Configuración de doble PC con NDI o capture card
 
 El doble PC sigue siendo relevante para streamers competitivos (CS2, Valorant, Fortnite) que necesitan cada FPS posible, o para quienes hacen streams muy largos con muchas fuentes.
 
@@ -138,7 +138,7 @@ El doble PC sigue siendo relevante para streamers competitivos (CS2, Valorant, F
 
 La clave es que el PC de streaming no juegue, así puede dedicar todos los recursos a codificar y procesar. En nuestras pruebas, la diferencia de FPS en el PC de juego es de 0-2%.
 
-### H3: Alternativas cloud gaming y streaming remoto
+### Alternativas cloud gaming y streaming remoto
 
 Para 2026, hay una tercera vía que está ganando tracción: **streaming desde la nube**. Servicios como **GeForce NOW** o **Boosteroid** te permiten jugar en servidores remotos y transmitir desde tu PC de streaming.
 
@@ -151,9 +151,9 @@ Lo probamos con GeForce NOW Ultimate (RTX 4080 en la nube) y el resultado fue so
 
 ---
 
-## H2: Optimización de Red y Latencia para Streaming Estable
+## Optimización de Red y Latencia para Streaming Estable
 
-### H3: Configuración de router, QoS y cable vs WiFi 7
+### Configuración de router, QoS y cable vs WiFi 7
 
 Aquí va la verdad incómoda: **el cable Ethernet sigue siendo mejor que cualquier WiFi**. En nuestras pruebas con WiFi 7 (el nuevo estándar de 2026), la latencia era de 3-5ms más que con cable, y los microcortes aparecían cuando alguien más usaba la red.
 
@@ -164,7 +164,7 @@ Aquí va la verdad incómoda: **el cable Ethernet sigue siendo mejor que cualqui
 
 **Cable vs WiFi**: Si no tienes más remedio que usar WiFi, asegúrate de estar en la banda de 5 GHz o 6 GHz (WiFi 6E/7). La banda de 2.4 GHz está demasiado saturada. Y nunca, jamás, uses repetidores WiFi para streaming. Son la causa principal de frame drops en nuestros tests.
 
-### H3: Servidores RTMP y baja latencia (Low Latency Mode)
+### Servidores RTMP y baja latencia (Low Latency Mode)
 
 Twitch y YouTube tienen diferentes servidores de ingesta. Twitch te recomienda automáticamente el más cercano, pero puedes forzar uno manualmente en la configuración de OBS.
 
@@ -179,7 +179,7 @@ Twitch y YouTube tienen diferentes servidores de ingesta. Twitch te recomienda a
 
 En nuestras pruebas, la latencia baja de Twitch causaba micro-cortes en conexiones inestables. Si tu subida es menor a 10 Mbps, no actives el Low Latency Mode. Prefiere una latencia de 10s pero estable.
 
-### H3: Herramientas para monitorear frame drops y jitter
+### Herramientas para monitorear frame drops y jitter
 
 No confíes solo en el indicador de OBS. Usa estas herramientas:
 
@@ -197,9 +197,9 @@ En nuestras pruebas, la causa más común de frame drops no era el bitrate, sino
 
 ---
 
-## H2: Herramientas de Interacción, Chatbots y Monetización
+## Herramientas de Interacción, Chatbots y Monetización
 
-### H3: Chatbots: Nightbot, StreamElements y Fossabot
+### Chatbots: Nightbot, StreamElements y Fossabot
 
 Los chatbots son el cerebro detrás de la interacción en tu canal. Aquí tienes nuestra comparativa tras meses de uso:
 

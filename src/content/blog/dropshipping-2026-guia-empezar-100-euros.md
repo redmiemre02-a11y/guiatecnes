@@ -28,21 +28,21 @@ En esta guía te explico exactamente cómo distribuir ese presupuesto, qué herr
 
 ---
 
-## H2: ¿Por qué el Dropshipping Sigue Vivo en 2026? (Realidades y Mitos)
+## ¿Por qué el Dropshipping Sigue Vivo en 2026? (Realidades y Mitos)
 
-### H3: Lo que cambió vs. 2020 (plazos de entrega, políticas de pago)
+### Lo que cambió vs. 2020 (plazos de entrega, políticas de pago)
 
 En 2020, el cliente esperaba su paquete de China en 20-40 días y punto. Ahora, con Amazon Prime y tiendas locales ofreciendo envíos en 24 horas, la paciencia del consumidor es mínima. En nuestras pruebas, una tienda con envío desde China tenía una tasa de abandono del 85% al ver el plazo de entrega estimado.
 
 Las pasarelas de pago también han apretado las tuercas. PayPal y Stripe exigen transparencia total sobre tiempos de envío y políticas de devolución. Si no cumples, te congelan los fondos. Lo que notamos fue que los negocios que sobreviven en 2026 usan proveedores con stock en Europa (España, Alemania o Polonia) para garantizar entregas en 2-5 días. El coste por unidad es mayor, pero la conversión se dispara.
 
-### H3: Mitos falsos: "está saturado" vs. "es dinero fácil"
+### Mitos falsos: "está saturado" vs. "es dinero fácil"
 
 El mito de la saturación lo repiten quienes venden cursos de "cómo hacerse rico sin trabajar". La realidad es que el mercado se satura de productos genéricos, no de marcas con criterio. Si vendes una funda de móvil con un estampado random, sí, estás muerto. Si vendes un accesorio que resuelve un dolor concreto (p.ej., organizadores de cables para teletrabajo) y construyes una marca alrededor, tienes espacio.
 
 El mito opuesto, el del dinero fácil, es igual de peligroso. Lo que notamos fue que los primeros 3 meses son de aprendizaje constante: campañas que no rentabilizan, proveedores que fallan, clientes que reclaman. No es un esquema piramidal, pero requiere más esfuerzo que un trabajo de 9 a 5. Quien te diga lo contrario, te quiere vender algo.
 
-### H3: El nuevo perfil de comprador: busca marcas con identidad, no catálogos
+### El nuevo perfil de comprador: busca marcas con identidad, no catálogos
 
 El comprador de 2026 es escéptico y está sobre-estimulado. Ha visto miles de anuncios y desarrolla un "banner blindness" brutal. Solo confía en marcas que transmiten autenticidad: vídeo real, testimonios verificables y una historia coherente.
 
@@ -50,9 +50,9 @@ En nuestras pruebas, las tiendas que funcionan tienen una voz clara, un problema
 
 ---
 
-## H2: Presupuesto de 100€: Desglose Exacto de Costes (Mes 1)
+## Presupuesto de 100€: Desglose Exacto de Costes (Mes 1)
 
-### H3: Gastos fijos imprescindibles (dominio ~10€, hosting ~15€, email marketing ~5€)
+### Gastos fijos imprescindibles (dominio ~10€, hosting ~15€, email marketing ~5€)
 
 Con 100€ tienes que ser quirúrgico. Lo que notamos fue que la mayoría de novatos gasta en herramientas innecesarias antes de tener una sola venta. Empieza por lo básico:
 
@@ -62,7 +62,7 @@ Con 100€ tienes que ser quirúrgico. Lo que notamos fue que la mayoría de nov
 
 Total fijo inicial: ~30€. Te quedan 70€ para el resto.
 
-### H3: Herramientas gratuitas que sustituyen a las de pago (Canva, ChatGPT, Google Trends)
+### Herramientas gratuitas que sustituyen a las de pago (Canva, ChatGPT, Google Trends)
 
 No necesitas suscripciones caras para empezar. En nuestras pruebas, estas herramientas gratuitas cubren el 90% de las necesidades iniciales:
 
@@ -71,7 +71,7 @@ No necesitas suscripciones caras para empezar. En nuestras pruebas, estas herram
 - **Google Trends**: Para validar si un producto está en ascenso o es una moda pasajera. Es tu mejor aliado de investigación sin pagar un céntimo.
 - **CapCut**: Edición de vídeo para TikTok/Reels. La versión gratuita tiene todas las funciones que necesitas para crear contenido orgánico decente.
 
-### H3: Presupuesto para anuncios: 50-60€ en Meta/TikTok (estrategia de micro-testing)
+### Presupuesto para anuncios: 50-60€ en Meta/TikTok (estrategia de micro-testing)
 
 Aquí está la clave: no lances campañas de 20€/día a lo loco. Con 50-60€ puedes hacer un test estructurado. Lo que notamos fue que la estrategia de micro-testing funciona así:
 
@@ -81,7 +81,7 @@ Aquí está la clave: no lances campañas de 20€/día a lo loco. Con 50-60€ 
 
 El error es gastar 30€ en un solo día y luego no tener presupuesto para iterar.
 
-### H3: Tabla comparativa: Plan A (Todo gratis) vs. Plan B (100€ optimizado)
+### Tabla comparativa: Plan A (Todo gratis) vs. Plan B (100€ optimizado)
 
 Para que lo veas claro, he preparado una comparativa rápida de escenarios según tu presupuesto inicial. No es magia, es matemática:
 
@@ -99,9 +99,9 @@ Con 100€ no esperes montar un imperio el primer mes. Espera construir una base
 
 ---
 
-## H2: Cómo Elegir un Producto Ganador con Solo 100€ (Sin Gastar en Spying Tools)
+## Cómo Elegir un Producto Ganador con Solo 100€ (Sin Gastar en Spying Tools)
 
-### H3: Criterios de selección: problema específico, peso <500g, precio 20-40€
+### Criterios de selección: problema específico, peso <500g, precio 20-40€
 
 No elijas un producto por corazonada. Aplica estos tres filtros obligatorios:
 
@@ -109,7 +109,7 @@ No elijas un producto por corazonada. Aplica estos tres filtros obligatorios:
 - **Peso inferior a 500g**: El envío desde la UE se dispara si superas ese peso. Un producto de 300g con envío desde Alemania cuesta unos 4-5€. Uno de 1kg puede costar 12-15€, matando tu margen.
 - **Precio de venta entre 20-40€**: Es el rango de compra impulsiva. Por debajo de 20€, los márgenes son demasiado bajos tras pagar publicidad. Por encima de 40€, necesitas más confianza y un embudo más complejo.
 
-### H3: 3 métodos gratuitos de validación: TikTok Creative Center, Amazon Movers & Shakers, Reddit
+### 3 métodos gratuitos de validación: TikTok Creative Center, Amazon Movers & Shakers, Reddit
 
 No necesitas pagar 100€/mes por una herramienta de spying. En nuestras pruebas, estos tres métodos gratuitos son oro puro:
 
@@ -117,7 +117,7 @@ No necesitas pagar 100€/mes por una herramienta de spying. En nuestras pruebas
 2. **Amazon Movers & Shakers**: Es la lista de productos que más suben en ventas en las últimas 24 horas. Filtra por categorías específicas y busca productos con +100% de subida. Cruza esos datos con Google Trends para ver si la tendencia es estacional o estructural.
 3. **Reddit (r/dropship, r/ecommerce)**: Busca hilos donde la gente comparte sus productos ganadores. No copies directamente, pero úsalo para identificar nichos que no habías considerado. Pregunta directamente a los usuarios qué problemas tienen en sus rutinas; las respuestas son minas de oro.
 
-### H3: Señales de alerta: productos de moda pasajera o con reseñas negativas recurrentes
+### Señales de alerta: productos de moda pasajera o con reseñas negativas recurrentes
 
 Desconfía de productos que explotan por una moda de TikTok y se mueren en 2 semanas. Ejemplo: los juguetes sensoriales de 2023. Si buscas en Google Trends y ves un pico exponencial que ya está cayendo, no entres.
 
@@ -125,9 +125,9 @@ Otra señal de alarma: reseñas negativas recurrentes en AliExpress o Amazon sob
 
 ---
 
-## H2: Configuración Paso a Paso de tu Tienda (Día 1 a Día 7)
+## Configuración Paso a Paso de tu Tienda (Día 1 a Día 7)
 
-### H3: Estructura de página de producto que convierte (copy + vídeo UGC)
+### Estructura de página de producto que convierte (copy + vídeo UGC)
 
 En nuestras pruebas, la página de producto es donde se gana o se pierde la venta. No basta con poner fotos del proveedor. La estructura que convierte es:
 
@@ -137,7 +137,7 @@ En nuestras pruebas, la página de producto es donde se gana o se pierde la vent
 - **Prueba social**: Instala una app de reseñas (Loox tiene plan gratis para empezar) y muestra fotos de clientes.
 - **Garantía y política de devolución**: 14-30 días sin preguntas. Esto reduce la fricción.
 
-### H3: Configuración de pasarelas de pago y cálculo de impuestos (UE/UK)
+### Configuración de pasarelas de pago y cálculo de impuestos (UE/UK)
 
 No es el paso más sexy, pero si lo haces mal, tendrás problemas legales. Para vender en la UE:
 
@@ -145,7 +145,7 @@ No es el paso más sexy, pero si lo haces mal, tendrás problemas legales. Para 
 - **PayPal**: Sigue siendo esencial para generar confianza en el checkout. Configura tu política de devoluciones claramente para evitar disputas.
 - **Impuestos (UE)**: Con el régimen OSS (One Stop Shop), declaras el IVA del país donde resides tu cliente, no el tuyo. Te registras en la Agencia Tributaria de tu país con el formulario correspondiente. Para el Reino Unido, si vendes menos de £8,000 al año, no necesitas registrarte; por encima, sí.
 
-### H3: Automatización con IA: chatbots para post-venta y emails de abandono de carrito
+### Automatización con IA: chatbots para post-venta y emails de abandono de carrito
 
 La IA ha bajado de precio y ahora es accesible. No necesitas un equipo de soporte. Lo que notamos fue que estas dos automatizaciones reducen el trabajo manual un 70%:
 
@@ -154,16 +154,16 @@ La IA ha bajado de precio y ahora es accesible. No necesitas un equipo de soport
 
 ---
 
-## H2: Estrategia de Tráfico y Publicidad con Presupuesto Mínimo
+## Estrategia de Tráfico y Publicidad con Presupuesto Mínimo
 
-### H3: Orgánico primero: TikTok/Reels (3 vídeos/día) + SEO de nicho (blog)
+### Orgánico primero: TikTok/Reels (3 vídeos/día) + SEO de nicho (blog)
 
 Con 100€, tu mayor inversión es el tiempo. Antes de gastar en anuncios, construye una base orgánica. La fórmula que funciona:
 
 - **TikTok/Reels**: Publica 3 vídeos al día durante las primeras 2 semanas. No tienen que ser virales; buscan consistencia. Usa el formato "problema-solución" en los primeros 3 segundos. Graba con tu móvil, sin iluminación profesional. La autenticidad vende más que la perfección.
 - **SEO de nicho**: Crea un blog en tu tienda con 2 artículos semanales atacando keywords de cola larga ("cómo organizar cables del escritorio sin taladrar"). Tardará 2-3 meses en posicionar, pero cuando lo haga, tendrás tráfico gratuito constante.
 
-### H3: Meta Ads: estructura de 1 campaña, 3 conjuntos, 5 creativos (test de 5€/día)
+### Meta Ads: estructura de 1 campaña, 3 conjuntos, 5 creativos (test de 5€/día)
 
 Cuando ya tengas algo de tracción orgánica y hayas validado el producto, lanza anuncios. La estructura que repito en todas mis pruebas:
 

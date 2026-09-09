@@ -133,8 +133,6 @@ En nuestras pruebas, esta combinación fue imbatible para trabajos de investigac
 
 ### 4.2 Para creadores de contenido visual (Leonardo + Runway)
 
-Aquí tienes un flujo de trabajo que probamos y funciona: genera imágenes base en Leonardo AI (150 créditos diarios) para tus posts de Instagram o portadas de YouTube. Luego, usa Runway Gen-3 para convertir esas imágenes en videos cortos animados con movimiento de cámara. Lo que notamos fue que Runway acepta imágenes como input y las anima de forma realista, lo que te da un video de 5 segundos que puedes usar en Reels o TikTok. La combinación de una imagen estática de Leonardo con un movimiento sutil de Runway produce resultados que parecen hechos por un estudio de animación.
-
 ### 4.3 Para desarrolladores y técnicos (Hugging Face + Copilot)
 
 Para el lado técnico, Hugging Face Spaces es tu laboratorio gratuito. Despliega modelos de código abierto para pruebas de concepto, fine-tune modelos pequeños con tus propios datos y prototipa aplicaciones de IA sin pagar por GPUs. Para el lado de productividad, Copilot es tu asistente para documentación, emails y análisis de datos en Excel. En nuestras pruebas, usamos Copilot para generar la documentación de un proyecto en Markdown, y luego Hugging Face para ejecutar un modelo de clasificación de texto. El resultado: un flujo de trabajo completo sin gastar un euro.

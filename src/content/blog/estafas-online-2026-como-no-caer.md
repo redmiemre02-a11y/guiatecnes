@@ -18,7 +18,7 @@ readingTime: 12
 
 ---
 
-# H1: Estafas Online 2026: Cómo No Caer en las 7 Más Comunes
+# Estafas Online 2026: Cómo No Caer en las 7 Más Comunes
 
 Llevo una década escribiendo sobre ciberseguridad y te lo digo sin rodeos: lo que viene en 2026 no tiene nada que ver con el spam de "príncipe nigeriano" que veíamos antes. Ahora los estafadores usan inteligencia artificial para clonar voces, generar vídeos falsos en tiempo real y crear páginas de phishing que engañan hasta a los más escépticos.
 
@@ -26,15 +26,15 @@ En nuestras pruebas de laboratorio hemos visto ataques que imitan perfectamente 
 
 ---
 
-## H2: 1. El Nuevo Panorama del Fraude Digital en 2026
+## 1. El Nuevo Panorama del Fraude Digital en 2026
 
-### H3: Por qué las estafas tradicionales están mutando
+### Por qué las estafas tradicionales están mutando
 
 El phishing clásico con correos mal redactados está muriendo. Los ciberdelincuentes ahora usan plantillas perfectas, con gramática impecable y que replican comunicaciones reales de tu banco o de Hacienda. Lo que notamos es que ya no buscan el "pescar muchos", sino "pescar bien": ataques dirigidos con datos personales que compran en la dark web.
 
 Además, la automatización con IA les permite personalizar cada mensaje en masa. Un bot analiza tus redes sociales, ve que te gusta el senderismo y te envía una oferta de "equipo de montaña en liquidación" con un enlace malicioso. Es terroríficamente efectivo.
 
-### H3: El papel de la IA generativa en la sofisticación del engaño
+### El papel de la IA generativa en la sofisticación del engaño
 
 La IA generativa ha democratizado el fraude. Antes necesitabas conocimientos técnicos para crear un deepfake; ahora hay herramientas que lo hacen por 10 euros al mes. En nuestras pruebas, generamos una clonación de voz convincente con solo 30 segundos de audio extraído de un vídeo de YouTube.
 
@@ -42,9 +42,9 @@ Los estafadores usan esto para llamarte haciéndose pasar por tu hijo pidiendo d
 
 ---
 
-## H2: 2. Las 7 Estafas Más Comunes que Verás en 2026
+## 2. Las 7 Estafas Más Comunes que Verás en 2026
 
-### H3: 2.1 Deepfake en videollamadas (suplantación de CEO/familiares)
+### 2.1 Deepfake en videollamadas (suplantación de CEO/familiares)
 
 Esta es la reina de las estafas en 2026. Un estafador clona la cara y voz de una persona real (tu jefe, tu padre, tu pareja) y te hace una videollamada pidiéndote una transferencia urgente o datos sensibles. La tecnología ya permite hacerlo en tiempo real, con la persona falsa reaccionando a tus gestos.
 
@@ -56,7 +56,7 @@ La excusa típica es "estoy en una reunión confidencial, no puedo hablar por te
 ❌ **Contras:** La tecnología avanza tan rápido que a veces es imposible distinguir visualmente.
 💰 **Precio de la defensa:** Gratis (verificación manual) o software anti-deepfake desde 15€/mes.
 
-### H3: 2.2 Quishing: códigos QR maliciosos en lugares públicos
+### 2.2 Quishing: códigos QR maliciosos en lugares públicos
 
 El quishing (QR + phishing) explotará en 2026 porque escanear códigos QR se ha vuelto un gesto automático. Los estafadores pegan su QR falso sobre el legítimo en parkings, restaurantes, o incluso en carteles de "se alquila". Al escanearlo, entras en una web clonada que roba tus credenciales.
 
@@ -68,7 +68,7 @@ En nuestras pruebas, pegamos un QR falso sobre el de una terraza de Madrid y el 
 ❌ **Contras:** Las URLs acortadas (bit.ly, tinyurl) ocultan el destino real.
 💰 **Precio:** Gratis (apps de escaneo seguro como Kaspersky QR Scanner).
 
-### H3: 2.3 Estafas en "compras en vivo" (live shopping)
+### 2.3 Estafas en "compras en vivo" (live shopping)
 
 El live shopping (comprar durante streams en TikTok, Instagram o Twitch) crecerá un 300% en 2026, y con ello las estafas. Los delincuentes montan un streaming falso con productos a precios irrisorios (un iPhone por 150€), crean urgencia con "quedan 3 unidades" y te redirigen a un enlace de pago externo.
 
@@ -80,7 +80,7 @@ Lo que notamos es que estos streams tienen comentarios falsos (bots) que dicen "
 ❌ **Contras:** La emoción del directo nubla el juicio crítico.
 💰 **Precio:** Gratis (verificar historial de la cuenta y reseñas externas).
 
-### H3: 2.4 Fraude con "wallets" de criptomonedas falsas
+### 2.4 Fraude con "wallets" de criptomonedas falsas
 
 Con el auge del Bitcoin y las altcoins, los estafadores crean aplicaciones de wallet falsas que imitan a las legítimas (MetaMask, Trust Wallet, etc.). Las suben a tiendas no oficiales o te las envían por WhatsApp con la excusa de "actualizar tu wallet". Al abrirla y transferir tus fondos, desaparecen.
 
@@ -92,7 +92,7 @@ En nuestras pruebas, encontramos una app falsa en una tienda de terceros que ten
 ❌ **Contras:** Incluso en tiendas oficiales hay apps fraudulentas (revisa desarrollador y fecha).
 💰 **Precio:** Gratis (verificación manual de la URL y del desarrollador).
 
-### H3: 2.5 Phishing con "códigos de verificación" robados en tiempo real
+### 2.5 Phishing con "códigos de verificación" robados en tiempo real
 
 Este es el phishing 2.0. El estafador te llama haciéndose pasar por tu banco y te dice que hay "movimientos sospechosos". Te pide que le confirmes el código SMS que acabas de recibir "para verificar que eres tú". Ese código es el OTP (One-Time Password) que usaría para autorizar una transferencia.
 
@@ -104,7 +104,7 @@ La clave está en que la llamada parece real: el número puede ser el mismo que 
 ❌ **Contras:** El spoofing hace que el número entrante parezca legítimo.
 💰 **Precio:** Gratis (regla de oro: ningún banco te pedirá el código OTP por teléfono).
 
-### H3: 2.6 Estafas de "soporte técnico" con acceso remoto
+### 2.6 Estafas de "soporte técnico" con acceso remoto
 
 Esta es vieja pero vuelve con fuerza en 2026 gracias a la IA. Recibes un pop-up en tu navegador que dice "Tu ordenador está infectado con un virus. Llame a este número". Al llamar, un "técnico" con acento profesional te pide instalar un software de acceso remoto (AnyDesk, TeamViewer) para "arreglarlo".
 
@@ -116,7 +116,7 @@ Una vez dentro, el estafador ve tus contraseñas guardadas, accede a tu banca on
 ❌ **Contras:** Los pop-ups son cada vez más sofisticados y difíciles de cerrar.
 💰 **Precio:** Gratis (nunca instalar software remoto a petición de un desconocido).
 
-### H3: 2.7 Fraude en alquileres vacacionales con IA generativa
+### 2.7 Fraude en alquileres vacacionales con IA generativa
 
 Los estafadores usan IA para crear anuncios perfectos de alquileres vacacionales con fotos generadas por ordenador que parecen reales. El precio es atractivo (30% por debajo del mercado), el propietario "está en el extranjero" y solo acepta pago por Western Union, cripto o transferencia internacional.
 
@@ -130,7 +130,7 @@ En nuestras pruebas, generamos un piso en la Costa Brava con IA que era imposibl
 
 ---
 
-## H2: 3. Tabla Comparativa: Señales de Alerta vs. Métodos Seguros
+## 3. Tabla Comparativa: Señales de Alerta vs. Métodos Seguros
 
 | Tipo de Estafa | Señal de Alerta Clave | Método de Contacto | Método de Pago Solicitado | Riesgo (1-5) | Cómo Verificar |
 |---|---|---|---|---|---|
@@ -144,41 +144,41 @@ En nuestras pruebas, generamos un piso en la Costa Brava con IA que era imposibl
 
 ---
 
-## H2: 4. Guía Práctica: 5 Hábitos que Te Blindan Contra el Fraude
+## 4. Guía Práctica: 5 Hábitos que Te Blindan Contra el Fraude
 
-### H3: Activar autenticación multifactor (MFA) con llave física
+### Activar autenticación multifactor (MFA) con llave física
 
 La MFA con SMS ya no es suficiente en 2026 (los estafadores interceptan los OTP). Usa una llave física tipo YubiKey o la autenticación biométrica de tu móvil. En nuestras pruebas, las cuentas con llave física tenían un 99.9% menos de probabilidad de ser comprometidas. El coste es mínimo comparado con el disgusto de perder tus ahorros.
 
-### H3: La regla de los 10 minutos: nunca pagues bajo presión temporal
+### La regla de los 10 minutos: nunca pagues bajo presión temporal
 
 Cualquier estafa que funcione en 2026 usa la urgencia como arma. "Oferta válida solo hoy", "si no pagas ahora pierdes la reserva", "tu cuenta será bloqueada en 1 hora". Lo que notamos es que los estafadores saben que la presión nubla el juicio. Establece una regla personal: ninguna transacción importante sin esperar 10 minutos y hablar con alguien de confianza.
 
-### H3: Usar tarjetas virtuales de un solo uso para compras online
+### Usar tarjetas virtuales de un solo uso para compras online
 
 Los bancos españoles (BBVA, Santander, CaixaBank) ofrecen tarjetas virtuales desechables. Cada vez que compras online, generas un número de tarjeta distinto con un límite y validez corta. Si el estafador obtiene el número, no puede usarlo para más compras. Es la herramienta más infravalorada contra el fraude.
 
-### H3: Verificación cruzada: contacta por un canal distinto al que te escribieron
+### Verificación cruzada: contacta por un canal distinto al que te escribieron
 
 Si tu "jefe" te escribe por WhatsApp pidiendo una transferencia, llámale por teléfono. Si tu "banco" te llama, cuelga y llama al número de la parte trasera de tu tarjeta. La verificación cruzada (usar un canal independiente) rompe el ciclo del engaño porque el estafador no controla ambos canales.
 
-### H3: Mantener software y navegadores actualizados (parches de seguridad)
+### Mantener software y navegadores actualizados (parches de seguridad)
 
 El 60% de los ataques en 2026 explotarán vulnerabilidades conocidas que ya tienen parche. En nuestras pruebas, los equipos sin actualizar caían en estafas de soporte técnico en un 80% de los casos. Activa las actualizaciones automáticas y no las pospongas: cada día de retraso es una ventana abierta.
 
 ---
 
-## H2: 5. Qué Hacer Si Ya Has Caído en una Estafa
+## 5. Qué Hacer Si Ya Has Caído en una Estafa
 
-### H3: Paso 1: Congelar cuentas y tarjetas inmediatamente
+### Paso 1: Congelar cuentas y tarjetas inmediatamente
 
 No pierdas tiempo buscando al estafador. Lo primero es limitar el daño. Llama a tu banco (el número oficial) y congela todas tus cuentas y tarjetas. Si has dado acceso remoto a tu ordenador, desconéctalo de internet ya y apágalo. Cada minuto cuenta: los estafadores vacían cuentas en segundos.
 
-### H3: Paso 2: Denunciar ante la policía cibernética (con pruebas)
+### Paso 2: Denunciar ante la policía cibernética (con pruebas)
 
 La denuncia es esencial, aunque piense que no recuperará el dinero. Guarda todas las pruebas: capturas de pantalla, números de teléfono, correos, direcciones de wallet, IDs de transacción. En España, denuncia en la Policía Nacional (Grupo de Ciberdelincuencia) o la Guardia Civil (Equipo de Delitos Telemáticos). Con las pruebas, pueden rastrear y bloquear cuentas del estafador.
 
-### H3: Paso 3: Reportar a la plataforma de pago (reversión si es posible)
+### Paso 3: Reportar a la plataforma de pago (reversión si es posible)
 
 Si pagaste con tarjeta de crédito, contacta con tu banco para solicitar un "chargeback". Si fue a través de PayPal o una pasarela de pago, abre una disputa lo antes posible (tienen plazos estrictos). Si fue cripto, reporta la dirección de la wallet a exchanges como Binance o Coinbase para que la congelen si se usa para mover fondos.
 
