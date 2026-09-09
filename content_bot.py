@@ -223,11 +223,13 @@ REGLAS: 1) NUNCA empieces con "En el mundo digital actual" o similares.
 3) Párrafos máx 3 líneas. 4) Para cada herramienta: ¿Para quién?, ✅Pros, ❌Contras, 💰Precio.
 5) Tabla comparativa. 6) FAQ con respuestas de 2-4 líneas. 7) 1.200-1.800 palabras.
 8) NO incluyas introducciones conversacionales (ej. "Aquí tienes el artículo"). Escribe SOLO el contenido en Markdown.
-9) NUNCA escribas literalmente la palabra "H1:", "H2:" o "H3:" en los títulos. Usa los símbolos #, ## y ### directamente.""",
+9) NUNCA escribas literalmente la palabra "H1:", "H2:" o "H3:" en los títulos. Usa los símbolos #, ## y ### directamente.
+10) MUY IMPORTANTE: A lo largo del artículo, inserta 1 o 2 enlaces internos de forma natural a otros artículos relevantes usando el formato Markdown [texto](/blog/slug).""",
         f"""Escribe el artículo completo siguiendo este esquema:
 {outline}
 
 TEMA: "{topic}" | KEYWORD: "{keyword}"
+OTROS ARTÍCULOS EN EL SITIO (para enlazar si es relevante): {', '.join(['/blog/' + slugify(t['keyword']) for t in load_topics()[:10]])}
 
 SALIDA: Devuelve ÚNICAMENTE código Markdown puro. Empieza directamente con ## ⚡ TL;DR""",
         temperature=0.75)
