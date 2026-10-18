@@ -30,7 +30,7 @@ const { authorName, posts } = Astro.props;
 ---
 
 <BaseLayout 
-  title={`${authorName} - GuíaTecnes`}
+  title={authorName}
   description={`Artículos sobre tecnología e inteligencia artificial escritos por ${authorName}.`}
 >
   <Header slot="header" />
@@ -73,6 +73,7 @@ const { authorName, posts } = Astro.props;
             tags={post.data.tags}
             author={post.data.author}
             readingTime={post.data.readingTime || 5}
+            heroImage={post.data.heroImage}
           />
         ))}
       </div>

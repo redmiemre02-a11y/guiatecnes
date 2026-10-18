@@ -4,6 +4,16 @@ import CookieBanner from '../components/CookieBanner.astro';
 import ProgressBar from '../components/ProgressBar.astro';
 import BackToTop from '../components/BackToTop.astro';
 import Search from '../components/Search.astro';
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
 interface Props {
   title: string;
   description: string;
@@ -11,65 +21,88 @@ interface Props {
   canonicalURL?: string;
   type?: 'website' | 'article';
   pubDate?: Date;
+  updatedDate?: Date;
   author?: string;
+  faqs?: FAQItem[];
+  breadcrumbs?: BreadcrumbItem[];
 }
 
 const {
   title,
   description,
-  image = '/og-default.png',
+  image = '/icon.svg',
   canonicalURL = new URL(Astro.url.pathname, Astro.site).toString(),
   type = 'website',
   pubDate,
+  updatedDate,
   author = 'Experto Tech',
+  faqs = [],
+  breadcrumbs = [],
 } = Astro.props;
 
 const siteName = 'GuíaTecnes';
-const siteURL = Astro.site?.toString() || 'https://guiatecnes.com';
+const siteURL = (Astro.site?.toString() || 'https://guiatecnes.com').replace(/\/$/, '');
+const fullImageURL = image.startsWith('http') ? image : new URL(image, siteURL).toString();
 
 const schemaWebSite = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": siteName,
   "url": siteURL,
-  "description": "Tu guía definitiva de herramientas de IA, alternativas de software y tecnología en español.",
-  "inLanguage": "es",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": `${siteURL}/buscar?q={search_term_string}`,
-    "query-input": "required name=search_term_string"
-  }
+  "description": "Tu guía definitiva de herramientas de IA, alternativas de software, tutoriales y solución de errores en español.",
+  "inLanguage": "es"
 };
 
 const schemaArticle = type === 'article' ? {
   "@context": "https://schema.org",
-  "@type": "Article",
+  "@type": "TechArticle",
   "headline": title,
   "description": description,
-  "image": new URL(image, siteURL).toString(),
+  "image": [fullImageURL],
   "author": {
     "@type": "Person",
-    "name": author
+    "name": author,
+    "url": `${siteURL}/autor/${author.toLowerCase().replace(/\s+/g, '-')}`
   },
   "publisher": {
     "@type": "Organization",
     "name": siteName,
     "logo": {
       "@type": "ImageObject",
-      "url": `${siteURL}/logo.png`
+      "url": `${siteURL}/icon.svg`
     }
   },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": (4.5 + (title.length % 5) * 0.1).toFixed(1),
-    "reviewCount": String(45 + (title.length * 3)),
-    "bestRating": "5",
-    "worstRating": "1"
-  },
   "datePublished": pubDate?.toISOString(),
-  "dateModified": pubDate?.toISOString(),
-  "mainEntityOfPage": canonicalURL,
+  "dateModified": (updatedDate || pubDate)?.toISOString(),
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": canonicalURL
+  },
   "inLanguage": "es"
+} : null;
+
+const schemaBreadcrumb = breadcrumbs.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": breadcrumbs.map((b, idx) => ({
+    "@type": "ListItem",
+    "position": idx + 1,
+    "name": b.name,
+    "item": b.url.startsWith('http') ? b.url : `${siteURL}${b.url}`
+  }))
+} : null;
+
+const schemaFAQ = faqs.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(f => ({
+    "@type": "Question",
+    "name": f.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": f.answer
+    }
+  }))
 } : null;
 ---
 
@@ -90,14 +123,14 @@ const schemaArticle = type === 'article' ? {
   <title>{title} | {siteName}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalURL} />
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 
   <!-- Open Graph -->
   <meta property="og:type" content={type} />
   <meta property="og:url" content={canonicalURL} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={new URL(image, siteURL).toString()} />
+  <meta property="og:image" content={fullImageURL} />
   <meta property="og:site_name" content={siteName} />
   <meta property="og:locale" content="es_ES" />
 
@@ -105,7 +138,7 @@ const schemaArticle = type === 'article' ? {
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={new URL(image, siteURL).toString()} />
+  <meta name="twitter:image" content={fullImageURL} />
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -118,6 +151,8 @@ const schemaArticle = type === 'article' ? {
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json" set:html={JSON.stringify(schemaWebSite)} />
   {schemaArticle && <script type="application/ld+json" set:html={JSON.stringify(schemaArticle)} />}
+  {schemaBreadcrumb && <script type="application/ld+json" set:html={JSON.stringify(schemaBreadcrumb)} />}
+  {schemaFAQ && <script type="application/ld+json" set:html={JSON.stringify(schemaFAQ)} />}
 
   <ClientRouter />
 

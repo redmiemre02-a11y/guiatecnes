@@ -120,6 +120,12 @@ def reading_time(text: str) -> int:
 def clean(text: str) -> str:
     text = re.sub(r'^```(?:markdown|md|json)?\n?', '', text, flags=re.MULTILINE)
     text = re.sub(r'\n?```\s*$', '', text, flags=re.MULTILINE)
+    # Remove conversational filler at the start
+    text = re.sub(r'(?m)^(?:Aquí tienes|Claro,|Por supuesto)[^\n]*(\n---)?\n+', '', text)
+    # Strip any literal H1:, H2:, H3: prefixes
+    text = re.sub(r'^(#+)\s*H[1-6]:\s*', r'\1 ', text, flags=re.MULTILINE)
+    # Strip leading # H1 title if the LLM generated one
+    text = re.sub(r'^\s*#\s+[^\n]+\n+', '', text)
     return text.strip()
 
 
@@ -141,6 +147,11 @@ TAG_QUERIES = {
     "familia":        "family children technology",
     "educacion":      "education online learning",
     "productividad":  "productivity workspace laptop",
+    "errores":        "computer repair troubleshooting",
+    "comparativas":   "smartphones laptops comparison",
+    "streaming":      "smart tv living room streaming",
+    "windows-linux":  "desktop computer coding system",
+    "freelance":      "remote work home office laptop",
 }
 
 FALLBACK_IMAGES = {
@@ -158,12 +169,17 @@ FALLBACK_IMAGES = {
     "tecnologia":     "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200",
     "guias":          "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200",
     "familia":        "https://images.unsplash.com/photo-1536640712-4d4c36ff0e4e?w=1200",
+    "errores":        "https://images.unsplash.com/photo-1588702547919-26089e690ecc?w=1200",
+    "comparativas":   "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1200",
+    "streaming":      "https://images.unsplash.com/photo-1593784991095-a205069470b6?w=1200",
+    "windows-linux":  "https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200",
+    "freelance":      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200",
 }
 
 def fetch_image(keyword: str, tag: str) -> dict:
     query   = TAG_QUERIES.get(tag, keyword)
     encoded = urllib.parse.quote(query)
-    url     = f"https://api.pexels.com/v1/search?query={encoded}&per_page=5&orientation=landscape&size=large"
+    url     = f"https://api.pexels.com/v1/search?query={encoded}&per_page=15&orientation=landscape&size=large"
     try:
         req = urllib.request.Request(url, headers={
             "Authorization": PEXELS_API_KEY,
@@ -175,12 +191,12 @@ def fetch_image(keyword: str, tag: str) -> dict:
             if photos:
                 p = random.choice(photos)   # Her seferinde farklı resim
                 return {"url": p["src"]["large2x"], "photographer": p["photographer"],
-                        "photographer_url": p["photographer_url"], "alt": f"Imagen de {keyword}"}
+                        "photographer_url": p["photographer_url"], "alt": f"Guía sobre {keyword}"}
     except Exception as e:
         warn(f"Pexels hatası: {e}")
     fallback = FALLBACK_IMAGES.get(tag, "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200")
     return {"url": fallback, "photographer": "Unsplash", "photographer_url": "https://unsplash.com",
-            "alt": f"Imagen de {keyword}"}
+            "alt": f"Guía sobre {keyword}"}
 
 
 # ============================================================
@@ -199,6 +215,21 @@ def chat(client, system: str, user: str, temperature: float = 0.7) -> str:
     return r.choices[0].message.content.strip()
 
 
+def get_related_internal_links(tag: str, current_keyword: str) -> str:
+    """Aynı kategorideki ve genel havuzdaki yazılmış makalelerden iç link önerileri seçer."""
+    all_topics = load_topics()
+    progress = load_progress()
+    written_set = set(progress.get("written", []))
+    same_tag = [t for t in all_topics if t.get("tag") == tag and t["keyword"] in written_set and t["keyword"] != current_keyword]
+    other_tag = [t for t in all_topics if t.get("tag") != tag and t["keyword"] in written_set and t["keyword"] != current_keyword]
+    random.shuffle(same_tag)
+    random.shuffle(other_tag)
+    chosen = (same_tag[:4] + other_tag[:3])[:6]
+    if not chosen:
+        chosen = all_topics[:5]
+    return ", ".join([f"[{t['topic'][:45]}](/blog/{slugify(t['keyword'])})" for t in chosen])
+
+
 # ============================================================
 # 3 ADIMLI MAKALE ÜRETİMİ
 # ============================================================
@@ -206,50 +237,60 @@ def gen_outline(client, topic: str, keyword: str) -> str:
     step("1/4 → Outline oluşturuluyor...")
     return chat(client,
         "Eres experto en SEO de tecnología. Responde SOLO con el esquema solicitado en formato Markdown puro. NUNCA uses prefijos literales como 'H2:' o 'H3:', usa únicamente los símbolos de Markdown (## y ###).",
-        f"""Crea un esquema para un artículo sobre:
+        f"""Crea un esquema orientado a posicionar #1 en Google Featured Snippets para:
 TEMA: "{topic}" | KEYWORD: "{keyword}"
 
-Incluye: TL;DR con 3 puntos (##), 4-6 secciones principales (##) con subsecciones (###),
-tabla comparativa (5+ columnas), FAQ con 3 preguntas específicas. No incluyas un título H1 en el esquema, el título SEO se manejará por separado.""",
+Incluye: TL;DR con 3 puntos accionables (## ⚡ TL;DR), 4-6 secciones principales (##) con subsecciones (###) enfocadas en intención de búsqueda y soluciones directas,
+tabla comparativa o de resumen (5+ columnas), y sección "## Preguntas frecuentes (FAQ)" con 4 preguntas específicas en formato ### ¿Pregunta?.""",
         temperature=0.4)
 
 
-def gen_article(client, topic: str, keyword: str, outline: str) -> str:
+def gen_article(client, topic: str, keyword: str, outline: str, tag: str = "tecnologia") -> str:
     step("2/4 → Makale yazılıyor (EEAT uyumlu)...")
+    internal_links = get_related_internal_links(tag, keyword)
     return chat(client,
-        """Eres blogger de tecnología con 10 años de experiencia. Español nativo, tono personal.
-REGLAS: 1) NUNCA empieces con "En el mundo digital actual" o similares.
-2) Usa "En nuestras pruebas...", "Lo que notamos fue...".
-3) Párrafos máx 3 líneas. 4) Para cada herramienta: ¿Para quién?, ✅Pros, ❌Contras, 💰Precio.
-5) Tabla comparativa. 6) FAQ con respuestas de 2-4 líneas. 7) 1.200-1.800 palabras.
-8) NO incluyas introducciones conversacionales (ej. "Aquí tienes el artículo"). Escribe SOLO el contenido en Markdown.
-9) NUNCA escribas literalmente la palabra "H1:", "H2:" o "H3:" en los títulos. Usa los símbolos #, ## y ### directamente.
-10) MUY IMPORTANTE: A lo largo del artículo, inserta 1 o 2 enlaces internos de forma natural a otros artículos relevantes usando el formato Markdown [texto](/blog/slug).""",
+        """Eres un ingeniero y analista de tecnología con 10 años de experiencia real. Español nativo, tono directo, práctico y cercano.
+REGLAS ESTRICTAS DE SEO Y CALIDAD:
+1) NUNCA empieces con clichés de IA ("En el mundo digital actual", "Hoy en día"). Ve directo a la respuesta o solución en la primera frase.
+2) Aporta experiencia real (E-E-A-T): usa cifras exactas, nombres de ajustes reales, rutas de menú exactas (ej. Ajustes > Red > DNS) y frases como "En nuestras pruebas...", "Tras analizar...".
+3) Párrafos cortos (máx 3 líneas) fáciles de escanear en móvil.
+4) Para herramientas o soluciones: incluye pasos numerados, ✅ Ventajas, ❌ Desventajas o errores a evitar.
+5) Incluye una tabla Markdown comparativa detallada.
+6) La sección final DEBE llamarse "## Preguntas frecuentes (FAQ)" y cada pregunta DEBE ir con "### ¿Pregunta?" seguida de una respuesta directa de 2-4 líneas (para activar Google FAQ Rich Snippets).
+7) Extensión: 1.300-1.900 palabras de puro valor sin relleno.
+8) NO incluyas introducciones conversacionales ("Aquí tienes el artículo"). Escribe SOLO Markdown.
+9) NUNCA escribas literalmente "H1:", "H2:" o "H3:" en los títulos. Usa ## y ### directamente.
+10) ENLACES INTERNOS SEO: Inserta de forma natural entre 2 y 3 enlaces internos en el cuerpo del texto usando los enlaces proporcionados.""",
         f"""Escribe el artículo completo siguiendo este esquema:
 {outline}
 
 TEMA: "{topic}" | KEYWORD: "{keyword}"
-OTROS ARTÍCULOS EN EL SITIO (para enlazar si es relevante): {', '.join(['/blog/' + slugify(t['keyword']) for t in load_topics()[:10]])}
+ENLACES INTERNOS DISPONIBLES (integra 2 o 3 en el texto): {internal_links}
 
 SALIDA: Devuelve ÚNICAMENTE código Markdown puro. Empieza directamente con ## ⚡ TL;DR""",
-        temperature=0.75)
+        temperature=0.7)
 
 
 def gen_meta(client, body: str, topic: str, keyword: str) -> dict:
     step("3/4 → Meta veriler üretiliyor...")
     raw = chat(client,
-        "Eres experto SEO. Responde SOLO con JSON válido, sin texto adicional.",
-        f"""Analiza este artículo y devuelve JSON:
+        "Eres experto SEO especialista en CTR (Click-Through Rate). Responde SOLO con JSON válido, sin texto adicional.",
+        f"""Analiza este artículo y devuelve JSON optimizado para lograr el máximo CTR en Google:
 KEYWORD: "{keyword}" | TEMA: "{topic}"
 FRAGMENTO: {body[:1500]}
 
-{{"title": "título SEO máx 65 chars con keyword",
-  "description": "meta desc 140-155 chars con keyword",
+REGLAS CTR:
+- "title": máx 62 caracteres, incluye la keyword principal al inicio si es posible, y añade gancho de clic (ej. [Guía 2026], (Paso a Paso), [Solución], (Probado)).
+- "description": entre 140 y 155 caracteres, respuesta directa + beneficio claro que invite a hacer clic.
+- "tags_extra": 2 etiquetas secundarias cortas sin tildes complicadas.
+
+{{"title": "título SEO magnético máx 62 chars",
+  "description": "meta desc persuasiva 140-155 chars con keyword",
   "tags_extra": ["tag2", "tag3"]}}""",
         temperature=0.2)
     raw = clean(raw)
     try:    return json.loads(raw)
-    except: return {"title": topic[:65], "description": f"Todo sobre {keyword} en 2026.", "tags_extra": []}
+    except: return {"title": topic[:62], "description": f"Guía práctica y actualizada sobre {keyword} en 2026. Paso a paso.", "tags_extra": []}
 
 
 # ============================================================
@@ -271,7 +312,7 @@ def generate_one(topic_item: dict, dry_run: bool = False) -> bool:
     client = get_client()
     try:
         outline = gen_outline(client, topic, keyword);  time.sleep(1)
-        body    = clean(gen_article(client, topic, keyword, outline)); time.sleep(1)
+        body    = clean(gen_article(client, topic, keyword, outline, tag)); time.sleep(1)
         meta    = gen_meta(client, body, topic, keyword); time.sleep(0.5)
 
         step("4/4 → Resim aranıyor (Pexels)...")

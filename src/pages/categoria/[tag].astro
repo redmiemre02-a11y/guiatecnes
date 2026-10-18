@@ -1,4 +1,4 @@
-﻿---
+---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
@@ -7,10 +7,11 @@ import PostCard from '../../components/PostCard.astro';
 import AdSenseBanner from '../../components/AdSenseBanner.astro';
 
 export async function getStaticPaths() {
-  const defaultTags = [
+  const officialCategories = [
     'ia', 'alternativas', 'tecnologia', 'guias', 'finanzas', 'ciberseguridad',
     'emprendimiento', 'salud', 'hogar', 'gaming', 'movil', 'familia',
-    'educacion', 'productividad'
+    'educacion', 'productividad', 'errores', 'comparativas', 'streaming',
+    'windows-linux', 'freelance'
   ];
 
   let allPosts: any[] = [];
@@ -20,22 +21,7 @@ export async function getStaticPaths() {
     allPosts = [];
   }
 
-  // Her post'un tags alanını güvenli şekilde al
-  const postTags: string[] = [];
-  for (const p of allPosts) {
-    const tags = p?.data?.tags;
-    if (Array.isArray(tags)) {
-      for (const t of tags) {
-        if (typeof t === 'string') {
-          postTags.push(t.toLowerCase());
-        }
-      }
-    }
-  }
-
-  const allTags = [...new Set([...postTags, ...defaultTags])];
-
-  return allTags.map(tag => ({
+  return officialCategories.map(tag => ({
     params: { tag },
     props: {
       posts: allPosts.filter(p => {
@@ -56,7 +42,12 @@ const sortedPosts = [...safePosts].sort((a: any, b: any) => b.data.pubDate.value
 
 const tagLabels: Record<string, string> = {
   ia:             '🤖 IA Herramientas',
+  errores:        '🛠️ Solución de Errores y Fallos',
+  comparativas:   '⚖️ Comparativas 2026',
   alternativas:   '🔄 Alternativas de Software',
+  streaming:      '📺 Streaming y Smart TV',
+  'windows-linux':'🖥️ Windows, Mac y Linux',
+  freelance:      '💼 Trabajo Remoto y Freelance',
   tecnologia:     '💻 Tecnología y Vida Cotidiana',
   guias:          '📖 Guías y Tutoriales',
   finanzas:       '💰 Finanzas Digitales',
@@ -65,7 +56,7 @@ const tagLabels: Record<string, string> = {
   salud:          '🏥 Salud Digital',
   hogar:          '🏠 Hogar Inteligente',
   gaming:         '🎮 Gaming y PC',
-  movil:          '📱 Apps Móviles',
+  movil:          '📱 Apps y Trucos Móviles',
   familia:        '👶 Familia y Niños Online',
   educacion:      '🎓 Educación Online',
   productividad:  '⚡ Productividad',
@@ -73,7 +64,12 @@ const tagLabels: Record<string, string> = {
 
 const tagDescs: Record<string, string> = {
   ia:             'Análisis y comparativas de las mejores herramientas de inteligencia artificial. Probadas y honestas.',
-  alternativas:   'Encuentra la mejor alternativa gratuita o de pago a los programas más populares del mercado.',
+  errores:        'Guías prácticas paso a paso para solucionar errores comunes en móviles, ordenadores, WiFi y aplicaciones.',
+  comparativas:   'Comparativas cara a cara de móviles, portátiles, aplicaciones y servicios para elegir siempre la mejor opción.',
+  alternativas:   'Encuentra la mejor alternativa gratuita o de código abierto a los programas más populares del mercado.',
+  streaming:      'Trucos, configuración y guías para Smart TV, Fire TV Stick, Android TV y plataformas de streaming.',
+  'windows-linux':'Tutoriales de optimización, comandos, distribuciones Linux y trucos para acelerar Windows y Mac.',
+  freelance:      'Las mejores plataformas, herramientas digitales y consejos prácticos para trabajar en remoto desde casa.',
   tecnologia:     'Noticias, análisis y trucos de tecnología para mejorar tu vida cotidiana.',
   guias:          'Tutoriales paso a paso para dominar la tecnología y las herramientas digitales.',
   finanzas:       'Inversión, criptomonedas, bancos digitales y apps para gestionar tu dinero mejor.',
@@ -89,12 +85,12 @@ const tagDescs: Record<string, string> = {
 };
 
 const label = tagLabels[tag!] || `📂 ${tag}`;
-const desc  = tagDescs[tag!]  || `Todos los artículos sobre ${tag} en TechES.`;
+const desc  = tagDescs[tag!]  || `Todos los artículos sobre ${tag} en GuíaTecnes.`;
 
 ---
 
 <BaseLayout
-  title={`${label} - TechES`}
+  title={label}
   description={desc}
 >
   <Header slot="header" />
@@ -120,6 +116,7 @@ const desc  = tagDescs[tag!]  || `Todos los artículos sobre ${tag} en TechES.`;
               tags={post.data.tags}
               author={post.data.author}
               readingTime={post.data.readingTime || 5}
+              heroImage={post.data.heroImage}
             />
           ))}
         </div>

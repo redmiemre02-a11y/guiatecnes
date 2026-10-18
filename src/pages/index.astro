@@ -8,44 +8,54 @@ import AdSenseBanner from '../components/AdSenseBanner.astro';
 
 const allPosts = await getCollection('blog');
 const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const recentPosts = sortedPosts.slice(0, 9);
+const recentPosts = sortedPosts.slice(0, 12);
 
 const categories = [
   {
     name: 'IA Herramientas',     slug: 'ia',             icon: '🤖', desc: 'Las mejores herramientas de IA analizadas y comparadas.',        color: '#6366f1', bg: 'rgba(99,102,241,0.1)',
   },
-  { name: 'Alternativas',         slug: 'alternativas',   icon: '🔄', desc: 'Alternativas gratis a los programas más populares.',              color: '#10b981', bg: 'rgba(16,185,129,0.1)',
+  { name: 'Solución de Errores', slug: 'errores',        icon: '🛠️', desc: 'Cómo solucionar fallos en móviles, PC, apps, WiFi y redes.',    color: '#ef4444', bg: 'rgba(239,68,68,0.1)',
   },
-  { name: 'Finanzas Digitales',   slug: 'finanzas',       icon: '💰', desc: 'Inversión, cripto y apps para gestionar tu dinero.',             color: '#eab308', bg: 'rgba(234,179,8,0.1)',
+  { name: 'Comparativas 2026',   slug: 'comparativas',   icon: '⚖️', desc: 'Comparativas cara a cara de móviles, portátiles y software.',    color: '#0ea5e9', bg: 'rgba(14,165,233,0.1)',
   },
-  { name: 'Ciberseguridad',       slug: 'ciberseguridad', icon: '🔒', desc: 'VPNs, antivirus y cómo protegerte de hackers.',                  color: '#ef4444', bg: 'rgba(239,68,68,0.1)',
+  { name: 'Alternativas Gratis', slug: 'alternativas',   icon: '🔄', desc: 'Alternativas gratuitas a los programas de pago más populares.',  color: '#10b981', bg: 'rgba(16,185,129,0.1)',
   },
-  { name: 'Ganar Dinero Online',  slug: 'emprendimiento', icon: '🚀', desc: 'Formas reales de generar ingresos desde casa.',                  color: '#f97316', bg: 'rgba(249,115,22,0.1)',
+  { name: 'Streaming y TV',      slug: 'streaming',      icon: '📺', desc: 'Trucos para Smart TV, Fire Stick, Android TV y plataformas.',   color: '#e11d48', bg: 'rgba(225,29,72,0.1)',
   },
-  { name: 'Salud Digital',        slug: 'salud',          icon: '🏥', desc: 'Apps de bienestar, smartwatches y tecnología para vivir sano.',  color: '#14b8a6', bg: 'rgba(20,184,166,0.1)',
+  { name: 'Windows, Mac y Linux',slug: 'windows-linux',  icon: '🖥️', desc: 'Optimización, trucos ocultos y rendimiento para tu ordenador.',  color: '#2563eb', bg: 'rgba(37,99,235,0.1)',
   },
-  { name: 'Hogar Inteligente',    slug: 'hogar',          icon: '🏠', desc: 'Gadgets y domótica barata para automatizar tu casa.',            color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)',
+  { name: 'Trabajo Remoto',      slug: 'freelance',      icon: '💼', desc: 'Plataformas, herramientas y guías para teletrabajar desde casa.',color: '#d97706', bg: 'rgba(217,119,6,0.1)',
   },
-  { name: 'Gaming y PC',          slug: 'gaming',         icon: '🎮', desc: 'Juegos, hardware y optimización de PC para gamers.',             color: '#ec4899', bg: 'rgba(236,72,153,0.1)',
+  { name: 'Finanzas Digitales',  slug: 'finanzas',       icon: '💰', desc: 'Inversión, neobancos, cripto y apps para gestionar tu dinero.',  color: '#eab308', bg: 'rgba(234,179,8,0.1)',
   },
-  { name: 'Apps Móviles',         slug: 'movil',          icon: '📱', desc: 'Las mejores apps para Android e iPhone en 2026.',                color: '#06b6d4', bg: 'rgba(6,182,212,0.1)',
+  { name: 'Ciberseguridad',      slug: 'ciberseguridad', icon: '🔒', desc: 'VPNs, antivirus, privacidad y cómo protegerte de estafas.',      color: '#dc2626', bg: 'rgba(220,38,38,0.1)',
   },
-  { name: 'Familia y Niños',      slug: 'familia',        icon: '👶', desc: 'Internet seguro para niños, control parental y apps edu.',       color: '#f59e0b', bg: 'rgba(245,158,11,0.1)',
+  { name: 'Ganar Dinero Online', slug: 'emprendimiento', icon: '🚀', desc: 'Formas reales y probadas de generar ingresos en internet.',      color: '#f97316', bg: 'rgba(249,115,22,0.1)',
   },
-  { name: 'Educación Online',     slug: 'educacion',      icon: '🎓', desc: 'Cursos gratis con certificado y aprende con IA.',                color: '#3b82f6', bg: 'rgba(59,130,246,0.1)',
+  { name: 'Salud Digital',       slug: 'salud',          icon: '🏥', desc: 'Apps de bienestar, smartwatches y tecnología para vivir sano.',  color: '#14b8a6', bg: 'rgba(20,184,166,0.1)',
   },
-  { name: 'Productividad',        slug: 'productividad',  icon: '⚡', desc: 'Apps y técnicas para trabajar más inteligente.',                 color: '#10b981', bg: 'rgba(16,185,129,0.1)',
+  { name: 'Hogar Inteligente',   slug: 'hogar',          icon: '🏠', desc: 'Gadgets y domótica barata para automatizar tu casa fácil.',      color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)',
   },
-  { name: 'Tecnología',           slug: 'tecnologia',     icon: '💻', desc: 'Noticias y trucos de tecnología para tu vida cotidiana.',        color: '#64748b', bg: 'rgba(100,116,139,0.1)',
+  { name: 'Gaming y PC',         slug: 'gaming',         icon: '🎮', desc: 'Juegos, hardware, subir FPS y optimización de PC para gamers.',  color: '#ec4899', bg: 'rgba(236,72,153,0.1)',
   },
-  { name: 'Guías y Tutoriales',   slug: 'guias',          icon: '📖', desc: 'Paso a paso para dominar cualquier herramienta digital.',        color: '#a855f7', bg: 'rgba(168,85,247,0.1)',
+  { name: 'Apps y Trucos Móvil', slug: 'movil',          icon: '📱', desc: 'Las mejores apps y ajustes ocultos para Android e iPhone.',      color: '#06b6d4', bg: 'rgba(6,182,212,0.1)',
+  },
+  { name: 'Familia y Niños',     slug: 'familia',        icon: '👶', desc: 'Internet seguro para niños, control parental y apps edu.',       color: '#f59e0b', bg: 'rgba(245,158,11,0.1)',
+  },
+  { name: 'Educación Online',    slug: 'educacion',      icon: '🎓', desc: 'Cursos gratis con certificado oficial y aprende con IA.',        color: '#3b82f6', bg: 'rgba(59,130,246,0.1)',
+  },
+  { name: 'Productividad',       slug: 'productividad',  icon: '⚡', desc: 'Apps, extensiones y técnicas para trabajar más inteligente.',    color: '#10b981', bg: 'rgba(16,185,129,0.1)',
+  },
+  { name: 'Tecnología',          slug: 'tecnologia',     icon: '💻', desc: 'Noticias, redes WiFi y trucos tecnológicos del día a día.',     color: '#64748b', bg: 'rgba(100,116,139,0.1)',
+  },
+  { name: 'Guías y Tutoriales',  slug: 'guias',          icon: '📖', desc: 'Paso a paso para dominar cualquier herramienta digital.',        color: '#a855f7', bg: 'rgba(168,85,247,0.1)',
   },
 ];
 ---
 
 <BaseLayout
-  title="GuíaTecnes - Herramientas de IA, Tecnología y Alternativas en Español"
-  description="Descubre las mejores herramientas de inteligencia artificial, alternativas de software gratuitas y guías de tecnología. Todo en español, actualizado cada día en guiatecnes.com"
+  title="GuíaTecnes - Herramientas de IA, Solución de Errores y Tecnología en Español"
+  description="Descubre las mejores herramientas de inteligencia artificial, solución de errores paso a paso, comparativas y alternativas gratuitas en español."
 >
   <Header slot="header" />
 
@@ -58,15 +68,15 @@ const categories = [
         y la Tecnología Moderna
       </h1>
       <p class="hero-subtitle">
-        Análisis honestos, alternativas gratuitas y guías paso a paso.<br />
+        Análisis honestos, solución de errores, alternativas gratuitas y guías paso a paso.<br />
         Sin tecnicismos innecesarios, directo al grano.
       </p>
       <div class="hero-actions">
         <a href="/categoria/ia" class="btn-primary">Ver Herramientas de IA →</a>
-        <a href="/categoria/alternativas" class="btn-secondary">Alternativas Gratuitas</a>
+        <a href="/categoria/errores" class="btn-secondary">🛠️ Solución de Errores</a>
       </div>
       <div class="hero-stats">
-        <div class="stat"><strong>50+</strong><span>Artículos</span></div>
+        <div class="stat"><strong>{allPosts.length}+</strong><span>Artículos</span></div>
         <div class="stat"><strong>100%</strong><span>En Español</span></div>
         <div class="stat"><strong>Free</strong><span>Siempre gratis</span></div>
       </div>
@@ -100,7 +110,7 @@ const categories = [
     <div class="container">
       <div class="section-header">
         <h2>Artículos Recientes</h2>
-        <p>Actualizados semanalmente con lo último en tecnología</p>
+        <p>Actualizados a diario con lo último en tecnología, trucos y soluciones</p>
       </div>
 
       {recentPosts.length > 0 ? (
@@ -114,6 +124,7 @@ const categories = [
               tags={post.data.tags}
               author={post.data.author}
               readingTime={post.data.readingTime || 5}
+              heroImage={post.data.heroImage}
             />
           ))}
         </div>
@@ -134,7 +145,7 @@ const categories = [
         <span class="nl-emoji">📬</span>
         <h2>Suscríbete al boletín semanal</h2>
         <p>Recibe las mejores herramientas de IA y alternativas gratuitas directamente en tu bandeja de entrada. Sin spam, solo lo mejor.</p>
-        <form class="nl-form" action="https://formspree.io/f/XXXXX" method="POST">
+        <form class="nl-form" action="https://formspree.io/f/xppzwgrq" method="POST">
           <input type="email" name="email" placeholder="tu@email.com" required />
           <button type="submit">Suscribirme gratis →</button>
         </form>

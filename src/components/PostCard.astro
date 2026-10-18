@@ -19,6 +19,11 @@ const tagSlug = primaryTag.toLowerCase().replace(/\s+/g, '-');
 function getTagColor(tag: string) {
   const t = tag.toLowerCase();
   if (t.includes('ia') || t.includes('inteligencia')) return 'tag-ia';
+  if (t.includes('error') || t.includes('solucion')) return 'tag-ciberseguridad';
+  if (t.includes('comparativ'))  return 'tag-movil';
+  if (t.includes('streaming'))   return 'tag-gaming';
+  if (t.includes('windows') || t.includes('linux')) return 'tag-educacion';
+  if (t.includes('freelance') || t.includes('remoto')) return 'tag-emprendimiento';
   if (t.includes('alternativ'))  return 'tag-alternativas';
   if (t.includes('tecnolog'))    return 'tag-tecnologia';
   if (t.includes('guia'))        return 'tag-guias';

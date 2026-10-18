@@ -28,7 +28,8 @@ const toc = headings.filter(h => h.depth === 2 || h.depth === 3);
 const allPosts = await getCollection('blog');
 const relatedPosts = allPosts
   .filter(p => p.id !== post.id && p.data.tags.some(t => post.data.tags.includes(t)))
-  .slice(0, 3);
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 6);
 
 const dateStr = post.data.pubDate.toLocaleDateString('es-ES', {
   year: 'numeric', month: 'long', day: 'numeric'
@@ -42,16 +43,49 @@ function getTagColor(tag: string) {
   if (t.includes('alternativ')) return 'tag-alternativas';
   if (t.includes('tecnolog')) return 'tag-tecnologia';
   if (t.includes('guia') || t.includes('guías')) return 'tag-guias';
+  if (t.includes('error') || t.includes('solucion')) return 'tag-errores';
+  if (t.includes('comparativ')) return 'tag-comparativas';
+  if (t.includes('streaming')) return 'tag-streaming';
+  if (t.includes('windows') || t.includes('linux')) return 'tag-windows-linux';
+  if (t.includes('freelance') || t.includes('remoto')) return 'tag-freelance';
+  if (t.includes('movil') || t.includes('android') || t.includes('iphone')) return 'tag-movil';
   return 'tag-default';
 }
+
+// Extract FAQs from post.body for Google FAQPage Rich Snippets
+const faqs: { question: string; answer: string }[] = [];
+if (post.body) {
+  const faqSectionMatch = post.body.split(/##\s+.*(?:Preguntas frecuentes|FAQ).*/i);
+  const targetText = faqSectionMatch.length > 1 ? faqSectionMatch[1] : post.body;
+  const qaRegex = /###\s+(¿[^\n]+\?)\s*\n+([^\n#]+(?:\n(?!###|##)[^\n#]+)*)/g;
+  let match;
+  while ((match = qaRegex.exec(targetText)) !== null) {
+    const q = match[1].trim();
+    const a = match[2].replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1').replace(/[*_`]/g, '').trim();
+    if (q && a) {
+      faqs.push({ question: q, answer: a });
+    }
+  }
+}
+
+const currentSlug = post.id.replace(/\.[^/.]+$/, "");
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: primaryTag, url: `/categoria/${primaryTag.toLowerCase()}` },
+  { name: post.data.title, url: `/blog/${currentSlug}` }
+];
 ---
 
 <BaseLayout
   title={post.data.title}
   description={post.data.description}
+  image={post.data.heroImage}
   type="article"
   pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
   author={post.data.author}
+  faqs={faqs}
+  breadcrumbs={breadcrumbs}
 >
   <Header slot="header" />
 
@@ -150,8 +184,12 @@ function getTagColor(tag: string) {
 
         <div class="article-tags">
           <strong>Etiquetas:</strong>
-          {post.data.tags.map(tag => (
-            <a href={`/categoria/${tag.toLowerCase()}`} class={`tag ${getTagColor(tag)}`}>{tag}</a>
+          {post.data.tags.map((tag, idx) => (
+            idx === 0 ? (
+              <a href={`/categoria/${tag.toLowerCase()}`} class={`tag ${getTagColor(tag)}`}>{tag}</a>
+            ) : (
+              <span class={`tag ${getTagColor(tag)}`}>{tag}</span>
+            )
           ))}
         </div>
 
@@ -196,11 +234,12 @@ function getTagColor(tag: string) {
                 <PostCard
                   title={p.data.title}
                   description={p.data.description}
-                  slug={p.slug}
+                  slug={p.id.replace(/\.[^/.]+$/, "")}
                   pubDate={p.data.pubDate}
                   tags={p.data.tags}
                   author={p.data.author}
                   readingTime={p.data.readingTime || 5}
+                  heroImage={p.data.heroImage}
                 />
               ))}
             </div>
@@ -214,19 +253,24 @@ function getTagColor(tag: string) {
         <div class="sidebar-card">
           <h3>📂 Categorías</h3>
           <a href="/categoria/ia">🤖 IA Herramientas</a>
-          <a href="/categoria/alternativas">🔄 Alternativas</a>
-          <a href="/categoria/finanzas">💰 Finanzas</a>
+          <a href="/categoria/errores">🛠️ Solución de Errores</a>
+          <a href="/categoria/comparativas">⚖️ Comparativas 2026</a>
+          <a href="/categoria/alternativas">🔄 Alternativas Gratis</a>
+          <a href="/categoria/streaming">📺 Streaming y Smart TV</a>
+          <a href="/categoria/windows-linux">🖥️ Windows, Mac y Linux</a>
+          <a href="/categoria/freelance">💼 Trabajo Remoto</a>
+          <a href="/categoria/finanzas">💰 Finanzas Digitales</a>
           <a href="/categoria/ciberseguridad">🔒 Ciberseguridad</a>
           <a href="/categoria/emprendimiento">🚀 Ganar Dinero</a>
           <a href="/categoria/salud">🏥 Salud Digital</a>
           <a href="/categoria/hogar">🏠 Hogar Inteligente</a>
           <a href="/categoria/gaming">🎮 Gaming y PC</a>
-          <a href="/categoria/movil">📱 Apps Móviles</a>
-          <a href="/categoria/familia">👶 Familia</a>
-          <a href="/categoria/educacion">🎓 Educación</a>
+          <a href="/categoria/movil">📱 Apps y Trucos Móvil</a>
+          <a href="/categoria/familia">👶 Familia y Niños</a>
+          <a href="/categoria/educacion">🎓 Educación Online</a>
           <a href="/categoria/productividad">⚡ Productividad</a>
           <a href="/categoria/tecnologia">💻 Tecnología</a>
-          <a href="/categoria/guias">📖 Guías</a>
+          <a href="/categoria/guias">📖 Guías Paso a Paso</a>
         </div>
 
         <div class="sidebar-card newsletter-mini">
