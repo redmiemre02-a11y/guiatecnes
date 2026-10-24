@@ -274,7 +274,7 @@ SALIDA: Devuelve ÚNICAMENTE código Markdown puro. Empieza directamente con ## 
 def gen_meta(client, body: str, topic: str, keyword: str) -> dict:
     step("3/4 → Meta veriler üretiliyor...")
     raw = chat(client,
-        "Eres experto SEO especialista en CTR (Click-Through Rate). Responde SOLO con JSON válido, sin texto adicional.",
+        "Eres especialista en Copywriting Viral y CTR extremo para Google Discover y Redes Sociales. Responde SOLO con JSON válido, sin texto adicional.",
         f"""Analiza este artículo y devuelve JSON optimizado para lograr el máximo CTR en Google:
 KEYWORD: "{keyword}" | TEMA: "{topic}"
 FRAGMENTO: {body[:1500]}
