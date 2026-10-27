@@ -1,0 +1,675 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Generador de Gradientes CSS Visual', url: '/herramientas/generador-gradientes-css' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es un degradado o gradiente CSS?',
+    answer: 'Es una transición suave entre dos o más colores creada directamente mediante código CSS, sin necesidad de cargar imágenes pesadas de fondo. Mejora la velocidad de carga web y se escala nítidamente en cualquier resolución.'
+  },
+  {
+    question: '¿Qué tipos de degradados CSS existen?',
+    answer: 'Existen tres tipos principales: Linear (lineal en una dirección angular), Radial (desde un punto central hacia afuera en forma de círculo o elipse) y Conic (giratorio alrededor de un centro, ideal para gráficos o ruletas).'
+  },
+  {
+    question: '¿El código CSS generado es compatible con todos los navegadores?',
+    answer: 'Sí. El código generado utiliza la sintaxis moderna estándar de CSS3 y añade prefijos de compatibilidad para motores WebKit, funcionando al 100% en Chrome, Safari, Firefox, Edge y navegadores móviles.'
+  },
+  {
+    question: '¿Afectan los degradados CSS al rendimiento del sitio web?',
+    answer: 'No. Al procesarse directamente por el motor gráfico del navegador (GPU), consumen infinitamente menos ancho de banda y memoria que un archivo de imagen JPG o PNG de fondo.'
+  }
+];
+---
+
+<BaseLayout
+  title="Generador de Gradientes CSS Visual y Paletas de Colores | GuiaTecnEs"
+  description="Diseña degradados CSS modernos lineales y radiales en tiempo real. Elige colores, ángulos, prueba paletas predefinidas y copia el código CSS listo para tu web."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Generador de Gradientes CSS</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🎨 Diseño Web, UI/UX & CSS3</div>
+      <h1>Generador de Gradientes CSS Visual</h1>
+      <p class="tool-subtitle">
+        Crea transiciones de color atractivas para botones, fondos y cabeceras. Ajusta ángulos, colores y copia el código CSS con un clic.
+      </p>
+    </header>
+
+    <div class="gradient-tool-grid">
+      <!-- VISTA PREVIA DEL GRADIENTE -->
+      <div class="card preview-card">
+        <div id="gradient-display" class="gradient-display">
+          <span class="preview-tag">Vista Previa en Vivo</span>
+        </div>
+
+        <div class="css-output-box">
+          <div class="output-header">
+            <span>Código CSS generado:</span>
+            <button type="button" id="btn-copy-css" class="btn-copy-css">📋 Copiar CSS</button>
+          </div>
+          <pre id="css-code-text" class="css-code-text">background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);</pre>
+        </div>
+      </div>
+
+      <!-- CONTROLES -->
+      <div class="card controls-card">
+        <h3>🎛️ Configuración del Gradiente</h3>
+
+        <!-- TIPO DE GRADIENTE -->
+        <div class="input-group">
+          <label>Tipo de degradado:</label>
+          <div class="type-buttons-flex">
+            <button type="button" class="type-btn active" data-type="linear">Lineal</button>
+            <button type="button" class="type-btn" data-type="radial">Radial</button>
+            <button type="button" class="type-btn" data-type="conic">Cónico</button>
+          </div>
+        </div>
+
+        <!-- ÁNGULO (para linear y conic) -->
+        <div class="input-group" id="angle-group">
+          <div class="label-flex">
+            <label for="gradient-angle">Ángulo de dirección:</label>
+            <span id="angle-value">135°</span>
+          </div>
+          <input type="range" id="gradient-angle" min="0" max="360" value="135" />
+        </div>
+
+        <!-- COLORES -->
+        <div class="input-group">
+          <label>Colores del degradado:</label>
+          <div class="colors-controls-flex">
+            <div class="color-picker-item">
+              <label for="color-1">Color 1:</label>
+              <div class="color-input-wrap">
+                <input type="color" id="color-1" value="#6366f1" />
+                <span id="color-1-hex" class="hex-text">#6366f1</span>
+              </div>
+            </div>
+            <div class="color-picker-item">
+              <label for="color-2">Color 2:</label>
+              <div class="color-input-wrap">
+                <input type="color" id="color-2" value="#ec4899" />
+                <span id="color-2-hex" class="hex-text">#ec4899</span>
+              </div>
+            </div>
+            <div class="color-picker-item" id="color-3-wrap" style="display: none;">
+              <label for="color-3">Color 3:</label>
+              <div class="color-input-wrap">
+                <input type="color" id="color-3" value="#3b82f6" />
+                <span id="color-3-hex" class="hex-text">#3b82f6</span>
+              </div>
+            </div>
+          </div>
+          <div class="toggle-third-color">
+            <button type="button" id="btn-toggle-color-3" class="btn-tool-sub">
+              + Añadir tercer color
+            </button>
+          </div>
+        </div>
+
+        <!-- PRESETS POPULARES -->
+        <div class="presets-group">
+          <label class="section-sublabel">⚡ Paletas de tendencia 2026:</label>
+          <div class="presets-chips-grid">
+            <button type="button" class="preset-chip" data-c1="#6366f1" data-c2="#ec4899" data-angle="135">Sunset Violet</button>
+            <button type="button" class="preset-chip" data-c1="#06b6d4" data-c2="#3b82f6" data-angle="90">Ocean Breeze</button>
+            <button type="button" class="preset-chip" data-c1="#10b981" data-c2="#06b6d4" data-angle="120">Emerald Aurora</button>
+            <button type="button" class="preset-chip" data-c1="#f59e0b" data-c2="#ef4444" data-angle="45">Warm Fire</button>
+            <button type="button" class="preset-chip" data-c1="#8b5cf6" data-c2="#d946ef" data-angle="160">Neon Glow</button>
+            <button type="button" class="preset-chip" data-c1="#0f172a" data-c2="#334155" data-angle="180">Dark Slate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO & GUIDE -->
+    <section class="seo-guide-section card">
+      <h2>¿Cómo utilizar degradados CSS en tu sitio web?</h2>
+      <p>
+        Los gradientes CSS permiten sustituir pesados archivos de imagen por un par de líneas de código ultrarrápidas. Para aplicarlo a cualquier botón, cabecera o tarjeta de tu web, basta con asignarlo a la propiedad <code>background</code> de tu selector:
+      </p>
+
+      <div class="guide-grid">
+        <div class="guide-box">
+          <h3>⚡ Rendimiento Óptimo</h3>
+          <p>
+            Cero peticiones HTTP al servidor y menos de 100 bytes en tu archivo CSS. Mejora drásticamente los resultados en Google PageSpeed Insights.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>📱 100% Responsive</h3>
+          <p>
+            A diferencia de las fotos que se pixelan o deforman, un gradiente vectorial se adapta automáticamente a cualquier pantalla, desde relojes inteligentes hasta monitores 4K.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>♿ Contraste Accesible</h3>
+          <p>
+            Asegúrate de comprobar que el texto situado sobre el fondo tenga el suficiente contraste (ratio WCAG 4.5:1) eligiendo fuentes blancas sobre degradados oscuros o viceversa.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre Gradientes CSS</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    background: rgba(236, 72, 153, 0.12);
+    color: #ec4899;
+    border: 1px solid rgba(236, 72, 153, 0.25);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .tool-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .gradient-tool-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 1.75rem;
+    align-items: start;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 860px) {
+    .gradient-tool-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1.25rem;
+  }
+
+  /* PREVIEW */
+  .gradient-display {
+    width: 100%;
+    height: 280px;
+    border-radius: 0.75rem;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15), 0 10px 25px rgba(0, 0, 0, 0.3);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    transition: background 0.15s ease;
+  }
+
+  .preview-tag {
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(8px);
+    color: #ffffff;
+    padding: 0.4rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .css-output-box {
+    background: #0b0f19;
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 1rem;
+  }
+
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 0.65rem;
+  }
+
+  .btn-copy-css {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color, #334155);
+    color: #fff;
+    padding: 0.3rem 0.8rem;
+    border-radius: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-copy-css:hover {
+    background: #ec4899;
+    border-color: #ec4899;
+  }
+
+  .css-code-text {
+    margin: 0;
+    font-family: ui-monospace, monospace;
+    font-size: 0.88rem;
+    color: #38bdf8;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  /* CONTROLS */
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .input-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-heading);
+  }
+
+  .type-buttons-flex {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+
+  .type-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-heading);
+    padding: 0.55rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .type-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .type-btn.active {
+    background: #ec4899;
+    color: #fff;
+    border-color: #ec4899;
+  }
+
+  .label-flex {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-heading);
+  }
+
+  input[type="range"] {
+    width: 100%;
+    accent-color: #ec4899;
+    cursor: pointer;
+  }
+
+  .colors-controls-flex {
+    display: flex;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  .color-picker-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .color-picker-item label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .color-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--input-bg, #0f172a);
+    border: 1px solid var(--border-color, #334155);
+    padding: 0.35rem 0.55rem;
+    border-radius: 0.4rem;
+  }
+
+  input[type="color"] {
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    background: transparent;
+  }
+
+  .hex-text {
+    font-family: ui-monospace, monospace;
+    font-size: 0.82rem;
+    color: var(--text-heading);
+  }
+
+  .btn-tool-sub {
+    background: transparent;
+    border: none;
+    color: #ec4899;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 0.35rem;
+    padding: 0;
+  }
+
+  .btn-tool-sub:hover {
+    text-decoration: underline;
+  }
+
+  .section-sublabel {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.6rem;
+  }
+
+  .presets-chips-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem;
+  }
+
+  .preset-chip {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.4rem;
+    padding: 0.4rem 0.55rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .preset-chip:hover {
+    background: #ec4899;
+    color: #fff;
+    border-color: #ec4899;
+  }
+
+  /* SEO GUIDE & FAQ */
+  .seo-guide-section {
+    margin-bottom: 2rem;
+  }
+
+  .seo-guide-section h2, .faq-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1rem;
+  }
+
+  .seo-guide-section p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .guide-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .guide-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-box p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+
+  .faq-section {
+    margin-bottom: 2rem;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initGradientGenerator() {
+    const display = document.getElementById('gradient-display');
+    const cssCodeText = document.getElementById('css-code-text');
+    const btnCopyCss = document.getElementById('btn-copy-css');
+
+    const typeBtns = document.querySelectorAll('.type-btn');
+    const angleRange = document.getElementById('gradient-angle') as HTMLInputElement;
+    const angleValue = document.getElementById('angle-value');
+    const angleGroup = document.getElementById('angle-group');
+
+    const color1Input = document.getElementById('color-1') as HTMLInputElement;
+    const color2Input = document.getElementById('color-2') as HTMLInputElement;
+    const color3Input = document.getElementById('color-3') as HTMLInputElement;
+    const color1Hex = document.getElementById('color-1-hex');
+    const color2Hex = document.getElementById('color-2-hex');
+    const color3Hex = document.getElementById('color-3-hex');
+
+    const color3Wrap = document.getElementById('color-3-wrap');
+    const btnToggleColor3 = document.getElementById('btn-toggle-color-3');
+    const presetChips = document.querySelectorAll('.preset-chip');
+
+    let currentType = 'linear';
+    let hasColor3 = false;
+
+    function update() {
+      const c1 = color1Input?.value || '#6366f1';
+      const c2 = color2Input?.value || '#ec4899';
+      const c3 = color3Input?.value || '#3b82f6';
+      const angle = angleRange?.value || '135';
+
+      if (color1Hex) color1Hex.textContent = c1;
+      if (color2Hex) color2Hex.textContent = c2;
+      if (color3Hex) color3Hex.textContent = c3;
+      if (angleValue) angleValue.textContent = `${angle}°`;
+
+      let gradientCSS = '';
+      if (currentType === 'linear') {
+        const colorsStr = hasColor3 ? `${c1} 0%, ${c2} 50%, ${c3} 100%` : `${c1} 0%, ${c2} 100%`;
+        gradientCSS = `linear-gradient(${angle}deg, ${colorsStr})`;
+      } else if (currentType === 'radial') {
+        const colorsStr = hasColor3 ? `${c1} 0%, ${c2} 50%, ${c3} 100%` : `${c1} 0%, ${c2} 100%`;
+        gradientCSS = `radial-gradient(circle, ${colorsStr})`;
+      } else if (currentType === 'conic') {
+        const colorsStr = hasColor3 ? `${c1}, ${c2}, ${c3}, ${c1}` : `${c1}, ${c2}, ${c1}`;
+        gradientCSS = `conic-gradient(from ${angle}deg, ${colorsStr})`;
+      }
+
+      if (display) display.style.background = gradientCSS;
+      if (cssCodeText) {
+        cssCodeText.textContent = `background: ${c1};\nbackground: ${gradientCSS};`;
+      }
+    }
+
+    typeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        typeBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentType = btn.getAttribute('data-type') || 'linear';
+        if (angleGroup) {
+          angleGroup.style.display = currentType === 'radial' ? 'none' : 'flex';
+        }
+        update();
+      });
+    });
+
+    [color1Input, color2Input, color3Input, angleRange].forEach(el => {
+      el?.addEventListener('input', update);
+    });
+
+    btnToggleColor3?.addEventListener('click', () => {
+      hasColor3 = !hasColor3;
+      if (color3Wrap) color3Wrap.style.display = hasColor3 ? 'flex' : 'none';
+      if (btnToggleColor3) {
+        btnToggleColor3.textContent = hasColor3 ? '- Quitar tercer color' : '+ Añadir tercer color';
+      }
+      update();
+    });
+
+    presetChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const c1 = chip.getAttribute('data-c1');
+        const c2 = chip.getAttribute('data-c2');
+        const ang = chip.getAttribute('data-angle');
+        if (c1 && color1Input) color1Input.value = c1;
+        if (c2 && color2Input) color2Input.value = c2;
+        if (ang && angleRange) angleRange.value = ang;
+        hasColor3 = false;
+        if (color3Wrap) color3Wrap.style.display = 'none';
+        if (btnToggleColor3) btnToggleColor3.textContent = '+ Añadir tercer color';
+        update();
+      });
+    });
+
+    btnCopyCss?.addEventListener('click', () => {
+      if (cssCodeText) {
+        navigator.clipboard.writeText(cssCodeText.textContent || '');
+        btnCopyCss.textContent = '¡Copiado!';
+        setTimeout(() => {
+          btnCopyCss.textContent = '📋 Copiar CSS';
+        }, 1500);
+      }
+    });
+
+    update();
+  }
+
+  document.addEventListener('astro:page-load', initGradientGenerator);
+</script>

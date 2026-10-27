@@ -1,0 +1,662 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Test de Ping y Latencia Online', url: '/herramientas/test-ping' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es el ping y en qué se diferencia de la velocidad de descarga?',
+    answer: 'La velocidad de descarga mide cuántos megabytes por segundo puedes transferir (ancho de banda), mientras que el ping (o latencia) mide el tiempo en milisegundos (ms) que tarda un paquete de datos en viajar desde tu dispositivo hasta el servidor y volver. Para videojuegos online y videollamadas, tener un ping bajo es mucho más importante que tener muchos megas.'
+  },
+  {
+    question: '¿Qué es un buen ping para jugar a videojuegos online?',
+    answer: 'Menos de 25 ms se considera excelente (nivel competitivo en Valorant, CS2 o Fortnite). Entre 25 y 60 ms es un ping óptimo para cualquier juego. A partir de 80-100 ms empezarás a notar retardo (lag) y por encima de 150 ms la partida se vuelve prácticamente injugable.'
+  },
+  {
+    question: '¿Qué significa el Jitter o fluctuación de ping?',
+    answer: 'El Jitter mide la estabilidad del ping a lo largo del tiempo. Un ping que oscila continuamente entre 20 ms y 90 ms provoca tirones repentinos en el juego aunque la media parezca buena. Lo ideal es tener un jitter inferior a 3-5 ms.'
+  },
+  {
+    question: '¿Cómo puedo reducir mi ping y evitar el lag?',
+    answer: 'Conéctate siempre por cable Ethernet en lugar de WiFi, utiliza las DNS de Cloudflare (1.1.1.1) o Google (8.8.8.8), pausa descargas en segundo plano (torrents, Steam) y activa el modo de baja latencia o QoS en tu router.'
+  }
+];
+---
+
+<BaseLayout
+  title="Test de Ping y Latencia Online en Tiempo Real | GuiaTecnEs"
+  description="Mide tu latencia (ping en ms), jitter y estabilidad de conexión hacia servidores de Cloudflare, Google y Amazon. Descubre si tu conexión es apta para gaming."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Test de Ping y Latencia</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🎮 Gaming, Fibra & Diagnóstico de Red</div>
+      <h1>Test de Ping y Latencia Online</h1>
+      <p class="tool-subtitle">
+        Comprueba el tiempo de respuesta en milisegundos hacia servidores globales y descubre si tu conexión tiene lag antes de jugar o entrar a una llamada.
+      </p>
+    </header>
+
+    <div class="ping-tool-grid">
+      <!-- PANEL DEL MEDIDOR -->
+      <div class="card gauge-card">
+        <div class="ping-display-box">
+          <span class="ping-label">Latencia Media:</span>
+          <div class="ping-val-wrapper">
+            <span id="main-ping-val" class="main-ping-val">--</span>
+            <span class="unit-text">ms</span>
+          </div>
+          <div id="ping-verdict-badge" class="verdict-badge verdict-neutral">
+            Pulsa Iniciar para medir
+          </div>
+        </div>
+
+        <div class="metrics-row">
+          <div class="metric-col">
+            <span class="metric-title">Ping Mínimo:</span>
+            <strong id="min-ping-val">-- ms</strong>
+          </div>
+          <div class="metric-col">
+            <span class="metric-title">Jitter (Estabilidad):</span>
+            <strong id="jitter-val">-- ms</strong>
+          </div>
+          <div class="metric-col">
+            <span class="metric-title">Calidad Gaming:</span>
+            <strong id="gaming-verdict">--</strong>
+          </div>
+        </div>
+
+        <div class="btn-action-wrap">
+          <button type="button" id="btn-start-ping" class="btn-start-ping">
+            <span>⚡</span> Iniciar Test de Latencia
+          </button>
+        </div>
+      </div>
+
+      <!-- DESGLOSE POR SERVIDORES -->
+      <div class="card servers-card">
+        <h3>🌐 Tiempo de Respuesta por Red</h3>
+        <p class="servers-sub">Medición hacia los principales proveedores de infraestructura:</p>
+
+        <div class="servers-list">
+          <div class="server-item" id="srv-cloudflare">
+            <div class="server-info">
+              <span class="server-icon">🟠</span>
+              <div>
+                <strong>Cloudflare Edge Network</strong>
+                <small>Infraestructura 1.1.1.1</small>
+              </div>
+            </div>
+            <span class="server-ms" id="ms-cloudflare">Pendiente</span>
+          </div>
+
+          <div class="server-item" id="srv-google">
+            <div class="server-info">
+              <span class="server-icon">🔴</span>
+              <div>
+                <strong>Google Public DNS / CDN</strong>
+                <small>Servidores 8.8.8.8</small>
+              </div>
+            </div>
+            <span class="server-ms" id="ms-google">Pendiente</span>
+          </div>
+
+          <div class="server-item" id="srv-aws">
+            <div class="server-info">
+              <span class="server-icon">🟡</span>
+              <div>
+                <strong>Amazon CloudFront (AWS)</strong>
+                <small>Red de distribución global</small>
+              </div>
+            </div>
+            <span class="server-ms" id="ms-aws">Pendiente</span>
+          </div>
+
+          <div class="server-item" id="srv-jsdelivr">
+            <div class="server-info">
+              <span class="server-icon">🟢</span>
+              <div>
+                <strong>jsDelivr Global CDN</strong>
+                <small>Servidores de alta velocidad</small>
+              </div>
+            </div>
+            <span class="server-ms" id="ms-jsdelivr">Pendiente</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ESCALA DE LATENCIA GAMING -->
+    <section class="scale-section card">
+      <h2>Escala de Latencia: ¿Qué significa tu resultado?</h2>
+      <div class="scale-grid">
+        <div class="scale-box green">
+          <span class="scale-badge">0 - 25 ms</span>
+          <h3>🟢 Nivel Esports / Perfecto</h3>
+          <p>Ventaja competitiva total. Respuesta instantánea en shooters y juegos en tiempo real.</p>
+        </div>
+        <div class="scale-box blue">
+          <span class="scale-badge">25 - 60 ms</span>
+          <h3>🔵 Excelente / Muy Bueno</h3>
+          <p>Experiencia fluida sin retardo perceptible en cualquier juego o videollamada HD.</p>
+        </div>
+        <div class="scale-box yellow">
+          <span class="scale-badge">60 - 110 ms</span>
+          <h3>🟡 Aceptable con Lag Leve</h3>
+          <p>Apto para juegos casuales, pero notarás desventaja frente a rivales con fibra directa.</p>
+        </div>
+        <div class="scale-box red">
+          <span class="scale-badge">+110 ms</span>
+          <h3>🔴 Latencia Crítica</h3>
+          <p>Retardo molesto, teletransportes (rubberbanding) y cortes en el chat de voz.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre el Ping</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .tool-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .ping-tool-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+    align-items: start;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 860px) {
+    .ping-tool-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.35rem;
+  }
+
+  .servers-sub {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+  }
+
+  /* GAUGE CARD */
+  .ping-display-box {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 182, 212, 0.08));
+    border: 2px solid #10b981;
+    border-radius: 0.85rem;
+    padding: 1.75rem 1rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .ping-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+  }
+
+  .ping-val-wrapper {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.35rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .main-ping-val {
+    font-size: 3.4rem;
+    font-weight: 900;
+    color: #10b981;
+    line-height: 1;
+  }
+
+  .unit-text {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .verdict-badge {
+    display: inline-block;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .verdict-neutral {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-muted);
+  }
+
+  .verdict-good {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 1px solid #10b981;
+  }
+
+  .verdict-warning {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+    border: 1px solid #f59e0b;
+  }
+
+  .verdict-bad {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid #ef4444;
+  }
+
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.65rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .metric-col {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.5rem;
+    padding: 0.75rem 0.5rem;
+  }
+
+  .metric-title {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .metric-col strong {
+    font-size: 1.05rem;
+    color: var(--text-heading);
+  }
+
+  .btn-start-ping {
+    width: 100%;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    border: none;
+    padding: 0.9rem;
+    border-radius: 0.65rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    transition: transform 0.15s, opacity 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .btn-start-ping:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+  }
+
+  .btn-start-ping:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* SERVERS LIST */
+  .servers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .server-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1rem;
+  }
+
+  .server-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .server-icon {
+    font-size: 1.3rem;
+  }
+
+  .server-info strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-heading);
+  }
+
+  .server-info small {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .server-ms {
+    font-family: ui-monospace, monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .server-ms.ready {
+    color: #10b981;
+  }
+
+  /* SCALE SECTION */
+  .scale-section {
+    margin-bottom: 2rem;
+  }
+
+  .scale-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1.25rem;
+  }
+
+  .scale-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .scale-box {
+    border: 1px solid var(--border-color, #334155);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+
+  .scale-box.green { border-top: 4px solid #10b981; }
+  .scale-box.blue { border-top: 4px solid #3b82f6; }
+  .scale-box.yellow { border-top: 4px solid #f59e0b; }
+  .scale-box.red { border-top: 4px solid #ef4444; }
+
+  .scale-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.35rem;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-muted);
+    margin-bottom: 0.65rem;
+  }
+
+  .scale-box h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.35rem;
+  }
+
+  .scale-box p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* FAQ */
+  .faq-section {
+    margin-bottom: 2rem;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initPingTester() {
+    const btnStart = document.getElementById('btn-start-ping') as HTMLButtonElement;
+    const mainPingVal = document.getElementById('main-ping-val');
+    const verdictBadge = document.getElementById('ping-verdict-badge');
+    const minPingVal = document.getElementById('min-ping-val');
+    const jitterVal = document.getElementById('jitter-val');
+    const gamingVerdict = document.getElementById('gaming-verdict');
+
+    const msCloudflare = document.getElementById('ms-cloudflare');
+    const msGoogle = document.getElementById('ms-google');
+    const msAws = document.getElementById('ms-aws');
+    const msJsdelivr = document.getElementById('ms-jsdelivr');
+
+    const endpoints = [
+      { name: 'Cloudflare', url: 'https://cloudflare.com/cdn-cgi/trace', el: msCloudflare },
+      { name: 'Google', url: 'https://www.google.com/generate_204', el: msGoogle },
+      { name: 'AWS', url: 'https://aws.amazon.com/favicon.ico', el: msAws },
+      { name: 'jsDelivr', url: 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/package.json', el: msJsdelivr }
+    ];
+
+    async function measureEndpoint(url: string): Promise<number> {
+      const cacheBust = `${url}?t=${Date.now()}_${Math.random()}`;
+      const tStart = performance.now();
+      try {
+        await fetch(cacheBust, { mode: 'no-cors', cache: 'no-store' });
+        const tEnd = performance.now();
+        return Math.round(tEnd - tStart);
+      } catch (err) {
+        // Fallback timing
+        const tEnd = performance.now();
+        return Math.round(tEnd - tStart);
+      }
+    }
+
+    async function runTest() {
+      if (!btnStart) return;
+      btnStart.disabled = true;
+      btnStart.innerHTML = '<span>⏳</span> Midiendo latencia en vivo...';
+
+      if (verdictBadge) {
+        verdictBadge.className = 'verdict-badge verdict-neutral';
+        verdictBadge.textContent = 'Enviando paquetes...';
+      }
+
+      endpoints.forEach(ep => {
+        if (ep.el) {
+          ep.el.textContent = 'Midiendo...';
+          ep.el.classList.remove('ready');
+        }
+      });
+
+      const collectedResults: number[] = [];
+
+      for (const ep of endpoints) {
+        // 2 sample pings per endpoint to avoid cold connection penalty
+        await measureEndpoint(ep.url);
+        const ms = await measureEndpoint(ep.url);
+        collectedResults.push(ms);
+
+        if (ep.el) {
+          ep.el.textContent = `${ms} ms`;
+          ep.el.classList.add('ready');
+        }
+
+        // Live average update
+        const currentAvg = Math.round(collectedResults.reduce((a, b) => a + b, 0) / collectedResults.length);
+        if (mainPingVal) mainPingVal.textContent = currentAvg.toString();
+      }
+
+      // Calculations
+      const avgPing = Math.round(collectedResults.reduce((a, b) => a + b, 0) / collectedResults.length);
+      const minPing = Math.min(...collectedResults);
+
+      // Jitter (average difference between consecutive pings)
+      let diffSum = 0;
+      for (let i = 1; i < collectedResults.length; i++) {
+        diffSum += Math.abs(collectedResults[i] - collectedResults[i - 1]);
+      }
+      const jitter = Math.round(diffSum / (collectedResults.length - 1));
+
+      if (mainPingVal) mainPingVal.textContent = avgPing.toString();
+      if (minPingVal) minPingVal.textContent = `${minPing} ms`;
+      if (jitterVal) jitterVal.textContent = `${jitter} ms`;
+
+      // Verdicts
+      if (verdictBadge && gamingVerdict) {
+        if (avgPing <= 30) {
+          verdictBadge.className = 'verdict-badge verdict-good';
+          verdictBadge.textContent = '🟢 Latencia Esports / Excelente';
+          gamingVerdict.textContent = 'Óptima (CS2 / Valorant)';
+        } else if (avgPing <= 65) {
+          verdictBadge.className = 'verdict-badge verdict-good';
+          verdictBadge.textContent = '🔵 Latencia Muy Buena';
+          gamingVerdict.textContent = 'Fluida sin Lag';
+        } else if (avgPing <= 110) {
+          verdictBadge.className = 'verdict-badge verdict-warning';
+          verdictBadge.textContent = '🟡 Latencia Moderada';
+          gamingVerdict.textContent = 'Casual / Posible Lag';
+        } else {
+          verdictBadge.className = 'verdict-badge verdict-bad';
+          verdictBadge.textContent = '🔴 Latencia Alta';
+          gamingVerdict.textContent = 'Desventaja en Partidas';
+        }
+      }
+
+      btnStart.disabled = false;
+      btnStart.innerHTML = '<span>🔄</span> Repetir Test de Latencia';
+    }
+
+    btnStart?.addEventListener('click', runTest);
+  }
+
+  document.addEventListener('astro:page-load', initPingTester);
+</script>

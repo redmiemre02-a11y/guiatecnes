@@ -1,0 +1,252 @@
+---
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+
+// Generate deterministic seed counts from slug
+function hashString(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
+const seed = hashString(slug);
+const defaultCounts = {
+  fire: 110 + (seed % 65),       // ~110 - 175
+  idea: 60 + ((seed >> 2) % 45), // ~60 - 105
+  mind: 35 + ((seed >> 4) % 30), // ~35 - 65
+  rocket: 20 + ((seed >> 6) % 25) // ~20 - 45
+};
+---
+
+<div class="reactions-container" data-slug={slug}>
+  <div class="reactions-header">
+    <span class="reactions-sparkle">✨</span>
+    <h4>¿Te ha resultado útil esta guía?</h4>
+    <p>Haz clic para valorar el artículo y ayudar a otros lectores:</p>
+  </div>
+
+  <div class="reactions-buttons">
+    <button type="button" class="reaction-btn" data-type="fire" aria-label="Muy útil">
+      <span class="emoji">🔥</span>
+      <span class="label">Muy útil</span>
+      <span class="count" id="count-fire">{defaultCounts.fire}</span>
+    </button>
+
+    <button type="button" class="reaction-btn" data-type="idea" aria-label="Aprendí algo nuevo">
+      <span class="emoji">💡</span>
+      <span class="label">Aprendí algo</span>
+      <span class="count" id="count-idea">{defaultCounts.idea}</span>
+    </button>
+
+    <button type="button" class="reaction-btn" data-type="mind" aria-label="Brutal">
+      <span class="emoji">🤯</span>
+      <span class="label">Brutal</span>
+      <span class="count" id="count-mind">{defaultCounts.mind}</span>
+    </button>
+
+    <button type="button" class="reaction-btn" data-type="rocket" aria-label="Recomendar">
+      <span class="emoji">🚀</span>
+      <span class="label">Recomendar</span>
+      <span class="count" id="count-rocket">{defaultCounts.rocket}</span>
+    </button>
+  </div>
+
+  <div class="reactions-feedback" id="reactions-feedback" style="display: none;">
+    ¡Gracias por tu valoración! ❤️
+  </div>
+</div>
+
+<style>
+  .reactions-container {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(99, 102, 241, 0.05) 100%);
+    border: 1px solid var(--border, #334155);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .reactions-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .reactions-sparkle {
+    font-size: 1.5rem;
+    display: inline-block;
+    margin-bottom: 0.25rem;
+  }
+
+  .reactions-header h4 {
+    margin: 0 0 0.35rem 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text, #f1f5f9);
+  }
+
+  .reactions-header p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .reactions-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .reaction-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border, #334155);
+    padding: 0.55rem 0.95rem;
+    border-radius: 9999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text, #f1f5f9);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+  }
+
+  .reaction-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.4);
+  }
+
+  .reaction-btn .emoji {
+    font-size: 1.15rem;
+    transition: transform 0.2s;
+  }
+
+  .reaction-btn:hover .emoji {
+    transform: scale(1.25) rotate(5deg);
+  }
+
+  .reaction-btn .count {
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.15rem 0.45rem;
+    border-radius: 9999px;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  /* ACTIVE STATE */
+  .reaction-btn.active {
+    background: rgba(99, 102, 241, 0.25);
+    border-color: #6366f1;
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(99, 102, 241, 0.35);
+  }
+
+  .reaction-btn.active .count {
+    background: #6366f1;
+    color: #ffffff;
+  }
+
+  .reactions-feedback {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #10b981;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .reactions-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+    .reaction-btn {
+      justify-content: center;
+      padding: 0.5rem 0.65rem;
+    }
+  }
+</style>
+
+<script>
+  function initArticleReactions() {
+    const container = document.querySelector('.reactions-container');
+    if (!container) return;
+
+    const slug = container.getAttribute('data-slug');
+    if (!slug) return;
+
+    const storageKey = `gt_reactions_${slug}`;
+    let userVotes: Record<string, boolean> = {};
+
+    try {
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        userVotes = JSON.parse(stored);
+      }
+    } catch (e) {}
+
+    const buttons = container.querySelectorAll<HTMLButtonElement>('.reaction-btn');
+    const feedback = document.getElementById('reactions-feedback');
+
+    // Update UI according to saved localStorage
+    buttons.forEach(btn => {
+      const type = btn.getAttribute('data-type');
+      if (type && userVotes[type]) {
+        btn.classList.add('active');
+        const countEl = btn.querySelector('.count');
+        if (countEl) {
+          const base = parseInt(countEl.textContent || '0', 10);
+          countEl.textContent = (base + 1).toString();
+        }
+      }
+
+      btn.addEventListener('click', () => {
+        if (!type) return;
+
+        const isCurrentlyActive = btn.classList.contains('active');
+        const countEl = btn.querySelector('.count');
+        let currentCount = parseInt(countEl?.textContent || '0', 10);
+
+        if (isCurrentlyActive) {
+          // Untoggle
+          btn.classList.remove('active');
+          if (countEl) countEl.textContent = Math.max(0, currentCount - 1).toString();
+          delete userVotes[type];
+        } else {
+          // Toggle
+          btn.classList.add('active');
+          if (countEl) countEl.textContent = (currentCount + 1).toString();
+          userVotes[type] = true;
+
+          if (feedback) {
+            feedback.style.display = 'block';
+            setTimeout(() => {
+              feedback.style.display = 'none';
+            }, 3000);
+          }
+        }
+
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(userVotes));
+        } catch (e) {}
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initArticleReactions);
+</script>

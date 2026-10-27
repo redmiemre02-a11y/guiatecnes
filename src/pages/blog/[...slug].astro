@@ -7,6 +7,7 @@ import AdSenseBanner from '../../components/AdSenseBanner.astro';
 import PostCard from '../../components/PostCard.astro';
 import Disqus from '../../components/Disqus.astro';
 import StarRating from '../../components/StarRating.astro';
+import ArticleReactions from '../../components/ArticleReactions.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -71,7 +72,151 @@ if (post.body) {
 
 function getRelevantTool(title: string, tags: string[]) {
   const text = (title + ' ' + tags.join(' ')).toLowerCase();
-  if (text.includes('wifi') || text.includes('velocidad') || text.includes('internet') || text.includes('ping') || text.includes('router') || text.includes('lag')) {
+
+  if (text.includes('ping') || text.includes('latencia') || text.includes('lag') || text.includes('gaming') || text.includes('valorant') || text.includes('cs2') || text.includes('servidor')) {
+    return {
+      title: '¿Sufres de Lag en tus Partidas Online?',
+      desc: 'Mide tu latencia (ping en ms), jitter y estabilidad de red hacia servidores de Cloudflare, Google y AWS en tiempo real.',
+      btn: 'Hacer Test de Ping y Latencia',
+      url: '/herramientas/test-ping',
+      icon: '⏱️',
+      badge: 'Gaming & Latencia'
+    };
+  }
+
+  if (text.includes('sueldo') || text.includes('nómina') || text.includes('nomina') || text.includes('irpf') || text.includes('salario') || text.includes('bruto') || text.includes('neto') || text.includes('hacienda')) {
+    return {
+      title: '¿Quieres saber cuánto cobrarás de sueldo neto?',
+      desc: 'Calcula tu salario neto real en España (2026) tras retenciones de IRPF y Seguridad Social en 12 o 14 pagas.',
+      btn: 'Calcular Sueldo Neto España',
+      url: '/herramientas/calculadora-sueldo-neto',
+      icon: '💶',
+      badge: 'Nómina & IRPF'
+    };
+  }
+
+  if (text.includes('cuenta') && (text.includes('amigo') || text.includes('restaurante') || text.includes('bar') || text.includes('propina') || text.includes('pagar') || text.includes('bizum'))) {
+    return {
+      title: '¿Cena con amigos? Divide la cuenta al instante',
+      desc: 'Calcula la propina justa, divide el ticket entre todos y genera el importe exacto para pedir Bizum por WhatsApp.',
+      btn: 'Dividir Cuenta y Propinas',
+      url: '/herramientas/calculadora-propinas',
+      icon: '🧾',
+      badge: 'Restaurantes & Bares'
+    };
+  }
+
+  if (text.includes('almacenamiento') || text.includes('disco') || text.includes('espacio') || text.includes('memoria') || text.includes('gb') || text.includes('tb') || text.includes('ssd') || text.includes('capacidad')) {
+    return {
+      title: '¿Por qué tu disco o móvil tiene menos espacio?',
+      desc: 'Convierte GB a TB y calcula la capacidad útil real en tu sistema operativo, además de cuántas fotos y juegos caben.',
+      btn: 'Conversor de Almacenamiento',
+      url: '/herramientas/conversor-almacenamiento',
+      icon: '💾',
+      badge: 'Capacidad Real'
+    };
+  }
+
+  if (text.includes('css') || text.includes('gradiente') || text.includes('color') || text.includes('diseño') || text.includes('interfaz') || text.includes('frontend')) {
+    return {
+      title: 'Crea degradados CSS modernos para tu web',
+      desc: 'Genera gradientes visuales lineales, radiales y cónicos con paletas modernas y código CSS listo para copiar.',
+      btn: 'Generar Gradientes CSS',
+      url: '/herramientas/generador-gradientes-css',
+      icon: '🎨',
+      badge: 'Diseño Web'
+    };
+  }
+
+  if (text.includes('minificar') || text.includes('pagespeed') || text.includes('optimizar codigo') || text.includes('velocidad web') || text.includes('rendimiento')) {
+    return {
+      title: 'Minifica y acelera el código de tu sitio web',
+      desc: 'Comprime código CSS, HTML y JavaScript en tu navegador. Elimina comentarios y reduce el tiempo de carga.',
+      btn: 'Minificador de Código Online',
+      url: '/herramientas/minificador-codigo',
+      icon: '⚡',
+      badge: 'Core Web Vitals'
+    };
+  }
+
+  if (text.includes('ruleta') || text.includes('sorteo') || text.includes('decision') || text.includes('decidir') || text.includes('azar') || text.includes('que jugar')) {
+    return {
+      title: '¿Indeciso? Deja que el azar elija por ti',
+      desc: 'Gira la ruleta de la suerte online para resolver dilemas, sortear ganadores de amigos o decidir qué jugar.',
+      btn: 'Girar Ruleta de Decisiones',
+      url: '/herramientas/ruleta-decisiones',
+      icon: '🎡',
+      badge: 'Sorteos al Azar'
+    };
+  }
+
+  if (text.includes('linktree') || text.includes('bio') || text.includes('instagram') || text.includes('tiktok') || text.includes('perfil')) {
+    return {
+      title: 'Crea tu propia página Link en Bio gratis',
+      desc: 'Agrupa todos tus enlaces, WhatsApp y redes sociales en una página rápida y atractiva sin pagar suscripciones.',
+      btn: 'Crear Mi Link en Bio',
+      url: '/herramientas/creador-link-bio',
+      icon: '✨',
+      badge: 'Alternativa Linktree'
+    };
+  }
+
+  if (text.includes('pantalla') || text.includes('monitor') || text.includes('resolucion') || text.includes('ppi') || text.includes('dpi') || text.includes('pulgadas') || text.includes('oled') || text.includes('4k') || text.includes('tv')) {
+    return {
+      title: 'Calcula la nitidez y densidad de píxeles (PPI)',
+      desc: 'Descubre el PPI real, tamaño de punto y distancia óptima de visión para tu monitor gaming, portátil o televisión.',
+      btn: 'Calcular PPI de Pantalla',
+      url: '/herramientas/calculadora-ppi',
+      icon: '🖥️',
+      badge: 'Hardware & Monitores'
+    };
+  }
+
+  if (text.includes('whatsapp') || text.includes('wa.me') || text.includes('contacto') || text.includes('cliente')) {
+    return {
+      title: 'Crea tu enlace directo de WhatsApp con QR',
+      desc: 'Genera un link directo con mensaje predeterminado y código QR descargable para que te escriban sin guardar tu número.',
+      btn: 'Generar Link de WhatsApp',
+      url: '/herramientas/generador-link-whatsapp',
+      icon: '💬',
+      badge: 'WhatsApp wa.me'
+    };
+  }
+
+  if (text.includes('ia') || text.includes('inteligencia artificial') || text.includes('chatgpt') || text.includes('claude') || text.includes('deepseek') || text.includes('prompt')) {
+    return {
+      title: 'Test: ¿Qué Inteligencia Artificial necesitas?',
+      desc: 'Responde a 4 preguntas y descubre si tu IA ideal para trabajar o estudiar es DeepSeek, Claude 3.5 Sonnet o ChatGPT.',
+      btn: 'Hacer Test de IA Gratuito',
+      url: '/herramientas/test-inteligencia-artificial',
+      icon: '🧠',
+      badge: 'Quiz Interactivo'
+    };
+  }
+
+  if (text.includes('luz') || text.includes('electricidad') || text.includes('consumo') || text.includes('kwh') || text.includes('vatios') || text.includes('factura')) {
+    return {
+      title: 'Calcula el consumo eléctrico de tu tecnología',
+      desc: 'Averigua cuántos euros al mes cuesta tener encendido tu PC Gaming, consola PS5, router o Smart TV.',
+      btn: 'Calcular Consumo de Luz',
+      url: '/herramientas/calculadora-luz',
+      icon: '💡',
+      badge: 'Ahorro Eléctrico'
+    };
+  }
+
+  if (text.includes('datos') || text.includes('tarifa') || text.includes('streaming') || text.includes('youtube') || text.includes('netflix') || text.includes('spotify')) {
+    return {
+      title: '¿Cuántos Gigas gastas al mes en el móvil?',
+      desc: 'Calcula tu consumo real de datos con Netflix, YouTube, TikTok y Spotify para saber qué tarifa móvil necesitas.',
+      btn: 'Calcular Consumo de Datos',
+      url: '/herramientas/calculadora-datos',
+      icon: '📶',
+      badge: 'Tarifas Móviles'
+    };
+  }
+
+  if (text.includes('wifi') || text.includes('velocidad') || text.includes('internet') || text.includes('fibra') || text.includes('megas') || text.includes('operadora')) {
     return {
       title: '¿Problemas con tu conexión a Internet?',
       desc: 'Comprueba al instante la velocidad real de descarga, subida y latencia (ping) de tu red con nuestro test interactivo gratuito.',
@@ -81,6 +226,7 @@ function getRelevantTool(title: string, tags: string[]) {
       badge: 'Test en Vivo'
     };
   }
+
   if (text.includes('contraseña') || text.includes('password') || text.includes('segur') || text.includes('hack') || text.includes('cuenta') || text.includes('privacidad')) {
     return {
       title: 'Protege tus cuentas y contraseñas',
@@ -91,7 +237,8 @@ function getRelevantTool(title: string, tags: string[]) {
       badge: 'Ciberseguridad'
     };
   }
-  if (text.includes('foto') || text.includes('imagen') || text.includes('camara') || text.includes('espacio') || text.includes('almacenamiento') || text.includes('megas')) {
+
+  if (text.includes('foto') || text.includes('imagen') || text.includes('camara') || text.includes('comprimir') || text.includes('peso')) {
     return {
       title: '¿Tus fotos ocupan demasiado espacio?',
       desc: 'Comprime imágenes JPG, PNG y WebP reduciendo hasta un 85% su peso sin perder calidad y sin subirlas a ningún servidor.',
@@ -101,7 +248,8 @@ function getRelevantTool(title: string, tags: string[]) {
       badge: 'Ahorro de Espacio'
     };
   }
-  if (text.includes('descarga') || text.includes('juego') || text.includes('steam') || text.includes('pelicula') || text.includes('gb') || text.includes('ps5')) {
+
+  if (text.includes('descarga') || text.includes('juego') || text.includes('steam') || text.includes('pelicula') || text.includes('ps5')) {
     return {
       title: '¿Cuánto tardará en descargarse tu archivo?',
       desc: 'Calcula con precisión las horas y minutos exactos que tardará cualquier descarga según los megas de tu conexión.',
@@ -111,6 +259,7 @@ function getRelevantTool(title: string, tags: string[]) {
       badge: 'Calculadora'
     };
   }
+
   if (text.includes('estafa') || text.includes('phishing') || text.includes('enlace') || text.includes('link') || text.includes('virus') || text.includes('banco') || text.includes('sms')) {
     return {
       title: '¿Has recibido un enlace sospechoso?',
@@ -121,7 +270,8 @@ function getRelevantTool(title: string, tags: string[]) {
       badge: 'Antifraude'
     };
   }
-  if (text.includes('freelance') || text.includes('trabajo') || text.includes('dinero') || text.includes('cobrar') || text.includes('remoto') || text.includes('precio') || text.includes('tarifa')) {
+
+  if (text.includes('freelance') || text.includes('trabajo') || text.includes('cobrar') || text.includes('remoto') || text.includes('precio') || text.includes('tarifa')) {
     return {
       title: 'Calcula tu tarifa profesional como freelance',
       desc: 'Descubre cuánto deberías cobrar por hora o por proyecto considerando tus gastos mensuales, vacaciones e impuestos.',
@@ -131,7 +281,8 @@ function getRelevantTool(title: string, tags: string[]) {
       badge: 'Productividad'
     };
   }
-  if (text.includes('redact') || text.includes('palabra') || text.includes('escrib') || text.includes('texto') || text.includes('twitter') || text.includes('instagram') || text.includes('bio')) {
+
+  if (text.includes('redact') || text.includes('palabra') || text.includes('escrib') || text.includes('texto') || text.includes('twitter')) {
     return {
       title: 'Contador de Palabras y Límites de Redes',
       desc: 'Cuenta palabras, caracteres y mide los límites de biografía para Twitter, Instagram y TikTok en tiempo real.',
@@ -141,16 +292,16 @@ function getRelevantTool(title: string, tags: string[]) {
       badge: 'Editor'
     };
   }
+
   return {
-    title: 'Descubre Nuestras Herramientas Gratuitas',
-    desc: 'Accede a generadores de contraseñas, test de velocidad WiFi, compresor de fotos, generador de QR y más utilidades sin registro.',
-    btn: 'Ver Todas las Herramientas 🧲',
+    title: 'Descubre Nuestras 28 Herramientas Gratuitas',
+    desc: 'Accede a generadores de contraseñas, test de velocidad WiFi, ruleta de decisiones, sueldo neto, conversor de almacenamiento y más.',
+    btn: 'Ver las 28 Herramientas 🧲',
     url: '/herramientas',
     icon: '🚀',
     badge: '100% Gratis'
   };
 }
-
 const relevantTool = getRelevantTool(post.data.title, post.data.tags);
 
 const currentSlug = post.id.replace(/\.[^/.]+$/, "");
@@ -301,6 +452,8 @@ const breadcrumbs = [
           </button>
           <span class="clap-count" id="clap-count">0</span>
         </div>
+
+        <ArticleReactions slug={post.id} />
 
         <StarRating 
           ratingValue={(4.5 + (post.data.title.length % 5) * 0.1).toFixed(1)} 
@@ -1080,3 +1233,66 @@ const breadcrumbs = [
     color: var(--text-muted, #94a3b8);
   }
 </style>
+
+<style>
+  .prose pre {
+    position: relative !important;
+  }
+  .code-copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #cbd5e1;
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    z-index: 10;
+  }
+  .code-copy-btn:hover {
+    background: rgba(99, 102, 241, 0.25);
+    border-color: #6366f1;
+    color: #ffffff;
+  }
+  .code-copy-btn.copied {
+    background: rgba(16, 185, 129, 0.25);
+    border-color: #10b981;
+    color: #10b981;
+  }
+</style>
+
+<script>
+  function initCodeCopyButtons() {
+    document.querySelectorAll('.prose pre').forEach(pre => {
+      if (pre.querySelector('.code-copy-btn')) return;
+      const btn = document.createElement('button');
+      btn.className = 'code-copy-btn';
+      btn.type = 'button';
+      btn.innerHTML = '📋 Copiar';
+      btn.setAttribute('aria-label', 'Copiar código');
+
+      btn.addEventListener('click', async () => {
+        const code = pre.querySelector('code')?.innerText || pre.innerText;
+        try {
+          await navigator.clipboard.writeText(code);
+          btn.innerHTML = '✅ ¡Copiado!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.innerHTML = '📋 Copiar';
+            btn.classList.remove('copied');
+          }, 2000);
+        } catch (e) {}
+      });
+
+      pre.appendChild(btn);
+    });
+  }
+
+  document.addEventListener('astro:page-load', initCodeCopyButtons);
+</script>

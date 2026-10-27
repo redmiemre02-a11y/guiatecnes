@@ -1,0 +1,714 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Conversor de Almacenamiento y Capacidad Real', url: '/herramientas/conversor-almacenamiento' }
+];
+
+const faqs = [
+  {
+    question: '¿Por qué mi móvil o disco duro tiene menos espacio del anunciado?',
+    answer: 'Los fabricantes venden el almacenamiento en sistema decimal (1 GB = 1.000.000.000 bytes), mientras que los sistemas operativos como Windows o Android calculan en sistema binario (1 GiB = 1.073.741.824 bytes). Por eso, un disco de 1 TB comercial equivale realmente a unos 931 GB utilizables.'
+  },
+  {
+    question: '¿Cuál es la diferencia entre MB (Megabyte) y Mb (Megabit)?',
+    answer: 'Un Byte equivale a 8 bits (1 B = 8 b). La velocidad de las conexiones de fibra óptica suele expresarse en Megabits por segundo (Mbps), mientras que el tamaño de los archivos que descargas se mide en Megabytes (MB).'
+  },
+  {
+    question: '¿Cuántas fotos caben en 128 GB o 256 GB?',
+    answer: 'En 128 GB caben aproximadamente unas 38.000 fotografías en formato estándar de smartphone (a unos 3 MB por foto) o unas 8 horas de vídeo en resolución 4K a 60 fps.'
+  },
+  {
+    question: '¿Qué es un Petabyte (PB)?',
+    answer: 'Un Petabyte equivale a 1.000 Terabytes o un millón de Gigabytes. Es una unidad habitualmente utilizada en centros de datos de inteligencia artificial, servidores en la nube y grandes plataformas de streaming.'
+  }
+];
+---
+
+<BaseLayout
+  title="Conversor de Almacenamiento Digital y Capacidad Real (GB, TB, MB) | GuiaTecnEs"
+  description="Convierte entre Bytes, KB, MB, GB, TB y calcula la capacidad real de tu móvil o disco duro. Averigua cuántas fotos, canciones y juegos caben en tu memoria."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Conversor de Almacenamiento</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">💾 Memoria, Discos y Móviles</div>
+      <h1>Conversor de Almacenamiento y Capacidad Real</h1>
+      <p class="tool-subtitle">
+        Convierte entre todas las unidades de almacenamiento, descubre el espacio útil real de tu disco o smartphone y calcula cuántos archivos caben.
+      </p>
+    </header>
+
+    <div class="storage-calc-grid">
+      <!-- PANEL DE ENTRADA -->
+      <div class="card form-card">
+        <h3>🔢 Cantidad y Unidad de Entrada</h3>
+
+        <div class="input-unit-flex">
+          <div class="input-group val-input-group">
+            <label for="storage-val">Cantidad:</label>
+            <input type="number" id="storage-val" value="128" min="0" step="any" />
+          </div>
+          <div class="input-group unit-input-group">
+            <label for="storage-unit">Unidad:</label>
+            <select id="storage-unit">
+              <option value="b">Bits (b)</option>
+              <option value="B">Bytes (B)</option>
+              <option value="KB">Kilobytes (KB)</option>
+              <option value="MB">Megabytes (MB)</option>
+              <option value="GB" selected>Gigabytes (GB)</option>
+              <option value="TB">Terabytes (TB)</option>
+              <option value="PB">Petabytes (PB)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- PRESETS RÁPIDOS -->
+        <div class="presets-row">
+          <span>Memorias habituales:</span>
+          <div class="chips-flex">
+            <button type="button" class="chip-storage" data-val="64" data-unit="GB">64 GB</button>
+            <button type="button" class="chip-storage" data-val="128" data-unit="GB">128 GB</button>
+            <button type="button" class="chip-storage" data-val="256" data-unit="GB">256 GB</button>
+            <button type="button" class="chip-storage" data-val="512" data-unit="GB">512 GB</button>
+            <button type="button" class="chip-storage" data-val="1" data-unit="TB">1 TB</button>
+            <button type="button" class="chip-storage" data-val="2" data-unit="TB">2 TB</button>
+          </div>
+        </div>
+
+        <!-- SISTEMA DE CÁLCULO -->
+        <div class="calc-mode-box">
+          <label class="section-sublabel">Estándar de medición:</label>
+          <div class="radio-modes">
+            <label class="radio-label">
+              <input type="radio" name="calc-mode" value="decimal" checked />
+              <span>Decimal Comercial (Base 1000 - Fabricantes de discos y móviles)</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="calc-mode" value="binary" />
+              <span>Binario Real (Base 1024 - Windows, Linux, GiB, TiB)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- CAPACIDAD REAL DISCO -->
+        <div class="real-space-alert" id="real-space-box">
+          <div class="alert-icon">💡</div>
+          <div class="alert-text">
+            <strong>¿Por qué ves menos espacio en tu dispositivo?</strong>
+            <p id="real-space-desc">
+              Un disco o móvil anunciado de <strong>128 GB</strong> se lee en tu sistema operativo como aproximadamente <strong>119,2 GiB</strong> debido al cálculo binario de 1024.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- EQUIVALENCIAS Y RESULTADOS -->
+      <div class="card results-card">
+        <h3>Equivalencias en el Mundo Real</h3>
+        <p class="results-desc">¿Qué puedes guardar aproximadamente con esta capacidad?</p>
+
+        <div class="equivalences-grid">
+          <div class="equiv-item">
+            <span class="equiv-icon">📸</span>
+            <div class="equiv-info">
+              <strong id="eq-photos">~42.600</strong>
+              <small>Fotos estándar de móvil (~3 MB)</small>
+            </div>
+          </div>
+          <div class="equiv-item">
+            <span class="equiv-icon">🎵</span>
+            <div class="equiv-info">
+              <strong id="eq-songs">~25.600</strong>
+              <small>Canciones en alta calidad (~5 MB)</small>
+            </div>
+          </div>
+          <div class="equiv-item">
+            <span class="equiv-icon">🎬</span>
+            <div class="equiv-info">
+              <strong id="eq-movies">~42 películas</strong>
+              <small>Películas Full HD 1080p (~3 GB)</small>
+            </div>
+          </div>
+          <div class="equiv-item">
+            <span class="equiv-icon">🎮</span>
+            <div class="equiv-info">
+              <strong id="eq-games">~1,8 juegos</strong>
+              <small>Juegos AAA modernos (~70 GB)</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABLA COMPLETA CONVERSIONES -->
+        <h4 class="table-title">Conversión a todas las unidades:</h4>
+        <div class="units-table">
+          <div class="unit-row"><span>Bytes:</span> <strong id="res-b">137.438.953.472 B</strong></div>
+          <div class="unit-row"><span>Kilobytes (KB):</span> <strong id="res-kb">134.217.728 KB</strong></div>
+          <div class="unit-row"><span>Megabytes (MB):</span> <strong id="res-mb">131.072 MB</strong></div>
+          <div class="unit-row highlight-unit"><span>Gigabytes (GB):</span> <strong id="res-gb">128 GB</strong></div>
+          <div class="unit-row"><span>Terabytes (TB):</span> <strong id="res-tb">0,125 TB</strong></div>
+          <div class="unit-row"><span>Petabytes (PB):</span> <strong id="res-pb">0,00012 TB</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO GUÍA -->
+    <section class="seo-guide-section card">
+      <h2>Tabla Comparativa: Capacidad Anunciada vs Capacidad Real en Windows</h2>
+      <p>
+        Esta tabla explica la diferencia entre el tamaño que viene impreso en la caja de una tarjeta microSD, SSD o smartphone y lo que verás tras formatearlo:
+      </p>
+
+      <div class="table-responsive">
+        <table class="storage-compare-table">
+          <thead>
+            <tr>
+              <th>Capacidad en la Caja (Fabricante)</th>
+              <th>Espacio Real Disponible en Windows</th>
+              <th>Diferencia / Pérdida aparente</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>32 GB</td><td>~29,8 GB</td><td>-2,2 GB (~7%)</td></tr>
+            <tr><td>64 GB</td><td>~59,6 GB</td><td>-4,4 GB (~7%)</td></tr>
+            <tr><td>128 GB</td><td>~119,2 GB</td><td>-8,8 GB (~7%)</td></tr>
+            <tr><td>256 GB</td><td>~238,4 GB</td><td>-17,6 GB (~7%)</td></tr>
+            <tr><td>512 GB</td><td>~476,8 GB</td><td>-35,2 GB (~7%)</td></tr>
+            <tr><td>1 TB (1.000 GB)</td><td>~931,3 GB</td><td>-68,7 GB (~7%)</td></tr>
+            <tr><td>2 TB (2.000 GB)</td><td>~1.862,6 GB</td><td>-137,4 GB (~7%)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre Almacenamiento</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    background: rgba(14, 165, 233, 0.12);
+    color: #0ea5e9;
+    border: 1px solid rgba(14, 165, 233, 0.25);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .tool-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .storage-calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+    align-items: start;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 860px) {
+    .storage-calc-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1.25rem;
+  }
+
+  .input-unit-flex {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .val-input-group {
+    flex: 1.5;
+  }
+
+  .unit-input-group {
+    flex: 1;
+  }
+
+  .input-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    margin-bottom: 0.35rem;
+  }
+
+  input[type="number"], select {
+    width: 100%;
+    padding: 0.75rem 0.85rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color, #334155);
+    background: var(--input-bg, #0f172a);
+    color: var(--text-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  select {
+    font-size: 0.95rem;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+  }
+
+  .presets-row {
+    margin-bottom: 1.25rem;
+  }
+
+  .presets-row span {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .chips-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .chip-storage {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.4rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .chip-storage:hover {
+    background: #0ea5e9;
+    color: #fff;
+    border-color: #0ea5e9;
+  }
+
+  .calc-mode-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .section-sublabel {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.6rem;
+  }
+
+  .radio-modes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+
+  .real-space-alert {
+    display: flex;
+    gap: 0.75rem;
+    background: rgba(14, 165, 233, 0.1);
+    border: 1px solid rgba(14, 165, 233, 0.3);
+    border-radius: 0.65rem;
+    padding: 1rem;
+  }
+
+  .alert-icon {
+    font-size: 1.4rem;
+  }
+
+  .alert-text strong {
+    font-size: 0.9rem;
+    color: #38bdf8;
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .alert-text p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* RESULTS CARD */
+  .results-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+  }
+
+  .equivalences-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+    margin-bottom: 1.75rem;
+  }
+
+  @media (max-width: 500px) {
+    .equivalences-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .equiv-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .equiv-icon {
+    font-size: 1.8rem;
+  }
+
+  .equiv-info strong {
+    display: block;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #38bdf8;
+  }
+
+  .equiv-info small {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.2;
+  }
+
+  .table-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+  }
+
+  .units-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .unit-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0.65rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 0.4rem;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+
+  .unit-row strong {
+    color: var(--text-heading);
+    font-family: ui-monospace, monospace;
+  }
+
+  .unit-row.highlight-unit {
+    background: rgba(14, 165, 233, 0.15);
+    border: 1px solid rgba(14, 165, 233, 0.3);
+    color: #38bdf8;
+  }
+
+  .unit-row.highlight-unit strong {
+    color: #38bdf8;
+    font-weight: 800;
+  }
+
+  /* SEO & GUIDE */
+  .seo-guide-section {
+    margin-bottom: 2rem;
+  }
+
+  .seo-guide-section h2, .faq-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1rem;
+  }
+
+  .seo-guide-section p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    margin-top: 1rem;
+  }
+
+  .storage-compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .storage-compare-table th, .storage-compare-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border: 1px solid var(--border-color, #334155);
+  }
+
+  .storage-compare-table th {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-heading);
+  }
+
+  .storage-compare-table td {
+    color: var(--text-muted);
+  }
+
+  /* FAQ */
+  .faq-section {
+    margin-bottom: 2rem;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initStorageCalculator() {
+    const valInput = document.getElementById('storage-val') as HTMLInputElement;
+    const unitSelect = document.getElementById('storage-unit') as HTMLSelectElement;
+    const modeRadios = document.querySelectorAll('input[name="calc-mode"]');
+    const chips = document.querySelectorAll('.chip-storage');
+
+    // Outputs
+    const eqPhotos = document.getElementById('eq-photos');
+    const eqSongs = document.getElementById('eq-songs');
+    const eqMovies = document.getElementById('eq-movies');
+    const eqGames = document.getElementById('eq-games');
+    const realSpaceDesc = document.getElementById('real-space-desc');
+
+    const resB = document.getElementById('res-b');
+    const resKb = document.getElementById('res-kb');
+    const resMb = document.getElementById('res-mb');
+    const resGb = document.getElementById('res-gb');
+    const resTb = document.getElementById('res-tb');
+    const resPb = document.getElementById('res-pb');
+
+    function calculate() {
+      const val = parseFloat(valInput.value) || 0;
+      const unit = unitSelect.value;
+      const mode = (document.querySelector('input[name="calc-mode"]:checked') as HTMLInputElement)?.value || 'decimal';
+      const base = mode === 'binary' ? 1024 : 1000;
+
+      // Convert input to Bytes
+      let bytes = 0;
+      switch (unit) {
+        case 'b': bytes = val / 8; break;
+        case 'B': bytes = val; break;
+        case 'KB': bytes = val * base; break;
+        case 'MB': bytes = val * Math.pow(base, 2); break;
+        case 'GB': bytes = val * Math.pow(base, 3); break;
+        case 'TB': bytes = val * Math.pow(base, 4); break;
+        case 'PB': bytes = val * Math.pow(base, 5); break;
+      }
+
+      // Convert Bytes to all units
+      const bVal = bytes;
+      const kbVal = bytes / base;
+      const mbVal = bytes / Math.pow(base, 2);
+      const gbVal = bytes / Math.pow(base, 3);
+      const tbVal = bytes / Math.pow(base, 4);
+      const pbVal = bytes / Math.pow(base, 5);
+
+      function formatNum(num: number, maxDec = 4): string {
+        if (num >= 1000) return Math.round(num).toLocaleString('es-ES');
+        if (num < 0.0001 && num > 0) return num.toExponential(2);
+        return num.toLocaleString('es-ES', { maximumFractionDigits: maxDec });
+      }
+
+      if (resB) resB.textContent = `${formatNum(bVal, 0)} B`;
+      if (resKb) resKb.textContent = `${formatNum(kbVal, 2)} KB`;
+      if (resMb) resMb.textContent = `${formatNum(mbVal, 2)} MB`;
+      if (resGb) resGb.textContent = `${formatNum(gbVal, 3)} GB`;
+      if (resTb) resTb.textContent = `${formatNum(tbVal, 4)} TB`;
+      if (resPb) resPb.textContent = `${formatNum(pbVal, 6)} PB`;
+
+      // Equivalences (base standard: 3 MB photo, 5 MB song, 3 GB 1080p movie, 70 GB AAA game)
+      const totalMB = bytes / (1000 * 1000);
+      const photosCount = Math.floor(totalMB / 3);
+      const songsCount = Math.floor(totalMB / 5);
+      const moviesCount = (totalMB / 3000).toFixed(1);
+      const gamesCount = (totalMB / 70000).toFixed(1);
+
+      if (eqPhotos) eqPhotos.textContent = `~${photosCount.toLocaleString('es-ES')}`;
+      if (eqSongs) eqSongs.textContent = `~${songsCount.toLocaleString('es-ES')}`;
+      if (eqMovies) eqMovies.textContent = `~${moviesCount} películas`;
+      if (eqGames) eqGames.textContent = `~${gamesCount} juegos`;
+
+      // Real space note if unit is GB or TB
+      if (realSpaceDesc) {
+        if (unit === 'GB' && val > 0) {
+          const binaryGB = (val * 1000 * 1000 * 1000) / (1024 * 1024 * 1024);
+          realSpaceDesc.innerHTML = `Un dispositivo anunciado de <strong>${val} GB</strong> se lee en Windows/Android como aproximadamente <strong>${binaryGB.toFixed(1)} GiB</strong> de espacio real utilizable.`;
+        } else if (unit === 'TB' && val > 0) {
+          const binaryTB = (val * 1e12) / Math.pow(1024, 4);
+          const binaryGB = (val * 1e12) / Math.pow(1024, 3);
+          realSpaceDesc.innerHTML = `Un disco anunciado de <strong>${val} TB</strong> ofrece aproximadamente <strong>${binaryGB.toFixed(0)} GB (${binaryTB.toFixed(2)} TiB)</strong> utilizables en tu ordenador.`;
+        } else {
+          realSpaceDesc.innerHTML = `La diferencia se debe a que los fabricantes usan potencias de 1000 y los sistemas operativos usan potencias de 1024.`;
+        }
+      }
+    }
+
+    [valInput, unitSelect].forEach(el => {
+      el?.addEventListener('input', calculate);
+      el?.addEventListener('change', calculate);
+    });
+
+    modeRadios.forEach(radio => {
+      radio.addEventListener('change', calculate);
+    });
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const v = chip.getAttribute('data-val');
+        const u = chip.getAttribute('data-unit');
+        if (v && u) {
+          valInput.value = v;
+          unitSelect.value = u;
+          calculate();
+        }
+      });
+    });
+
+    calculate();
+  }
+
+  document.addEventListener('astro:page-load', initStorageCalculator);
+</script>
