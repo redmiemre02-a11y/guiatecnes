@@ -1,0 +1,342 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Conversor de Letras Bonitas y Tipografías', url: '/herramientas/letras-bonitas' }
+];
+
+const faqs = [
+  {
+    question: '¿Por qué funcionan estas letras en Instagram, WhatsApp y TikTok?',
+    answer: 'Estas letras no son fuentes instaladas, sino caracteres especiales del estándar universal Unicode. Como forman parte del alfabeto informático global, se ven correctamente en cualquier móvil iPhone o Android sin instalar ninguna aplicación.'
+  },
+  {
+    question: '¿Cómo puedo usarlas en la biografía de mi perfil?',
+    answer: 'Simplemente escribe tu texto arriba, haz clic en "Copiar" al lado del estilo que más te guste, entra a Instagram o TikTok, ve a "Editar Perfil" y pega el texto en el campo de Biografía o Nombre.'
+  },
+  {
+    question: '¿Afecta al SEO de mi perfil usar letras especiales?',
+    answer: 'En el nombre de usuario (handle) solo se permiten caracteres alfanuméricos normales, pero en tu nombre visible y en la descripción (bio) puedes usar letras bonitas sin problema para destacar visualmente.'
+  }
+];
+---
+
+<BaseLayout
+  title="Conversor de Letras Bonitas para Instagram, TikTok y WhatsApp | Fuentes Chidas"
+  description="Convierte tu texto normal en letras bonitas, cursivas, góticas, con círculos y símbolos para copiar y pegar en tu biografía de Instagram, TikTok y WhatsApp."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Letras Bonitas</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">✨ Tipografías Unicode</div>
+      <h1>Conversor de Letras Bonitas para Instagram</h1>
+      <p class="tool-subtitle">
+        Escribe lo que quieras para transformarlo en decenas de fuentes diferentes (cursiva, gótica, negrita, con círculos) listas para copiar y pegar en tus biografías y estados.
+      </p>
+    </header>
+
+    <div class="fonts-card">
+      <div class="input-container">
+        <label for="font-input">✍️ Escribe aquí tu texto:</label>
+        <textarea id="font-input" placeholder="Escribe aquí tu frase, nombre o biografía..." rows="3">Tu Nombre Aquí</textarea>
+      </div>
+
+      <!-- LISTA DE ESTILOS -->
+      <div class="styles-list" id="styles-list">
+        <!-- Generado dinámicamente -->
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+      <h2>Preguntas Frecuentes</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page { padding: 2rem 0 4rem; max-width: 900px; margin: 0 auto; }
+  .breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 2rem;
+  }
+  .breadcrumb a { color: var(--text-muted, #94a3b8); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary, #6366f1); }
+
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    background: rgba(168, 85, 247, 0.12);
+    color: #a855f7;
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 50px;
+    margin-bottom: 0.8rem;
+  }
+  .tool-header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .fonts-card {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 20px;
+    padding: 2.2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 3rem;
+  }
+
+  .input-container {
+    margin-bottom: 2rem;
+  }
+
+  .input-container label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    font-size: 1rem;
+  }
+
+  textarea {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.25);
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    color: var(--text, #f1f5f9);
+    font-size: 1.15rem;
+    font-weight: 600;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+
+  textarea:focus {
+    border-color: #a855f7;
+  }
+
+  /* STYLES LIST */
+  .styles-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  :global(.font-item) {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.2s;
+  }
+
+  :global(.font-item:hover) {
+    border-color: #a855f7;
+    background: rgba(168, 85, 247, 0.06);
+  }
+
+  :global(.font-info) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  :global(.font-name) {
+    font-size: 0.75rem;
+    color: var(--text-muted, #94a3b8);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  :global(.font-preview) {
+    font-size: 1.2rem;
+    color: var(--text, #f1f5f9);
+    word-break: break-all;
+  }
+
+  :global(.btn-copy-font) {
+    background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+    border: none;
+    color: white;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  :global(.btn-copy-font:hover) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+  }
+
+  :global(.btn-copy-font.copied) {
+    background: #10b981;
+  }
+
+  .faq-section {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .faq-section h2 { font-size: 1.35rem; margin-bottom: 1.5rem; font-weight: 800; }
+  .faq-list { display: flex; flex-direction: column; gap: 1rem; }
+  .faq-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .faq-item summary { font-weight: 700; cursor: pointer; color: var(--text, #f1f5f9); }
+  .faq-item p { margin: 0.75rem 0 0; color: var(--text-muted, #94a3b8); font-size: 0.92rem; line-height: 1.6; }
+
+  @media (max-width: 650px) {
+    .fonts-card { padding: 1.4rem; }
+    :global(.font-item) { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+    :global(.btn-copy-font) { width: 100%; text-align: center; }
+  }
+</style>
+
+<script>
+  const NORMAL_CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+  const STYLES = [
+    {
+      name: 'Cursiva Elegante (Script)',
+      map: '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟𝐸𝐹𝒢𝐻𝐼𝒥𝒦𝐿𝑀𝒩𝒪𝒫𝒬𝑅𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵0123456789'
+    },
+    {
+      name: 'Negrita Cursiva (Bold Script)',
+      map: '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩0123456789'
+    },
+    {
+      name: 'Gótica / Fraktur Clásica',
+      map: '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ0123456789'
+    },
+    {
+      name: 'Doble Línea (Double-Struck)',
+      map: '𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡'
+    },
+    {
+      name: 'Negrita Moderna (Sans-Serif)',
+      map: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵'
+    },
+    {
+      name: 'Círculos Negros (Circled Dark)',
+      map: '🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢𝅀🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩0123456789'
+    },
+    {
+      name: 'Cuadrados (Square)',
+      map: '🅂🅀🅄🄰🅁🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉0123456789'
+    },
+    {
+      name: 'Máquina de Escribir (Monospace)',
+      map: '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿'
+    },
+    {
+      name: 'Minúsculas Pequeñas (Small Caps)',
+      map: 'ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    }
+  ];
+
+  function convertText(text: string, styleMap: string): string {
+    const chars = Array.from(styleMap);
+    return text.split('').map(char => {
+      const idx = NORMAL_CHARS.indexOf(char);
+      return idx !== -1 && chars[idx] ? chars[idx] : char;
+    }).join('');
+  }
+
+  function initFontConverter() {
+    const input = document.getElementById('font-input') as HTMLTextAreaElement;
+    const list = document.getElementById('styles-list');
+
+    if (!input || !list) return;
+
+    function render() {
+      const text = input.value.trim() || 'Tu Nombre Aquí';
+
+      list.innerHTML = STYLES.map(s => {
+        const converted = convertText(text, s.map);
+        return `
+          <div class="font-item">
+            <div class="font-info">
+              <span class="font-name">${s.name}</span>
+              <span class="font-preview">${converted}</span>
+            </div>
+            <button type="button" class="btn-copy-font" data-copy="${converted.replace(/"/g, '&quot;')}">Copiar</button>
+          </div>
+        `;
+      }).join('');
+
+      list.querySelectorAll('.btn-copy-font').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const b = e.currentTarget as HTMLElement;
+          const textToCopy = b.getAttribute('data-copy') || '';
+          navigator.clipboard.writeText(textToCopy);
+          b.textContent = '¡Copiado!';
+          b.classList.add('copied');
+          setTimeout(() => {
+            b.textContent = 'Copiar';
+            b.classList.remove('copied');
+          }, 1500);
+        });
+      });
+    }
+
+    input.addEventListener('input', render);
+    render();
+  }
+
+  document.addEventListener('astro:page-load', initFontConverter);
+</script>

@@ -1,0 +1,419 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Generador de Nombres de Usuario y Gamertags', url: '/herramientas/generador-nombres' }
+];
+
+const faqs = [
+  {
+    question: '¿Puedo usar estos nombres en Instagram, TikTok o Free Fire?',
+    answer: 'Sí. Todos los nombres y gamertags generados utilizan caracteres y símbolos compatibles con la mayoría de redes sociales y juegos como Free Fire, Roblox, Fortnite, Twitch y Discord.'
+  },
+  {
+    question: '¿Qué hace que un nombre de usuario sea memorable y profesional?',
+    answer: 'Un buen nombre de usuario debe ser fácil de pronunciar, no tener demasiados números aleatorios consecutivos y reflejar tu personalidad o nicho de contenido (por ejemplo gaming, tecnología o estilo estético).'
+  },
+  {
+    question: '¿El generador es gratuito e ilimitado?',
+    answer: 'Completamente gratis. Puedes generar tantas combinaciones como desees con un solo clic y copiarlas directamente al portapapeles sin necesidad de registrarte.'
+  }
+];
+---
+
+<BaseLayout
+  title="Generador de Nombres de Usuario y Gamertags Chidos | Instagram, Free Fire y TikTok"
+  description="Crea nombres de usuario originales, gamertags épicos para juegos (Free Fire, Roblox, Twitch) y perfiles estéticos para Instagram y TikTok con símbolos únicos."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Generador de Nombres</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🎮 Gamertags & Redes Sociales</div>
+      <h1>Generador de Nombres de Usuario y Gamertags</h1>
+      <p class="tool-subtitle">
+        Crea ideas originales de nombres para tus perfiles de Instagram, TikTok, Twitch, YouTube o juegos competitivos (Free Fire, Roblox, Valorant).
+      </p>
+    </header>
+
+    <div class="generator-card">
+      <div class="form-grid">
+        <!-- PALABRA CLAVE BASE -->
+        <div class="input-group">
+          <label for="keyword-input">🔤 Palabra o nombre base (Opcional):</label>
+          <input type="text" id="keyword-input" placeholder="Ej: Shadow, Alex, Luna, Pro, Rex..." />
+        </div>
+
+        <!-- ESTILO / CATEGORÍA -->
+        <div class="input-group">
+          <label for="style-select">🎨 Estilo del nombre:</label>
+          <select id="style-select">
+            <option value="gamer" selected>🎮 Gamer / Competitivo (Pro)</option>
+            <option value="aesthetic">✨ Estético / Aesthetic</option>
+            <option value="tech">⚡ Cyber / Futurista</option>
+            <option value="legendary">🐉 Épico / Mitológico</option>
+            <option value="minimal">💎 Corto / Minimalista</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- CHECKBOXES DE PERSONALIZACIÓN -->
+      <div class="options-row">
+        <label class="check-label">
+          <input type="checkbox" id="check-symbols" checked />
+          <span>Incluir símbolos chidos (⚡, 亗, 彡, ×, 𝕏)</span>
+        </label>
+        <label class="check-label">
+          <input type="checkbox" id="check-numbers" checked />
+          <span>Incluir números estilizados</span>
+        </label>
+      </div>
+
+      <div class="generate-action">
+        <button type="button" class="btn-generate" id="generate-names-btn">
+          <span>✨</span> Generar 12 Nuevas Ideas
+        </button>
+      </div>
+
+      <!-- LISTA DE RESULTADOS GENERADOS -->
+      <div class="names-result-grid" id="names-grid">
+        <!-- Rellenado dinámicamente con JavaScript -->
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+      <h2>Preguntas Frecuentes</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page { padding: 2rem 0 4rem; max-width: 900px; margin: 0 auto; }
+  .breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 2rem;
+  }
+  .breadcrumb a { color: var(--text-muted, #94a3b8); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary, #6366f1); }
+
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    background: rgba(236, 72, 153, 0.12);
+    color: #ec4899;
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 50px;
+    margin-bottom: 0.8rem;
+  }
+  .tool-header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .generator-card {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 20px;
+    padding: 2.2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 3rem;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .input-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 0.92rem;
+  }
+
+  .input-group input, .input-group select {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    color: var(--text, #f1f5f9);
+    font-size: 1.05rem;
+    font-weight: 600;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+
+  .input-group input:focus, .input-group select:focus {
+    border-color: #ec4899;
+  }
+
+  .input-group select option {
+    background: #1e293b;
+    color: white;
+  }
+
+  .options-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .check-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text, #f1f5f9);
+    cursor: pointer;
+  }
+
+  .check-label input {
+    accent-color: #ec4899;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+  }
+
+  .generate-action {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .btn-generate {
+    background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+    color: white;
+    border: none;
+    padding: 0.9rem 2.2rem;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1.05rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-generate:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(236, 72, 153, 0.55);
+  }
+
+  /* NAMES GRID */
+  .names-result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  :global(.name-card) {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+  }
+
+  :global(.name-card:hover) {
+    border-color: #ec4899;
+    background: rgba(236, 72, 153, 0.08);
+    transform: translateY(-2px);
+  }
+
+  :global(.name-text) {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text, #f1f5f9);
+    letter-spacing: 0.02em;
+    word-break: break-all;
+  }
+
+  :global(.btn-copy-name) {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text, #f1f5f9);
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+    transition: all 0.2s;
+  }
+
+  :global(.btn-copy-name.copied) {
+    background: #10b981;
+    color: white;
+    border-color: #10b981;
+  }
+
+  .faq-section {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .faq-section h2 { font-size: 1.35rem; margin-bottom: 1.5rem; font-weight: 800; }
+  .faq-list { display: flex; flex-direction: column; gap: 1rem; }
+  .faq-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .faq-item summary { font-weight: 700; cursor: pointer; color: var(--text, #f1f5f9); }
+  .faq-item p { margin: 0.75rem 0 0; color: var(--text-muted, #94a3b8); font-size: 0.92rem; line-height: 1.6; }
+
+  @media (max-width: 650px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .generator-card { padding: 1.4rem; }
+  }
+</style>
+
+<script>
+  const GAMER_PREFIXES = ['Ghost', 'Dark', 'Viper', 'Frost', 'Shadow', 'Apex', 'Titan', 'Nova', 'Rogue', 'Iron', 'Zenith', 'Phantom', 'Nexus', 'Blaze'];
+  const GAMER_SUFFIXES = ['Sniper', 'Slayer', 'Pro', 'God', 'Knight', 'Strike', 'Wolf', 'Lord', 'King', 'Hunter', 'Blade', 'Zero', 'Gamer'];
+
+  const AESTHETIC_WORDS = ['Moon', 'Velvet', 'Cloud', 'Honey', 'Cosmic', 'Lilac', 'Echo', 'Aura', 'Soul', 'Glow', 'Daisy', 'Hazel', 'Opal', 'Breeze', 'Petal'];
+  const TECH_WORDS = ['Cyber', 'Neon', 'Glitch', 'Matrix', 'Binary', 'Pixel', 'Quantum', 'Byte', 'Kernel', 'Vector', 'Synth', 'Sync', 'ZeroX'];
+  const EPIC_WORDS = ['Valkyrie', 'Draco', 'Fenrir', 'Hydra', 'Anubis', 'Thor', 'Kronos', 'Spartan', 'Cerberus', 'Ares', 'Poseidon', 'Odin'];
+
+  const SYMBOLS = ['⚡', '亗', '彡', '×', '𝕏', '★', 'ツ', 'メ', '☯', '♛', 'ϟ', '☬'];
+
+  function initNameGenerator() {
+    const keywordInput = document.getElementById('keyword-input') as HTMLInputElement;
+    const styleSelect = document.getElementById('style-select') as HTMLSelectElement;
+    const checkSymbols = document.getElementById('check-symbols') as HTMLInputElement;
+    const checkNumbers = document.getElementById('check-numbers') as HTMLInputElement;
+    const genBtn = document.getElementById('generate-names-btn');
+    const namesGrid = document.getElementById('names-grid');
+
+    if (!genBtn || !namesGrid) return;
+
+    function generate() {
+      const kw = (keywordInput.value.trim() || '').replace(/\s+/g, '');
+      const style = styleSelect.value;
+      const useSymbols = checkSymbols.checked;
+      const useNumbers = checkNumbers.checked;
+
+      const results: string[] = [];
+
+      for (let i = 0; i < 12; i++) {
+        let name = '';
+        const randNum = Math.floor(Math.random() * 90 + 10);
+        const randSym = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+
+        if (style === 'gamer') {
+          const pre = GAMER_PREFIXES[Math.floor(Math.random() * GAMER_PREFIXES.length)];
+          const suf = GAMER_SUFFIXES[Math.floor(Math.random() * GAMER_SUFFIXES.length)];
+          name = kw ? `${pre}${kw}` : `${pre}${suf}`;
+          if (useNumbers && Math.random() > 0.4) name += randNum;
+          if (useSymbols && Math.random() > 0.3) name = `${randSym} ${name} ${randSym}`;
+        } else if (style === 'aesthetic') {
+          const w1 = AESTHETIC_WORDS[Math.floor(Math.random() * AESTHETIC_WORDS.length)];
+          const w2 = AESTHETIC_WORDS[Math.floor(Math.random() * AESTHETIC_WORDS.length)];
+          name = kw ? `${kw}.${w1.toLowerCase()}` : `${w1.toLowerCase()}_${w2.toLowerCase()}`;
+          if (useSymbols && Math.random() > 0.5) name = `✧${name}✧`;
+        } else if (style === 'tech') {
+          const tw = TECH_WORDS[Math.floor(Math.random() * TECH_WORDS.length)];
+          name = kw ? `${tw}_${kw}` : `${tw}${randNum}`;
+          if (useSymbols) name = `[${name}]`;
+        } else if (style === 'legendary') {
+          const ew = EPIC_WORDS[Math.floor(Math.random() * EPIC_WORDS.length)];
+          name = kw ? `${ew}_${kw}` : `Lord_${ew}`;
+          if (useSymbols) name = `亗 ${name} 亗`;
+        } else {
+          // Minimal
+          const pre = GAMER_PREFIXES[Math.floor(Math.random() * GAMER_PREFIXES.length)].slice(0, 3);
+          name = kw ? `${pre}_${kw}` : `${pre}${randNum}`;
+        }
+
+        results.push(name);
+      }
+
+      namesGrid.innerHTML = results.map(n => `
+        <div class="name-card">
+          <span class="name-text">${n}</span>
+          <button type="button" class="btn-copy-name" data-name="${n.replace(/"/g, '&quot;')}">Copiar</button>
+        </div>
+      `).join('');
+
+      // Attach copy listeners
+      namesGrid.querySelectorAll('.btn-copy-name').forEach(b => {
+        b.addEventListener('click', (e) => {
+          const btn = e.currentTarget as HTMLElement;
+          const nameToCopy = btn.getAttribute('data-name') || '';
+          navigator.clipboard.writeText(nameToCopy);
+          btn.textContent = '¡Copiado!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = 'Copiar';
+            btn.classList.remove('copied');
+          }, 1500);
+        });
+      });
+    }
+
+    genBtn.addEventListener('click', generate);
+    keywordInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') generate();
+    });
+    styleSelect.addEventListener('change', generate);
+
+    // Initial generate
+    generate();
+  }
+
+  document.addEventListener('astro:page-load', initNameGenerator);
+</script>

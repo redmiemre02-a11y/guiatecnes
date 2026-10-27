@@ -1,0 +1,426 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Consumo Eléctrico de PC y Consolas', url: '/herramientas/calculadora-luz' }
+];
+
+const faqs = [
+  {
+    question: '¿Cuánto gasta un PC Gaming o una PS5 en la factura de la luz al mes?',
+    answer: 'Una PlayStation 5 jugando unas 3 horas al día consume unos 18 kWh al mes, lo que equivale a unos 2.80 € a 3.50 € mensuales en España. Un PC Gaming de gama alta jugando 4 horas diarias puede costar entre 7 € y 12 € al mes según la tarifa eléctrica.'
+  },
+  {
+    question: '¿Cuánto cuesta dejar el Router WiFi encendido las 24 horas?',
+    answer: 'Un router doméstico medio consume unos 10 a 12 Vatios (W). Dejarlo encendido todo el día durante todo el mes gasta unos 8.5 kWh, lo que supone apenas 1.30 € al mes en la factura de la luz.'
+  },
+  {
+    question: '¿Cómo puedo reducir el consumo eléctrico de mi ordenador?',
+    answer: 'Activa el modo de suspensión tras 15 minutos de inactividad, baja el brillo de tu monitor al 60-70%, activa el bloqueo de FPS (por ejemplo a 60 o 120 FPS) en tus juegos para que la tarjeta gráfica no trabaje al 100% innecesariamente y desenchufa regletas por la noche.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Consumo Eléctrico de PC Gaming y PS5 | Cuánto gastas en luz"
+  description="Calcula gratis cuánto cuesta tener encendido tu PC Gaming, PS5, portátil, televisión o router. Conoce el gasto en euros al mes y año según el precio del kWh."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de Consumo Eléctrico</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">⚡ Ahorro de Energía</div>
+      <h1>Calculadora de Consumo Eléctrico de PC y Gadgets</h1>
+      <p class="tool-subtitle">
+        Descubre cuánto dinero te cuesta tener encendida tu consola (PS5, Xbox), tu ordenador gamer o tu televisión al día, mes y año según el precio del kWh.
+      </p>
+    </header>
+
+    <div class="calc-card">
+      <div class="form-grid">
+        <!-- DISPOSITIVO PREDEFINIDO -->
+        <div class="input-group">
+          <label for="device-preset">🖥️ Selecciona el aparato:</label>
+          <select id="device-preset">
+            <option value="450" selected>🖥️ PC Gaming en juego (450W)</option>
+            <option value="120">💻 PC Gaming en reposo / oficina (120W)</option>
+            <option value="65">💻 Portátil / Laptop (65W)</option>
+            <option value="200">🎮 PS5 / Xbox Series X jugando (200W)</option>
+            <option value="100">📺 Smart TV 4K de 55 pulgadas (100W)</option>
+            <option value="12">📶 Router WiFi 24/7 (12W)</option>
+            <option value="1000">❄️ Aire acondicionado frío/calor (1000W)</option>
+            <option value="custom">⚙️ Potencia personalizada (W)...</option>
+          </select>
+        </div>
+
+        <!-- POTENCIA MANUAL -->
+        <div class="input-group" id="custom-watts-group">
+          <label for="custom-watts">🔌 Potencia del aparato (Vatios - W):</label>
+          <input type="number" id="custom-watts" value="450" min="1" max="10000" />
+        </div>
+      </div>
+
+      <div class="form-grid secondary">
+        <!-- HORAS AL DÍA -->
+        <div class="input-group">
+          <label for="hours-day">⏱️ Horas de uso al día:</label>
+          <div class="range-wrap">
+            <input type="range" id="hours-range" min="0.5" max="24" step="0.5" value="4" />
+            <span class="range-val" id="hours-val">4 h / día</span>
+          </div>
+        </div>
+
+        <!-- PRECIO KWH -->
+        <div class="input-group">
+          <label for="kwh-price">💶 Precio del kWh (€ / $):</label>
+          <div class="kwh-wrap">
+            <input type="number" id="kwh-price" value="0.16" min="0.01" step="0.01" />
+            <span>€ / kWh (Media España)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTADOS PRINCIPALES -->
+      <div class="cost-dashboard">
+        <div class="cost-col">
+          <span class="cost-label">Gasto Diario:</span>
+          <strong class="cost-val" id="cost-daily">0.29 €</strong>
+          <small id="kwh-daily">1.80 kWh / día</small>
+        </div>
+        <div class="cost-col featured">
+          <span class="cost-label">Gasto Mensual:</span>
+          <strong class="cost-val text-green" id="cost-monthly">8.64 €</strong>
+          <small id="kwh-monthly">54.0 kWh / mes</small>
+        </div>
+        <div class="cost-col">
+          <span class="cost-label">Gasto Anual:</span>
+          <strong class="cost-val text-blue" id="cost-yearly">105.12 €</strong>
+          <small id="kwh-yearly">657 kWh / año</small>
+        </div>
+      </div>
+
+      <!-- ACCIONES -->
+      <div class="actions-row">
+        <button id="wa-share-luz-btn" class="wa-btn" type="button">
+          <span>💬</span> Compartir resultado en WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+      <h2>Preguntas Frecuentes sobre Consumo de Luz</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page { padding: 2rem 0 4rem; max-width: 900px; margin: 0 auto; }
+  .breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 2rem;
+  }
+  .breadcrumb a { color: var(--text-muted, #94a3b8); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary, #6366f1); }
+
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    background: rgba(245, 158, 11, 0.12);
+    color: #f59e0b;
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 50px;
+    margin-bottom: 0.8rem;
+  }
+  .tool-header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .calc-card {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 20px;
+    padding: 2.2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 3rem;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .input-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 0.92rem;
+  }
+
+  .input-group select, .input-group input[type="number"] {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    color: var(--text, #f1f5f9);
+    font-size: 1.05rem;
+    font-weight: 600;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+
+  .input-group select:focus, .input-group input:focus {
+    border-color: #f59e0b;
+  }
+
+  .input-group select option {
+    background: #1e293b;
+    color: white;
+  }
+
+  .range-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+  }
+
+  .range-wrap input {
+    flex: 1;
+    accent-color: #f59e0b;
+    cursor: pointer;
+  }
+
+  .range-val {
+    min-width: 80px;
+    font-weight: 700;
+    color: #f59e0b;
+    text-align: right;
+  }
+
+  .kwh-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .kwh-wrap input {
+    width: 100px;
+  }
+
+  .kwh-wrap span {
+    color: var(--text-muted, #94a3b8);
+    font-size: 0.85rem;
+  }
+
+  /* COST DASHBOARD */
+  .cost-dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 1rem;
+    margin: 2.2rem 0;
+  }
+
+  .cost-col {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 1.25rem 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .cost-col.featured {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(16, 185, 129, 0.1) 100%);
+    border-color: rgba(245, 158, 11, 0.4);
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.1);
+  }
+
+  .cost-label {
+    font-size: 0.82rem;
+    color: var(--text-muted, #94a3b8);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+
+  .cost-val {
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+    font-weight: 900;
+    color: var(--text, #f1f5f9);
+    margin-bottom: 0.2rem;
+  }
+
+  .text-green { color: #10b981; font-size: clamp(1.8rem, 4vw, 2.3rem); }
+  .text-blue { color: #38bdf8; }
+
+  .cost-col small {
+    color: var(--text-muted, #94a3b8);
+    font-size: 0.82rem;
+  }
+
+  .actions-row {
+    display: flex;
+    justify-content: center;
+  }
+
+  .wa-btn {
+    background: #25D366;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.8rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .wa-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+  }
+
+  .faq-section {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .faq-section h2 { font-size: 1.35rem; margin-bottom: 1.5rem; font-weight: 800; }
+  .faq-list { display: flex; flex-direction: column; gap: 1rem; }
+  .faq-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .faq-item summary { font-weight: 700; cursor: pointer; color: var(--text, #f1f5f9); }
+  .faq-item p { margin: 0.75rem 0 0; color: var(--text-muted, #94a3b8); font-size: 0.92rem; line-height: 1.6; }
+
+  @media (max-width: 650px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .cost-dashboard { grid-template-columns: 1fr; }
+    .calc-card { padding: 1.4rem; }
+  }
+</style>
+
+<script>
+  function initPowerCalc() {
+    const presetSelect = document.getElementById('device-preset') as HTMLSelectElement;
+    const wattsInput = document.getElementById('custom-watts') as HTMLInputElement;
+    const hoursRange = document.getElementById('hours-range') as HTMLInputElement;
+    const hoursVal = document.getElementById('hours-val');
+    const kwhPriceInput = document.getElementById('kwh-price') as HTMLInputElement;
+
+    const costDaily = document.getElementById('cost-daily');
+    const kwhDaily = document.getElementById('kwh-daily');
+    const costMonthly = document.getElementById('cost-monthly');
+    const kwhMonthly = document.getElementById('kwh-monthly');
+    const costYearly = document.getElementById('cost-yearly');
+    const kwhYearly = document.getElementById('kwh-yearly');
+    const waBtn = document.getElementById('wa-share-luz-btn');
+
+    if (!presetSelect || !wattsInput || !hoursRange) return;
+
+    function calculate() {
+      const watts = parseFloat(wattsInput.value) || 0;
+      const hours = parseFloat(hoursRange.value) || 0;
+      const pricePerKwh = parseFloat(kwhPriceInput.value) || 0.16;
+
+      if (hoursVal) hoursVal.textContent = `${hours} h / día`;
+
+      // kWh = (Watts * hours) / 1000
+      const dayKwh = (watts * hours) / 1000;
+      const monthKwh = dayKwh * 30;
+      const yearKwh = dayKwh * 365;
+
+      const dayCost = dayKwh * pricePerKwh;
+      const monthCost = monthKwh * pricePerKwh;
+      const yearCost = yearKwh * pricePerKwh;
+
+      if (costDaily) costDaily.textContent = `${dayCost.toFixed(2)} €`;
+      if (kwhDaily) kwhDaily.textContent = `${dayKwh.toFixed(2)} kWh / día`;
+
+      if (costMonthly) costMonthly.textContent = `${monthCost.toFixed(2)} €`;
+      if (kwhMonthly) kwhMonthly.textContent = `${monthKwh.toFixed(1)} kWh / mes`;
+
+      if (costYearly) costYearly.textContent = `${yearCost.toFixed(2)} €`;
+      if (kwhYearly) kwhYearly.textContent = `${yearKwh.toFixed(0)} kWh / año`;
+    }
+
+    presetSelect.addEventListener('change', () => {
+      if (presetSelect.value !== 'custom') {
+        wattsInput.value = presetSelect.value;
+      }
+      calculate();
+    });
+
+    wattsInput.addEventListener('input', () => {
+      presetSelect.value = 'custom';
+      calculate();
+    });
+
+    hoursRange.addEventListener('input', calculate);
+    kwhPriceInput.addEventListener('input', calculate);
+
+    calculate();
+
+    waBtn?.addEventListener('click', () => {
+      const mon = costMonthly?.textContent || '';
+      const text = `💡 Acabo de calcular el gasto de luz de mi aparato: ¡consume ${mon} al mes! Calcula gratis el tuyo en GuíaTecnes: ${window.location.href}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    });
+  }
+
+  document.addEventListener('astro:page-load', initPowerCalc);
+</script>
