@@ -1,0 +1,357 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Contador de Palabras, Caracteres y Párrafos Online Gratis"
+  description="Cuenta palabras, caracteres con y sin espacios, oraciones y tiempo de lectura de tu texto al instante. Ideal para ensayos, SEO, Twitter y resúmenes."
+>
+  <Header slot="header" />
+
+  <main class="tool-container">
+    <div class="tool-hero">
+      <span class="badge">📝 Redacción y SEO</span>
+      <h1>Contador de Palabras y Caracteres</h1>
+      <p class="subtitle">Escribe o pega tu texto para analizar en tiempo real la cantidad de palabras, letras, tiempo estimado de lectura y densidad de términos.</p>
+    </div>
+
+    <div class="counter-card">
+      <!-- Metrics Top Bar -->
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="stat-num" id="stat-words">0</span>
+          <span class="stat-desc">Palabras</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="stat-chars">0</span>
+          <span class="stat-desc">Caracteres</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="stat-chars-no-space">0</span>
+          <span class="stat-desc">Sin Espacios</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="stat-paras">0</span>
+          <span class="stat-desc">Párrafos</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="stat-reading">0 min</span>
+          <span class="stat-desc">Lectura</span>
+        </div>
+      </div>
+
+      <!-- Textarea Area -->
+      <div class="textarea-wrap">
+        <textarea id="text-input" rows="12" placeholder="Escribe o pega aquí tu texto para empezar a contar automáticamente..."></textarea>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="actions-row">
+        <button id="btn-copy" class="btn-tool">📋 Copiar Texto</button>
+        <button id="btn-clear" class="btn-tool btn-danger">🗑️ Borrar Todo</button>
+        <button id="btn-uppercase" class="btn-tool">MAYÚSCULAS</button>
+        <button id="btn-lowercase" class="btn-tool">minúsculas</button>
+      </div>
+
+      <!-- Social Media Limits Progress -->
+      <div class="social-limits">
+        <h3>Límites para Redes Sociales:</h3>
+        <div class="limit-item">
+          <div class="limit-header">
+            <span>𝕏 Twitter / X (280 chars)</span>
+            <span id="tw-count">0 / 280</span>
+          </div>
+          <div class="limit-bar"><div class="limit-progress" id="tw-progress"></div></div>
+        </div>
+
+        <div class="limit-item">
+          <div class="limit-header">
+            <span>📸 Instagram Bio (150 chars)</span>
+            <span id="ig-count">0 / 150</span>
+          </div>
+          <div class="limit-bar"><div class="limit-progress" id="ig-progress"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO GUIDE -->
+    <section class="guide-section">
+      <h2>¿Por qué es importante medir la longitud de un texto?</h2>
+      <p>En el mundo digital, cada plataforma premia una longitud específica para captar la atención de los lectores y posicionar en los motores de búsqueda:</p>
+
+      <div class="seo-tips-grid">
+        <div class="tip-card">
+          <span>🔍</span>
+          <h4>Artículos de Blog SEO</h4>
+          <p>Los artículos que superan las 1.200 - 1.800 palabras tienen un 70% más de probabilidades de alcanzar la primera página de Google.</p>
+        </div>
+        <div class="tip-card">
+          <span>📱</span>
+          <h4>Redes Sociales y Copys</h4>
+          <p>En Instagram y LinkedIn, las 2 primeras líneas (menos de 125 caracteres) son las que deciden si el usuario pulsa en 'Ver más' o sigue deslizando.</p>
+        </div>
+        <div class="tip-card">
+          <span>🎓</span>
+          <h4>Trabajos Académicos</h4>
+          <p>Cumple con exactitud los límites de palabras exigidos en ensayos universitarios sin excederte ni quedarte corto.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  document.addEventListener('astro:page-load', () => {
+    const input = document.getElementById('text-input');
+    const wordsEl = document.getElementById('stat-words');
+    const charsEl = document.getElementById('stat-chars');
+    const charsNoSpaceEl = document.getElementById('stat-chars-no-space');
+    const parasEl = document.getElementById('stat-paras');
+    const readingEl = document.getElementById('stat-reading');
+
+    const twCount = document.getElementById('tw-count');
+    const twProgress = document.getElementById('tw-progress');
+    const igCount = document.getElementById('ig-count');
+    const igProgress = document.getElementById('ig-progress');
+
+    const btnCopy = document.getElementById('btn-copy');
+    const btnClear = document.getElementById('btn-clear');
+    const btnUpper = document.getElementById('btn-uppercase');
+    const btnLower = document.getElementById('btn-lowercase');
+
+    if (!input) return;
+
+    function updateStats() {
+      const text = input.value;
+      const chars = text.length;
+      const charsNoSpace = text.replace(/\s+/g, '').length;
+
+      // Words count
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+
+      // Paragraphs count
+      const paras = text.trim() ? text.split(/\n+/).filter(p => p.trim().length > 0).length : 0;
+
+      // Reading time (Average 200 words per minute)
+      const minutes = Math.ceil(words / 200);
+
+      wordsEl.textContent = words.toLocaleString('es-ES');
+      charsEl.textContent = chars.toLocaleString('es-ES');
+      charsNoSpaceEl.textContent = charsNoSpace.toLocaleString('es-ES');
+      parasEl.textContent = paras.toLocaleString('es-ES');
+      readingEl.textContent = minutes + ' min';
+
+      // Twitter progress (280)
+      twCount.textContent = `${chars} / 280`;
+      const twPct = Math.min(100, (chars / 280) * 100);
+      twProgress.style.width = twPct + '%';
+      twProgress.style.backgroundColor = chars > 280 ? '#ef4444' : '#1d9bf0';
+
+      // Instagram progress (150)
+      igCount.textContent = `${chars} / 150`;
+      const igPct = Math.min(100, (chars / 150) * 100);
+      igProgress.style.width = igPct + '%';
+      igProgress.style.backgroundColor = chars > 150 ? '#ef4444' : '#e1306c';
+    }
+
+    input.addEventListener('input', updateStats);
+
+    btnCopy?.addEventListener('click', () => {
+      input.select();
+      navigator.clipboard.writeText(input.value);
+      btnCopy.textContent = '✅ ¡Copiado!';
+      setTimeout(() => btnCopy.textContent = '📋 Copiar Texto', 2000);
+    });
+
+    btnClear?.addEventListener('click', () => {
+      input.value = '';
+      updateStats();
+    });
+
+    btnUpper?.addEventListener('click', () => {
+      input.value = input.value.toUpperCase();
+      updateStats();
+    });
+
+    btnLower?.addEventListener('click', () => {
+      input.value = input.value.toLowerCase();
+      updateStats();
+    });
+
+    updateStats();
+  });
+</script>
+
+<style>
+  .tool-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+  .tool-hero {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .badge {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    background: rgba(168, 85, 247, 0.15);
+    color: #a855f7;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+  }
+  h1 {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: var(--heading);
+    margin-bottom: 0.75rem;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .counter-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.25rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+  .stat-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.35rem;
+  }
+  .stat-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .textarea-wrap textarea {
+    width: 100%;
+    padding: 1.25rem;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    font-family: inherit;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--text);
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+  .textarea-wrap textarea:focus {
+    border-color: var(--primary);
+  }
+
+  .actions-row {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  .btn-tool {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-tool:hover { border-color: var(--primary); }
+  .btn-danger:hover { border-color: #ef4444; color: #ef4444; }
+
+  .social-limits {
+    margin-top: 2rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+  }
+  .social-limits h3 {
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+    color: var(--heading);
+  }
+  .limit-item {
+    margin-bottom: 1rem;
+  }
+  .limit-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+  }
+  .limit-bar {
+    height: 6px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .limit-progress {
+    height: 100%;
+    width: 0%;
+    transition: width 0.2s;
+  }
+
+  /* GUIDE */
+  .guide-section {
+    margin-top: 4rem;
+  }
+  .guide-section h2 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--heading);
+  }
+  .guide-section p {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  .seo-tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.5rem;
+  }
+  .tip-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 14px;
+  }
+  .tip-card span { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+  .tip-card h4 { font-size: 1.05rem; margin-bottom: 0.4rem; color: var(--heading); }
+  .tip-card p { font-size: 0.88rem; margin-bottom: 0; }
+</style>

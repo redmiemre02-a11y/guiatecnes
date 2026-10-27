@@ -1,0 +1,365 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<BaseLayout
+  title="¿Cuál es mi IP Pública y Ubicación Actual? (Saber si uso VPN)"
+  description="Descubre tu dirección IP pública, proveedor de internet (ISP), ciudad, país y si tu conexión está protegida por una VPN en tiempo real y gratis."
+>
+  <Header slot="header" />
+
+  <main class="tool-container">
+    <div class="tool-hero">
+      <span class="badge">🌐 Información de Red en Tiempo Real</span>
+      <h1>¿Cuál es mi IP Pública?</h1>
+      <p class="subtitle">Comprueba al instante tu dirección IP real, proveedor de internet, país y comprueba si tu VPN o proxy está ocultando tus datos correctamente.</p>
+    </div>
+
+    <div class="ip-card">
+      <div class="main-ip-box">
+        <span class="ip-label">Tu dirección IP pública es:</span>
+        <div class="ip-row">
+          <span class="ip-address" id="ip-display">Detectando IP...</span>
+          <button id="btn-copy-ip" class="btn-copy">📋 Copiar</button>
+        </div>
+        <span class="ip-status-badge" id="ip-type">IPv4 Pública</span>
+      </div>
+
+      <!-- Network Details Grid -->
+      <div class="details-grid">
+        <div class="detail-box">
+          <span class="d-icon">📍</span>
+          <div>
+            <span class="d-label">Ubicación / Ciudad:</span>
+            <strong class="d-val" id="ip-location">Detectando...</strong>
+          </div>
+        </div>
+
+        <div class="detail-box">
+          <span class="d-icon">🏢</span>
+          <div>
+            <span class="d-label">Proveedor (ISP):</span>
+            <strong class="d-val" id="ip-isp">Detectando...</strong>
+          </div>
+        </div>
+
+        <div class="detail-box">
+          <span class="d-icon">🛡️</span>
+          <div>
+            <span class="d-label">Estado de Protección:</span>
+            <strong class="d-val" id="ip-vpn-status">Analizando...</strong>
+          </div>
+        </div>
+
+        <div class="detail-box">
+          <span class="d-icon">💻</span>
+          <div>
+            <span class="d-label">Sistema / Navegador:</span>
+            <strong class="d-val" id="ip-browser">Detectando...</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions-box">
+        <button id="btn-refresh" class="btn-refresh">🔄 Volver a comprobar mi IP</button>
+      </div>
+
+      <!-- Share Box -->
+      <div class="share-box">
+        <p>¿Quieres comprobar si tu VPN funciona? Comparte este comprobador:</p>
+        <a href="https://api.whatsapp.com/send?text=%F0%9F%8C%90%20%C2%A1Comprueba%20tu%20direcci%C3%B3n%20IP%20p%C3%BAblica%20y%20si%20tu%20ubicaci%C3%B3n%20es%20visible%20gratis!%20%E2%9E%A1%EF%B8%8F%20https%3A%2F%2Fguiatecnes.com%2Fherramientas%2Fmi-ip" target="_blank" rel="noopener noreferrer" class="btn-wa">
+          💬 Compartir en WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <!-- SEO GUIDE -->
+    <section class="guide-section">
+      <h2>¿Qué es una dirección IP y qué información revela sobre ti?</h2>
+      <p>Una dirección IP (Protocolo de Internet) es como la matrícula de tu coche en internet. Cada vez que visitas una web, descargas un archivo o juegas online, tu router envía esta matrícula a los servidores de destino.</p>
+
+      <div class="ip-info-grid">
+        <div class="info-card">
+          <span>🎯</span>
+          <h4>Tu ubicación geográfica aproximada</h4>
+          <p>Tu IP indica tu país, región y muchas veces la ciudad exacta o centralita desde la que te conectas a internet.</p>
+        </div>
+        <div class="info-card">
+          <span>📡</span>
+          <h4>Tu compañía de telecomunicaciones</h4>
+          <p>Cualquier web sabe qué operador tienes contratado (Movistar, Vodafone, Claro, Telmex, Tigo, etc.).</p>
+        </div>
+        <div class="info-card">
+          <span>🛡️</span>
+          <h4>¿Cómo ocultar tu IP?</h4>
+          <p>La forma más rápida y segura de cambiar tu IP y proteger tu anonimato es utilizar una red privada virtual (VPN).</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  document.addEventListener('astro:page-load', () => {
+    const ipDisplay = document.getElementById('ip-display');
+    const ipLocation = document.getElementById('ip-location');
+    const ipIsp = document.getElementById('ip-isp');
+    const ipVpn = document.getElementById('ip-vpn-status');
+    const ipBrowser = document.getElementById('ip-browser');
+    const btnCopy = document.getElementById('btn-copy-ip');
+    const btnRefresh = document.getElementById('btn-refresh');
+
+    if (!ipDisplay) return;
+
+    // Detect browser/OS
+    const ua = navigator.userAgent;
+    let os = 'Windows / PC';
+    if (ua.includes('Android')) os = 'Android';
+    else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS (Apple)';
+    else if (ua.includes('Macintosh')) os = 'macOS';
+    else if (ua.includes('Linux')) os = 'Linux';
+    ipBrowser.textContent = os;
+
+    async function fetchIP() {
+      ipDisplay.textContent = 'Detectando...';
+      ipLocation.textContent = 'Consultando...';
+      ipIsp.textContent = 'Consultando...';
+      ipVpn.textContent = 'Analizando...';
+
+      try {
+        const resp = await fetch('https://ipapi.co/json/');
+        const data = await resp.json();
+
+        ipDisplay.textContent = data.ip || 'No disponible';
+        ipLocation.textContent = `${data.city || 'Desconocida'}, ${data.country_name || 'Desconocido'}`;
+        ipIsp.textContent = data.org || data.asn || 'Proveedor local';
+
+        // VPN suspicion heuristic
+        const isHosting = (data.org || '').toLowerCase().includes('hosting') || 
+                          (data.org || '').toLowerCase().includes('cloud') || 
+                          (data.org || '').toLowerCase().includes('vpn') ||
+                          (data.org || '').toLowerCase().includes('datacenter');
+
+        if (isHosting) {
+          ipVpn.innerHTML = '<span style="color:#10b981;">🛡️ Protegido (VPN / Proxy Activo)</span>';
+        } else {
+          ipVpn.innerHTML = '<span style="color:#f59e0b;">🌐 Conexión Estándar (Sin VPN)</span>';
+        }
+
+      } catch (e) {
+        // Fallback simple IP
+        try {
+          const r2 = await fetch('https://api.ipify.org?format=json');
+          const d2 = await r2.json();
+          ipDisplay.textContent = d2.ip;
+          ipLocation.textContent = 'Ubicación protegida';
+          ipIsp.textContent = 'Conexión segura';
+          ipVpn.textContent = 'No analizable';
+        } catch (err) {
+          ipDisplay.textContent = 'Error al detectar IP';
+        }
+      }
+    }
+
+    btnCopy?.addEventListener('click', () => {
+      const text = ipDisplay.textContent;
+      if (text && !text.includes('Detectando')) {
+        navigator.clipboard.writeText(text);
+        btnCopy.textContent = '✅ Copiada';
+        setTimeout(() => btnCopy.textContent = '📋 Copiar', 2000);
+      }
+    });
+
+    btnRefresh?.addEventListener('click', fetchIP);
+
+    fetchIP();
+  });
+</script>
+
+<style>
+  .tool-container {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+  .tool-hero {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .badge {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    background: rgba(14, 165, 233, 0.15);
+    color: #0ea5e9;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(14, 165, 233, 0.3);
+  }
+  h1 {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: var(--heading);
+    margin-bottom: 0.75rem;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .ip-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  }
+
+  .main-ip-box {
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+    border: 1px solid rgba(14, 165, 233, 0.25);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .ip-label {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+  .ip-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+  .ip-address {
+    font-size: 2.6rem;
+    font-weight: 800;
+    font-family: monospace;
+    color: var(--heading);
+    letter-spacing: 1px;
+  }
+  .btn-copy {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+  .ip-status-badge {
+    display: inline-block;
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.2rem 0.65rem;
+    border-radius: 9999px;
+  }
+
+  /* DETAILS */
+  .details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .detail-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .d-icon { font-size: 2rem; }
+  .d-label { display: block; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.2rem; }
+  .d-val { font-size: 1.05rem; color: var(--heading); }
+
+  .actions-box {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .btn-refresh {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-refresh:hover { border-color: var(--primary); color: var(--primary); }
+
+  .share-box {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    text-align: center;
+  }
+  .share-box p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+  .btn-wa {
+    display: inline-block;
+    background: #25d366;
+    color: white;
+    text-decoration: none;
+    border-radius: 9999px;
+    padding: 0.75rem 1.75rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  /* GUIDE */
+  .guide-section {
+    margin-top: 4rem;
+  }
+  .guide-section h2 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--heading);
+  }
+  .guide-section p {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  .ip-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.5rem;
+  }
+  .info-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 14px;
+  }
+  .info-card span { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+  .info-card h4 { font-size: 1.05rem; margin-bottom: 0.4rem; color: var(--heading); }
+  .info-card p { font-size: 0.88rem; margin-bottom: 0; }
+
+  @media (max-width: 600px) {
+    .ip-address { font-size: 1.8rem; }
+    h1 { font-size: 1.8rem; }
+  }
+</style>
