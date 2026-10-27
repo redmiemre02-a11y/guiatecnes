@@ -55,10 +55,13 @@ const schemaWebSite = {
 
 const schemaArticle = type === 'article' ? {
   "@context": "https://schema.org",
-  "@type": "TechArticle",
+  "@type": "NewsArticle",
   "headline": title,
   "description": description,
-  "image": [fullImageURL],
+  "image": [
+    fullImageURL,
+    fullImageURL.includes("?") ? `${fullImageURL}&w=1200&h=675&fit=crop` : `${fullImageURL}?w=1200&h=675&fit=crop`
+  ],
   "author": {
     "@type": "Person",
     "name": author,

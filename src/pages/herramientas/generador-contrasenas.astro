@@ -1,0 +1,510 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Generador de Contraseñas Seguras y Test de Seguridad Online"
+  description="Genera contraseñas 100% seguras, aleatorias e indescifrables gratis. Comprueba el nivel de seguridad de tus claves y protégete de hackers al instante."
+>
+  <Header slot="header" />
+
+  <main class="tool-container">
+    <div class="tool-hero">
+      <span class="badge">🔒 Herramienta Gratuita de Ciberseguridad</span>
+      <h1>Generador de Contraseñas Seguras</h1>
+      <p class="subtitle">Crea claves ultra seguras, indescifrables para ciberdelincuentes y comprueba su fortaleza en tiempo real. 100% privado: nada sale de tu navegador.</p>
+    </div>
+
+    <div class="generator-card">
+      <div class="result-box">
+        <input type="text" id="password-output" readonly value="P@$$w0rd!2026_xYz" />
+        <button id="copy-btn" class="btn-copy" title="Copiar al portapapeles">
+          <span id="copy-icon">📋</span> <span id="copy-text">Copiar</span>
+        </button>
+        <button id="refresh-btn" class="btn-refresh" title="Generar otra">🔄</button>
+      </div>
+
+      <div class="strength-meter">
+        <div class="strength-bar" id="strength-bar"></div>
+      </div>
+      <p class="strength-label" id="strength-label">Seguridad: <strong>Muy Alta 🛡️</strong></p>
+
+      <div class="controls">
+        <div class="control-row">
+          <div class="label-group">
+            <label for="length-slider">Longitud de la contraseña:</label>
+            <span class="length-badge" id="length-val">16</span>
+          </div>
+          <input type="range" id="length-slider" min="8" max="64" value="16" />
+        </div>
+
+        <div class="options-grid">
+          <label class="checkbox-container">
+            <input type="checkbox" id="inc-uppercase" checked />
+            <span class="checkmark"></span>
+            Mayúsculas (A-Z)
+          </label>
+          <label class="checkbox-container">
+            <input type="checkbox" id="inc-lowercase" checked />
+            <span class="checkmark"></span>
+            Minúsculas (a-z)
+          </label>
+          <label class="checkbox-container">
+            <input type="checkbox" id="inc-numbers" checked />
+            <span class="checkmark"></span>
+            Números (0-9)
+          </label>
+          <label class="checkbox-container">
+            <input type="checkbox" id="inc-symbols" checked />
+            <span class="checkmark"></span>
+            Símbolos (!@#$%^&*)
+          </label>
+        </div>
+      </div>
+
+      <button id="generate-btn" class="btn-generate">⚡ Generar Nueva Clave Segura</button>
+
+      <!-- TESTER BOX -->
+      <div class="test-box">
+        <h3>🔍 ¿Quieres comprobar una contraseña que ya usas?</h3>
+        <p>Escribe cualquier clave para analizar cuánto tardaría un hacker en descifrarla:</p>
+        <input type="password" id="test-input" placeholder="Escribe tu clave aquí para comprobar..." />
+        <div class="crack-time" id="crack-time">Tiempo estimado de hackeo: <strong>Introduce una clave</strong></div>
+      </div>
+
+      <!-- WHATSAPP SHARE -->
+      <div class="share-box">
+        <p>¿Te ha servido? Comparte esta herramienta con amigos y familia para proteger sus cuentas:</p>
+        <a href="https://api.whatsapp.com/send?text=%F0%9F%94%92%20%C2%A1Mira%20esta%20herramienta%20gratis%20para%20crear%20contrase%C3%B1as%20imposibles%20de%20hackear%20y%20comprobar%20tus%20claves!%20%E2%9E%A1%EF%B8%8F%20https%3A%2F%2Fguiatecnes.com%2Fherramientas%2Fgenerador-contrasenas" target="_blank" rel="noopener noreferrer" class="btn-wa-share">
+          💬 Compartir por WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <!-- SEO CONTENT -->
+    <section class="tool-guide">
+      <h2>¿Cómo crear una contraseña verdaderamente segura en 2026?</h2>
+      <p>Los ciberdelincuentes utilizan ataques de fuerza bruta asistidos por inteligencia artificial capaces de probar <strong>miles de millones de combinaciones por segundo</strong>. Una contraseña de 8 caracteres con solo números o letras se descifra en menos de 1 segundo.</p>
+      
+      <div class="tips-grid">
+        <div class="tip-card">
+          <span class="tip-icon">📏</span>
+          <h4>La longitud es la reina</h4>
+          <p>Usa siempre al menos 14 o 16 caracteres. Cada carácter extra multiplica exponencialmente el tiempo de descifrado.</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-icon">🔀</span>
+          <h4>No uses datos personales</h4>
+          <p>Evita fechas de cumpleaños, nombres de mascotas o secuencias como "123456" o "password".</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-icon">🔑</span>
+          <h4>Usa un gestor de claves</h4>
+          <p>Nadie puede memorizar 50 claves seguras. Usa herramientas gratuitas recomendadas como Bitwarden o KeePassXC.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  const UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const LOWER = 'abcdefghijklmnopqrstuvwxyz';
+  const NUMS = '0123456789';
+  const SYMS = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+  function getRandom(str) {
+    const arr = new Uint32Array(1);
+    window.crypto.getRandomValues(arr);
+    return str[arr[0] % str.length];
+  }
+
+  function generatePassword() {
+    const len = parseInt(document.getElementById('length-slider').value);
+    const incU = document.getElementById('inc-uppercase').checked;
+    const incL = document.getElementById('inc-lowercase').checked;
+    const incN = document.getElementById('inc-numbers').checked;
+    const incS = document.getElementById('inc-symbols').checked;
+
+    let chars = '';
+    let guaranteed = [];
+
+    if (incU) { chars += UPPER; guaranteed.push(getRandom(UPPER)); }
+    if (incL) { chars += LOWER; guaranteed.push(getRandom(LOWER)); }
+    if (incN) { chars += NUMS; guaranteed.push(getRandom(NUMS)); }
+    if (incS) { chars += SYMS; guaranteed.push(getRandom(SYMS)); }
+
+    if (!chars) {
+      chars = LOWER;
+      guaranteed.push(getRandom(LOWER));
+    }
+
+    let result = [...guaranteed];
+    for (let i = guaranteed.length; i < len; i++) {
+      result.push(getRandom(chars));
+    }
+
+    // Karıştır
+    for (let i = result.length - 1; i > 0; i--) {
+      const arr = new Uint32Array(1);
+      window.crypto.getRandomValues(arr);
+      const j = arr[0] % (i + 1);
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+
+    const finalPass = result.join('');
+    document.getElementById('password-output').value = finalPass;
+    evaluateStrength(finalPass);
+  }
+
+  function evaluateStrength(pass) {
+    let score = 0;
+    if (pass.length >= 10) score += 20;
+    if (pass.length >= 14) score += 25;
+    if (pass.length >= 18) score += 20;
+    if (/[A-Z]/.test(pass)) score += 10;
+    if (/[a-z]/.test(pass)) score += 5;
+    if (/[0-9]/.test(pass)) score += 10;
+    if (/[^A-Za-z0-9]/.test(pass)) score += 10;
+
+    const bar = document.getElementById('strength-bar');
+    const label = document.getElementById('strength-label');
+
+    if (score < 40) {
+      bar.style.width = '25%';
+      bar.style.backgroundColor = '#ef4444';
+      label.innerHTML = 'Seguridad: <strong style="color:#ef4444;">Débil ⚠️</strong>';
+    } else if (score < 70) {
+      bar.style.width = '60%';
+      bar.style.backgroundColor = '#f59e0b';
+      label.innerHTML = 'Seguridad: <strong style="color:#f59e0b;">Media 👍</strong>';
+    } else {
+      bar.style.width = '100%';
+      bar.style.backgroundColor = '#10b981';
+      label.innerHTML = 'Seguridad: <strong style="color:#10b981;">Muy Alta 🛡️ (Impenetrable)</strong>';
+    }
+  }
+
+  function estimateCrackTime(pwd) {
+    if (!pwd) return 'Introduce una clave';
+    let pool = 0;
+    if (/[a-z]/.test(pwd)) pool += 26;
+    if (/[A-Z]/.test(pwd)) pool += 26;
+    if (/[0-9]/.test(pwd)) pool += 10;
+    if (/[^A-Za-z0-9]/.test(pwd)) pool += 33;
+    if (pool === 0) pool = 10;
+
+    const combinations = Math.pow(pool, pwd.length);
+    // Varsayalım saniyede 10 milyar deneme yapabilen güçlü bir GPU kümesi
+    const seconds = combinations / 10000000000;
+
+    if (seconds < 1) return '<span style="color:#ef4444;">Instantáneo (menos de 1 segundo) ❌</span>';
+    if (seconds < 60) return `<span style="color:#ef4444;">~${Math.round(seconds)} segundos ❌</span>`;
+    if (seconds < 3600) return `<span style="color:#f59e0b;">~${Math.round(seconds/60)} minutos ⚠️</span>`;
+    if (seconds < 86400) return `<span style="color:#f59e0b;">~${Math.round(seconds/3600)} horas ⚠️</span>`;
+    if (seconds < 31536000) return `<span style="color:#10b981;">~${Math.round(seconds/86400)} días 👍</span>`;
+    if (seconds < 3153600000) return `<span style="color:#10b981;">~${Math.round(seconds/31536000)} años 🛡️</span>`;
+    return '<span style="color:#10b981;">Millones de siglos 🚀 (Imposible de hackear)</span>';
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    const slider = document.getElementById('length-slider');
+    const valSpan = document.getElementById('length-val');
+    const copyBtn = document.getElementById('copy-btn');
+    const refreshBtn = document.getElementById('refresh-btn');
+    const genBtn = document.getElementById('generate-btn');
+    const testInput = document.getElementById('test-input');
+    const crackDisplay = document.getElementById('crack-time');
+
+    if (!slider) return;
+
+    slider.addEventListener('input', (e) => {
+      valSpan.textContent = e.target.value;
+      generatePassword();
+    });
+
+    [ 'inc-uppercase', 'inc-lowercase', 'inc-numbers', 'inc-symbols' ].forEach(id => {
+      document.getElementById(id)?.addEventListener('change', generatePassword);
+    });
+
+    refreshBtn?.addEventListener('click', generatePassword);
+    genBtn?.addEventListener('click', generatePassword);
+
+    copyBtn?.addEventListener('click', () => {
+      const output = document.getElementById('password-output');
+      output.select();
+      navigator.clipboard.writeText(output.value);
+      const icon = document.getElementById('copy-icon');
+      const text = document.getElementById('copy-text');
+      icon.textContent = '✅';
+      text.textContent = '¡Copiada!';
+      setTimeout(() => {
+        icon.textContent = '📋';
+        text.textContent = 'Copiar';
+      }, 2000);
+    });
+
+    testInput?.addEventListener('input', (e) => {
+      crackDisplay.innerHTML = `Tiempo estimado de hackeo: <strong>${estimateCrackTime(e.target.value)}</strong>`;
+    });
+
+    generatePassword();
+  });
+</script>
+
+<style>
+  .tool-container {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+  .tool-hero {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .badge {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+  h1 {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: var(--heading);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+  .generator-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.25rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  }
+  .result-box {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  #password-output {
+    flex: 1;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    font-family: 'Courier New', monospace;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 1px;
+    outline: none;
+  }
+  .btn-copy, .btn-refresh {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0 1.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .btn-refresh {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 1.25rem;
+  }
+  .btn-copy:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-refresh:hover { border-color: var(--primary); }
+
+  .strength-meter {
+    height: 8px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+  .strength-bar {
+    height: 100%;
+    width: 100%;
+    transition: width 0.3s, background-color 0.3s;
+  }
+  .strength-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 1.75rem;
+  }
+
+  .controls {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .control-row {
+    margin-bottom: 1.5rem;
+  }
+  .label-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  .length-badge {
+    background: var(--primary);
+    color: white;
+    padding: 0.15rem 0.6rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+  input[type="range"] {
+    width: 100%;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+  }
+
+  .btn-generate {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary) 0%, #06b6d4 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-generate:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(99, 102, 241, 0.4);
+  }
+
+  .test-box {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+  }
+  .test-box h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+    color: var(--heading);
+  }
+  .test-box p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+  #test-input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    outline: none;
+  }
+  .crack-time {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+  }
+
+  .share-box {
+    margin-top: 2rem;
+    padding: 1.25rem;
+    background: rgba(37, 211, 102, 0.08);
+    border: 1px solid rgba(37, 211, 102, 0.2);
+    border-radius: 12px;
+    text-align: center;
+  }
+  .share-box p {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+  .btn-wa-share {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #25d366;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    transition: transform 0.2s;
+  }
+  .btn-wa-share:hover { transform: scale(1.03); }
+
+  .tool-guide {
+    margin-top: 4rem;
+  }
+  .tool-guide h2 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--heading);
+  }
+  .tool-guide p {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.5rem;
+  }
+  .tip-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 14px;
+  }
+  .tip-icon { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
+  .tip-card h4 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--heading); }
+  .tip-card p { font-size: 0.88rem; margin-bottom: 0; }
+
+  @media (max-width: 600px) {
+    .result-box { flex-direction: column; }
+    #password-output { font-size: 1.1rem; }
+    h1 { font-size: 1.8rem; }
+  }
+</style>
