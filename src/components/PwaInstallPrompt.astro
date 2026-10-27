@@ -1,0 +1,160 @@
+---
+---
+<div id="pwa-install-toast" class="pwa-toast" style="display: none;" role="dialog" aria-label="Instalar aplicación">
+  <div class="pwa-toast-inner">
+    <div class="pwa-icon">⚡</div>
+    <div class="pwa-content">
+      <strong>Instalar GuíaTecnes App</strong>
+      <p>Acceso directo a las 20 herramientas sin descargas pesadas.</p>
+    </div>
+    <div class="pwa-actions">
+      <button type="button" id="pwa-install-btn" class="btn-pwa-install">Instalar</button>
+      <button type="button" id="pwa-close-btn" class="btn-pwa-close" aria-label="Cerrar">✕</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .pwa-toast {
+    position: fixed;
+    bottom: 74px; /* above mobile nav */
+    left: 1rem;
+    right: 1rem;
+    max-width: 440px;
+    margin: 0 auto;
+    z-index: 99990;
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .pwa-toast-inner {
+    background: rgba(15, 23, 42, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    border-radius: 16px;
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .pwa-icon {
+    font-size: 1.8rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .pwa-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .pwa-content strong {
+    display: block;
+    font-size: 0.92rem;
+    color: var(--text, #f1f5f9);
+    margin-bottom: 0.15rem;
+  }
+
+  .pwa-content p {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.35;
+  }
+
+  .pwa-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .btn-pwa-install {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    border: none;
+    padding: 0.45rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    transition: transform 0.15s;
+  }
+
+  .btn-pwa-install:hover {
+    transform: scale(1.04);
+  }
+
+  .btn-pwa-close {
+    background: transparent;
+    border: none;
+    color: var(--text-muted, #94a3b8);
+    font-size: 1rem;
+    padding: 0.3rem 0.4rem;
+    cursor: pointer;
+  }
+
+  .btn-pwa-close:hover {
+    color: white;
+  }
+
+  @media (min-width: 769px) {
+    .pwa-toast {
+      bottom: 2rem;
+      left: auto;
+      right: 2rem;
+    }
+  }
+</style>
+
+<script>
+  let deferredPrompt: any = null;
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+
+    const dismissedTime = localStorage.getItem('pwa_dismissed_time');
+    const now = Date.now();
+
+    // If dismissed less than 7 days ago, don't show
+    if (dismissedTime && now - parseInt(dismissedTime) < 7 * 24 * 60 * 60 * 1000) {
+      return;
+    }
+
+    const toast = document.getElementById('pwa-install-toast');
+    if (toast) {
+      toast.style.display = 'block';
+    }
+  });
+
+  function initPwaToast() {
+    const toast = document.getElementById('pwa-install-toast');
+    const installBtn = document.getElementById('pwa-install-btn');
+    const closeBtn = document.getElementById('pwa-close-btn');
+
+    installBtn?.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        if (toast) toast.style.display = 'none';
+      }
+    });
+
+    closeBtn?.addEventListener('click', () => {
+      localStorage.setItem('pwa_dismissed_time', Date.now().toString());
+      if (toast) toast.style.display = 'none';
+    });
+  }
+
+  document.addEventListener('astro:page-load', initPwaToast);
+</script>

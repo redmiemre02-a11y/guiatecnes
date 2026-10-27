@@ -1,0 +1,461 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de DPI / PPI y Pantalla', url: '/herramientas/calculadora-ppi' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es el PPI y por qué es más importante que la resolución?',
+    answer: 'El PPI (Pixels Per Inch o Píxeles Por Pulgada) mide la densidad y nitidez real de una pantalla. Una resolución 4K en una televisión gigante de 75 pulgadas tiene menos nitidez (menos PPI) que una pantalla 1080p en un móvil de 6 pulgadas.'
+  },
+  {
+    question: '¿A partir de cuántos PPI una pantalla se considera "Retina"?',
+    answer: 'Depende de la distancia de visión. Para teléfonos móviles que usamos a 25-30 cm, se consideran indetectables los píxeles a partir de 300 PPI. Para monitores de ordenador a 60 cm de distancia, unos 110-140 PPI ofrecen una nitidez impecable.'
+  },
+  {
+    question: '¿Cuál es el mejor tamaño y resolución para monitores gaming y trabajo?',
+    answer: 'El estándar de oro para monitores de escritorio es 27 pulgadas con resolución 2K (2560x1440), que ofrece unos 109 PPI con un equilibrio perfecto entre nitidez, espacio de trabajo y rendimiento en tarjeta gráfica.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de PPI y DPI de Pantalla Online | Nitidez y Densidad de Píxeles"
+  description="Calcula los PPI (píxeles por pulgada), tamaño de punto (dot pitch), relación de aspecto y distancia de visión recomendada para cualquier monitor, móvil o TV."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de PPI</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🖥️ Monitores, Móviles y TV</div>
+      <h1>Calculadora de PPI, DPI y Densidad de Pantalla</h1>
+      <p class="tool-subtitle">
+        Calcula la nitidez exacta de cualquier pantalla según sus píxeles y pulgadas. Descubre su relación de aspecto, tamaño de píxel y distancia de visión óptima.
+      </p>
+    </header>
+
+    <div class="ppi-card">
+      <!-- PRESETS RÁPIDOS -->
+      <div class="preset-section">
+        <label>⚡ Opciones rápidas de dispositivos populares:</label>
+        <div class="preset-buttons">
+          <button type="button" class="preset-btn" data-w="1920" data-h="1080" data-d="24">Monitor 24" FHD</button>
+          <button type="button" class="preset-btn" data-w="2560" data-h="1440" data-d="27">Monitor 27" 2K (Gaming)</button>
+          <button type="button" class="preset-btn" data-w="3840" data-h="2160" data-d="32">Monitor 32" 4K</button>
+          <button type="button" class="preset-btn" data-w="3024" data-h="1964" data-d="14.2">MacBook Pro 14"</button>
+          <button type="button" class="preset-btn" data-w="2556" data-h="1179" data-d="6.1">iPhone 16 Pro</button>
+          <button type="button" class="preset-btn" data-w="3840" data-h="2160" data-d="55">Smart TV 55" 4K</button>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="input-group">
+          <label for="width-px">↔️ Ancho en píxeles:</label>
+          <input type="number" id="width-px" value="2560" min="100" />
+        </div>
+
+        <div class="input-group">
+          <label for="height-px">↕️ Alto en píxeles:</label>
+          <input type="number" id="height-px" value="1440" min="100" />
+        </div>
+
+        <div class="input-group">
+          <label for="diag-inch">📐 Diagonal de pantalla (Pulgadas):</label>
+          <input type="number" id="diag-inch" value="27" min="1" step="0.1" />
+        </div>
+      </div>
+
+      <!-- DASHBOARD DE RESULTADOS -->
+      <div class="ppi-dashboard">
+        <div class="ppi-hero">
+          <span class="ppi-label">Densidad de Píxeles:</span>
+          <strong class="ppi-value" id="ppi-val">108.79 PPI</strong>
+          <span class="ppi-verdict" id="ppi-verdict">Nitidez Óptima para Escritorio</span>
+        </div>
+
+        <div class="specs-grid">
+          <div class="spec-item">
+            <span>Dot Pitch (Tamaño Píxel):</span>
+            <strong id="res-dot-pitch">0.2335 mm</strong>
+          </div>
+          <div class="spec-item">
+            <span>Relación de Aspecto:</span>
+            <strong id="res-aspect">16:9 Panorámica</strong>
+          </div>
+          <div class="spec-item">
+            <span>Megapíxeles Totales:</span>
+            <strong id="res-megapixels">3.69 MP</strong>
+          </div>
+          <div class="spec-item">
+            <span>Distancia Óptima de Visión:</span>
+            <strong id="res-distance">~80 cm</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions-row">
+        <button id="wa-share-ppi-btn" class="wa-btn" type="button">
+          <span>💬</span> Compartir resultado por WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+      <h2>Preguntas Frecuentes sobre PPI y Resoluciones</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page { padding: 2rem 0 4rem; max-width: 900px; margin: 0 auto; }
+  .breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 2rem;
+  }
+  .breadcrumb a { color: var(--text-muted, #94a3b8); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary, #6366f1); }
+
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    background: rgba(6, 182, 212, 0.12);
+    color: #06b6d4;
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 50px;
+    margin-bottom: 0.8rem;
+  }
+  .tool-header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .ppi-card {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 20px;
+    padding: 2.2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 3rem;
+  }
+
+  .preset-section {
+    margin-bottom: 2rem;
+  }
+
+  .preset-section label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 0.6rem;
+  }
+
+  .preset-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .preset-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text, #f1f5f9);
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .preset-btn:hover {
+    background: rgba(6, 182, 212, 0.2);
+    border-color: #06b6d4;
+    color: #06b6d4;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .input-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.45rem;
+    font-size: 0.9rem;
+  }
+
+  .input-group input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    color: var(--text, #f1f5f9);
+    font-size: 1.05rem;
+    font-weight: 600;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+
+  .input-group input:focus {
+    border-color: #06b6d4;
+  }
+
+  /* PPI DASHBOARD */
+  .ppi-dashboard {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .ppi-hero {
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .ppi-label {
+    display: block;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--text-muted, #94a3b8);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.35rem;
+  }
+
+  .ppi-value {
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    color: #06b6d4;
+    line-height: 1.1;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .ppi-verdict {
+    display: inline-block;
+    padding: 0.3rem 0.9rem;
+    background: rgba(6, 182, 212, 0.15);
+    color: #22d3ee;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 50px;
+  }
+
+  .specs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .spec-item {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.85rem 1.1rem;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .spec-item span {
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .spec-item strong {
+    font-size: 0.95rem;
+    color: var(--text, #f1f5f9);
+  }
+
+  .actions-row {
+    display: flex;
+    justify-content: center;
+  }
+
+  .wa-btn {
+    background: #25D366;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.8rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .wa-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+  }
+
+  .faq-section {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .faq-section h2 { font-size: 1.35rem; margin-bottom: 1.5rem; font-weight: 800; }
+  .faq-list { display: flex; flex-direction: column; gap: 1rem; }
+  .faq-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .faq-item summary { font-weight: 700; cursor: pointer; color: var(--text, #f1f5f9); }
+  .faq-item p { margin: 0.75rem 0 0; color: var(--text-muted, #94a3b8); font-size: 0.92rem; line-height: 1.6; }
+
+  @media (max-width: 680px) {
+    .form-grid, .specs-grid { grid-template-columns: 1fr; }
+    .ppi-card { padding: 1.4rem; }
+  }
+</style>
+
+<script>
+  function gcd(a: number, b: number): number {
+    return b === 0 ? a : gcd(b, a % b);
+  }
+
+  function initPpiCalc() {
+    const wInput = document.getElementById('width-px') as HTMLInputElement;
+    const hInput = document.getElementById('height-px') as HTMLInputElement;
+    const dInput = document.getElementById('diag-inch') as HTMLInputElement;
+
+    const ppiVal = document.getElementById('ppi-val');
+    const ppiVerdict = document.getElementById('ppi-verdict');
+    const dotPitch = document.getElementById('res-dot-pitch');
+    const aspect = document.getElementById('res-aspect');
+    const megapixels = document.getElementById('res-megapixels');
+    const distance = document.getElementById('res-distance');
+    const waBtn = document.getElementById('wa-share-ppi-btn');
+
+    if (!wInput || !hInput || !dInput) return;
+
+    function calculate() {
+      const w = parseFloat(wInput.value) || 1920;
+      const h = parseFloat(hInput.value) || 1080;
+      const d = parseFloat(dInput.value) || 24;
+
+      if (w <= 0 || h <= 0 || d <= 0) return;
+
+      const diagPixels = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2));
+      const ppi = diagPixels / d;
+
+      // Dot pitch in mm: 25.4 mm / ppi
+      const pitchMm = 25.4 / ppi;
+
+      // Aspect ratio
+      const divisor = gcd(Math.round(w), Math.round(h));
+      let ratioW = Math.round(w) / divisor;
+      let ratioH = Math.round(h) / divisor;
+
+      // Simplify common wide ratios like 8:5 to 16:10
+      if (ratioW === 8 && ratioH === 5) { ratioW = 16; ratioH = 10; }
+
+      // Total megapixels
+      const mp = (w * h) / 1000000;
+
+      // Optimal viewing distance: approx 3438 / PPI in inches -> cm
+      const optDistCm = Math.round((3438 / ppi) * 2.54);
+
+      if (ppiVal) ppiVal.textContent = `${ppi.toFixed(2)} PPI`;
+      if (dotPitch) dotPitch.textContent = `${pitchMm.toFixed(4)} mm`;
+      if (aspect) aspect.textContent = `${ratioW}:${ratioH}`;
+      if (megapixels) megapixels.textContent = `${mp.toFixed(2)} MP`;
+      if (distance) distance.textContent = `~${optDistCm} cm`;
+
+      if (ppiVerdict) {
+        if (ppi >= 300) {
+          ppiVerdict.textContent = '🌟 Ultra Nítido (Retina / Píxeles Indetectables)';
+          ppiVerdict.style.color = '#10b981';
+        } else if (ppi >= 125) {
+          ppiVerdict.textContent = '✅ Alta Nitidez (Ideal para Diseño y 4K)';
+          ppiVerdict.style.color = '#38bdf8';
+        } else if (ppi >= 95) {
+          ppiVerdict.textContent = '🖥️ Nitidez Estándar de Escritorio (2K / FHD)';
+          ppiVerdict.style.color = '#f59e0b';
+        } else {
+          ppiVerdict.textContent = '⚠️ Baja Densidad (Píxeles visibles si estás cerca)';
+          ppiVerdict.style.color = '#ef4444';
+        }
+      }
+    }
+
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const b = e.currentTarget as HTMLElement;
+        wInput.value = b.getAttribute('data-w') || '1920';
+        hInput.value = b.getAttribute('data-h') || '1080';
+        dInput.value = b.getAttribute('data-d') || '24';
+        calculate();
+      });
+    });
+
+    [wInput, hInput, dInput].forEach(el => el.addEventListener('input', calculate));
+
+    calculate();
+
+    waBtn?.addEventListener('click', () => {
+      const p = ppiVal?.textContent || '';
+      const text = `🖥️ Acabo de calcular la densidad de mi pantalla: ¡tiene ${p}! Comprueba gratis la nitidez de tu monitor o móvil en GuíaTecnes: ${window.location.href}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    });
+  }
+
+  document.addEventListener('astro:page-load', initPpiCalc);
+</script>

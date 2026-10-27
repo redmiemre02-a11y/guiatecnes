@@ -5,6 +5,7 @@ import ProgressBar from '../components/ProgressBar.astro';
 import BackToTop from '../components/BackToTop.astro';
 import Search from '../components/Search.astro';
 import MobileBottomNav from '../components/MobileBottomNav.astro';
+import PwaInstallPrompt from '../components/PwaInstallPrompt.astro';
 interface FAQItem {
   question: string;
   answer: string;
@@ -229,6 +230,7 @@ const schemaFAQ = faqs.length > 0 ? {
   <BackToTop />
   <CookieBanner />
   <MobileBottomNav />
+  <PwaInstallPrompt />
 </body>
 </html>
 
