@@ -1,0 +1,812 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Sueldo Neto a Bruto España 2026', url: '/herramientas/calculadora-sueldo-neto' }
+];
+
+const faqs = [
+  {
+    question: '¿Cuál es la diferencia entre sueldo bruto y sueldo neto?',
+    answer: 'El sueldo bruto es la cantidad total de dinero que la empresa te paga antes de impuestos. El sueldo neto es el dinero real «limpio» que ingresa en tu cuenta bancaria cada mes tras restar las cotizaciones a la Seguridad Social y la retención del IRPF.'
+  },
+  {
+    question: '¿Qué porcentaje se descuenta de Seguridad Social en 2026?',
+    answer: 'El trabajador aporta aproximadamente un 6,47% de su base de cotización: 4,70% por contingencias comunes, 1,55% por desempleo (en contratos indefinidos), 0,10% por formación profesional y un 0,12% por el MEI (Mecanismo de Equidad Intergeneracional).'
+  },
+  {
+    question: '¿Es mejor cobrar en 12 o en 14 pagas?',
+    answer: 'El sueldo neto anual es exactamente el mismo. En 12 pagas recibes las pagas extraordinarias prorrateadas cada mes (mayor nómina mensual), mientras que en 14 pagas recibes un sueldo mensual menor pero cobras dos pagas dobles (habitualmente en junio y diciembre).'
+  },
+  {
+    question: '¿Por qué me retienen más o menos IRPF que a mi compañero?',
+    answer: 'El tipo de retención de IRPF depende de tu salario bruto anual, tu estado civil, si tienes hijos a cargo o personas mayores dependientes, y de si tienes algún grado de discapacidad reconocido.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Sueldo Neto a Bruto España 2026 | IRPF y Nómina"
+  description="Calcula tu sueldo neto mensual y anual en España (2026). Descubre cuánto pagas de IRPF y Seguridad Social en 12 o 14 pagas con desglose completo de nómina."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de Sueldo Neto España</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">💶 Actualizada a la Normativa España 2026</div>
+      <h1>Calculadora de Sueldo Neto a Bruto España</h1>
+      <p class="tool-subtitle">
+        Descubre cuánto dinero llegará a tu cuenta bancaria cada mes. Calcula el IRPF, la Seguridad Social y el salario neto en 12 o 14 pagas.
+      </p>
+    </header>
+
+    <div class="salary-calc-grid">
+      <!-- FORMULARIO DE ENTRADA -->
+      <div class="card form-card">
+        <h3>📋 Datos de tu Salario</h3>
+
+        <div class="input-group">
+          <label for="gross-salary">💰 Sueldo Bruto Anual (€):</label>
+          <div class="input-currency-wrapper">
+            <input type="number" id="gross-salary" value="28000" min="10000" max="500000" step="500" />
+            <span class="currency-symbol">€/año</span>
+          </div>
+          <div class="quick-presets-chips">
+            <button type="button" class="salary-chip" data-val="16000">16.000€</button>
+            <button type="button" class="salary-chip" data-val="22000">22.000€</button>
+            <button type="button" class="salary-chip" data-val="28000">28.000€</button>
+            <button type="button" class="salary-chip" data-val="35000">35.000€</button>
+            <button type="button" class="salary-chip" data-val="45000">45.000€</button>
+            <button type="button" class="salary-chip" data-val="60000">60.000€</button>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="input-group">
+            <label for="pay-installments">📅 Número de Pagas:</label>
+            <select id="pay-installments">
+              <option value="12" selected>12 Pagas (Prorrateadas)</option>
+              <option value="14">14 Pagas (Con Extras de Verano y Navidad)</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="contract-type">📄 Tipo de Contrato:</label>
+            <select id="contract-type">
+              <option value="indefinite" selected>Indefinido (General)</option>
+              <option value="temporary">Temporal / Obra o Servicio</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="input-group">
+            <label for="family-status">👨‍👩‍👧 Situación Familiar:</label>
+            <select id="family-status">
+              <option value="single" selected>Soltero / Sin Cónyuge a cargo</option>
+              <option value="married">Casado (Cónyuge sin ingresos)</option>
+              <option value="single-parent">Familia Monoparental</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="children-count">👶 Hijos a Cargo:</label>
+            <select id="children-count">
+              <option value="0" selected>0 hijos</option>
+              <option value="1">1 hijo</option>
+              <option value="2">2 hijos</option>
+              <option value="3">3 o más hijos</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="disability">♿ Grado de Discapacidad:</label>
+          <select id="disability">
+            <option value="0" selected>Sin discapacidad reconocida</option>
+            <option value="33">Discapacidad del 33% al 64%</option>
+            <option value="65">Discapacidad del 65% o superior</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- TARJETA DE RESULTADOS EN VIVO -->
+      <div class="card results-card">
+        <h3>Tu Sueldo Neto Estimado</h3>
+
+        <div class="main-result-box">
+          <div class="monthly-display">
+            <span class="monthly-label">Sueldo Neto Mensual:</span>
+            <div class="monthly-value" id="net-monthly">1.821,40 €</div>
+            <span class="monthly-note" id="installments-note">en 12 pagas al año</span>
+          </div>
+        </div>
+
+        <!-- Barra visual de desglose -->
+        <div class="breakdown-bar-wrapper">
+          <div class="breakdown-bar">
+            <div id="bar-net" class="bar-segment bar-net" style="width: 78%;" title="Neto"></div>
+            <div id="bar-irpf" class="bar-segment bar-irpf" style="width: 15.5%;" title="IRPF"></div>
+            <div id="bar-ss" class="bar-segment bar-ss" style="width: 6.5%;" title="Seguridad Social"></div>
+          </div>
+          <div class="bar-legend">
+            <span class="legend-item"><span class="dot dot-net"></span> Neto (<span id="pct-net">78%</span>)</span>
+            <span class="legend-item"><span class="dot dot-irpf"></span> IRPF (<span id="pct-irpf">15.5%</span>)</span>
+            <span class="legend-item"><span class="dot dot-ss"></span> Seg. Social (<span id="pct-ss">6.5%</span>)</span>
+          </div>
+        </div>
+
+        <!-- Tabla desglose anual y mensual -->
+        <div class="breakdown-table">
+          <div class="breakdown-row header-row">
+            <span>Concepto</span>
+            <span>Mensual</span>
+            <span>Anual</span>
+          </div>
+          <div class="breakdown-row">
+            <span>Sueldo Bruto</span>
+            <strong id="tbl-gross-month">2.333,33 €</strong>
+            <strong id="tbl-gross-year">28.000,00 €</strong>
+          </div>
+          <div class="breakdown-row ss-row">
+            <span>Seguridad Social (6,47%)</span>
+            <span id="tbl-ss-month">-150,97 €</span>
+            <span id="tbl-ss-year">-1.811,60 €</span>
+          </div>
+          <div class="breakdown-row irpf-row">
+            <span>Retención IRPF (<span id="tbl-irpf-rate">15,48%</span>)</span>
+            <span id="tbl-irpf-month">-360,96 €</span>
+            <span id="tbl-irpf-year">-4.331,52 €</span>
+          </div>
+          <div class="breakdown-row total-row">
+            <span>Sueldo Neto Líquido</span>
+            <strong id="tbl-net-month">1.821,40 €</strong>
+            <strong id="tbl-net-year">21.856,88 €</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUÍA INFORMATIVA SEO -->
+    <section class="seo-guide-section card">
+      <h2>¿Cómo se calcula el sueldo neto en España en 2026?</h2>
+      <p>
+        Para conocer el salario real que percibirás en tu nómina española, se aplican dos deducciones principales sobre tu retribución bruta acordada en contrato:
+      </p>
+
+      <div class="guide-grid">
+        <div class="guide-box">
+          <h3>🏛️ 1. Retención del IRPF (Hacienda)</h3>
+          <p>
+            El IRPF es un impuesto progresivo: a mayor salario, mayor porcentaje de retención. Se calculan tramos desde el 19% hasta el 47%, aplicando el mínimo personal no sujeto a tributación (5.550 € para solteros) y las reducciones familiares por hijos.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>🛡️ 2. Cotización a la Seguridad Social</h3>
+          <p>
+            Garantiza tu cobertura médica, bajas laborales, derecho a paro y futura pensión de jubilación. Se descuenta aproximadamente un <strong>6,47%</strong> mensual a cargo del trabajador (4,70% contingencias comunes, 1,55% desempleo, 0,10% formación y 0,12% MEI).
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>📅 3. Distribución en 12 o 14 Pagas</h3>
+          <p>
+            Si tu convenio establece 14 pagas, las dos pagas extras (junio y diciembre) se abonan completas o con su correspondiente retención, manteniendo el total neto anual idéntico al de 12 pagas.
+          </p>
+        </div>
+      </div>
+
+      <h2>Tramos de IRPF aplicables en España</h2>
+      <div class="table-responsive">
+        <table class="tramos-table">
+          <thead>
+            <tr>
+              <th>Base Liquidable Anual</th>
+              <th>Tipo Estatal + Autonómico Medio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Hasta 12.450 €</td><td>19,00%</td></tr>
+            <tr><td>De 12.450 € a 20.200 €</td><td>24,00%</td></tr>
+            <tr><td>De 20.200 € a 35.200 €</td><td>30,00%</td></tr>
+            <tr><td>De 35.200 € a 60.000 €</td><td>37,00%</td></tr>
+            <tr><td>De 60.000 € a 300.000 €</td><td>45,00%</td></tr>
+            <tr><td>Más de 300.000 €</td><td>47,00%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre el Sueldo Neto y Nómina</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .tool-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .salary-calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+    align-items: start;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 860px) {
+    .salary-calc-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1.25rem;
+  }
+
+  .form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .form-row-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .input-group label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-heading);
+  }
+
+  .input-currency-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-currency-wrapper input {
+    width: 100%;
+    padding: 0.75rem 4.5rem 0.75rem 0.85rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border-color, #334155);
+    background: var(--input-bg, #0f172a);
+    color: var(--text-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .currency-symbol {
+    position: absolute;
+    right: 1rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  select {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color, #334155);
+    background: var(--input-bg, #0f172a);
+    color: var(--text-heading);
+    font-size: 0.95rem;
+  }
+
+  select:focus, input:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  }
+
+  .quick-presets-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+  }
+
+  .salary-chip {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.4rem;
+    padding: 0.25rem 0.55rem;
+    font-size: 0.75rem;
+    color: var(--text-heading);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .salary-chip:hover {
+    background: #10b981;
+    color: #fff;
+    border-color: #10b981;
+  }
+
+  /* RESULTS CARD */
+  .main-result-box {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
+    border: 2px solid #10b981;
+    border-radius: 0.85rem;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .monthly-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.35rem;
+  }
+
+  .monthly-value {
+    font-size: 2.6rem;
+    font-weight: 900;
+    color: #10b981;
+    line-height: 1.1;
+    margin-bottom: 0.35rem;
+  }
+
+  .monthly-note {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  /* BREAKDOWN BAR */
+  .breakdown-bar-wrapper {
+    margin-bottom: 1.75rem;
+  }
+
+  .breakdown-bar {
+    height: 18px;
+    display: flex;
+    border-radius: 9999px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    margin-bottom: 0.65rem;
+  }
+
+  .bar-segment {
+    height: 100%;
+    transition: width 0.3s ease;
+  }
+
+  .bar-net { background: #10b981; }
+  .bar-irpf { background: #6366f1; }
+  .bar-ss { background: #f59e0b; }
+
+  .bar-legend {
+    display: flex;
+    justify-content: space-around;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot-net { background: #10b981; }
+  .dot-irpf { background: #6366f1; }
+  .dot-ss { background: #f59e0b; }
+
+  /* BREAKDOWN TABLE */
+  .breakdown-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    font-size: 0.9rem;
+    padding: 0.6rem 0.5rem;
+    border-bottom: 1px solid var(--border-color, #334155);
+    align-items: center;
+  }
+
+  .header-row {
+    font-weight: 700;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+
+  .ss-row { color: #f59e0b; }
+  .irpf-row { color: #a5b4fc; }
+
+  .total-row {
+    font-size: 1.05rem;
+    border-bottom: none;
+    padding-top: 0.85rem;
+    border-top: 2px solid var(--border-color, #334155);
+    color: #10b981;
+  }
+
+  /* SEO & GUIDE */
+  .seo-guide-section {
+    margin-bottom: 2rem;
+  }
+
+  .seo-guide-section h2, .faq-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1rem;
+  }
+
+  .seo-guide-section p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .guide-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .guide-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-box p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    margin-top: 1rem;
+  }
+
+  .tramos-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .tramos-table th, .tramos-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border: 1px solid var(--border-color, #334155);
+  }
+
+  .tramos-table th {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-heading);
+  }
+
+  .tramos-table td {
+    color: var(--text-muted);
+  }
+
+  /* FAQ */
+  .faq-section {
+    margin-bottom: 2rem;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initSalaryCalculator() {
+    const grossSalaryInput = document.getElementById('gross-salary') as HTMLInputElement;
+    const installmentsSelect = document.getElementById('pay-installments') as HTMLSelectElement;
+    const contractTypeSelect = document.getElementById('contract-type') as HTMLSelectElement;
+    const familyStatusSelect = document.getElementById('family-status') as HTMLSelectElement;
+    const childrenCountSelect = document.getElementById('children-count') as HTMLSelectElement;
+    const disabilitySelect = document.getElementById('disability') as HTMLSelectElement;
+    const chips = document.querySelectorAll('.salary-chip');
+
+    // Outputs
+    const netMonthlyEl = document.getElementById('net-monthly');
+    const installmentsNoteEl = document.getElementById('installments-note');
+    const barNet = document.getElementById('bar-net');
+    const barIrpf = document.getElementById('bar-irpf');
+    const barSs = document.getElementById('bar-ss');
+    const pctNet = document.getElementById('pct-net');
+    const pctIrpf = document.getElementById('pct-irpf');
+    const pctSs = document.getElementById('pct-ss');
+
+    const tblGrossMonth = document.getElementById('tbl-gross-month');
+    const tblGrossYear = document.getElementById('tbl-gross-year');
+    const tblSsMonth = document.getElementById('tbl-ss-month');
+    const tblSsYear = document.getElementById('tbl-ss-year');
+    const tblIrpfMonth = document.getElementById('tbl-irpf-month');
+    const tblIrpfYear = document.getElementById('tbl-irpf-year');
+    const tblIrpfRate = document.getElementById('tbl-irpf-rate');
+    const tblNetMonth = document.getElementById('tbl-net-month');
+    const tblNetYear = document.getElementById('tbl-net-year');
+
+    function formatEuro(amount: number): string {
+      return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(amount);
+    }
+
+    function calculate() {
+      const gross = Math.max(0, parseFloat(grossSalaryInput.value) || 0);
+      const installments = parseInt(installmentsSelect.value, 10) || 12;
+      const isTemporary = contractTypeSelect.value === 'temporary';
+      const family = familyStatusSelect.value;
+      const children = parseInt(childrenCountSelect.value, 10) || 0;
+      const disability = parseInt(disabilitySelect.value, 10) || 0;
+
+      // 1. Seguridad Social (tope de base cotización 2026: ~56.646 €/año)
+      const ssBase = Math.min(gross, 56646);
+      const ssRate = isTemporary ? 0.0652 : 0.0647; // 4.70% CC + 1.55/1.60% Desempleo + 0.10% FP + 0.12% MEI
+      const ssYear = ssBase * ssRate;
+
+      // 2. IRPF (Cálculo progresivo simplificado con tramos IRPF España 2026)
+      // Mínimo personal y familiar
+      let minPersonal = 5550;
+      if (family === 'married') minPersonal += 1200;
+      if (family === 'single-parent') minPersonal += 2150;
+      
+      // Hijos
+      const childDeductions = [0, 2400, 2700 + 2400, 4000 + 2700 + 2400];
+      minPersonal += childDeductions[Math.min(children, 3)];
+
+      // Discapacidad
+      if (disability === 33) minPersonal += 3000;
+      else if (disability === 65) minPersonal += 9000;
+
+      // Reducción rendimientos trabajo para rentas bajas
+      let workDeduction = 0;
+      if (gross <= 14049) {
+        workDeduction = 6498;
+      } else if (gross <= 19747) {
+        workDeduction = Math.max(0, 6498 - 1.14 * (gross - 14049));
+      } else {
+        workDeduction = 2000; // Gastos generales deducibles
+      }
+
+      const taxableBase = Math.max(0, gross - ssYear - workDeduction);
+
+      function computeTax(base: number): number {
+        let tax = 0;
+        const brackets = [
+          { limit: 12450, rate: 0.19 },
+          { limit: 20200, rate: 0.24 },
+          { limit: 35200, rate: 0.30 },
+          { limit: 60000, rate: 0.37 },
+          { limit: 300000, rate: 0.45 },
+          { limit: Infinity, rate: 0.47 }
+        ];
+
+        let prev = 0;
+        for (const b of brackets) {
+          if (base > prev) {
+            const chunk = Math.min(base - prev, b.limit - prev);
+            tax += chunk * b.rate;
+            prev = b.limit;
+          } else {
+            break;
+          }
+        }
+        return tax;
+      }
+
+      const rawTax = computeTax(taxableBase);
+      const minTax = computeTax(minPersonal);
+      let irpfYear = Math.max(0, rawTax - minTax);
+
+      // Si el bruto es muy bajo (exención IRPF España ~15.876€ para soltero sin hijos)
+      if (gross <= 15876 && children === 0 && disability === 0) {
+        irpfYear = 0;
+      }
+
+      const irpfRate = gross > 0 ? (irpfYear / gross) * 100 : 0;
+
+      // 3. Sueldo Neto
+      const netYear = Math.max(0, gross - ssYear - irpfYear);
+      const grossMonth = gross / installments;
+      const netMonth = netYear / installments;
+      const ssMonth = ssYear / installments;
+      const irpfMonth = irpfYear / installments;
+
+      // Actualizar UI
+      if (netMonthlyEl) netMonthlyEl.textContent = formatEuro(netMonth);
+      if (installmentsNoteEl) {
+        installmentsNoteEl.textContent = installments === 14 
+          ? 'en 14 pagas (con pagas dobles en verano y navidad)'
+          : 'en 12 pagas al año (pagas prorrateadas)';
+      }
+
+      // Porcentajes para barra visual
+      const pNet = gross > 0 ? ((netYear / gross) * 100) : 0;
+      const pIrpf = gross > 0 ? ((irpfYear / gross) * 100) : 0;
+      const pSs = gross > 0 ? ((ssYear / gross) * 100) : 0;
+
+      if (barNet) barNet.style.width = `${pNet}%`;
+      if (barIrpf) barIrpf.style.width = `${pIrpf}%`;
+      if (barSs) barSs.style.width = `${pSs}%`;
+
+      if (pctNet) pctNet.textContent = `${pNet.toFixed(1)}%`;
+      if (pctIrpf) pctIrpf.textContent = `${pIrpf.toFixed(1)}%`;
+      if (pctSs) pctSs.textContent = `${pSs.toFixed(1)}%`;
+
+      // Tabla
+      if (tblGrossMonth) tblGrossMonth.textContent = formatEuro(grossMonth);
+      if (tblGrossYear) tblGrossYear.textContent = formatEuro(gross);
+      if (tblSsMonth) tblSsMonth.textContent = `-${formatEuro(ssMonth)}`;
+      if (tblSsYear) tblSsYear.textContent = `-${formatEuro(ssYear)}`;
+      if (tblIrpfRate) tblIrpfRate.textContent = `${irpfRate.toFixed(2)}%`;
+      if (tblIrpfMonth) tblIrpfMonth.textContent = `-${formatEuro(irpfMonth)}`;
+      if (tblIrpfYear) tblIrpfYear.textContent = `-${formatEuro(irpfYear)}`;
+      if (tblNetMonth) tblNetMonth.textContent = formatEuro(netMonth);
+      if (tblNetYear) tblNetYear.textContent = formatEuro(netYear);
+    }
+
+    [grossSalaryInput, installmentsSelect, contractTypeSelect, familyStatusSelect, childrenCountSelect, disabilitySelect].forEach(el => {
+      el?.addEventListener('input', calculate);
+      el?.addEventListener('change', calculate);
+    });
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const val = chip.getAttribute('data-val');
+        if (val && grossSalaryInput) {
+          grossSalaryInput.value = val;
+          calculate();
+        }
+      });
+    });
+
+    calculate();
+  }
+
+  document.addEventListener('astro:page-load', initSalaryCalculator);
+</script>

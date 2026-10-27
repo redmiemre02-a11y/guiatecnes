@@ -1,0 +1,1145 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Creador de Páginas Link en Bio', url: '/herramientas/creador-link-bio' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es una página «Link en Bio» y por qué es importante?',
+    answer: 'Redes sociales como Instagram o TikTok solo permiten colocar un único enlace en el perfil. Un agregador de enlaces (o «Link in bio») te permite mostrar todos tus proyectos, WhatsApp, tienda online, vídeos de YouTube y perfiles sociales desde una única página web personalizada.'
+  },
+  {
+    question: '¿Tengo que pagar suscripciones como en Linktree o Beacons?',
+    answer: 'No. Esta herramienta es 100% gratuita. Puedes diseñar tu página, verla en vivo y descargar o copiar el código HTML limpio y sin publicidad para alojarlo gratis en GitHub Pages, Netlify, Vercel o tu propio servidor web.'
+  },
+  {
+    question: '¿Cómo subo mi foto de perfil?',
+    answer: 'Puedes pegar la URL directa de cualquier imagen o subir una fotografía desde tu móvil u ordenador. La herramienta la convertirá automáticamente a formato web sin enviarla a ningún servidor de terceros.'
+  },
+  {
+    question: '¿El diseño se adapta a teléfonos móviles?',
+    answer: 'Sí. El código HTML y CSS generado es 100% «mobile-first», ultra ligero (menos de 25 KB) y carga de forma casi instantánea en cualquier smartphone o navegador de escritorio.'
+  }
+];
+---
+
+<BaseLayout
+  title="Creador de Páginas Link en Bio Gratis | Alternativa a Linktree"
+  description="Crea tu propia página de enlaces personalizada para la biografía de Instagram y TikTok gratis. Elige temas, añade redes, botones y descarga tu HTML listo para usar."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Creador de Link en Bio</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">✨ Alternativa Gratuita a Linktree</div>
+      <h1>Creador de Páginas Link en Bio</h1>
+      <p class="tool-subtitle">
+        Diseña tu propio micro-sitio para tus redes sociales en segundos. Agrega tus enlaces, personaliza los colores y descarga el código HTML para alojarlo gratis.
+      </p>
+    </header>
+
+    <div class="bio-builder-layout">
+      <!-- PANEL DE CONFIGURACIÓN -->
+      <div class="card builder-settings-card">
+        <h3>🎨 1. Perfil y Personalización</h3>
+        
+        <div class="form-row">
+          <div class="input-group">
+            <label for="bio-name">Nombre o Marca:</label>
+            <input type="text" id="bio-name" value="Alex Tech & Gaming" placeholder="Ej: Tu Nombre o Proyecto" />
+          </div>
+          <div class="input-group">
+            <label for="bio-handle">Usuario / @handle:</label>
+            <input type="text" id="bio-handle" value="@alextech" placeholder="@tuusuario" />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="bio-description">Biografía corta:</label>
+          <textarea id="bio-description" rows="2" placeholder="Creador de contenido tecnológico, reviews y setups gaming.">Creador de contenido tech, tutoriales y guías semanales 🚀</textarea>
+        </div>
+
+        <div class="input-group">
+          <label for="bio-avatar-url">Foto de Perfil (URL o subir foto):</label>
+          <div class="avatar-input-flex">
+            <input type="text" id="bio-avatar-url" value="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" placeholder="https://..." />
+            <label class="btn-file-upload" for="bio-avatar-file">
+              📁 Subir Foto
+              <input type="file" id="bio-avatar-file" accept="image/*" style="display:none;" />
+            </label>
+          </div>
+        </div>
+
+        <!-- SELECCIÓN DE TEMA -->
+        <div class="theme-selection-group">
+          <label class="section-sublabel">Estilo visual y paleta:</label>
+          <div class="themes-grid">
+            <label class="theme-card active" data-theme="dark">
+              <input type="radio" name="bio-theme" value="dark" checked />
+              <div class="theme-preview dark-theme-prev"></div>
+              <span>Midnight Dark</span>
+            </label>
+            <label class="theme-card" data-theme="cyber">
+              <input type="radio" name="bio-theme" value="cyber" />
+              <div class="theme-preview cyber-theme-prev"></div>
+              <span>Cyberpunk Neon</span>
+            </label>
+            <label class="theme-card" data-theme="aesthetic">
+              <input type="radio" name="bio-theme" value="aesthetic" />
+              <div class="theme-preview aesthetic-theme-prev"></div>
+              <span>Rose Pastel</span>
+            </label>
+            <label class="theme-card" data-theme="light">
+              <input type="radio" name="bio-theme" value="light" />
+              <div class="theme-preview light-theme-prev"></div>
+              <span>Minimal White</span>
+            </label>
+            <label class="theme-card" data-theme="gradient">
+              <input type="radio" name="bio-theme" value="gradient" />
+              <div class="theme-preview gradient-theme-prev"></div>
+              <span>Sunset Violet</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- REDES SOCIALES ICONOS -->
+        <div class="socials-config-group">
+          <label class="section-sublabel">Redes Sociales (Iconos directos):</label>
+          <div class="socials-inputs-grid">
+            <div class="social-input-item">
+              <span>📷 Instagram:</span>
+              <input type="text" id="social-instagram" placeholder="https://instagram.com/usuario" value="https://instagram.com/" />
+            </div>
+            <div class="social-input-item">
+              <span>🎵 TikTok:</span>
+              <input type="text" id="social-tiktok" placeholder="https://tiktok.com/@usuario" value="https://tiktok.com/" />
+            </div>
+            <div class="social-input-item">
+              <span>▶️ YouTube:</span>
+              <input type="text" id="social-youtube" placeholder="https://youtube.com/@canal" value="https://youtube.com/" />
+            </div>
+            <div class="social-input-item">
+              <span>💬 WhatsApp:</span>
+              <input type="text" id="social-whatsapp" placeholder="https://wa.me/34600000000" value="https://wa.me/34600000000" />
+            </div>
+            <div class="social-input-item">
+              <span>🐦 X / Twitter:</span>
+              <input type="text" id="social-twitter" placeholder="https://x.com/usuario" />
+            </div>
+            <div class="social-input-item">
+              <span>🟣 Twitch:</span>
+              <input type="text" id="social-twitch" placeholder="https://twitch.tv/usuario" />
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTONES DE ENLACE PERSONALIZADOS -->
+        <div class="links-config-group">
+          <div class="links-header-flex">
+            <label class="section-sublabel">Botones de enlaces principales:</label>
+            <button type="button" id="btn-add-link" class="btn-add-link">+ Añadir Enlace</button>
+          </div>
+          <div id="links-list-container" class="links-list-container">
+            <!-- Renderizado dinámico -->
+          </div>
+        </div>
+
+        <!-- BOTONES DE EXPORTACIÓN -->
+        <div class="export-actions-bar">
+          <button type="button" id="btn-copy-html" class="btn-export-primary">
+            📋 Copiar Código HTML Listo
+          </button>
+          <button type="button" id="btn-download-html" class="btn-export-secondary">
+            💾 Descargar index.html
+          </button>
+          <button type="button" id="btn-preview-window" class="btn-export-secondary">
+            👁️ Vista Pantalla Completa
+          </button>
+        </div>
+      </div>
+
+      <!-- VISTA PREVIA EN SMARTPHONE INTERACTIVO -->
+      <div class="card preview-mobile-card">
+        <div class="preview-header">
+          <span class="preview-title">📱 Vista Previa en Vivo (Móvil)</span>
+        </div>
+
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div id="phone-screen" class="phone-screen theme-dark">
+            <div class="bio-mobile-content">
+              <div class="mobile-avatar-wrap">
+                <img id="mobile-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" alt="Avatar" />
+              </div>
+              <h2 id="mobile-name" class="mobile-name">Alex Tech & Gaming</h2>
+              <span id="mobile-handle" class="mobile-handle">@alextech</span>
+              <p id="mobile-desc" class="mobile-desc">Creador de contenido tech, tutoriales y guías semanales 🚀</p>
+
+              <!-- Socials icon row -->
+              <div id="mobile-socials-row" class="mobile-socials-row">
+                <!-- Se llena dinámicamente -->
+              </div>
+
+              <!-- Links list buttons -->
+              <div id="mobile-links-container" class="mobile-links-container">
+                <!-- Se llena dinámicamente -->
+              </div>
+
+              <div class="mobile-footer-badge">
+                <span>Hecho con GuiaTecnEs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO GUÍA -->
+    <section class="seo-guide-section card">
+      <h2>¿Cómo alojar tu página Link en Bio gratis y sin pagar suscripciones?</h2>
+      <p>
+        Muchas plataformas populares como Linktree o Bio.link cobran suscripciones mensuales para retirar su marca de agua o utilizar temas personalizados. Al generar tu propio archivo HTML con GuiaTecnEs, tienes el control total de tus datos y puedes alojarlo sin costo en:
+      </p>
+
+      <div class="guide-grid">
+        <div class="guide-box">
+          <h3>🐙 GitHub Pages (100% Gratis)</h3>
+          <p>
+            Crea un repositorio público en GitHub llamado <code>tuusuario.github.io</code>, sube el archivo <code>index.html</code> que descargas aquí y tendrás tu enlace público de inmediato.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>⚡ Vercel o Netlify Drop</h3>
+          <p>
+            Solo arrastra y suelta tu archivo HTML en Netlify Drop o Vercel para obtener una dirección web ultrarrápida con certificado SSL y HTTPS automático.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>🚀 Carga Inmediata y SEO Limpio</h3>
+          <p>
+            El código generado no incluye scripts pesados de rastreo ni publicidad, lo que garantiza una velocidad de carga de menos de 100 milisegundos en redes móviles 4G y 5G.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre el Creador de Enlaces</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    background: rgba(168, 85, 247, 0.12);
+    color: #a855f7;
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .tool-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .bio-builder-layout {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 1.75rem;
+    align-items: start;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .bio-builder-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+  }
+
+  .input-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-heading);
+  }
+
+  input[type="text"], textarea {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color, #334155);
+    background: var(--input-bg, #0f172a);
+    color: var(--text-heading);
+    font-family: inherit;
+    font-size: 0.9rem;
+  }
+
+  input[type="text"]:focus, textarea:focus {
+    outline: none;
+    border-color: #a855f7;
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+  }
+
+  .avatar-input-flex {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-file-upload {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color, #334155);
+    padding: 0.65rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+
+  .btn-file-upload:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .section-sublabel {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.6rem;
+  }
+
+  /* THEMES SELECTOR */
+  .themes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
+    gap: 0.65rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .theme-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.65rem;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.02);
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+
+  .theme-card input {
+    display: none;
+  }
+
+  .theme-preview {
+    width: 100%;
+    height: 38px;
+    border-radius: 0.35rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .dark-theme-prev { background: #0f172a; border-color: #3b82f6; }
+  .cyber-theme-prev { background: #050505; border-color: #06b6d4; }
+  .aesthetic-theme-prev { background: #fdf2f8; border-color: #f472b6; }
+  .light-theme-prev { background: #ffffff; border-color: #cbd5e1; }
+  .gradient-theme-prev { background: linear-gradient(135deg, #4f46e5, #ec4899); }
+
+  .theme-card.active {
+    border-color: #a855f7;
+    color: var(--text-heading);
+    background: rgba(168, 85, 247, 0.1);
+  }
+
+  /* SOCIALS INPUTS */
+  .socials-inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 600px) {
+    .socials-inputs-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .social-input-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .social-input-item span {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  /* LINKS LIST CONFIG */
+  .links-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .btn-add-link {
+    background: rgba(168, 85, 247, 0.15);
+    border: 1px solid #a855f7;
+    color: #c084fc;
+    padding: 0.35rem 0.85rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .btn-add-link:hover {
+    background: rgba(168, 85, 247, 0.3);
+  }
+
+  .links-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .link-edit-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+  }
+
+  .link-edit-title {
+    flex: 1.2;
+  }
+
+  .link-edit-url {
+    flex: 2;
+  }
+
+  .btn-del-link {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid #ef4444;
+    color: #f87171;
+    width: 32px;
+    height: 32px;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    transition: background 0.15s;
+  }
+
+  .btn-del-link:hover {
+    background: rgba(239, 68, 68, 0.3);
+  }
+
+  /* EXPORT ACTIONS */
+  .export-actions-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .btn-export-primary {
+    background: linear-gradient(135deg, #a855f7, #6366f1);
+    color: #fff;
+    border: none;
+    padding: 0.85rem;
+    border-radius: 0.65rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(168, 85, 247, 0.35);
+    transition: transform 0.15s, opacity 0.15s;
+  }
+
+  .btn-export-primary:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+  }
+
+  .btn-export-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-heading);
+    padding: 0.65rem;
+    border-radius: 0.65rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .btn-export-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* PHONE FRAME PREVIEW */
+  .preview-mobile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .preview-header {
+    margin-bottom: 1rem;
+  }
+
+  .preview-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-heading);
+  }
+
+  .phone-frame {
+    width: 320px;
+    height: 600px;
+    border-radius: 36px;
+    border: 8px solid #0f172a;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    background: #000;
+  }
+
+  .phone-notch {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110px;
+    height: 18px;
+    background: #0f172a;
+    border-radius: 12px;
+    z-index: 20;
+  }
+
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 2.5rem 1.25rem 1.5rem;
+    box-sizing: border-box;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* THEMING STYLES FOR SCREEN */
+  .phone-screen.theme-dark {
+    background: #0b0f19;
+    color: #f1f5f9;
+  }
+  .phone-screen.theme-dark .mobile-link-btn {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #f8fafc;
+  }
+
+  .phone-screen.theme-cyber {
+    background: #050508;
+    color: #06b6d4;
+  }
+  .phone-screen.theme-cyber .mobile-link-btn {
+    background: #0d1117;
+    border: 1px solid #06b6d4;
+    color: #38bdf8;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.25);
+  }
+
+  .phone-screen.theme-aesthetic {
+    background: #fdf2f8;
+    color: #831843;
+  }
+  .phone-screen.theme-aesthetic .mobile-link-btn {
+    background: #ffffff;
+    border: 1px solid #fbcfe8;
+    color: #9d174d;
+    box-shadow: 0 4px 10px rgba(244, 114, 182, 0.15);
+  }
+
+  .phone-screen.theme-light {
+    background: #ffffff;
+    color: #0f172a;
+  }
+  .phone-screen.theme-light .mobile-link-btn {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #0f172a;
+  }
+
+  .phone-screen.theme-gradient {
+    background: linear-gradient(180deg, #312e81, #701a75);
+    color: #ffffff;
+  }
+  .phone-screen.theme-gradient .mobile-link-btn {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+  }
+
+  /* MOBILE CONTENT */
+  .bio-mobile-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .mobile-avatar-wrap {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+    border: 3px solid #a855f7;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+
+  .mobile-avatar-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mobile-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .mobile-handle {
+    font-size: 0.8rem;
+    opacity: 0.75;
+    margin-bottom: 0.5rem;
+  }
+
+  .mobile-desc {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+    max-width: 250px;
+  }
+
+  .mobile-socials-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .mobile-social-icon {
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: transform 0.15s;
+  }
+
+  .mobile-social-icon:hover {
+    transform: scale(1.15);
+  }
+
+  .mobile-links-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+
+  .mobile-link-btn {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.65rem;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    transition: transform 0.15s, opacity 0.15s;
+    word-break: break-word;
+  }
+
+  .mobile-link-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .mobile-footer-badge {
+    font-size: 0.7rem;
+    opacity: 0.6;
+    margin-top: auto;
+    padding-top: 1rem;
+  }
+
+  /* SEO & GUIDE */
+  .seo-guide-section {
+    margin-bottom: 2rem;
+  }
+
+  .seo-guide-section h2, .faq-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1rem;
+  }
+
+  .seo-guide-section p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .guide-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .guide-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-box p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+
+  /* FAQ */
+  .faq-section {
+    margin-bottom: 2rem;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initBioBuilder() {
+    const inputName = document.getElementById('bio-name') as HTMLInputElement;
+    const inputHandle = document.getElementById('bio-handle') as HTMLInputElement;
+    const inputDesc = document.getElementById('bio-description') as HTMLTextAreaElement;
+    const inputAvatarUrl = document.getElementById('bio-avatar-url') as HTMLInputElement;
+    const inputAvatarFile = document.getElementById('bio-avatar-file') as HTMLInputElement;
+
+    // Mobile elements
+    const mobileAvatarImg = document.getElementById('mobile-avatar-img') as HTMLImageElement;
+    const mobileName = document.getElementById('mobile-name');
+    const mobileHandle = document.getElementById('mobile-handle');
+    const mobileDesc = document.getElementById('mobile-desc');
+    const mobileSocialsRow = document.getElementById('mobile-socials-row');
+    const mobileLinksContainer = document.getElementById('mobile-links-container');
+    const phoneScreen = document.getElementById('phone-screen');
+
+    // Themes
+    const themeCards = document.querySelectorAll('.theme-card');
+    let currentTheme = 'dark';
+
+    // Social inputs
+    const socialInputs: Record<string, HTMLInputElement | null> = {
+      instagram: document.getElementById('social-instagram') as HTMLInputElement,
+      tiktok: document.getElementById('social-tiktok') as HTMLInputElement,
+      youtube: document.getElementById('social-youtube') as HTMLInputElement,
+      whatsapp: document.getElementById('social-whatsapp') as HTMLInputElement,
+      twitter: document.getElementById('social-twitter') as HTMLInputElement,
+      twitch: document.getElementById('social-twitch') as HTMLInputElement
+    };
+
+    const socialIconsMap: Record<string, string> = {
+      instagram: '📸',
+      tiktok: '🎵',
+      youtube: '▶️',
+      whatsapp: '💬',
+      twitter: '🐦',
+      twitch: '🟣'
+    };
+
+    // Links state
+    let links = [
+      { title: '🌐 Mi Sitio Web Oficial', url: 'https://guiatecnes.com' },
+      { title: '🎮 Canal de YouTube & Reviews', url: 'https://youtube.com' },
+      { title: '💬 Contactar por WhatsApp', url: 'https://wa.me/34600000000' }
+    ];
+
+    const linksListContainer = document.getElementById('links-list-container');
+    const btnAddLink = document.getElementById('btn-add-link');
+    const btnCopyHtml = document.getElementById('btn-copy-html');
+    const btnDownloadHtml = document.getElementById('btn-download-html');
+    const btnPreviewWindow = document.getElementById('btn-preview-window');
+
+    function renderLinksInputs() {
+      if (!linksListContainer) return;
+      linksListContainer.innerHTML = '';
+
+      links.forEach((link, idx) => {
+        const row = document.createElement('div');
+        row.className = 'link-edit-row';
+        row.innerHTML = `
+          <input type="text" class="link-edit-title" value="${link.title}" placeholder="Texto del botón" data-index="${idx}" />
+          <input type="text" class="link-edit-url" value="${link.url}" placeholder="https://..." data-index="${idx}" />
+          <button type="button" class="btn-del-link" data-index="${idx}" title="Eliminar enlace">✕</button>
+        `;
+        linksListContainer.appendChild(row);
+      });
+
+      // Bind events to inputs
+      linksListContainer.querySelectorAll('.link-edit-title').forEach(el => {
+        el.addEventListener('input', (e) => {
+          const idx = parseInt((e.target as HTMLElement).getAttribute('data-index') || '0', 10);
+          links[idx].title = (e.target as HTMLInputElement).value;
+          updatePreview();
+        });
+      });
+
+      linksListContainer.querySelectorAll('.link-edit-url').forEach(el => {
+        el.addEventListener('input', (e) => {
+          const idx = parseInt((e.target as HTMLElement).getAttribute('data-index') || '0', 10);
+          links[idx].url = (e.target as HTMLInputElement).value;
+          updatePreview();
+        });
+      });
+
+      linksListContainer.querySelectorAll('.btn-del-link').forEach(el => {
+        el.addEventListener('click', (e) => {
+          const idx = parseInt((e.currentTarget as HTMLElement).getAttribute('data-index') || '0', 10);
+          links.splice(idx, 1);
+          renderLinksInputs();
+          updatePreview();
+        });
+      });
+    }
+
+    function updatePreview() {
+      if (mobileName && inputName) mobileName.textContent = inputName.value || 'Tu Nombre';
+      if (mobileHandle && inputHandle) mobileHandle.textContent = inputHandle.value || '@usuario';
+      if (mobileDesc && inputDesc) mobileDesc.textContent = inputDesc.value || '';
+      if (mobileAvatarImg && inputAvatarUrl) mobileAvatarImg.src = inputAvatarUrl.value;
+
+      // Update socials
+      if (mobileSocialsRow) {
+        mobileSocialsRow.innerHTML = '';
+        Object.entries(socialInputs).forEach(([key, input]) => {
+          if (input && input.value.trim().length > 0) {
+            const a = document.createElement('a');
+            a.className = 'mobile-social-icon';
+            a.href = input.value;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.textContent = socialIconsMap[key] || '🔗';
+            mobileSocialsRow.appendChild(a);
+          }
+        });
+      }
+
+      // Update links
+      if (mobileLinksContainer) {
+        mobileLinksContainer.innerHTML = '';
+        links.forEach(l => {
+          if (l.title.trim()) {
+            const a = document.createElement('a');
+            a.className = 'mobile-link-btn';
+            a.href = l.url || '#';
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.textContent = l.title;
+            mobileLinksContainer.appendChild(a);
+          }
+        });
+      }
+    }
+
+    // Avatar file upload
+    inputAvatarFile?.addEventListener('change', (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const res = event.target?.result as string;
+          if (res) {
+            if (inputAvatarUrl) inputAvatarUrl.value = res;
+            if (mobileAvatarImg) mobileAvatarImg.src = res;
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Theme selector
+    themeCards.forEach(card => {
+      card.addEventListener('click', () => {
+        themeCards.forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        const theme = card.getAttribute('data-theme') || 'dark';
+        currentTheme = theme;
+        if (phoneScreen) {
+          phoneScreen.className = `phone-screen theme-${theme}`;
+        }
+      });
+    });
+
+    // Add link button
+    btnAddLink?.addEventListener('click', () => {
+      links.push({ title: 'Nuevo Enlace ✨', url: 'https://' });
+      renderLinksInputs();
+      updatePreview();
+    });
+
+    // Input listeners
+    [inputName, inputHandle, inputDesc, inputAvatarUrl].forEach(inp => {
+      inp?.addEventListener('input', updatePreview);
+    });
+
+    Object.values(socialInputs).forEach(inp => {
+      inp?.addEventListener('input', updatePreview);
+    });
+
+    // Generate standalone clean HTML file
+    function generateFullHtml(): string {
+      const name = inputName.value || 'Mi Perfil';
+      const handle = inputHandle.value || '';
+      const desc = inputDesc.value || '';
+      const avatar = inputAvatarUrl.value || '';
+
+      const themeStyles: Record<string, string> = {
+        dark: `body { background: #0b0f19; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; } .link-btn { background: #1e293b; border: 1px solid #334155; color: #f8fafc; } .link-btn:hover { background: #334155; }`,
+        cyber: `body { background: #050508; color: #06b6d4; font-family: monospace, system-ui; } .link-btn { background: #0d1117; border: 1px solid #06b6d4; color: #38bdf8; box-shadow: 0 0 10px rgba(6,182,212,0.25); } .link-btn:hover { background: #06b6d4; color: #000; }`,
+        aesthetic: `body { background: #fdf2f8; color: #831843; font-family: system-ui, sans-serif; } .link-btn { background: #ffffff; border: 1px solid #fbcfe8; color: #9d174d; box-shadow: 0 4px 10px rgba(244,114,182,0.15); } .link-btn:hover { background: #fce7f3; }`,
+        light: `body { background: #ffffff; color: #0f172a; font-family: system-ui, -apple-system, sans-serif; } .link-btn { background: #f8fafc; border: 1px solid #e2e8f0; color: #0f172a; } .link-btn:hover { background: #f1f5f9; }`,
+        gradient: `body { background: linear-gradient(180deg, #312e81, #701a75); color: #ffffff; font-family: system-ui, sans-serif; } .link-btn { background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.3); color: #ffffff; } .link-btn:hover { background: rgba(255,255,255,0.25); }`
+      };
+
+      const socialsHtml = Object.entries(socialInputs)
+        .filter(([_, inp]) => inp && inp.value.trim().length > 0)
+        .map(([k, inp]) => `<a href="${inp!.value}" target="_blank" rel="noopener noreferrer" style="font-size:1.4rem;text-decoration:none;margin:0 6px;">${socialIconsMap[k] || '🔗'}</a>`)
+        .join('');
+
+      const linksHtml = links
+        .filter(l => l.title.trim().length > 0)
+        .map(l => `<a href="${l.url}" class="link-btn" target="_blank" rel="noopener noreferrer">${l.title}</a>`)
+        .join('\n      ');
+
+      return `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${name} | Link en Bio</title>
+  <meta name="description" content="${desc}">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 2rem 1rem; }
+    .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .avatar { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem; box-shadow: 0 4px 14px rgba(0,0,0,0.3); border: 3px solid rgba(255,255,255,0.2); }
+    h1 { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.25rem; }
+    .handle { font-size: 0.9rem; opacity: 0.75; margin-bottom: 0.75rem; }
+    .desc { font-size: 0.95rem; line-height: 1.5; opacity: 0.9; margin-bottom: 1.25rem; max-width: 380px; }
+    .socials { display: flex; justify-content: center; margin-bottom: 1.75rem; flex-wrap: wrap; }
+    .links-list { width: 100%; display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem; }
+    .link-btn { display: block; width: 100%; padding: 0.9rem 1.25rem; border-radius: 0.75rem; text-decoration: none; font-size: 1rem; font-weight: 600; text-align: center; transition: all 0.2s ease; word-break: break-word; }
+    .footer { font-size: 0.75rem; opacity: 0.5; margin-top: 1rem; }
+    ${themeStyles[currentTheme] || themeStyles.dark}
+  </style>
+</head>
+<body>
+  <div class="container">
+    ${avatar ? `<img src="${avatar}" alt="${name}" class="avatar">` : ''}
+    <h1>${name}</h1>
+    ${handle ? `<div class="handle">${handle}</div>` : ''}
+    ${desc ? `<p class="desc">${desc}</p>` : ''}
+    ${socialsHtml ? `<div class="socials">${socialsHtml}</div>` : ''}
+    <div class="links-list">
+      ${linksHtml}
+    </div>
+    <div class="footer">Creado con GuiaTecnEs Link en Bio</div>
+  </div>
+</body>
+</html>`;
+    }
+
+    // Export events
+    btnCopyHtml?.addEventListener('click', () => {
+      const code = generateFullHtml();
+      navigator.clipboard.writeText(code);
+      btnCopyHtml.textContent = '¡Código HTML Copiado!';
+      setTimeout(() => {
+        btnCopyHtml.textContent = '📋 Copiar Código HTML Listo';
+      }, 2000);
+    });
+
+    btnDownloadHtml?.addEventListener('click', () => {
+      const code = generateFullHtml();
+      const blob = new Blob([code], { type: 'text/html;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'index.html';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    btnPreviewWindow?.addEventListener('click', () => {
+      const code = generateFullHtml();
+      const blob = new Blob([code], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    });
+
+    renderLinksInputs();
+    updatePreview();
+  }
+
+  document.addEventListener('astro:page-load', initBioBuilder);
+</script>
