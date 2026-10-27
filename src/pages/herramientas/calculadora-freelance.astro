@@ -1,0 +1,367 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Calculadora Freelance y Tarifa por Hora Online (¿Cuánto Cobrar?)"
+  description="Calcula cuánto debes cobrar por hora o proyecto siendo freelance o teletrabajador. Incluye impuestos, vacaciones y gastos para no perder dinero."
+>
+  <Header slot="header" />
+
+  <main class="tool-container">
+    <div class="tool-hero">
+      <span class="badge">💰 Finanzas y Trabajo Remoto</span>
+      <h1>Calculadora de Tarifa Freelance</h1>
+      <p class="subtitle">Descubre exactamente cuánto debes cobrar por hora y por proyecto según tus gastos, impuestos y el sueldo neto que quieres ganar a fin de mes.</p>
+    </div>
+
+    <div class="calc-grid">
+      <!-- Form Controls -->
+      <div class="calc-form-card">
+        <h3>Tus Objetivos y Gastos</h3>
+
+        <div class="field-group">
+          <label for="net-goal">Sueldo neto que deseas ganar al mes (€ / $):</label>
+          <input type="number" id="net-goal" value="2000" min="500" step="100" />
+        </div>
+
+        <div class="field-group">
+          <label for="monthly-expenses">Gastos fijos del negocio (software, internet, gestor):</label>
+          <input type="number" id="monthly-expenses" value="250" min="0" step="50" />
+        </div>
+
+        <div class="field-group">
+          <label for="tax-rate">Estimación de impuestos y autónomo (%):</label>
+          <input type="number" id="tax-rate" value="25" min="0" max="60" />
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label for="hours-week">Horas facturables / semana:</label>
+            <input type="number" id="hours-week" value="25" min="5" max="60" />
+            <small>Ojo: No todas las 40h semanales son facturables.</small>
+          </div>
+          <div class="field-group">
+            <label for="vacation-weeks">Semanas de vacaciones al año:</label>
+            <input type="number" id="vacation-weeks" value="4" min="0" max="15" />
+          </div>
+        </div>
+
+        <button id="btn-calc" class="btn-calc">⚡ Recalcular Tarifa</button>
+      </div>
+
+      <!-- Result Card -->
+      <div class="calc-result-card">
+        <h3>Tu Tarifa Recomendada</h3>
+
+        <div class="main-price-box">
+          <span class="price-label">Debes cobrar como mínimo:</span>
+          <div class="price-display">
+            <span class="price-val" id="hourly-rate">--</span>
+            <span class="price-currency">€ / hora</span>
+          </div>
+        </div>
+
+        <div class="breakdown-list">
+          <div class="b-item">
+            <span>Tarifa Jornada (8 horas):</span>
+            <strong id="daily-rate">-- €</strong>
+          </div>
+          <div class="b-item">
+            <span>Facturación bruta mensual necesaria:</span>
+            <strong id="gross-monthly">-- €</strong>
+          </div>
+          <div class="b-item">
+            <span>Horas facturables al año:</span>
+            <strong id="billable-hours-year">-- h</strong>
+          </div>
+        </div>
+
+        <div class="share-box">
+          <p>¿Te ha servido? Comparte esta calculadora con otros freelancers:</p>
+          <a href="https://api.whatsapp.com/send?text=%F0%9F%92%B0%20%C2%A1Mira%20esta%20calculadora%20gratis%20para%20saber%20cu%C3%A1nto%20cobrar%20por%20hora%20siendo%20freelance%20o%20remoto!%20%E2%9E%A1%EF%B8%8F%20https%3A%2F%2Fguiatecnes.com%2Fherramientas%2Fcalculadora-freelance" target="_blank" rel="noopener noreferrer" class="btn-wa">
+            💬 Compartir en WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO GUIDE -->
+    <section class="guide-section">
+      <h2>El error número 1 de los freelancers: No contar las horas invisibles</h2>
+      <p>Muchos profesionales cometen el error de dividir su sueldo deseado entre 160 horas al mes (40h x 4 semanas). <strong>Esto es una trampa mortal:</strong> ningún freelance factura 40 horas a la semana, porque entre 10 y 15 horas se van en buscar clientes, responder correos, enviar presupuestos y hacer facturas.</p>
+
+      <div class="advice-grid">
+        <div class="adv-card">
+          <span>🏖️</span>
+          <h4>Nadie te paga las vacaciones</h4>
+          <p>Tus horas de trabajo deben ser lo bastante rentables para financiar las 4 o 5 semanas al año en las que descanses o estés enfermo.</p>
+        </div>
+        <div class="adv-card">
+          <span>🧾</span>
+          <h4>Los impuestos no son tuyos</h4>
+          <p>Separa siempre entre un 20% y un 30% de cada factura recibida en una cuenta aparte para no llevarte sorpresas fiscales.</p>
+        </div>
+        <div class="adv-card">
+          <span>📈</span>
+          <h4>Margen de beneficio</h4>
+          <p>Tu negocio debe tener un colchón de seguridad para renovar tu ordenador, pagar licencias de software o afrontar meses flojos.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  document.addEventListener('astro:page-load', () => {
+    const netGoal = document.getElementById('net-goal');
+    const expenses = document.getElementById('monthly-expenses');
+    const taxRate = document.getElementById('tax-rate');
+    const hoursWeek = document.getElementById('hours-week');
+    const vacationWeeks = document.getElementById('vacation-weeks');
+    const btnCalc = document.getElementById('btn-calc');
+
+    const hourlyRateEl = document.getElementById('hourly-rate');
+    const dailyRateEl = document.getElementById('daily-rate');
+    const grossMonthlyEl = document.getElementById('gross-monthly');
+    const billableHoursEl = document.getElementById('billable-hours-year');
+
+    if (!btnCalc) return;
+
+    function calculate() {
+      const net = parseFloat(netGoal.value) || 2000;
+      const exp = parseFloat(expenses.value) || 250;
+      const tax = (parseFloat(taxRate.value) || 25) / 100;
+      const hours = parseFloat(hoursWeek.value) || 25;
+      const vac = parseFloat(vacationWeeks.value) || 4;
+
+      // Annual net needed
+      const annualNet = net * 12;
+      const annualExpenses = exp * 12;
+
+      // Gross needed before taxes: Gross * (1 - tax) - annualExpenses = annualNet => Gross = (annualNet + annualExpenses) / (1 - tax)
+      const annualGross = (annualNet + annualExpenses) / (1 - tax);
+      const monthlyGross = annualGross / 12;
+
+      // Total billable hours in a year
+      const workingWeeks = Math.max(1, 52 - vac);
+      const annualBillableHours = workingWeeks * hours;
+
+      // Hourly rate
+      const hourly = annualGross / annualBillableHours;
+      const daily = hourly * 8;
+
+      hourlyRateEl.textContent = Math.round(hourly);
+      dailyRateEl.textContent = Math.round(daily) + ' €';
+      grossMonthlyEl.textContent = Math.round(monthlyGross).toLocaleString('es-ES') + ' €';
+      billableHoursEl.textContent = Math.round(annualBillableHours).toLocaleString('es-ES') + ' h';
+    }
+
+    btnCalc.addEventListener('click', calculate);
+    [netGoal, expenses, taxRate, hoursWeek, vacationWeeks].forEach(el => {
+      el?.addEventListener('input', calculate);
+    });
+
+    calculate();
+  });
+</script>
+
+<style>
+  .tool-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+  .tool-hero {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .badge {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    background: rgba(234, 179, 8, 0.15);
+    color: #eab308;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(234, 179, 8, 0.3);
+  }
+  h1 {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: var(--heading);
+    margin-bottom: 0.75rem;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .calc-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  .calc-form-card, .calc-result-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 2.25rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--heading);
+  }
+  .field-group {
+    margin-bottom: 1.25rem;
+  }
+  .field-group label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+  }
+  .field-group input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 600;
+    outline: none;
+    box-sizing: border-box;
+  }
+  .field-group small {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .btn-calc {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary) 0%, #eab308 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.9rem;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
+  }
+
+  /* RESULT CARD */
+  .main-price-box {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(234, 179, 8, 0.1) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .price-label {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .price-val {
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: var(--heading);
+  }
+  .price-currency {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-left: 0.25rem;
+  }
+
+  .breakdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .b-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .b-item strong { color: var(--text); }
+
+  .share-box p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.6rem;
+    text-align: center;
+  }
+  .btn-wa {
+    display: block;
+    background: #25d366;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    padding: 0.75rem;
+    font-weight: 700;
+    font-size: 0.88rem;
+    text-align: center;
+  }
+
+  /* GUIDE */
+  .guide-section {
+    margin-top: 4rem;
+  }
+  .guide-section h2 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--heading);
+  }
+  .guide-section p {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  .advice-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.5rem;
+  }
+  .adv-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 14px;
+  }
+  .adv-card span { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+  .adv-card h4 { font-size: 1.05rem; margin-bottom: 0.4rem; color: var(--heading); }
+  .adv-card p { font-size: 0.88rem; margin-bottom: 0; }
+
+  @media (max-width: 768px) {
+    .calc-grid { grid-template-columns: 1fr; }
+  }
+</style>

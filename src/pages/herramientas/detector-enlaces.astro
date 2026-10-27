@@ -1,0 +1,389 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Comprobador de Enlaces y Links Sospechosos Online (Anti-Phishing)"
+  description="Analiza cualquier enlace, mensaje de WhatsApp o URL sospechosa gratis. Detecta estafas, suplantación bancaria (phishing) y virus antes de hacer clic."
+>
+  <Header slot="header" />
+
+  <main class="tool-container">
+    <div class="tool-hero">
+      <span class="badge">🛡️ Seguridad Anti-Estafas</span>
+      <h1>Comprobador de Enlaces Sospechosos</h1>
+      <p class="subtitle">¿Te ha llegado un SMS o mensaje de WhatsApp con un enlace raro? Pégalo aquí para analizar si es una estafa o suplantación antes de hacer clic.</p>
+    </div>
+
+    <div class="checker-card">
+      <div class="input-wrap">
+        <input type="text" id="url-input" placeholder="Pega el enlace sospechoso aquí (ej: http://banco-seguro-login.xyz...)" />
+        <button id="check-btn" class="btn-check">🔍 Analizar Enlace</button>
+      </div>
+
+      <!-- Result Display -->
+      <div id="result-display" class="result-display" style="display: none;">
+        <div class="result-header" id="res-header">
+          <span class="result-icon" id="res-icon">🛡️</span>
+          <div>
+            <h3 id="res-title">Enlace Analizado</h3>
+            <span class="domain-badge" id="res-domain">--</span>
+          </div>
+        </div>
+
+        <div class="score-meter">
+          <div class="score-bar" id="score-bar"></div>
+        </div>
+        <p class="score-text" id="score-text">Nivel de riesgo: <strong>Analizando...</strong></p>
+
+        <ul class="checks-list" id="checks-list"></ul>
+      </div>
+
+      <!-- Share Box -->
+      <div class="share-box">
+        <p>Protege a tus contactos: Comparte este detector en tus grupos de WhatsApp familiares:</p>
+        <a href="https://api.whatsapp.com/send?text=%F0%9F%9A%A8%20%C2%A1Antes%20de%20abrir%20un%20link%20raro%20de%20WhatsApp%20o%20SMS%2C%20comprueba%20si%20es%20un%20virus%20o%20estafa%20aqu%C3%AD!%20%E2%9E%A1%EF%B8%8F%20https%3A%2F%2Fguiatecnes.com%2Fherramientas%2Fdetector-enlaces" target="_blank" rel="noopener noreferrer" class="btn-wa">
+          💬 Compartir Detector en WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <!-- SEO GUIDE -->
+    <section class="guide-section">
+      <h2>¿Cómo reconocer un enlace fraudulento en 2026?</h2>
+      <p>Los ciberdelincuentes ya no usan enlaces con faltas de ortografía evidentes. Crean páginas idénticas a las de Correos, tu banco, Netflix o la Agencia Tributaria utilizando <strong>dominios trampa</strong>.</p>
+
+      <div class="signs-grid">
+        <div class="sign-card">
+          <span class="sign-icon">⚠️</span>
+          <h4>Extensiones dudosas (.xyz, .top, .ru)</h4>
+          <p>Tu banco o tienda de confianza casi nunca usará dominios gratuitos o baratos como .xyz, .click, .live o .vip.</p>
+        </div>
+        <div class="sign-card">
+          <span class="sign-icon">🔒</span>
+          <h4>Falso candado de seguridad</h4>
+          <p>Que una web tenga 'https' y candado solo significa que la conexión está cifrada, ¡no que sea una empresa legítima!</p>
+        </div>
+        <div class="sign-card">
+          <span class="sign-icon">⏱️</span>
+          <h4>Urgencia extrema ("Tu cuenta será bloqueada")</h4>
+          <p>Si el mensaje te mete prisa para que entres antes de 24 horas, es el patrón clásico de ingeniería social para robarte.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  document.addEventListener('astro:page-load', () => {
+    const input = document.getElementById('url-input');
+    const btn = document.getElementById('check-btn');
+    const display = document.getElementById('result-display');
+    const icon = document.getElementById('res-icon');
+    const title = document.getElementById('res-title');
+    const domainSpan = document.getElementById('res-domain');
+    const bar = document.getElementById('score-bar');
+    const scoreText = document.getElementById('score-text');
+    const list = document.getElementById('checks-list');
+
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      let rawUrl = input.value.trim();
+      if (!rawUrl) return;
+
+      if (!rawUrl.startsWith('http://') && !rawUrl.startsWith('https://')) {
+        rawUrl = 'https://' + rawUrl;
+      }
+
+      display.style.display = 'block';
+
+      try {
+        const parsed = new URL(rawUrl);
+        const domain = parsed.hostname.toLowerCase();
+        domainSpan.textContent = domain;
+
+        let riskScore = 0; // 0 to 100
+        let findings = [];
+
+        // Check 1: Protocol
+        if (parsed.protocol === 'http:') {
+          riskScore += 25;
+          findings.push({ pass: false, text: 'No utiliza cifrado seguro HTTPS (Conexión abierta).' });
+        } else {
+          findings.push({ pass: true, text: 'Protocolo HTTPS con certificado SSL detectado.' });
+        }
+
+        // Check 2: Suspicious TLD
+        const suspiciousTLDs = ['.xyz', '.top', '.click', '.tk', '.ml', '.ga', '.cf', '.gq', '.live', '.vip', '.work', '.monster'];
+        const hasBadTLD = suspiciousTLDs.some(tld => domain.endsWith(tld));
+        if (hasBadTLD) {
+          riskScore += 35;
+          findings.push({ pass: false, text: 'Terminación de dominio de alto riesgo (.xyz, .top, etc.) habitualmente usada en estafas.' });
+        } else {
+          findings.push({ pass: true, text: 'Extensión de dominio estándar y común.' });
+        }
+
+        // Check 3: Phishing keywords in subdomain
+        const phishingKeywords = ['banco', 'santander', 'bbva', 'caixa', 'correos', 'netflix', 'paypal', 'apple', 'login', 'verificar', 'seguridad', 'actualizar', 'tarjeta'];
+        const matchedKw = phishingKeywords.filter(kw => domain.includes(kw));
+        
+        // Exclude legitimate official domains
+        const legitDomains = ['bbva.es', 'bancosantander.es', 'caixabank.es', 'correos.es', 'netflix.com', 'paypal.com', 'apple.com', 'google.com', 'microsoft.com'];
+        const isLegit = legitDomains.some(ld => domain === ld || domain.endsWith('.' + ld));
+
+        if (matchedKw.length > 0 && !isLegit) {
+          riskScore += 45;
+          findings.push({ pass: false, text: `Alerta: El dominio contiene palabras sensibles (${matchedKw.join(', ')}) pero NO pertenece a los servidores oficiales.` });
+        } else if (isLegit) {
+          findings.push({ pass: true, text: 'Dominio verificado perteneciente a una entidad oficial reconocida.' });
+        }
+
+        // Check 4: IP as host
+        if (/^(\d{1,3}\.){3}\d{1,3}$/.test(domain)) {
+          riskScore += 50;
+          findings.push({ pass: false, text: 'Peligro: El enlace apunta directamente a una dirección IP numérica en vez de a un nombre de dominio.' });
+        }
+
+        // Check 5: Excessive subdomains or hyphens
+        if ((domain.match(/-/g) || []).length > 2 || domain.split('.').length > 4) {
+          riskScore += 20;
+          findings.push({ pass: false, text: 'Estructura con demasiados guiones o subdominios para confundir a la víctima.' });
+        } else {
+          findings.push({ pass: true, text: 'Estructura de dominio limpia y natural.' });
+        }
+
+        // Render result
+        list.innerHTML = '';
+        findings.forEach(f => {
+          const li = document.createElement('li');
+          li.className = f.pass ? 'item-pass' : 'item-fail';
+          li.innerHTML = `<span>${f.pass ? '✅' : '❌'}</span> ${f.text}`;
+          list.appendChild(li);
+        });
+
+        if (riskScore >= 45) {
+          icon.textContent = '🚨';
+          title.textContent = '¡Enlace de Alto Riesgo / Posible Estafa!';
+          title.style.color = '#ef4444';
+          bar.style.width = '95%';
+          bar.style.backgroundColor = '#ef4444';
+          scoreText.innerHTML = 'Nivel de riesgo: <strong style="color:#ef4444;">MUY PELIGROSO ⚠️ (No abras este enlace ni pongas contraseñas)</strong>';
+        } else if (riskScore > 15) {
+          icon.textContent = '⚠️';
+          title.textContent = 'Enlace con Precaución';
+          title.style.color = '#f59e0b';
+          bar.style.width = '55%';
+          bar.style.backgroundColor = '#f59e0b';
+          scoreText.innerHTML = 'Nivel de riesgo: <strong style="color:#f59e0b;">MODERADO (Revisa bien antes de introducir datos)</strong>';
+        } else {
+          icon.textContent = '🛡️';
+          title.textContent = 'Enlace Aparentemente Seguro';
+          title.style.color = '#10b981';
+          bar.style.width = '10%';
+          bar.style.backgroundColor = '#10b981';
+          scoreText.innerHTML = 'Nivel de riesgo: <strong style="color:#10b981;">BAJO (No presenta anomalías evidentes)</strong>';
+        }
+
+      } catch (e) {
+        alert('Por favor introduce una dirección web válida.');
+      }
+    });
+  });
+</script>
+
+<style>
+  .tool-container {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+  .tool-hero {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .badge {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+  h1 {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: var(--heading);
+    margin-bottom: 0.75rem;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .checker-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  }
+  .input-wrap {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  #url-input {
+    flex: 1;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    font-size: 1.05rem;
+    color: var(--text);
+    outline: none;
+    box-sizing: border-box;
+  }
+  .btn-check {
+    background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0 1.75rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+    transition: transform 0.2s;
+    white-space: nowrap;
+  }
+  .btn-check:hover { transform: translateY(-1px); }
+
+  /* RESULT */
+  .result-display {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.75rem;
+    margin-bottom: 2rem;
+  }
+  .result-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .result-icon { font-size: 2.5rem; }
+  .result-header h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+  }
+  .domain-badge {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .score-meter {
+    height: 8px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+  .score-bar {
+    height: 100%;
+    transition: width 0.3s, background-color 0.3s;
+  }
+  .score-text {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .checks-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .checks-list li {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .item-fail { color: #ef4444; }
+  .item-pass { color: var(--text); }
+
+  .share-box {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    text-align: center;
+  }
+  .share-box p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+  .btn-wa {
+    display: inline-block;
+    background: #25d366;
+    color: white;
+    text-decoration: none;
+    border-radius: 9999px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  /* GUIDE */
+  .guide-section {
+    margin-top: 4rem;
+  }
+  .guide-section h2 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--heading);
+  }
+  .guide-section p {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  .signs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.5rem;
+  }
+  .sign-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 14px;
+  }
+  .sign-icon { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+  .sign-card h4 { font-size: 1.05rem; margin-bottom: 0.4rem; color: var(--heading); }
+  .sign-card p { font-size: 0.88rem; margin-bottom: 0; }
+
+  @media (max-width: 650px) {
+    .input-wrap { flex-direction: column; }
+    h1 { font-size: 1.8rem; }
+  }
+</style>

@@ -1,0 +1,386 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Generador de Códigos QR Gratis y Personalizados (Sin Caducidad)"
+  description="Crea códigos QR personalizados para páginas web, redes sociales, texto o claves WiFi gratis. Descarga en alta resolución (PNG/SVG) sin registrarte y para siempre."
+>
+  <Header slot="header" />
+
+  <main class="tool-container">
+    <div class="tool-hero">
+      <span class="badge">📲 Herramienta Online Gratuita</span>
+      <h1>Generador de Códigos QR Gratis</h1>
+      <p class="subtitle">Genera códigos QR de alta resolución para enlaces, redes sociales o WiFi. 100% gratuitos, sin caducidad y sin marcas de agua.</p>
+    </div>
+
+    <div class="qr-grid">
+      <!-- Input Controls -->
+      <div class="qr-card">
+        <div class="tabs">
+          <button class="tab-btn active" data-type="url">🔗 Web / Enlace</button>
+          <button class="tab-btn" data-type="wifi">📶 Red WiFi</button>
+          <button class="tab-btn" data-type="text">📝 Texto</button>
+        </div>
+
+        <div class="tab-content" id="content-url">
+          <label for="input-url">Enlace o URL de destino:</label>
+          <input type="url" id="input-url" placeholder="https://tuweb.com o enlace de Instagram" value="https://guiatecnes.com" />
+        </div>
+
+        <div class="tab-content" id="content-wifi" style="display: none;">
+          <label for="wifi-ssid">Nombre de la red (SSID):</label>
+          <input type="text" id="wifi-ssid" placeholder="Mi_WiFi_Casa" />
+          <label for="wifi-pass" style="margin-top: 0.75rem;">Contraseña WiFi:</label>
+          <input type="text" id="wifi-pass" placeholder="Clave de tu WiFi" />
+        </div>
+
+        <div class="tab-content" id="content-text" style="display: none;">
+          <label for="input-text">Escribe tu mensaje o texto:</label>
+          <textarea id="input-text" rows="3" placeholder="Escribe aquí cualquier nota o mensaje..."></textarea>
+        </div>
+
+        <div class="color-options">
+          <div class="color-picker-group">
+            <label for="qr-fg">Color del código:</label>
+            <input type="color" id="qr-fg" value="#0f172a" />
+          </div>
+          <div class="color-picker-group">
+            <label for="qr-bg">Color de fondo:</label>
+            <input type="color" id="qr-bg" value="#ffffff" />
+          </div>
+        </div>
+
+        <button id="btn-create-qr" class="btn-create">⚡ Actualizar Código QR</button>
+      </div>
+
+      <!-- Preview & Download -->
+      <div class="qr-preview-card">
+        <h3>Vista Previa</h3>
+        <div class="qr-box">
+          <img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https%3A%2F%2Fguiatecnes.com&color=0f172a&bgcolor=ffffff&margin=1" alt="Código QR generado" width="220" height="220" />
+        </div>
+
+        <button id="btn-download" class="btn-download">
+          💾 Descargar Código QR (PNG HD)
+        </button>
+
+        <a href="https://api.whatsapp.com/send?text=%F0%9F%93%B2%20%C2%A1Mira%20este%20generador%20de%20c%C3%B3digos%20QR%20gratis%20sin%20l%C3%ADmites%20ni%20caducidad!%20%E2%9E%A1%EF%B8%8F%20https%3A%2F%2Fguiatecnes.com%2Fherramientas%2Fgenerador-qr" target="_blank" rel="noopener noreferrer" class="btn-wa-share">
+          💬 Compartir herramienta en WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <!-- SEO GUIDE -->
+    <section class="qr-guide">
+      <h2>¿Para qué sirven los códigos QR y por qué los nuestros no caducan?</h2>
+      <p>Muchos sitios web engañan a los usuarios creando códigos QR dinámicos que caducan a los 14 días para obligarles a pagar una suscripción. En <strong>GuíaTecnes</strong> generamos <strong>códigos QR estáticos directos</strong>: el contenido va incrustado directamente en el dibujo del código, lo que significa que <strong>funcionará para siempre, sin importar los años que pasen.</strong></p>
+
+      <div class="uses-grid">
+        <div class="use-card">
+          <span>📶</span>
+          <h4>Conectar a WiFi sin decir la clave</h4>
+          <p>Imprime un código QR con los datos de tu red para que tus invitados se conecten apuntando la cámara sin tener que teclear claves largas.</p>
+        </div>
+        <div class="use-card">
+          <span>🍽️</span>
+          <h4>Cartas de restaurante y Menús</h4>
+          <p>Enlaza directamente al PDF de tu carta o a tu perfil de Google Maps para recibir reseñas de clientes satisfechos.</p>
+        </div>
+        <div class="use-card">
+          <span>💼</span>
+          <h4>Tarjetas de visita y LinkedIn</h4>
+          <p>Añade un código QR a tu currículum o tarjeta para que contacten contigo en WhatsApp o visiten tu portafolio en un toque.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  document.addEventListener('astro:page-load', () => {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const contentUrl = document.getElementById('content-url');
+    const contentWifi = document.getElementById('content-wifi');
+    const contentText = document.getElementById('content-text');
+    const inputUrl = document.getElementById('input-url');
+    const wifiSsid = document.getElementById('wifi-ssid');
+    const wifiPass = document.getElementById('wifi-pass');
+    const inputText = document.getElementById('input-text');
+    const qrFg = document.getElementById('qr-fg');
+    const qrBg = document.getElementById('qr-bg');
+    const btnCreate = document.getElementById('btn-create-qr');
+    const qrImg = document.getElementById('qr-img');
+    const btnDownload = document.getElementById('btn-download');
+
+    if (!btnCreate) return;
+
+    let activeType = 'url';
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeType = btn.getAttribute('data-type');
+
+        contentUrl.style.display = activeType === 'url' ? 'block' : 'none';
+        contentWifi.style.display = activeType === 'wifi' ? 'block' : 'none';
+        contentText.style.display = activeType === 'text' ? 'block' : 'none';
+
+        updateQR();
+      });
+    });
+
+    function getQRData() {
+      if (activeType === 'url') {
+        return inputUrl.value.trim() || 'https://guiatecnes.com';
+      }
+      if (activeType === 'wifi') {
+        const ssid = wifiSsid.value.trim() || 'MiWiFi';
+        const pass = wifiPass.value.trim();
+        return `WIFI:S:${ssid};T:WPA;P:${pass};;`;
+      }
+      if (activeType === 'text') {
+        return inputText.value.trim() || 'Hola desde GuíaTecnes';
+      }
+      return 'https://guiatecnes.com';
+    }
+
+    function updateQR() {
+      const data = encodeURIComponent(getQRData());
+      const fg = qrFg.value.replace('#', '');
+      const bg = qrBg.value.replace('#', '');
+      const url = `https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=${data}&color=${fg}&bgcolor=${bg}&margin=1`;
+      qrImg.src = url;
+    }
+
+    btnCreate.addEventListener('click', updateQR);
+
+    btnDownload.addEventListener('click', async () => {
+      try {
+        const response = await fetch(qrImg.src);
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = 'codigo-qr-guiatecnes.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+      } catch (e) {
+        window.open(qrImg.src, '_blank');
+      }
+    });
+  });
+</script>
+
+<style>
+  .tool-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+  .tool-hero {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .badge {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    background: rgba(6, 182, 212, 0.15);
+    color: #06b6d4;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(6, 182, 212, 0.3);
+  }
+  h1 {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: var(--heading);
+    margin-bottom: 0.75rem;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .qr-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  .qr-card, .qr-preview-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  }
+
+  .tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+  }
+  .tab-btn {
+    background: transparent;
+    border: none;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    background: var(--primary);
+    color: white;
+  }
+
+  .tab-content label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+  }
+  .tab-content input, .tab-content textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 0.95rem;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  .color-options {
+    display: flex;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .color-picker-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .color-picker-group input[type="color"] {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: transparent;
+  }
+
+  .btn-create {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary) 0%, #06b6d4 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.9rem;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  }
+
+  /* PREVIEW */
+  .qr-preview-card {
+    text-align: center;
+  }
+  .qr-preview-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+    color: var(--heading);
+  }
+  .qr-box {
+    background: white;
+    padding: 1.25rem;
+    border-radius: 14px;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  #qr-img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  .btn-download {
+    width: 100%;
+    background: #10b981;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.85rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: transform 0.2s;
+  }
+  .btn-download:hover { transform: translateY(-1px); }
+  .btn-wa-share {
+    display: block;
+    background: #25d366;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    padding: 0.75rem;
+    font-weight: 700;
+    font-size: 0.88rem;
+  }
+
+  /* GUIDE */
+  .qr-guide {
+    margin-top: 4rem;
+  }
+  .qr-guide h2 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--heading);
+  }
+  .qr-guide p {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  .uses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.5rem;
+  }
+  .use-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 14px;
+  }
+  .use-card span { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+  .use-card h4 { font-size: 1.05rem; margin-bottom: 0.4rem; color: var(--heading); }
+  .use-card p { font-size: 0.88rem; margin-bottom: 0; }
+
+  @media (max-width: 768px) {
+    .qr-grid { grid-template-columns: 1fr; }
+  }
+</style>
