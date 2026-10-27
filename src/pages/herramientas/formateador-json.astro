@@ -1,0 +1,400 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Formateador y Validador JSON', url: '/herramientas/formateador-json' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es JSON y para qué sirve formatearlo?',
+    answer: 'JSON (JavaScript Object Notation) es el estándar universal para enviar datos entre servidores, aplicaciones y APIs. Formatearlo organiza el código con sangrías y saltos de línea legibles para humanos.'
+  },
+  {
+    question: '¿Mis datos JSON se envían a algún servidor?',
+    answer: 'No. Toda la validación, formateo y minificación se ejecuta al 100% en tu navegador (lado del cliente con JavaScript). Tus claves de API, tokens o información privada nunca abandonan tu ordenador.'
+  },
+  {
+    question: '¿Qué diferencia hay entre formatear y minificar?',
+    answer: 'Formatear (Beautify) añade espacios y sangrías para facilitar la lectura y depuración de código. Minificar elimina todos los espacios, saltos de línea y tabulaciones innecesarios para reducir al mínimo el tamaño del archivo.'
+  }
+];
+---
+
+<BaseLayout
+  title="Formateador y Validador JSON Online | Beautifier y Minificador Gratis"
+  description="Formatea, valida y minifica archivos o código JSON en tiempo real. Resaltado de sintaxis, detección de errores de línea y descarga de archivos 100% privado."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Formateador JSON</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">💻 100% Privado en Cliente</div>
+      <h1>Formateador y Validador JSON Online</h1>
+      <p class="tool-subtitle">
+        Pega tu código desordenado o minificado para embellecerlo, detectar errores sintácticos al instante o comprimirlo a una sola línea.
+      </p>
+    </header>
+
+    <div class="json-workspace">
+      <!-- BARRA DE ACCIONES -->
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button type="button" class="tool-btn btn-primary" id="btn-beautify">
+            <span>✨</span> Formatear (2 Espacios)
+          </button>
+          <button type="button" class="tool-btn btn-secondary" id="btn-minify">
+            <span>🗜️</span> Minificar
+          </button>
+          <button type="button" class="tool-btn btn-outline" id="btn-sample">
+            <span>💡</span> Cargar Ejemplo
+          </button>
+        </div>
+        <div class="toolbar-right">
+          <button type="button" class="tool-btn btn-success" id="btn-copy">
+            <span>📋</span> Copiar
+          </button>
+          <button type="button" class="tool-btn btn-outline" id="btn-download">
+            <span>📥</span> Descargar .json
+          </button>
+          <button type="button" class="tool-btn btn-danger" id="btn-clear">
+            <span>🧹</span> Limpiar
+          </button>
+        </div>
+      </div>
+
+      <!-- STATUS BAR -->
+      <div class="status-bar" id="status-bar">
+        <span class="status-indicator" id="status-indicator">⚪</span>
+        <span class="status-msg" id="status-msg">Esperando entrada de JSON...</span>
+        <span class="char-count" id="char-count">0 caracteres</span>
+      </div>
+
+      <!-- EDITORES -->
+      <div class="editor-grid">
+        <div class="editor-pane">
+          <div class="pane-header">
+            <span>📥 Entrada (Pega aquí tu JSON)</span>
+          </div>
+          <textarea id="json-input" placeholder='Pega tu JSON aquí, por ejemplo: {"nombre":"Carlos","activo":true,"roles":["admin","editor"]}'></textarea>
+        </div>
+        <div class="editor-pane">
+          <div class="pane-header">
+            <span>📤 Salida Formateada</span>
+          </div>
+          <textarea id="json-output" readonly placeholder="El resultado formateado o minificado aparecerá aquí..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+      <h2>Preguntas Frecuentes sobre JSON</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page { padding: 2rem 0 4rem; max-width: 1100px; margin: 0 auto; }
+  .breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 2rem;
+  }
+  .breadcrumb a { color: var(--text-muted, #94a3b8); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary, #6366f1); }
+
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--primary, #6366f1);
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 50px;
+    margin-bottom: 0.8rem;
+  }
+  .tool-header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .json-workspace {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 3rem;
+  }
+
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-left, .toolbar-right {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tool-btn {
+    border: none;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s;
+  }
+
+  .btn-primary { background: var(--primary, #6366f1); color: white; }
+  .btn-primary:hover { background: #4f46e5; }
+  .btn-secondary { background: rgba(255, 255, 255, 0.1); color: white; }
+  .btn-secondary:hover { background: rgba(255, 255, 255, 0.18); }
+  .btn-outline { background: transparent; border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; }
+  .btn-outline:hover { background: rgba(255, 255, 255, 0.05); color: white; }
+  .btn-success { background: #10b981; color: white; }
+  .btn-success:hover { background: #059669; }
+  .btn-danger { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); }
+  .btn-danger:hover { background: rgba(239, 68, 68, 0.25); }
+
+  /* STATUS BAR */
+  .status-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 0.65rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .status-msg { flex: 1; color: var(--text-muted, #94a3b8); }
+  .char-count { color: var(--text-muted, #94a3b8); font-size: 0.8rem; }
+  .status-bar.valid { border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.08); }
+  .status-bar.valid .status-msg { color: #10b981; font-weight: 600; }
+  .status-bar.invalid { border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.08); }
+  .status-bar.invalid .status-msg { color: #ef4444; font-weight: 600; }
+
+  /* EDITOR GRID */
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0f172a;
+  }
+
+  .pane-header {
+    background: rgba(255, 255, 255, 0.04);
+    padding: 0.65rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted, #94a3b8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  textarea {
+    width: 100%;
+    height: 380px;
+    background: transparent;
+    border: none;
+    color: #e2e8f0;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    padding: 1rem;
+    resize: vertical;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  .faq-section {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .faq-section h2 { font-size: 1.35rem; margin-bottom: 1.5rem; font-weight: 800; }
+  .faq-list { display: flex; flex-direction: column; gap: 1rem; }
+  .faq-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .faq-item summary { font-weight: 700; cursor: pointer; color: var(--text, #f1f5f9); }
+  .faq-item p { margin: 0.75rem 0 0; color: var(--text-muted, #94a3b8); font-size: 0.92rem; line-height: 1.6; }
+
+  @media (max-width: 768px) {
+    .editor-grid { grid-template-columns: 1fr; }
+    textarea { height: 260px; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .toolbar-left, .toolbar-right { width: 100%; }
+    .tool-btn { flex: 1; justify-content: center; }
+  }
+</style>
+
+<script>
+  function initJsonFormatter() {
+    const input = document.getElementById('json-input') as HTMLTextAreaElement;
+    const output = document.getElementById('json-output') as HTMLTextAreaElement;
+    const statusBar = document.getElementById('status-bar');
+    const statusIndicator = document.getElementById('status-indicator');
+    const statusMsg = document.getElementById('status-msg');
+    const charCount = document.getElementById('char-count');
+
+    const btnBeautify = document.getElementById('btn-beautify');
+    const btnMinify = document.getElementById('btn-minify');
+    const btnSample = document.getElementById('btn-sample');
+    const btnCopy = document.getElementById('btn-copy');
+    const btnDownload = document.getElementById('btn-download');
+    const btnClear = document.getElementById('btn-clear');
+
+    if (!input || !output) return;
+
+    function validateAndProcess(mode: 'beautify' | 'minify') {
+      const text = input.value.trim();
+      if (!text) {
+        output.value = '';
+        if (statusBar) {
+          statusBar.className = 'status-bar';
+          if (statusIndicator) statusIndicator.textContent = '⚪';
+          if (statusMsg) statusMsg.textContent = 'Esperando entrada de JSON...';
+          if (charCount) charCount.textContent = '0 caracteres';
+        }
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(text);
+        const result = mode === 'beautify' ? JSON.stringify(parsed, null, 2) : JSON.stringify(parsed);
+        output.value = result;
+
+        if (statusBar) {
+          statusBar.className = 'status-bar valid';
+          if (statusIndicator) statusIndicator.textContent = '✅';
+          if (statusMsg) statusMsg.textContent = '¡JSON Válido y procesado con éxito!';
+          if (charCount) charCount.textContent = `${result.length} caracteres`;
+        }
+      } catch (err: any) {
+        if (statusBar) {
+          statusBar.className = 'status-bar invalid';
+          if (statusIndicator) statusIndicator.textContent = '❌';
+          if (statusMsg) statusMsg.textContent = `Error de sintaxis: ${err.message}`;
+          if (charCount) charCount.textContent = `${text.length} caracteres`;
+        }
+      }
+    }
+
+    btnBeautify?.addEventListener('click', () => validateAndProcess('beautify'));
+    btnMinify?.addEventListener('click', () => validateAndProcess('minify'));
+
+    btnSample?.addEventListener('click', () => {
+      const sample = {
+        sitio: "GuíaTecnes",
+        version: 2026,
+        activo: true,
+        estadisticas: {
+          articulos: 286,
+          herramientas: 11,
+          idioma: "es-ES"
+        },
+        caracteristicas: [
+          "100% Gratuito",
+          "Sin registro obligatorio",
+          "Herramientas locales de alto rendimiento"
+        ]
+      };
+      input.value = JSON.stringify(sample);
+      validateAndProcess('beautify');
+    });
+
+    btnCopy?.addEventListener('click', () => {
+      const val = output.value || input.value;
+      if (!val) return;
+      navigator.clipboard.writeText(val);
+      const originalText = btnCopy.innerHTML;
+      btnCopy.innerHTML = '<span>✅</span> ¡Copiado!';
+      setTimeout(() => { btnCopy.innerHTML = originalText; }, 2000);
+    });
+
+    btnDownload?.addEventListener('click', () => {
+      const val = output.value || input.value;
+      if (!val) return;
+      const blob = new Blob([val], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'archivo_formateado.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    btnClear?.addEventListener('click', () => {
+      input.value = '';
+      output.value = '';
+      validateAndProcess('beautify');
+    });
+
+    input.addEventListener('input', () => {
+      if (charCount) charCount.textContent = `${input.value.length} caracteres`;
+    });
+  }
+
+  document.addEventListener('astro:page-load', initJsonFormatter);
+</script>

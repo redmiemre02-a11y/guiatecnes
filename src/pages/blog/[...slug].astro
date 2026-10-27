@@ -68,6 +68,90 @@ if (post.body) {
   }
 }
 
+function getRelevantTool(title: string, tags: string[]) {
+  const text = (title + ' ' + tags.join(' ')).toLowerCase();
+  if (text.includes('wifi') || text.includes('velocidad') || text.includes('internet') || text.includes('ping') || text.includes('router') || text.includes('lag')) {
+    return {
+      title: '¿Problemas con tu conexión a Internet?',
+      desc: 'Comprueba al instante la velocidad real de descarga, subida y latencia (ping) de tu red con nuestro test interactivo gratuito.',
+      btn: 'Hacer Test de Velocidad WiFi',
+      url: '/herramientas/test-velocidad',
+      icon: '⚡',
+      badge: 'Test en Vivo'
+    };
+  }
+  if (text.includes('contraseña') || text.includes('password') || text.includes('segur') || text.includes('hack') || text.includes('cuenta') || text.includes('privacidad')) {
+    return {
+      title: 'Protege tus cuentas y contraseñas',
+      desc: 'Genera claves indescifrables de alta seguridad y comprueba cuántos siglos tardaría un ciberdelincuente en descifrarlas.',
+      btn: 'Generar Contraseña Segura',
+      url: '/herramientas/generador-contrasenas',
+      icon: '🔐',
+      badge: 'Ciberseguridad'
+    };
+  }
+  if (text.includes('foto') || text.includes('imagen') || text.includes('camara') || text.includes('espacio') || text.includes('almacenamiento') || text.includes('megas')) {
+    return {
+      title: '¿Tus fotos ocupan demasiado espacio?',
+      desc: 'Comprime imágenes JPG, PNG y WebP reduciendo hasta un 85% su peso sin perder calidad y sin subirlas a ningún servidor.',
+      btn: 'Comprimir Imágenes Gratis',
+      url: '/herramientas/compresor-imagenes',
+      icon: '🖼️',
+      badge: 'Ahorro de Espacio'
+    };
+  }
+  if (text.includes('descarga') || text.includes('juego') || text.includes('steam') || text.includes('pelicula') || text.includes('gb') || text.includes('ps5')) {
+    return {
+      title: '¿Cuánto tardará en descargarse tu archivo?',
+      desc: 'Calcula con precisión las horas y minutos exactos que tardará cualquier descarga según los megas de tu conexión.',
+      btn: 'Calcular Tiempo de Descarga',
+      url: '/herramientas/calculadora-descarga',
+      icon: '⏳',
+      badge: 'Calculadora'
+    };
+  }
+  if (text.includes('estafa') || text.includes('phishing') || text.includes('enlace') || text.includes('link') || text.includes('virus') || text.includes('banco') || text.includes('sms')) {
+    return {
+      title: '¿Has recibido un enlace sospechoso?',
+      desc: 'Analiza enlaces y direcciones web dudosas para prevenir ataques de phishing, estafas bancarias o robo de cuentas.',
+      btn: 'Analizar Enlace Sospechoso',
+      url: '/herramientas/detector-enlaces',
+      icon: '🛡️',
+      badge: 'Antifraude'
+    };
+  }
+  if (text.includes('freelance') || text.includes('trabajo') || text.includes('dinero') || text.includes('cobrar') || text.includes('remoto') || text.includes('precio') || text.includes('tarifa')) {
+    return {
+      title: 'Calcula tu tarifa profesional como freelance',
+      desc: 'Descubre cuánto deberías cobrar por hora o por proyecto considerando tus gastos mensuales, vacaciones e impuestos.',
+      btn: 'Calcular Tarifa Freelance',
+      url: '/herramientas/calculadora-freelance',
+      icon: '💼',
+      badge: 'Productividad'
+    };
+  }
+  if (text.includes('redact') || text.includes('palabra') || text.includes('escrib') || text.includes('texto') || text.includes('twitter') || text.includes('instagram') || text.includes('bio')) {
+    return {
+      title: 'Contador de Palabras y Límites de Redes',
+      desc: 'Cuenta palabras, caracteres y mide los límites de biografía para Twitter, Instagram y TikTok en tiempo real.',
+      btn: 'Abrir Contador de Palabras',
+      url: '/herramientas/contador-palabras',
+      icon: '📝',
+      badge: 'Editor'
+    };
+  }
+  return {
+    title: 'Descubre Nuestras Herramientas Gratuitas',
+    desc: 'Accede a generadores de contraseñas, test de velocidad WiFi, compresor de fotos, generador de QR y más utilidades sin registro.',
+    btn: 'Ver Todas las Herramientas 🧲',
+    url: '/herramientas',
+    icon: '🚀',
+    badge: '100% Gratis'
+  };
+}
+
+const relevantTool = getRelevantTool(post.data.title, post.data.tags);
+
 const currentSlug = post.id.replace(/\.[^/.]+$/, "");
 const breadcrumbs = [
   { name: 'Inicio', url: '/' },
@@ -145,19 +229,22 @@ const breadcrumbs = [
           </div>
 
           <div class="share-bar">
-            <span>Compartir:</span>
-            <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(Astro.url.toString())}`}
-              target="_blank" rel="noopener noreferrer" class="share-btn share-x"
-            >𝕏 Twitter</a>
+            <span class="share-label">Compartir:</span>
             <a
               href={`https://wa.me/?text=${encodeURIComponent(post.data.title + ' ' + Astro.url.toString())}`}
-              target="_blank" rel="noopener noreferrer" class="share-btn share-wa"
+              target="_blank" rel="noopener noreferrer" class="share-btn share-wa" title="Compartir en WhatsApp"
             >💬 WhatsApp</a>
             <a
-              href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(Astro.url.toString())}`}
-              target="_blank" rel="noopener noreferrer" class="share-btn share-li"
-            >in LinkedIn</a>
+              href={`https://t.me/share/url?url=${encodeURIComponent(Astro.url.toString())}&text=${encodeURIComponent(post.data.title)}`}
+              target="_blank" rel="noopener noreferrer" class="share-btn share-tg" title="Compartir en Telegram"
+            >✈️ Telegram</a>
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(Astro.url.toString())}`}
+              target="_blank" rel="noopener noreferrer" class="share-btn share-x" title="Compartir en 𝕏"
+            >𝕏 Twitter</a>
+            <button id="copy-link-btn" class="share-btn share-copy" type="button" title="Copiar enlace">
+              <span id="copy-icon">🔗</span> <span id="copy-text">Copiar</span>
+            </button>
           </div>
         </header>
 
@@ -178,6 +265,19 @@ const breadcrumbs = [
 
         <div class="prose">
           <Content />
+        </div>
+
+        <!-- DYNAMIC CONTEXTUAL TOOL CTA -->
+        <div class="contextual-tool-card">
+          <div class="tool-card-icon">{relevantTool.icon}</div>
+          <div class="tool-card-body">
+            <div class="tool-card-header">
+              <span class="tool-card-badge">{relevantTool.badge}</span>
+              <h3 class="tool-card-title">{relevantTool.title}</h3>
+            </div>
+            <p class="tool-card-desc">{relevantTool.desc}</p>
+            <a href={relevantTool.url} class="tool-card-btn">{relevantTool.btn} →</a>
+          </div>
         </div>
 
         <AdSenseBanner variant="in-article" />
@@ -249,6 +349,23 @@ const breadcrumbs = [
 
       <aside class="article-sidebar">
         <AdSenseBanner variant="sidebar" />
+
+        <div class="sidebar-card sidebar-tools">
+          <div class="sidebar-tools-header">
+            <span class="tools-badge">Recomendado</span>
+            <h3>🧲 Herramientas Gratis</h3>
+          </div>
+          <p class="sidebar-tools-desc">Utilidades rápidas y 100% online:</p>
+          <ul class="sidebar-tools-list">
+            <li><a href="/herramientas/test-velocidad"><span>⚡</span> Test de Velocidad WiFi</a></li>
+            <li><a href="/herramientas/generador-contrasenas"><span>🔐</span> Generador de Claves</a></li>
+            <li><a href="/herramientas/compresor-imagenes"><span>🖼️</span> Comprimir Imágenes</a></li>
+            <li><a href="/herramientas/calculadora-descarga"><span>⏳</span> Tiempo de Descarga</a></li>
+            <li><a href="/herramientas/generador-qr"><span>📱</span> Generador de QR</a></li>
+            <li><a href="/herramientas/detector-enlaces"><span>🛡️</span> Detector de Enlaces</a></li>
+          </ul>
+          <a href="/herramientas" class="sidebar-tools-cta">Ver todas las herramientas →</a>
+        </div>
 
         <div class="sidebar-card">
           <h3>📂 Categorías</h3>
@@ -619,6 +736,25 @@ const breadcrumbs = [
       overlay.classList.remove('active');
     });
 
+    // Copy Link Logic
+    const copyBtn = document.getElementById('copy-link-btn');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          const copyText = document.getElementById('copy-text');
+          if (copyText) copyText.textContent = '¡Copiado!';
+          copyBtn.classList.add('copied');
+          setTimeout(() => {
+            if (copyText) copyText.textContent = 'Copiar';
+            copyBtn.classList.remove('copied');
+          }, 2000);
+        } catch (e) {
+          console.error(e);
+        }
+      });
+    }
+
     // Clap Button Logic
     const clapBtn = document.getElementById('clap-btn');
     const clapCount = document.getElementById('clap-count');
@@ -687,3 +823,173 @@ const breadcrumbs = [
     }
   });
 </script>
+
+<style>
+  .share-tg { background: #229ED9; color: white; }
+  .share-copy {
+    background: var(--bg-card, #1e293b);
+    color: var(--text, #f1f5f9);
+    border: 1px solid var(--border, rgba(255,255,255,0.1));
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .share-copy.copied {
+    background: #10b981;
+    color: white;
+    border-color: #10b981;
+  }
+
+  /* Contextual Tool CTA Card */
+  .contextual-tool-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 2.5rem 0;
+    padding: 1.5rem 1.75rem;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(16, 185, 129, 0.05) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  }
+  .tool-card-icon {
+    font-size: 2.75rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .tool-card-body { flex: 1; }
+  .tool-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.35rem;
+  }
+  .tool-card-badge {
+    background: var(--primary, #6366f1);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.6rem;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .tool-card-title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text, #f1f5f9);
+  }
+  .tool-card-desc {
+    margin: 0.25rem 0 0.85rem;
+    font-size: 0.9rem;
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.45;
+  }
+  .tool-card-btn {
+    display: inline-block;
+    padding: 0.55rem 1.25rem;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 0.88rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .tool-card-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+    text-decoration: none;
+  }
+
+  /* Sidebar Tools Widget */
+  .sidebar-tools {
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.04) 0%, transparent 100%);
+  }
+  .sidebar-tools-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  .sidebar-tools-header h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+  .tools-badge {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 50px;
+    text-transform: uppercase;
+  }
+  .sidebar-tools-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted, #94a3b8);
+    margin: 0 0 0.75rem;
+  }
+  .sidebar-tools-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .sidebar-tools-list li a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 0.6rem;
+    border-radius: 6px;
+    color: var(--text, #f1f5f9);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  .sidebar-tools-list li a:hover {
+    background: var(--bg-card-hover, #263347);
+    color: var(--primary, #6366f1);
+    transform: translateX(3px);
+  }
+  .sidebar-tools-cta {
+    display: block;
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 6px;
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary, #6366f1);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .sidebar-tools-cta:hover {
+    background: rgba(99, 102, 241, 0.2);
+    text-decoration: none;
+  }
+
+  @media (max-width: 640px) {
+    .contextual-tool-card {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+      padding: 1.25rem 1rem;
+    }
+    .tool-card-header {
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .tool-card-btn {
+      width: 100%;
+    }
+  }
+</style>

@@ -1,0 +1,525 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de IVA y Descuentos', url: '/herramientas/calculadora-iva' }
+];
+
+const faqs = [
+  {
+    question: '¿Cómo se calcula el IVA de un producto o servicio?',
+    answer: 'Para añadir el IVA, multiplica el precio base por el porcentaje de IVA (por ejemplo 0.21 para el 21%) y suma el resultado. Para quitar el IVA a un precio final, divide el precio total entre (1 + porcentaje / 100), es decir, entre 1.21.'
+  },
+  {
+    question: '¿Cuáles son los tipos de IVA vigentes en España?',
+    answer: 'En España existen tres tipos impositivos: General (21% para la mayoría de bienes y tecnología), Reducido (10% para transporte, hostelería y vivienda) y Superreducido (4% para alimentos básicos, libros y medicamentos).'
+  },
+  {
+    question: '¿Qué IVA se aplica en compras de tecnología y software?',
+    answer: 'En la gran mayoría de países de la Unión Europea y Latinoamérica, los productos de tecnología, telefonía móvil, suscripciones digitales y ordenadores tributan al tipo de IVA general (21% en España y Argentina, 16% en México, 19% en Colombia y Chile).'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de IVA y Descuentos Online | Calcular y Quitar IVA Gratis"
+  description="Calcula o desglosa el IVA de cualquier importe fácilmente. Tipos de IVA de España (21%, 10%, 4%), México, Colombia y cálculo de descuentos comerciales en tiempo real."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de IVA</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">💰 Rápida y sin errores</div>
+      <h1>Calculadora de IVA y Descuentos</h1>
+      <p class="tool-subtitle">
+        Añade o quita el IVA (desglose) de cualquier factura, presupuesto o compra. Válido para España, México, Colombia, Argentina y tipos personalizados.
+      </p>
+    </header>
+
+    <div class="calculator-card">
+      <!-- MODO DE CÁLCULO -->
+      <div class="mode-tabs">
+        <button type="button" class="mode-tab active" id="mode-add" data-mode="add">
+          ➕ Añadir IVA (Base ➔ Total)
+        </button>
+        <button type="button" class="mode-tab" id="mode-sub" data-mode="sub">
+          ➖ Quitar / Desglosar IVA (Total ➔ Base)
+        </button>
+      </div>
+
+      <div class="form-grid">
+        <!-- IMPORTE -->
+        <div class="input-group">
+          <label for="amount-input" id="amount-label">💶 Importe Base (€ / $):</label>
+          <div class="input-wrapper">
+            <input type="number" id="amount-input" value="100" min="0" step="any" placeholder="Ej: 100" />
+          </div>
+        </div>
+
+        <!-- TIPO DE IVA -->
+        <div class="input-group">
+          <label for="vat-preset">🏛️ Porcentaje de IVA:</label>
+          <div class="input-wrapper">
+            <select id="vat-preset">
+              <option value="21" selected>España - General (21%)</option>
+              <option value="10">España - Reducido (10%)</option>
+              <option value="4">España - Superreducido (4%)</option>
+              <option value="16">México - IVA General (16%)</option>
+              <option value="19">Colombia - IVA General (19%)</option>
+              <option value="21_ar">Argentina - IVA General (21%)</option>
+              <option value="19_cl">Chile - IVA General (19%)</option>
+              <option value="custom">Personalizado...</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIPO PERSONALIZADO Y DESCUENTO -->
+      <div class="form-grid-secondary">
+        <div class="input-group" id="custom-vat-group" style="display: none;">
+          <label for="custom-vat-val">IVA Personalizado (%):</label>
+          <input type="number" id="custom-vat-val" value="21" min="0" max="100" step="0.1" />
+        </div>
+
+        <div class="input-group">
+          <label for="discount-val">🏷️ Descuento Comercial (% Opcional):</label>
+          <input type="number" id="discount-val" value="0" min="0" max="100" step="any" placeholder="Ej: 15" />
+        </div>
+      </div>
+
+      <!-- DESGLOSE DE RESULTADOS -->
+      <div class="result-breakdown">
+        <div class="breakdown-row">
+          <span class="breakdown-label">Base Imponible:</span>
+          <strong class="breakdown-val" id="res-base">100.00 €</strong>
+        </div>
+        <div class="breakdown-row" id="row-discount" style="display: none;">
+          <span class="breakdown-label">Descuento aplicado:</span>
+          <strong class="breakdown-val text-green" id="res-discount">- 0.00 €</strong>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">Cuota de IVA (<span id="res-vat-rate">21%</span>):</span>
+          <strong class="breakdown-val text-blue" id="res-vat">21.00 €</strong>
+        </div>
+        <div class="breakdown-total">
+          <span>Importe Total:</span>
+          <strong id="res-total">121.00 €</strong>
+        </div>
+      </div>
+
+      <div class="actions-row">
+        <button id="copy-summary-btn" class="copy-btn" type="button">
+          <span>📋</span> Copiar desglose de factura
+        </button>
+      </div>
+    </div>
+
+    <!-- GUÍA SOBRE EL IVA -->
+    <section class="tool-guide">
+      <h2>Fórmulas para Calcular o Quitar el IVA</h2>
+      <div class="formula-box">
+        <div class="formula-item">
+          <strong>Para añadir el IVA:</strong>
+          <code>Total = Base × (1 + IVA / 100)</code>
+          <p>Ejemplo con 100€ al 21%: 100 × 1.21 = <strong>121€</strong></p>
+        </div>
+        <div class="formula-item">
+          <strong>Para quitar / desglosar el IVA:</strong>
+          <code>Base = Total / (1 + IVA / 100)</code>
+          <p>Ejemplo con 121€ al 21%: 121 / 1.21 = <strong>100€ Base</strong> (21€ de IVA)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+      <h2>Preguntas Frecuentes sobre el IVA</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page { padding: 2rem 0 4rem; max-width: 850px; margin: 0 auto; }
+  .breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 2rem;
+  }
+  .breadcrumb a { color: var(--text-muted, #94a3b8); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary, #6366f1); }
+
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 50px;
+    margin-bottom: 0.8rem;
+  }
+  .tool-header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .calculator-card {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 20px;
+    padding: 2.2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 3rem;
+  }
+
+  /* MODE TABS */
+  .mode-tabs {
+    display: flex;
+    gap: 0.5rem;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 0.4rem;
+    border-radius: 12px;
+    margin-bottom: 1.8rem;
+  }
+
+  .mode-tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-muted, #94a3b8);
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .mode-tab.active {
+    background: var(--primary, #6366f1);
+    color: white;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .form-grid-secondary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .input-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 0.92rem;
+  }
+
+  .input-group input, .input-group select {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    color: var(--text, #f1f5f9);
+    font-size: 1.05rem;
+    font-weight: 600;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+
+  .input-group input:focus, .input-group select:focus {
+    border-color: var(--primary, #6366f1);
+  }
+
+  .input-group select option {
+    background: #1e293b;
+    color: white;
+  }
+
+  /* BREAKDOWN */
+  .result-breakdown {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.5rem 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.55rem 0;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .breakdown-label {
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .text-green { color: #10b981; }
+  .text-blue { color: #38bdf8; }
+
+  .breakdown-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+  }
+
+  .breakdown-total strong {
+    font-size: 1.8rem;
+    color: #10b981;
+  }
+
+  .actions-row {
+    display: flex;
+    justify-content: center;
+  }
+
+  .copy-btn {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.8rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .copy-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+  }
+
+  /* FORMULA SECTION */
+  .tool-guide {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .tool-guide h2 { font-size: 1.35rem; margin-bottom: 1.2rem; font-weight: 800; }
+  .formula-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .formula-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 1.25rem;
+  }
+
+  .formula-item strong { display: block; margin-bottom: 0.5rem; color: var(--text, #f1f5f9); }
+  .formula-item code {
+    display: block;
+    background: rgba(99, 102, 241, 0.15);
+    color: #a5b4fc;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+  }
+  .formula-item p { margin: 0; color: var(--text-muted, #94a3b8); font-size: 0.88rem; }
+
+  .faq-section {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .faq-section h2 { font-size: 1.35rem; margin-bottom: 1.5rem; font-weight: 800; }
+  .faq-list { display: flex; flex-direction: column; gap: 1rem; }
+  .faq-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .faq-item summary { font-weight: 700; cursor: pointer; color: var(--text, #f1f5f9); }
+  .faq-item p { margin: 0.75rem 0 0; color: var(--text-muted, #94a3b8); font-size: 0.92rem; line-height: 1.6; }
+
+  @media (max-width: 650px) {
+    .form-grid, .form-grid-secondary, .formula-box { grid-template-columns: 1fr; }
+    .calculator-card { padding: 1.4rem; }
+    .mode-tabs { flex-direction: column; }
+    .breakdown-total strong { font-size: 1.45rem; }
+  }
+</style>
+
+<script>
+  function initVatCalc() {
+    let mode = 'add'; // 'add' or 'sub'
+    const modeAddBtn = document.getElementById('mode-add');
+    const modeSubBtn = document.getElementById('mode-sub');
+    const amountLabel = document.getElementById('amount-label');
+    const amountInput = document.getElementById('amount-input') as HTMLInputElement;
+    const vatPreset = document.getElementById('vat-preset') as HTMLSelectElement;
+    const customVatGroup = document.getElementById('custom-vat-group');
+    const customVatVal = document.getElementById('custom-vat-val') as HTMLInputElement;
+    const discountVal = document.getElementById('discount-val') as HTMLInputElement;
+
+    const resBase = document.getElementById('res-base');
+    const resDiscount = document.getElementById('res-discount');
+    const rowDiscount = document.getElementById('row-discount');
+    const resVatRate = document.getElementById('res-vat-rate');
+    const resVat = document.getElementById('res-vat');
+    const resTotal = document.getElementById('res-total');
+    const copyBtn = document.getElementById('copy-summary-btn');
+
+    if (!amountInput || !vatPreset) return;
+
+    function getVatPercentage(): number {
+      const p = vatPreset.value;
+      if (p === 'custom') {
+        return parseFloat(customVatVal.value) || 0;
+      }
+      return parseFloat(p.replace(/_[a-z]+$/, '')) || 0;
+    }
+
+    function calculate() {
+      const rawAmount = parseFloat(amountInput.value) || 0;
+      const vatPercent = getVatPercentage();
+      const discPercent = parseFloat(discountVal.value) || 0;
+
+      let base = 0;
+      let vatAmount = 0;
+      let discountAmount = 0;
+      let total = 0;
+
+      if (mode === 'add') {
+        // Amount input is Base Imponible
+        let effectiveBase = rawAmount;
+        if (discPercent > 0) {
+          discountAmount = rawAmount * (discPercent / 100);
+          effectiveBase = rawAmount - discountAmount;
+        }
+        base = rawAmount;
+        vatAmount = effectiveBase * (vatPercent / 100);
+        total = effectiveBase + vatAmount;
+      } else {
+        // Amount input is Total con IVA
+        let effectiveTotal = rawAmount;
+        if (discPercent > 0) {
+          discountAmount = rawAmount * (discPercent / 100);
+          effectiveTotal = rawAmount - discountAmount;
+        }
+        base = effectiveTotal / (1 + vatPercent / 100);
+        vatAmount = effectiveTotal - base;
+        total = effectiveTotal;
+      }
+
+      if (resBase) resBase.textContent = `${base.toFixed(2)} €`;
+      if (resVatRate) resVatRate.textContent = `${vatPercent}%`;
+      if (resVat) resVat.textContent = `${vatAmount.toFixed(2)} €`;
+      if (resTotal) resTotal.textContent = `${total.toFixed(2)} €`;
+
+      if (rowDiscount && resDiscount) {
+        if (discPercent > 0) {
+          rowDiscount.style.display = 'flex';
+          resDiscount.textContent = `- ${discountAmount.toFixed(2)} € (${discPercent}%)`;
+        } else {
+          rowDiscount.style.display = 'none';
+        }
+      }
+    }
+
+    modeAddBtn?.addEventListener('click', () => {
+      mode = 'add';
+      modeAddBtn.classList.add('active');
+      modeSubBtn?.classList.remove('active');
+      if (amountLabel) amountLabel.textContent = '💶 Importe Base (€ / $):';
+      calculate();
+    });
+
+    modeSubBtn?.addEventListener('click', () => {
+      mode = 'sub';
+      modeSubBtn.classList.add('active');
+      modeAddBtn?.classList.remove('active');
+      if (amountLabel) amountLabel.textContent = '💶 Importe Total con IVA (€ / $):';
+      calculate();
+    });
+
+    vatPreset.addEventListener('change', () => {
+      if (customVatGroup) {
+        customVatGroup.style.display = vatPreset.value === 'custom' ? 'block' : 'none';
+      }
+      calculate();
+    });
+
+    customVatVal?.addEventListener('input', calculate);
+    amountInput.addEventListener('input', calculate);
+    discountVal?.addEventListener('input', calculate);
+
+    copyBtn?.addEventListener('click', () => {
+      const text = `📄 Desglose de Cálculo:\n- Base Imponible: ${resBase?.textContent}\n- IVA (${resVatRate?.textContent}): ${resVat?.textContent}\n- Total a pagar: ${resTotal?.textContent}\n\nCalculado en GuíaTecnes: ${window.location.href}`;
+      navigator.clipboard.writeText(text);
+      const originalText = copyBtn.innerHTML;
+      copyBtn.innerHTML = '<span>✅</span> ¡Copiado!';
+      setTimeout(() => { copyBtn.innerHTML = originalText; }, 2000);
+    });
+
+    calculate();
+  }
+
+  document.addEventListener('astro:page-load', initVatCalc);
+</script>

@@ -1,0 +1,561 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Tiempo de Descarga', url: '/herramientas/calculadora-descarga' }
+];
+
+const faqs = [
+  {
+    question: '¿Por qué la velocidad de descarga en MB/s es diferente a los Mbps de mi operador?',
+    answer: 'Los proveedores de Internet venden la velocidad en Megabits por segundo (Mbps), mientras que el tamaño de los archivos se mide en MegaBytes (MB). Como 1 Byte equivale a 8 bits, una conexión de 100 Mbps descarga a un máximo teórico de 12.5 MB/s.'
+  },
+  {
+    question: '¿Por qué mi descarga real va más lenta que el cálculo estimado?',
+    answer: 'La velocidad real se ve afectada por la sobrecarga del protocolo TCP/IP (un 5-10%), la calidad de la señal WiFi y la capacidad del servidor de origen (por ejemplo Steam, PlayStation Network o Google Drive) para enviar los datos.'
+  },
+  {
+    question: '¿Cómo puedo hacer que mis juegos y películas descarguen más rápido?',
+    answer: 'Conecta tu ordenador o consola mediante cable de red Ethernet en lugar de WiFi, pausa otras descargas o emisiones en streaming en la red de tu casa y cambia las DNS a las de Google (8.8.8.8) o Cloudflare (1.1.1.1).'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Tiempo de Descarga Online | ¿Cuánto tardará mi archivo?"
+  description="Calcula gratis cuánto tiempo tardará en descargarse tu juego, película o archivo según la velocidad de tu conexión a Internet (Fibra, WiFi o Datos móviles)."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de Descarga</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">⏳ 100% Gratis y Precisa</div>
+      <h1>Calculadora de Tiempo de Descarga</h1>
+      <p class="tool-subtitle">
+        Averigua cuántas horas, minutos o segundos tardará tu juego (Steam, PS5, Xbox), actualización o película según tu velocidad de fibra o WiFi.
+      </p>
+    </header>
+
+    <div class="calculator-card">
+      <div class="form-grid">
+        <!-- TAMAÑO DEL ARCHIVO -->
+        <div class="input-group">
+          <label for="file-size">📁 Tamaño del archivo:</label>
+          <div class="input-with-select">
+            <input type="number" id="file-size" value="50" min="0.1" step="any" placeholder="Ej: 50" />
+            <select id="file-unit">
+              <option value="MB">MB</option>
+              <option value="GB" selected>GB</option>
+              <option value="TB">TB</option>
+            </select>
+          </div>
+          <div class="quick-tags">
+            <button type="button" class="preset-file" data-val="2" data-unit="GB">Serie (2 GB)</button>
+            <button type="button" class="preset-file" data-val="25" data-unit="GB">Película 4K (25 GB)</button>
+            <button type="button" class="preset-file" data-val="100" data-unit="GB">Juego AAA (100 GB)</button>
+          </div>
+        </div>
+
+        <!-- VELOCIDAD DE INTERNET -->
+        <div class="input-group">
+          <label for="speed-val">⚡ Velocidad de tu Internet:</label>
+          <div class="input-with-select">
+            <input type="number" id="speed-val" value="300" min="1" step="any" placeholder="Ej: 300" />
+            <select id="speed-unit">
+              <option value="Kbps">Kbps</option>
+              <option value="Mbps" selected>Mbps (Megas)</option>
+              <option value="Gbps">Gbps</option>
+            </select>
+          </div>
+          <div class="quick-tags">
+            <button type="button" class="preset-speed" data-val="50" data-unit="Mbps">50 Megas</button>
+            <button type="button" class="preset-speed" data-val="300" data-unit="Mbps">300 Megas</button>
+            <button type="button" class="preset-speed" data-val="600" data-unit="Mbps">600 Megas</button>
+            <button type="button" class="preset-speed" data-val="1" data-unit="Gbps">1 Gbps</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTADO PRINCIPAL -->
+      <div class="result-hero">
+        <div class="result-label">Tiempo Estimado de Descarga:</div>
+        <div class="result-time" id="result-time-display">24 minutos 13 segundos</div>
+        <div class="result-meta">
+          <span>Velocidad real de transferencia: <strong id="transfer-rate-display">37.5 MB/s</strong></span>
+          <span class="dot">•</span>
+          <span>Incluye 10% de margen por protocolo TCP/IP</span>
+        </div>
+      </div>
+
+      <!-- COMPARATIVA RÁPIDA -->
+      <div class="comparison-section">
+        <h3>📊 ¿Cuánto tardaría este mismo archivo con otras velocidades?</h3>
+        <div class="comparison-grid" id="comparison-grid">
+          <!-- Generado dinámicamente con JS -->
+        </div>
+      </div>
+
+      <div class="share-box">
+        <button id="whatsapp-share-btn" class="wa-btn" type="button">
+          <span>💬</span> Compartir resultado por WhatsApp
+        </button>
+        <a href="/herramientas/test-velocidad" class="test-btn">
+          <span>⚡</span> ¿No sabes tus megas? Mídelos aquí
+        </a>
+      </div>
+    </div>
+
+    <!-- FAQ Y GUÍA EDUCATIVA -->
+    <section class="tool-guide">
+      <h2>Diferencia entre Mbps (Megabits) y MB/s (MegaBytes)</h2>
+      <p>
+        Uno de los errores más comunes al descargar archivos es confundir <strong>Megabits (Mbps)</strong> con <strong>MegaBytes por segundo (MB/s)</strong>:
+      </p>
+      <ul>
+        <li><strong>Megabit (Mb):</strong> Es la unidad con la que las operadoras (Movistar, Vodafone, Orange, Claro, etc.) venden tu velocidad de conexión.</li>
+        <li><strong>MegaByte (MB):</strong> Es la unidad con la que se mide el tamaño de tus fotos, vídeos y juegos.</li>
+        <li><strong>Regla de oro:</strong> 1 Byte = 8 bits. Por lo tanto, divide tus megas contratados entre 8 para saber tu velocidad máxima real de descarga. Una conexión de <strong>300 Mbps</strong> descargará a un máximo teórico de <strong>37.5 MB/s</strong>.</li>
+      </ul>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+      <h2>Preguntas Frecuentes</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page { padding: 2rem 0 4rem; max-width: 900px; margin: 0 auto; }
+  .breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 2rem;
+  }
+  .breadcrumb a { color: var(--text-muted, #94a3b8); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary, #6366f1); }
+
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--primary, #6366f1);
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 50px;
+    margin-bottom: 0.8rem;
+  }
+  .tool-header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .calculator-card {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 20px;
+    padding: 2.2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 3rem;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.8rem;
+    margin-bottom: 2rem;
+  }
+
+  .input-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    font-size: 0.95rem;
+  }
+
+  .input-with-select {
+    display: flex;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.2);
+    transition: border-color 0.2s;
+  }
+
+  .input-with-select:focus-within {
+    border-color: var(--primary, #6366f1);
+  }
+
+  .input-with-select input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 0.75rem 1rem;
+    color: var(--text, #f1f5f9);
+    font-size: 1.15rem;
+    font-weight: 700;
+    outline: none;
+    min-width: 0;
+  }
+
+  .input-with-select select {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text, #f1f5f9);
+    padding: 0 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .quick-tags {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .quick-tags button {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-muted, #94a3b8);
+    font-size: 0.75rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .quick-tags button:hover {
+    background: rgba(99, 102, 241, 0.2);
+    color: var(--primary, #6366f1);
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+
+  /* RESULT HERO */
+  .result-hero {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(16, 185, 129, 0.08) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 16px;
+    padding: 1.8rem;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .result-label {
+    font-size: 0.95rem;
+    color: var(--text-muted, #94a3b8);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-time {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 900;
+    color: #10b981;
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+    text-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
+  }
+
+  .result-meta {
+    font-size: 0.88rem;
+    color: var(--text-muted, #94a3b8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .result-meta strong {
+    color: var(--text, #f1f5f9);
+  }
+
+  /* COMPARISON SECTION */
+  .comparison-section {
+    margin-bottom: 2rem;
+  }
+
+  .comparison-section h3 {
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+  }
+
+  :global(.comp-card) {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  :global(.comp-speed) {
+    font-size: 0.82rem;
+    color: var(--text-muted, #94a3b8);
+    font-weight: 600;
+  }
+
+  :global(.comp-time) {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text, #f1f5f9);
+  }
+
+  .share-box {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .wa-btn {
+    background: #25D366;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.92rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .wa-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+  }
+
+  .test-btn {
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    color: var(--primary, #6366f1);
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 0.92rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+  }
+
+  .test-btn:hover {
+    background: rgba(99, 102, 241, 0.25);
+    text-decoration: none;
+  }
+
+  .tool-guide {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .tool-guide h2 { font-size: 1.35rem; margin-bottom: 0.8rem; font-weight: 800; }
+  .tool-guide p { color: var(--text-muted, #94a3b8); line-height: 1.6; }
+  .tool-guide ul { color: var(--text-muted, #94a3b8); line-height: 1.7; padding-left: 1.4rem; }
+
+  .faq-section {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .faq-section h2 { font-size: 1.35rem; margin-bottom: 1.5rem; font-weight: 800; }
+  .faq-list { display: flex; flex-direction: column; gap: 1rem; }
+  .faq-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .faq-item summary { font-weight: 700; cursor: pointer; color: var(--text, #f1f5f9); }
+  .faq-item p { margin: 0.75rem 0 0; color: var(--text-muted, #94a3b8); font-size: 0.92rem; line-height: 1.6; }
+
+  @media (max-width: 700px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .calculator-card { padding: 1.5rem; }
+    .share-box { flex-direction: column; }
+    .wa-btn, .test-btn { width: 100%; justify-content: center; }
+  }
+</style>
+
+<script>
+  function formatSeconds(totalSec: number) {
+    if (totalSec < 1) return 'Menos de 1 segundo';
+    const days = Math.floor(totalSec / 86400);
+    const hours = Math.floor((totalSec % 86400) / 3600);
+    const minutes = Math.floor((totalSec % 3600) / 60);
+    const seconds = Math.floor(totalSec % 60);
+
+    const parts = [];
+    if (days > 0) parts.push(`${days}d`);
+    if (hours > 0) parts.push(`${hours}h`);
+    if (minutes > 0) parts.push(`${minutes}m`);
+    if (seconds > 0 || parts.length === 0) parts.push(`${seconds}s`);
+
+    return parts.join(' ');
+  }
+
+  function initDownloadCalc() {
+    const sizeInput = document.getElementById('file-size') as HTMLInputElement;
+    const unitSelect = document.getElementById('file-unit') as HTMLSelectElement;
+    const speedInput = document.getElementById('speed-val') as HTMLInputElement;
+    const speedUnitSelect = document.getElementById('speed-unit') as HTMLSelectElement;
+    const timeDisplay = document.getElementById('result-time-display');
+    const transferRateDisplay = document.getElementById('transfer-rate-display');
+    const compGrid = document.getElementById('comparison-grid');
+    const waBtn = document.getElementById('whatsapp-share-btn');
+
+    if (!sizeInput || !unitSelect || !speedInput || !speedUnitSelect) return;
+
+    function calculate() {
+      const rawSize = parseFloat(sizeInput.value) || 0;
+      const sizeUnit = unitSelect.value;
+      const rawSpeed = parseFloat(speedInput.value) || 0;
+      const speedUnit = speedUnitSelect.value;
+
+      if (rawSize <= 0 || rawSpeed <= 0) {
+        if (timeDisplay) timeDisplay.textContent = 'Introduce valores válidos';
+        return;
+      }
+
+      // Convert size to MegaBytes (MB)
+      let sizeInMB = rawSize;
+      if (sizeUnit === 'GB') sizeInMB = rawSize * 1024;
+      else if (sizeUnit === 'TB') sizeInMB = rawSize * 1024 * 1024;
+
+      // Convert speed to MegaBytes per second (MB/s)
+      let speedInMbps = rawSpeed;
+      if (speedUnit === 'Kbps') speedInMbps = rawSpeed / 1000;
+      else if (speedUnit === 'Gbps') speedInMbps = rawSpeed * 1000;
+
+      // 1 Byte = 8 bits, plus ~10% TCP/IP overhead
+      const effectiveMBps = (speedInMbps / 8) * 0.90;
+      const totalSeconds = sizeInMB / effectiveMBps;
+
+      if (timeDisplay) {
+        timeDisplay.textContent = formatSeconds(totalSeconds);
+      }
+
+      if (transferRateDisplay) {
+        const rawRateMB = (speedInMbps / 8);
+        transferRateDisplay.textContent = `${rawRateMB >= 10 ? rawRateMB.toFixed(1) : rawRateMB.toFixed(2)} MB/s`;
+      }
+
+      // Populate comparison grid
+      if (compGrid) {
+        const standardSpeeds = [
+          { name: '10 Megas (ADSL)', mbps: 10 },
+          { name: '50 Megas (Básica)', mbps: 50 },
+          { name: '100 Megas (Fibra)', mbps: 100 },
+          { name: '300 Megas (Estándar)', mbps: 300 },
+          { name: '600 Megas (Gamer)', mbps: 600 },
+          { name: '1 Gbps (Ultra)', mbps: 1000 }
+        ];
+
+        compGrid.innerHTML = standardSpeeds.map(s => {
+          const sMBps = (s.mbps / 8) * 0.90;
+          const sSec = sizeInMB / sMBps;
+          return `
+            <div class="comp-card">
+              <span class="comp-speed">${s.name}</span>
+              <span class="comp-time">${formatSeconds(sSec)}</span>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // Presets
+    document.querySelectorAll('.preset-file').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const t = e.currentTarget as HTMLElement;
+        sizeInput.value = t.dataset.val || '10';
+        unitSelect.value = t.dataset.unit || 'GB';
+        calculate();
+      });
+    });
+
+    document.querySelectorAll('.preset-speed').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const t = e.currentTarget as HTMLElement;
+        speedInput.value = t.dataset.val || '300';
+        speedUnitSelect.value = t.dataset.unit || 'Mbps';
+        calculate();
+      });
+    });
+
+    sizeInput.addEventListener('input', calculate);
+    unitSelect.addEventListener('change', calculate);
+    speedInput.addEventListener('input', calculate);
+    speedUnitSelect.addEventListener('change', calculate);
+
+    // Initial run
+    calculate();
+
+    // WhatsApp share
+    waBtn?.addEventListener('click', () => {
+      const time = timeDisplay?.textContent || '';
+      const text = `⏳ Mi archivo de ${sizeInput.value} ${unitSelect.value} tardará ${time} con ${speedInput.value} ${speedUnitSelect.value}. ¡Calcula el tuyo gratis en GuíaTecnes: ${window.location.href}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    });
+  }
+
+  document.addEventListener('astro:page-load', initDownloadCalc);
+</script>
