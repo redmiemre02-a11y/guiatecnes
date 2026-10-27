@@ -119,6 +119,24 @@ const schemaFAQ = faqs.length > 0 ? {
 
   <meta name="google-site-verification" content="vW7RzvvD792i7f2DlXIWHsu18OSy2en5zb_REtQ4yW0" />
 
+  <!-- Google tag (gtag.js) -->
+  <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-SXB94PDCND"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-SXB94PDCND');
+
+    // Astro ViewTransitions / ClientRouter uyumluluğu (Sayfa geçişlerinde tetikleme)
+    document.addEventListener('astro:page-load', () => {
+      gtag('config', 'G-SXB94PDCND', {
+        page_path: window.location.pathname,
+        page_title: document.title,
+      });
+    });
+  </script>
+
   <!-- SEO Primary -->
   <title>{title} | {siteName}</title>
   <meta name="description" content={description} />
