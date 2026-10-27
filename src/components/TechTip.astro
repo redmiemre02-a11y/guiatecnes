@@ -1,0 +1,226 @@
+---
+---
+<div class="tech-tip-widget" id="tech-tip-container">
+  <div class="tip-header">
+    <div class="tip-badge">
+      <span class="pulse-dot"></span>
+      <span>💡 Truco Tech del Día</span>
+    </div>
+    <span class="tip-category" id="tip-category">WhatsApp</span>
+  </div>
+
+  <h3 class="tip-title" id="tip-title">Enviar fotos con calidad original sin compresión</h3>
+  <p class="tip-desc" id="tip-desc">
+    Al adjuntar una foto en WhatsApp, toca en el icono de <strong>Documento</strong> en lugar de Galería y selecciona la foto. Se enviará con su resolución y nitidez al 100% sin que WhatsApp la pixele.
+  </p>
+
+  <div class="tip-footer">
+    <button type="button" class="tip-btn tip-btn-next" id="next-tip-btn">
+      <span>🎲</span> Siguiente Truco
+    </button>
+    <button type="button" class="tip-btn tip-btn-copy" id="copy-tip-btn">
+      <span>📋</span> Copiar
+    </button>
+  </div>
+</div>
+
+<style>
+  .tech-tip-widget {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(16, 185, 129, 0.08) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    border-radius: 18px;
+    padding: 1.5rem 1.75rem;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    margin: 2.5rem 0;
+  }
+
+  .tip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.85rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tip-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--primary, #6366f1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 10px #10b981;
+    animation: pulse 1.8s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.3); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.8; }
+  }
+
+  .tip-category {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-muted, #94a3b8);
+    padding: 0.2rem 0.65rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .tip-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text, #f1f5f9);
+    letter-spacing: -0.01em;
+  }
+
+  .tip-desc {
+    margin: 0 0 1.25rem;
+    font-size: 0.95rem;
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.55;
+  }
+
+  .tip-footer {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .tip-btn {
+    border: none;
+    padding: 0.55rem 1.1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s;
+  }
+
+  .tip-btn-next {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+  }
+
+  .tip-btn-next:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  }
+
+  .tip-btn-copy {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text, #f1f5f9);
+  }
+
+  .tip-btn-copy:hover {
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  @media (max-width: 600px) {
+    .tech-tip-widget { padding: 1.25rem; }
+    .tip-footer { flex-direction: column; }
+    .tip-btn { width: 100%; justify-content: center; }
+  }
+</style>
+
+<script>
+  const TIPS = [
+    {
+      category: 'WhatsApp',
+      title: 'Enviar fotos con calidad original sin compresión',
+      desc: 'Al adjuntar una foto en WhatsApp, toca en el icono de Documento en lugar de Galería y selecciona la foto. Se enviará con su resolución y nitidez al 100% sin que WhatsApp la pixele.'
+    },
+    {
+      category: 'Windows 11',
+      title: 'Historial del Portapapeles (Copiar varios textos a la vez)',
+      desc: 'Pulsa las teclas Windows + V para abrir el historial del portapapeles. Podrás ver y pegar los últimos 25 elementos que copiaste, incluso imágenes y emojis.'
+    },
+    {
+      category: 'iPhone iOS',
+      title: 'Tocar atrás para hacer captura de pantalla',
+      desc: 'Ve a Ajustes ➔ Accesibilidad ➔ Tocar ➔ Toque posterior. Configura "Tocar dos veces" para hacer Captura de pantalla al tocar la manzana de tu iPhone.'
+    },
+    {
+      category: 'Navegador Web',
+      title: 'Recuperar la última pestaña cerrada por error',
+      desc: 'Si cerraste una página web por accidente, pulsa Ctrl + Shift + T (Cmd + Shift + T en Mac). Tu navegador abrirá al instante la pestaña cerrada en el mismo punto.'
+    },
+    {
+      category: 'Android',
+      title: 'Acelerar las animaciones del móvil al doble',
+      desc: 'En Ajustes ➔ Opciones de desarrollador, busca "Escala de animación de ventana" y cámbiala de 1x a 0.5x. Tu teléfono se sentirá el doble de rápido y fluido.'
+    },
+    {
+      category: 'Google Search',
+      title: 'Buscar solo archivos PDF o libros gratis',
+      desc: 'Añade filetype:pdf al final de cualquier búsqueda en Google (ej: python desde cero filetype:pdf) para que solo aparezcan documentos y manuales descargables.'
+    },
+    {
+      category: 'Batería Móvil',
+      title: 'Regla del 20-80% para alargar la vida útil',
+      desc: 'Evita que tu móvil baje del 20% y desconéctalo al llegar al 80-85%. Mantener la batería en ese rango puede duplicar sus años de vida útil.'
+    },
+    {
+      category: 'YouTube',
+      title: 'Saltar directamente al momento exacto de un vídeo',
+      desc: 'Haz clic derecho sobre cualquier vídeo de YouTube y selecciona "Copiar URL del vídeo en el momento actual" para compartirlo justo donde empieza lo interesante.'
+    },
+    {
+      category: 'Ciberseguridad',
+      title: 'Comprobar si tu contraseña se ha filtrado en internet',
+      desc: 'Entra en haveibeenpwned.com e introduce tu email. Sabrás en segundos si alguna empresa (LinkedIn, Adobe, Canva) ha sufrido una brecha con tus datos.'
+    }
+  ];
+
+  function initTechTip() {
+    let currentIdx = Math.floor(Math.random() * TIPS.length);
+    const catEl = document.getElementById('tip-category');
+    const titleEl = document.getElementById('tip-title');
+    const descEl = document.getElementById('tip-desc');
+    const nextBtn = document.getElementById('next-tip-btn');
+    const copyBtn = document.getElementById('copy-tip-btn');
+
+    function render(idx: number) {
+      const t = TIPS[idx];
+      if (catEl) catEl.textContent = t.category;
+      if (titleEl) titleEl.textContent = t.title;
+      if (descEl) descEl.innerHTML = t.desc;
+    }
+
+    render(currentIdx);
+
+    nextBtn?.addEventListener('click', () => {
+      currentIdx = (currentIdx + 1) % TIPS.length;
+      render(currentIdx);
+    });
+
+    copyBtn?.addEventListener('click', () => {
+      const t = TIPS[currentIdx];
+      const text = `💡 Truco Tech: ${t.title}\n${t.desc}\n\nVía GuíaTecnes: https://guiatecnes.com`;
+      navigator.clipboard.writeText(text);
+      if (copyBtn) {
+        copyBtn.innerHTML = '<span>✅</span> ¡Copiado!';
+        setTimeout(() => { copyBtn.innerHTML = '<span>📋</span> Copiar'; }, 2000);
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initTechTip);
+</script>

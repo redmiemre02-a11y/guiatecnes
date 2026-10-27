@@ -13,25 +13,38 @@
     height: 4px;
     z-index: 100000;
     background: transparent;
+    pointer-events: none;
   }
   #progress-bar {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #6366f1, #06b6d4, #a855f7);
+    background: linear-gradient(90deg, #6366f1, #06b6d4, #10b981);
     border-radius: 0 4px 4px 0;
-    transition: width 0.1s ease;
-    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+    transition: width 0.08s ease-out;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.6);
   }
 </style>
 
 <script>
-  window.addEventListener('scroll', () => {
-    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    // Eğer sayfa kaydırılamayacak kadar kısaysa barı gizle
-    if (height > 0) {
-      const scrolled = (winScroll / height) * 100;
-      document.getElementById('progress-bar').style.width = scrolled + '%';
+  function initProgressBar() {
+    const bar = document.getElementById('progress-bar');
+    if (!bar) return;
+
+    function update() {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (height > 0) {
+        const scrolled = (winScroll / height) * 100;
+        bar.style.width = scrolled + '%';
+      } else {
+        bar.style.width = '0%';
+      }
     }
-  });
+
+    window.removeEventListener('scroll', update);
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+
+  document.addEventListener('astro:page-load', initProgressBar);
 </script>

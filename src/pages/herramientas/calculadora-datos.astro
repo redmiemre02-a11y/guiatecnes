@@ -1,0 +1,654 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Consumo de Datos', url: '/herramientas/calculadora-datos' }
+];
+
+const faqs = [
+  {
+    question: '¿Cuántos datos móviles consume ver un vídeo en Netflix o YouTube?',
+    answer: 'En calidad estándar (SD o 480p) se consumen unos 500 MB a 700 MB por hora. En alta definición (HD 1080p) el consumo sube a unos 2.5 GB a 3 GB por hora, y en calidad 4K puede llegar a consumir hasta 7 GB por hora.'
+  },
+  {
+    question: '¿TikTok o Instagram Reels gastan muchos gigas de internet?',
+    answer: 'Sí. Debido a la carga continua de vídeos verticales en alta calidad y la precarga automática del siguiente vídeo, usar TikTok o Instagram Reels consume entre 800 MB y 1 GB por cada hora de uso continuado.'
+  },
+  {
+    question: '¿Cómo puedo evitar que se me acaben los gigas de mi tarifa?',
+    answer: 'Descarga series y listas de Spotify cuando estés conectado a tu red WiFi de casa, activa la opción "Ahorro de datos" en los ajustes de Instagram y TikTok, y desactiva la descarga automática de fotos y vídeos en WhatsApp.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Consumo de Datos Móviles (GB) | ¿Cuántos Gigas gastas al mes?"
+  description="Calcula gratis cuántos Gigas o Megas de internet consumes con Netflix, YouTube, TikTok, Spotify y juegos online. Comprueba si tu tarifa móvil es suficiente."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de Datos</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">📶 Ahorra en tu Tarifa Móvil</div>
+      <h1>Calculadora de Consumo de Datos e Internet</h1>
+      <p class="tool-subtitle">
+        Indica cuántas horas usas cada app al día para saber cuántos Gigas (GB) gastas al mes y si tu tarifa móvil actual es suficiente o necesitas más datos.
+      </p>
+    </header>
+
+    <div class="calculator-card">
+      <!-- CONFIGURACIÓN DE TARIFA -->
+      <div class="plan-header">
+        <label for="plan-gigas">💳 Tu tarifa mensual de datos contratada:</label>
+        <div class="plan-input-wrap">
+          <input type="number" id="plan-gigas" value="20" min="1" max="500" />
+          <span>GB al mes</span>
+        </div>
+      </div>
+
+      <div class="apps-grid">
+        <!-- NETFLIX & STREAMING -->
+        <div class="app-card">
+          <div class="app-info">
+            <span class="app-icon">🎬</span>
+            <div>
+              <strong>Netflix / Disney+ / Prime</strong>
+              <small>Streaming de películas y series</small>
+            </div>
+          </div>
+          <div class="app-controls">
+            <select id="netflix-quality">
+              <option value="0.7">Calidad SD (0.7 GB/h)</option>
+              <option value="3.0" selected>Calidad HD 1080p (3.0 GB/h)</option>
+              <option value="7.0">Calidad 4K (7.0 GB/h)</option>
+            </select>
+            <div class="slider-wrap">
+              <input type="range" id="netflix-hours" min="0" max="10" step="0.5" value="1" />
+              <span class="hours-val" id="netflix-val">1 h / día</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- YOUTUBE -->
+        <div class="app-card">
+          <div class="app-info">
+            <span class="app-icon">📺</span>
+            <div>
+              <strong>YouTube</strong>
+              <small>Vídeos y tutoriales</small>
+            </div>
+          </div>
+          <div class="app-controls">
+            <select id="yt-quality">
+              <option value="0.5">Calidad 480p (0.5 GB/h)</option>
+              <option value="1.5" selected>Calidad 720p / 1080p (1.5 GB/h)</option>
+              <option value="4.5">Calidad 4K (4.5 GB/h)</option>
+            </select>
+            <div class="slider-wrap">
+              <input type="range" id="yt-hours" min="0" max="10" step="0.5" value="1.5" />
+              <span class="hours-val" id="yt-val">1.5 h / día</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TIKTOK E INSTAGRAM -->
+        <div class="app-card">
+          <div class="app-info">
+            <span class="app-icon">📱</span>
+            <div>
+              <strong>TikTok & Instagram Reels</strong>
+              <small>Vídeos cortos en vertical</small>
+            </div>
+          </div>
+          <div class="app-controls">
+            <span class="fixed-rate">~840 MB por hora de scroll</span>
+            <div class="slider-wrap">
+              <input type="range" id="social-hours" min="0" max="10" step="0.5" value="1" />
+              <span class="hours-val" id="social-val">1 h / día</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SPOTIFY Y MÚSICA -->
+        <div class="app-card">
+          <div class="app-info">
+            <span class="app-icon">🎵</span>
+            <div>
+              <strong>Spotify / Música en Streaming</strong>
+              <small>Canciones y podcasts</small>
+            </div>
+          </div>
+          <div class="app-controls">
+            <select id="music-quality">
+              <option value="0.043">Normal (43 MB/h)</option>
+              <option value="0.072" selected>Alta Calidad (72 MB/h)</option>
+              <option value="0.144">Muy Alta 320k (144 MB/h)</option>
+            </select>
+            <div class="slider-wrap">
+              <input type="range" id="music-hours" min="0" max="12" step="0.5" value="2" />
+              <span class="hours-val" id="music-val">2 h / día</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- JUEGOS ONLINE -->
+        <div class="app-card">
+          <div class="app-info">
+            <span class="app-icon">🎮</span>
+            <div>
+              <strong>Juegos Online Móvil</strong>
+              <small>Free Fire, COD, Brawl Stars, Roblox</small>
+            </div>
+          </div>
+          <div class="app-controls">
+            <span class="fixed-rate">~60 MB por hora de juego</span>
+            <div class="slider-wrap">
+              <input type="range" id="gaming-hours" min="0" max="8" step="0.5" value="1" />
+              <span class="hours-val" id="gaming-val">1 h / día</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIDEOLLAMADAS -->
+        <div class="app-card">
+          <div class="app-info">
+            <span class="app-icon">💻</span>
+            <div>
+              <strong>Videollamadas</strong>
+              <small>Zoom, Meet, WhatsApp Vídeo</small>
+            </div>
+          </div>
+          <div class="app-controls">
+            <span class="fixed-rate">~1.2 GB por hora</span>
+            <div class="slider-wrap">
+              <input type="range" id="video-call-hours" min="0" max="6" step="0.5" value="0" />
+              <span class="hours-val" id="video-call-val">0 h / día</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTADO TOTAL Y VEREDICTO -->
+      <div class="result-dashboard">
+        <div class="dashboard-col">
+          <span class="dash-label">Consumo Diario Estimado:</span>
+          <strong class="dash-value" id="daily-consumption">6.1 GB / día</strong>
+        </div>
+        <div class="dashboard-col main-col">
+          <span class="dash-label">Consumo Mensual Estimado:</span>
+          <strong class="dash-value text-accent" id="monthly-consumption">183 GB / mes</strong>
+        </div>
+      </div>
+
+      <!-- BARRA DE PROGRESO DE LA TARIFA -->
+      <div class="tariff-status">
+        <div class="tariff-bar-wrap">
+          <div class="tariff-bar" id="tariff-bar" style="width: 100%;"></div>
+        </div>
+        <div class="verdict-box" id="verdict-box">
+          <!-- Generado dinámicamente -->
+        </div>
+      </div>
+
+      <div class="actions-row">
+        <button id="wa-share-calc-btn" class="wa-btn" type="button">
+          <span>💬</span> Compartir resultado por WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+      <h2>Preguntas Frecuentes sobre Consumo de Datos</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page { padding: 2rem 0 4rem; max-width: 900px; margin: 0 auto; }
+  .breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 2rem;
+  }
+  .breadcrumb a { color: var(--text-muted, #94a3b8); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary, #6366f1); }
+
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--primary, #6366f1);
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 50px;
+    margin-bottom: 0.8rem;
+  }
+  .tool-header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .calculator-card {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 20px;
+    padding: 2.2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 3rem;
+  }
+
+  /* PLAN HEADER */
+  .plan-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 1rem 1.4rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .plan-header label {
+    font-weight: 700;
+    font-size: 0.98rem;
+  }
+
+  .plan-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .plan-input-wrap input {
+    width: 80px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--primary, #6366f1);
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-align: center;
+    outline: none;
+  }
+
+  .plan-input-wrap span {
+    color: var(--text-muted, #94a3b8);
+    font-weight: 600;
+  }
+
+  /* APPS GRID */
+  .apps-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .app-card {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 1.25rem;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .app-info {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .app-icon {
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .app-info strong {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--text, #f1f5f9);
+  }
+
+  .app-info small {
+    color: var(--text-muted, #94a3b8);
+    font-size: 0.8rem;
+  }
+
+  .app-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .app-controls select {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text, #f1f5f9);
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .app-controls select option {
+    background: #1e293b;
+    color: white;
+  }
+
+  .fixed-rate {
+    font-size: 0.82rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .slider-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .slider-wrap input[type="range"] {
+    flex: 1;
+    accent-color: var(--primary, #6366f1);
+    cursor: pointer;
+  }
+
+  .hours-val {
+    min-width: 80px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--primary, #6366f1);
+    text-align: right;
+  }
+
+  /* DASHBOARD RESULTS */
+  .result-dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .dashboard-col {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .dashboard-col.main-col {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(16, 185, 129, 0.08) 100%);
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+
+  .dash-label {
+    display: block;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    color: var(--text-muted, #94a3b8);
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+
+  .dash-value {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--text, #f1f5f9);
+  }
+
+  .text-accent {
+    color: #10b981;
+    font-size: 1.8rem;
+  }
+
+  /* TARIFF PROGRESS BAR */
+  .tariff-status {
+    margin-bottom: 2rem;
+  }
+
+  .tariff-bar-wrap {
+    height: 12px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 50px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .tariff-bar {
+    height: 100%;
+    border-radius: 50px;
+    background: #10b981;
+    transition: width 0.3s, background-color 0.3s;
+  }
+
+  .verdict-box {
+    padding: 1rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  .verdict-box.ok {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #10b981;
+  }
+
+  .verdict-box.warn {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+  }
+
+  .actions-row {
+    display: flex;
+    justify-content: center;
+  }
+
+  .wa-btn {
+    background: #25D366;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.8rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .wa-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+  }
+
+  .faq-section {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .faq-section h2 { font-size: 1.35rem; margin-bottom: 1.5rem; font-weight: 800; }
+  .faq-list { display: flex; flex-direction: column; gap: 1rem; }
+  .faq-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .faq-item summary { font-weight: 700; cursor: pointer; color: var(--text, #f1f5f9); }
+  .faq-item p { margin: 0.75rem 0 0; color: var(--text-muted, #94a3b8); font-size: 0.92rem; line-height: 1.6; }
+
+  @media (max-width: 700px) {
+    .app-card { grid-template-columns: 1fr; gap: 1rem; }
+    .result-dashboard { grid-template-columns: 1fr; }
+    .calculator-card { padding: 1.4rem; }
+  }
+</style>
+
+<script>
+  function initDataCalculator() {
+    const planInput = document.getElementById('plan-gigas') as HTMLInputElement;
+
+    const netflixHours = document.getElementById('netflix-hours') as HTMLInputElement;
+    const netflixQuality = document.getElementById('netflix-quality') as HTMLSelectElement;
+    const netflixVal = document.getElementById('netflix-val');
+
+    const ytHours = document.getElementById('yt-hours') as HTMLInputElement;
+    const ytQuality = document.getElementById('yt-quality') as HTMLSelectElement;
+    const ytVal = document.getElementById('yt-val');
+
+    const socialHours = document.getElementById('social-hours') as HTMLInputElement;
+    const socialVal = document.getElementById('social-val');
+
+    const musicHours = document.getElementById('music-hours') as HTMLInputElement;
+    const musicQuality = document.getElementById('music-quality') as HTMLSelectElement;
+    const musicVal = document.getElementById('music-val');
+
+    const gamingHours = document.getElementById('gaming-hours') as HTMLInputElement;
+    const gamingVal = document.getElementById('gaming-val');
+
+    const videoCallHours = document.getElementById('video-call-hours') as HTMLInputElement;
+    const videoCallVal = document.getElementById('video-call-val');
+
+    const dailyDisplay = document.getElementById('daily-consumption');
+    const monthlyDisplay = document.getElementById('monthly-consumption');
+    const tariffBar = document.getElementById('tariff-bar');
+    const verdictBox = document.getElementById('verdict-box');
+    const waBtn = document.getElementById('wa-share-calc-btn');
+
+    if (!planInput || !netflixHours) return;
+
+    function calculate() {
+      const netflixH = parseFloat(netflixHours.value) || 0;
+      const netflixRate = parseFloat(netflixQuality.value) || 3.0;
+      if (netflixVal) netflixVal.textContent = `${netflixH} h / día`;
+
+      const ytH = parseFloat(ytHours.value) || 0;
+      const ytRate = parseFloat(ytQuality.value) || 1.5;
+      if (ytVal) ytVal.textContent = `${ytH} h / día`;
+
+      const socH = parseFloat(socialHours.value) || 0;
+      const socRate = 0.84; // 840 MB
+      if (socialVal) socialVal.textContent = `${socH} h / día`;
+
+      const musH = parseFloat(musicHours.value) || 0;
+      const musRate = parseFloat(musicQuality.value) || 0.072;
+      if (musicVal) musicVal.textContent = `${musH} h / día`;
+
+      const gameH = parseFloat(gamingHours.value) || 0;
+      const gameRate = 0.06; // 60 MB
+      if (gamingVal) gamingVal.textContent = `${gameH} h / día`;
+
+      const vcH = parseFloat(videoCallHours.value) || 0;
+      const vcRate = 1.2; // 1.2 GB
+      if (videoCallVal) videoCallVal.textContent = `${vcH} h / día`;
+
+      const dailyGB = (netflixH * netflixRate) +
+                      (ytH * ytRate) +
+                      (socH * socRate) +
+                      (musH * musRate) +
+                      (gameH * gameRate) +
+                      (vcH * vcRate) +
+                      0.06; // fondo y whatsapp
+
+      const monthlyGB = dailyGB * 30;
+      const userPlan = parseFloat(planInput.value) || 20;
+
+      if (dailyDisplay) dailyDisplay.textContent = `${dailyGB.toFixed(1)} GB / día`;
+      if (monthlyDisplay) monthlyDisplay.textContent = `${monthlyGB.toFixed(0)} GB / mes`;
+
+      // Tariff bar calculation
+      const percentUsed = Math.min((monthlyGB / userPlan) * 100, 100);
+      if (tariffBar) {
+        tariffBar.style.width = `${percentUsed}%`;
+        if (monthlyGB > userPlan) {
+          tariffBar.style.backgroundColor = '#ef4444';
+        } else if (percentUsed > 80) {
+          tariffBar.style.backgroundColor = '#f59e0b';
+        } else {
+          tariffBar.style.backgroundColor = '#10b981';
+        }
+      }
+
+      if (verdictBox) {
+        if (monthlyGB > userPlan) {
+          const extra = (monthlyGB - userPlan).toFixed(0);
+          verdictBox.className = 'verdict-box warn';
+          verdictBox.innerHTML = `⚠️ <strong>Tu tarifa de ${userPlan} GB se agotará rápido.</strong> Gastas unos <strong>${monthlyGB.toFixed(0)} GB</strong> al mes (te faltan ${extra} GB). Te recomendamos conectarte al WiFi en casa o bajar la calidad de Netflix y YouTube a 480p/720p.`;
+        } else {
+          const sobran = (userPlan - monthlyGB).toFixed(0);
+          verdictBox.className = 'verdict-box ok';
+          verdictBox.innerHTML = `✅ <strong>¡Tu tarifa es suficiente!</strong> Tu consumo estimado es de <strong>${monthlyGB.toFixed(0)} GB</strong> de los ${userPlan} GB contratados. Te sobran aproximadamente ${sobran} GB al mes para navegar tranquilo.`;
+        }
+      }
+    }
+
+    [netflixHours, ytHours, socialHours, musicHours, gamingHours, videoCallHours, planInput].forEach(el => {
+      el.addEventListener('input', calculate);
+    });
+
+    [netflixQuality, ytQuality, musicQuality].forEach(el => {
+      el.addEventListener('change', calculate);
+    });
+
+    calculate();
+
+    waBtn?.addEventListener('click', () => {
+      const mon = monthlyDisplay?.textContent || '';
+      const text = `📊 Mi consumo móvil estimado es de ${mon}. ¡Calcula cuántos Gigas gastas tú con esta herramienta gratis en GuíaTecnes: ${window.location.href}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    });
+  }
+
+  document.addEventListener('astro:page-load', initDataCalculator);
+</script>

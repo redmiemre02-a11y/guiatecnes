@@ -1,0 +1,427 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Conversor de Mayúsculas y Minúsculas', url: '/herramientas/conversor-texto' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es un Slug y para qué sirve en SEO?',
+    answer: 'Un slug es la parte final de una dirección URL que identifica una página con palabras legibles separadas por guiones (por ejemplo: "mi-primer-articulo"). Nuestro conversor elimina tildes, signos y espacios para crear URLs 100% optimizadas para Google.'
+  },
+  {
+    question: '¿Cómo funciona la conversión de tipo título o tipo oración?',
+    answer: 'El modo "Tipo Título" convierte en mayúscula la primera letra de cada palabra (ideal para encabezados y nombres), mientras que el modo "Tipo Oración" solo pone en mayúscula la primera letra después de un punto.'
+  },
+  {
+    question: '¿Se guarda mi texto en algún servidor?',
+    answer: 'No. Toda la transformación de texto se ejecuta en el navegador de tu dispositivo mediante JavaScript local. Ningún texto se almacena ni se transmite a través de internet.'
+  }
+];
+---
+
+<BaseLayout
+  title="Conversor de Mayúsculas, Minúsculas y Generador de Slugs Online Gratis"
+  description="Convierte texto a MAYÚSCULAS, minúsculas, Tipo Título, limpia espacios repetidos y genera URLs amigables (slugs) en tiempo real sin registro."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Conversor de Texto</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🔠 Rápido y 100% Privado</div>
+      <h1>Conversor de Mayúsculas, Minúsculas y Slugs</h1>
+      <p class="tool-subtitle">
+        Cambia al instante el formato de tus textos: mayúsculas, minúsculas, formato título, capitalización de oraciones, limpieza de espacios y generación de slugs SEO.
+      </p>
+    </header>
+
+    <div class="converter-card">
+      <!-- BOTONES DE TRANSFORMACIÓN -->
+      <div class="action-buttons-grid">
+        <button type="button" class="format-btn" id="btn-upper">MAYÚSCULAS</button>
+        <button type="button" class="format-btn" id="btn-lower">minúsculas</button>
+        <button type="button" class="format-btn" id="btn-title">Tipo Título</button>
+        <button type="button" class="format-btn" id="btn-sentence">Tipo Oración</button>
+        <button type="button" class="format-btn" id="btn-alternate">aLtErNaDo</button>
+        <button type="button" class="format-btn highlight" id="btn-slug">🔗 Generar Slug URL</button>
+        <button type="button" class="format-btn" id="btn-clean-spaces">🧹 Limpiar Espacios</button>
+        <button type="button" class="format-btn" id="btn-reverse">🔄 Invertir</button>
+      </div>
+
+      <!-- ÁREA DE TEXTO -->
+      <div class="textarea-wrap">
+        <textarea id="text-input" placeholder="Escribe o pega aquí tu texto para convertirlo al instante..."></textarea>
+      </div>
+
+      <!-- ESTADÍSTICAS EN TIEMPO REAL -->
+      <div class="stats-bar">
+        <div class="stat-pill">Palabras: <strong id="stat-words">0</strong></div>
+        <div class="stat-pill">Caracteres: <strong id="stat-chars">0</strong></div>
+        <div class="stat-pill">Sin espacios: <strong id="stat-no-spaces">0</strong></div>
+        <div class="stat-pill">Líneas: <strong id="stat-lines">0</strong></div>
+      </div>
+
+      <!-- BOTONES DE COPIAR Y LIMPIAR -->
+      <div class="bottom-actions">
+        <button type="button" class="btn-copy" id="copy-text-btn">
+          <span>📋</span> Copiar al portapapeles
+        </button>
+        <button type="button" class="btn-download" id="download-txt-btn">
+          <span>📥</span> Descargar .txt
+        </button>
+        <button type="button" class="btn-clear" id="clear-text-btn">
+          <span>🗑️</span> Borrar todo
+        </button>
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+      <h2>Preguntas Frecuentes sobre el Conversor de Texto</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page { padding: 2rem 0 4rem; max-width: 900px; margin: 0 auto; }
+  .breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 2rem;
+  }
+  .breadcrumb a { color: var(--text-muted, #94a3b8); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary, #6366f1); }
+
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 50px;
+    margin-bottom: 0.8rem;
+  }
+  .tool-header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .converter-card {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 3rem;
+  }
+
+  /* ACTION BUTTONS */
+  .action-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .format-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text, #f1f5f9);
+    padding: 0.65rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .format-btn:hover {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: var(--primary, #6366f1);
+    color: var(--primary, #6366f1);
+    transform: translateY(-2px);
+  }
+
+  .format-btn.highlight {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(16, 185, 129, 0.2) 100%);
+    border-color: rgba(99, 102, 241, 0.4);
+    color: #a5b4fc;
+  }
+
+  .textarea-wrap {
+    margin-bottom: 1.25rem;
+  }
+
+  textarea {
+    width: 100%;
+    height: 280px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 1.25rem;
+    color: var(--text, #f1f5f9);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+
+  textarea:focus {
+    border-color: var(--primary, #6366f1);
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex;
+    gap: 0.75rem;
+    background: rgba(0, 0, 0, 0.15);
+    padding: 0.75rem 1.2rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .stat-pill {
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .stat-pill strong {
+    color: var(--text, #f1f5f9);
+    margin-left: 0.2rem;
+  }
+
+  /* BOTTOM ACTIONS */
+  .bottom-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-copy {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.6rem;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.92rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+  }
+
+  .btn-copy:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+  }
+
+  .btn-download {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text, #f1f5f9);
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.92rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-clear {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    color: #ef4444;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.92rem;
+    margin-left: auto;
+  }
+
+  .btn-clear:hover {
+    background: rgba(239, 68, 68, 0.25);
+  }
+
+  .faq-section {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .faq-section h2 { font-size: 1.35rem; margin-bottom: 1.5rem; font-weight: 800; }
+  .faq-list { display: flex; flex-direction: column; gap: 1rem; }
+  .faq-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .faq-item summary { font-weight: 700; cursor: pointer; color: var(--text, #f1f5f9); }
+  .faq-item p { margin: 0.75rem 0 0; color: var(--text-muted, #94a3b8); font-size: 0.92rem; line-height: 1.6; }
+
+  @media (max-width: 600px) {
+    .converter-card { padding: 1.25rem; }
+    .bottom-actions { flex-direction: column; }
+    .btn-copy, .btn-download, .btn-clear { width: 100%; justify-content: center; margin-left: 0; }
+  }
+</style>
+
+<script>
+  function initTextConverter() {
+    const textarea = document.getElementById('text-input') as HTMLTextAreaElement;
+    const statWords = document.getElementById('stat-words');
+    const statChars = document.getElementById('stat-chars');
+    const statNoSpaces = document.getElementById('stat-no-spaces');
+    const statLines = document.getElementById('stat-lines');
+
+    const btnUpper = document.getElementById('btn-upper');
+    const btnLower = document.getElementById('btn-lower');
+    const btnTitle = document.getElementById('btn-title');
+    const btnSentence = document.getElementById('btn-sentence');
+    const btnAlternate = document.getElementById('btn-alternate');
+    const btnSlug = document.getElementById('btn-slug');
+    const btnCleanSpaces = document.getElementById('btn-clean-spaces');
+    const btnReverse = document.getElementById('btn-reverse');
+
+    const copyBtn = document.getElementById('copy-text-btn');
+    const downloadBtn = document.getElementById('download-txt-btn');
+    const clearBtn = document.getElementById('clear-text-btn');
+
+    if (!textarea) return;
+
+    function updateStats() {
+      const text = textarea.value;
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      const chars = text.length;
+      const noSpaces = text.replace(/\s/g, '').length;
+      const lines = text ? text.split('\n').length : 0;
+
+      if (statWords) statWords.textContent = words.toString();
+      if (statChars) statChars.textContent = chars.toString();
+      if (statNoSpaces) statNoSpaces.textContent = noSpaces.toString();
+      if (statLines) statLines.textContent = lines.toString();
+    }
+
+    btnUpper?.addEventListener('click', () => {
+      textarea.value = textarea.value.toUpperCase();
+      updateStats();
+    });
+
+    btnLower?.addEventListener('click', () => {
+      textarea.value = textarea.value.toLowerCase();
+      updateStats();
+    });
+
+    btnTitle?.addEventListener('click', () => {
+      textarea.value = textarea.value.toLowerCase().replace(/(?:^|\s|\/|-)\p{L}/gu, m => m.toUpperCase());
+      updateStats();
+    });
+
+    btnSentence?.addEventListener('click', () => {
+      textarea.value = textarea.value.toLowerCase().replace(/(^\s*|\.\s+)(\p{L})/gu, (_, sep, letter) => sep + letter.toUpperCase());
+      updateStats();
+    });
+
+    btnAlternate?.addEventListener('click', () => {
+      textarea.value = textarea.value.split('').map((char, i) => i % 2 === 0 ? char.toLowerCase() : char.toUpperCase()).join('');
+      updateStats();
+    });
+
+    btnSlug?.addEventListener('click', () => {
+      let slug = textarea.value.toLowerCase();
+      slug = slug.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // quitar tildes
+      slug = slug.replace(/[^a-z0-9\s-]/g, ''); // quitar caracteres especiales
+      slug = slug.trim().replace(/\s+/g, '-').replace(/-+/g, '-');
+      textarea.value = slug;
+      updateStats();
+    });
+
+    btnCleanSpaces?.addEventListener('click', () => {
+      textarea.value = textarea.value.replace(/[ \t]+/g, ' ').replace(/\n\s*\n\s*\n/g, '\n\n').trim();
+      updateStats();
+    });
+
+    btnReverse?.addEventListener('click', () => {
+      textarea.value = textarea.value.split('').reverse().join('');
+      updateStats();
+    });
+
+    copyBtn?.addEventListener('click', () => {
+      if (!textarea.value) return;
+      navigator.clipboard.writeText(textarea.value);
+      const orig = copyBtn.innerHTML;
+      copyBtn.innerHTML = '<span>✅</span> ¡Texto Copiado!';
+      setTimeout(() => { copyBtn.innerHTML = orig; }, 2000);
+    });
+
+    downloadBtn?.addEventListener('click', () => {
+      if (!textarea.value) return;
+      const blob = new Blob([textarea.value], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'texto_convertido.txt';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      textarea.value = '';
+      updateStats();
+    });
+
+    textarea.addEventListener('input', updateStats);
+    updateStats();
+  }
+
+  document.addEventListener('astro:page-load', initTextConverter);
+</script>

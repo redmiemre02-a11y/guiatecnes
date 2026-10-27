@@ -5,10 +5,63 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PostCard from '../components/PostCard.astro';
 import AdSenseBanner from '../components/AdSenseBanner.astro';
+import TechTip from '../components/TechTip.astro';
 
 const allPosts = await getCollection('blog');
 const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const recentPosts = sortedPosts.slice(0, 12);
+
+
+const featuredTools = [
+  {
+    title: 'Test de Velocidad WiFi',
+    desc: 'Mide tu conexión y latencia en vivo con indicador en tiempo real.',
+    url: '/herramientas/test-velocidad',
+    icon: '⚡',
+    badge: 'Popular',
+    color: '#6366f1'
+  },
+  {
+    title: 'Compresor de Fotos',
+    desc: 'Reduce hasta un 85% el tamaño de imágenes JPG, PNG y WebP.',
+    url: '/herramientas/compresor-imagenes',
+    icon: '🖼️',
+    badge: 'Sin Pérdida',
+    color: '#10b981'
+  },
+  {
+    title: 'Calculadora de Descarga',
+    desc: 'Averigua cuántos minutos tardará tu juego o película según tus megas.',
+    url: '/herramientas/calculadora-descarga',
+    icon: '⏳',
+    badge: 'Gaming',
+    color: '#f59e0b'
+  },
+  {
+    title: 'Consumo de Datos (GB)',
+    desc: 'Calcula cuántos Gigas gastas con Netflix, YouTube y TikTok al mes.',
+    url: '/herramientas/calculadora-datos',
+    icon: '📶',
+    badge: 'Ahorro',
+    color: '#38bdf8'
+  },
+  {
+    title: 'Generador de Códigos QR',
+    desc: 'Crea códigos QR permanentes en alta resolución para WiFi o enlaces.',
+    url: '/herramientas/generador-qr',
+    icon: '📲',
+    badge: 'Gratis',
+    color: '#06b6d4'
+  },
+  {
+    title: 'Generador de Contraseñas',
+    desc: 'Claves seguras indescifrables y estimador de tiempo de hackeo.',
+    url: '/herramientas/generador-contrasenas',
+    icon: '🛡️',
+    badge: 'Seguridad',
+    color: '#10b981'
+  }
+];
 
 const categories = [
   {
@@ -72,18 +125,52 @@ const categories = [
         Sin tecnicismos innecesarios, directo al grano.
       </p>
       <div class="hero-actions">
-        <a href="/categoria/ia" class="btn-primary">Ver Herramientas de IA →</a>
-        <a href="/categoria/errores" class="btn-secondary">🛠️ Solución de Errores</a>
+        <a href="/herramientas" class="btn-primary">🧲 Probar Herramientas Online →</a>
+        <a href="/categoria/ia" class="btn-secondary">🤖 Herramientas de IA</a>
+        <a href="/categoria/errores" class="btn-outline-hero">🛠️ Solución de Errores</a>
       </div>
       <div class="hero-stats">
-        <div class="stat"><strong>{allPosts.length}+</strong><span>Artículos</span></div>
+        <div class="stat"><strong>{allPosts.length}+</strong><span>Artículos Guía</span></div>
+        <div class="stat"><strong>13+</strong><span>Herramientas Gratis</span></div>
         <div class="stat"><strong>100%</strong><span>En Español</span></div>
-        <div class="stat"><strong>Free</strong><span>Siempre gratis</span></div>
+        <div class="stat"><strong>0€</strong><span>Siempre gratis</span></div>
       </div>
     </div>
   </section>
 
   <AdSenseBanner variant="banner" />
+
+
+  <!-- FEATURED INTERACTIVE TOOLS SHOWCASE -->
+  <section class="section featured-tools-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge-interactive">⚡ Utilidades en Vivo</span>
+        <h2>Herramientas Online Gratuitas</h2>
+        <p>Prácticas, sin registros molestos y 100% privadas. Diseñadas para resolver tus tareas al instante.</p>
+      </div>
+
+      <div class="home-tools-grid">
+        {featuredTools.map(tool => (
+          <a href={tool.url} class="home-tool-card">
+            <div class="home-tool-top">
+              <span class="home-tool-icon">{tool.icon}</span>
+              <span class="home-tool-badge" style={`color: ${tool.color}; background: ${tool.color}15; border-color: ${tool.color}35;`}>{tool.badge}</span>
+            </div>
+            <h3>{tool.title}</h3>
+            <p>{tool.desc}</p>
+            <span class="home-tool-cta">Abrir herramienta →</span>
+          </a>
+        ))}
+      </div>
+
+      <div class="view-all-tools-wrap">
+        <a href="/herramientas" class="btn-all-tools">
+          <span>🧲</span> Ver las 13 herramientas disponibles →
+        </a>
+      </div>
+    </div>
+  </section>
 
   <!-- CATEGORIES SECTION -->
   <section class="section">
@@ -137,6 +224,8 @@ const categories = [
   </section>
 
   <AdSenseBanner variant="banner" />
+
+  <div class="container"><TechTip /></div>
 
   <!-- NEWSLETTER SECTION -->
   <section class="section newsletter-section">
@@ -456,4 +545,120 @@ const categories = [
   .nl-form button:hover { background: var(--primary-dark); }
 
   .newsletter-card small { font-size: 0.8rem; color: var(--text-muted); }
+</style>
+
+<style>
+  .btn-outline-hero {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text, #f1f5f9);
+    padding: 0.85rem 1.6rem;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.25s;
+    font-size: 0.95rem;
+  }
+  .btn-outline-hero:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+  }
+
+  /* FEATURED TOOLS SECTION */
+  .featured-tools-section {
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.04) 0%, transparent 100%);
+    padding-top: 2rem;
+  }
+  .badge-interactive {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 50px;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .home-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .home-tool-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.6rem;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.25s ease;
+  }
+  .home-tool-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+  .home-tool-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .home-tool-icon {
+    font-size: 2.2rem;
+    line-height: 1;
+  }
+  .home-tool-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 50px;
+    border: 1px solid;
+    text-transform: uppercase;
+  }
+  .home-tool-card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+  .home-tool-card p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+    flex: 1;
+  }
+  .home-tool-cta {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .view-all-tools-wrap {
+    text-align: center;
+  }
+  .btn-all-tools {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 12px;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-all-tools:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+    text-decoration: none;
+  }
 </style>
