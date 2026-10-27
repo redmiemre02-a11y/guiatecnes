@@ -1,0 +1,404 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Codificador y Decodificador Base64', url: '/herramientas/conversor-base64' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es Base64 y para qué se utiliza?',
+    answer: 'Base64 es un sistema de codificación que representa datos binarios o texto utilizando un conjunto de 64 caracteres ASCII imprimibles. Se usa comúnmente en transferencias de correo electrónico, APIs web y para incrustar pequeñas imágenes directamente en código HTML o CSS.'
+  },
+  {
+    question: '¿Es Base64 un método seguro de cifrado?',
+    answer: 'No. Base64 es una codificación de datos, no un cifrado de seguridad. Cualquiera puede decodificar un texto Base64 al instante sin necesidad de contraseña. Para seguridad utiliza algoritmos criptográficos como AES o RSA.'
+  },
+  {
+    question: '¿Este conversor soporta caracteres con tildes, la letra ñ y emojis?',
+    answer: 'Sí. Nuestro conversor utiliza codificación UTF-8 completa, por lo que procesa correctamente tildes, signos ortográficos en español y emojis sin generar errores de decodificación.'
+  }
+];
+---
+
+<BaseLayout
+  title="Codificador y Decodificador Base64 Online | Codificar y Descodificar Gratis"
+  description="Convierte texto plano a Base64 o descodifica cadenas Base64 a texto legible al instante. Compatible con UTF-8, tildes, emojis y 100% privado en tu navegador."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Conversor Base64</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">💻 Utilidad para Desarrolladores</div>
+      <h1>Codificador y Decodificador Base64</h1>
+      <p class="tool-subtitle">
+        Codifica y descodifica cadenas de texto en formato Base64 con soporte completo para UTF-8 y caracteres especiales en español.
+      </p>
+    </header>
+
+    <div class="base64-card">
+      <!-- MODE TABS -->
+      <div class="mode-tabs">
+        <button type="button" class="mode-tab active" id="tab-encode">
+          🔒 Codificar (Texto ➔ Base64)
+        </button>
+        <button type="button" class="mode-tab" id="tab-decode">
+          🔓 Decodificar (Base64 ➔ Texto)
+        </button>
+      </div>
+
+      <div class="editor-grid">
+        <!-- INPUT -->
+        <div class="editor-pane">
+          <div class="pane-header">
+            <span id="input-label">📥 Texto de Entrada:</span>
+            <button type="button" class="btn-clear-mini" id="clear-btn">Borrar</button>
+          </div>
+          <textarea id="base64-input" placeholder="Escribe o pega el texto que deseas codificar..."></textarea>
+          <div class="pane-footer">
+            <span id="input-stats">0 caracteres</span>
+          </div>
+        </div>
+
+        <!-- OUTPUT -->
+        <div class="editor-pane">
+          <div class="pane-header">
+            <span id="output-label">📤 Resultado Base64:</span>
+            <div class="pane-actions">
+              <button type="button" class="btn-copy-mini" id="copy-btn">📋 Copiar</button>
+              <button type="button" class="btn-copy-mini" id="download-btn">📥 Descargar</button>
+            </div>
+          </div>
+          <textarea id="base64-output" readonly placeholder="El resultado aparecerá aquí automáticamente..."></textarea>
+          <div class="pane-footer">
+            <span id="output-stats">0 caracteres</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ERROR ALERT -->
+      <div class="error-msg" id="error-msg" style="display: none;">
+        ⚠️ La cadena introducida no es un código Base64 válido.
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+      <h2>Preguntas Frecuentes sobre Base64</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page { padding: 2rem 0 4rem; max-width: 1000px; margin: 0 auto; }
+  .breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 2rem;
+  }
+  .breadcrumb a { color: var(--text-muted, #94a3b8); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary, #6366f1); }
+
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--primary, #6366f1);
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 50px;
+    margin-bottom: 0.8rem;
+  }
+  .tool-header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .base64-card {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 3rem;
+  }
+
+  /* MODE TABS */
+  .mode-tabs {
+    display: flex;
+    gap: 0.5rem;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 0.4rem;
+    border-radius: 12px;
+    margin-bottom: 1.8rem;
+  }
+
+  .mode-tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-muted, #94a3b8);
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .mode-tab.active {
+    background: var(--primary, #6366f1);
+    color: white;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  .editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .editor-pane {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background: #0f172a;
+    overflow: hidden;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .pane-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-clear-mini, .btn-copy-mini {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text, #f1f5f9);
+    padding: 0.3rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-copy-mini:hover, .btn-clear-mini:hover {
+    background: var(--primary, #6366f1);
+    color: white;
+  }
+
+  textarea {
+    width: 100%;
+    height: 300px;
+    background: transparent;
+    border: none;
+    padding: 1rem;
+    color: #e2e8f0;
+    font-family: 'Consolas', monospace;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+
+  .pane-footer {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 0.78rem;
+    color: var(--text-muted, #94a3b8);
+    text-align: right;
+  }
+
+  .error-msg {
+    margin-top: 1rem;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  .faq-section {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .faq-section h2 { font-size: 1.35rem; margin-bottom: 1.5rem; font-weight: 800; }
+  .faq-list { display: flex; flex-direction: column; gap: 1rem; }
+  .faq-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .faq-item summary { font-weight: 700; cursor: pointer; color: var(--text, #f1f5f9); }
+  .faq-item p { margin: 0.75rem 0 0; color: var(--text-muted, #94a3b8); font-size: 0.92rem; line-height: 1.6; }
+
+  @media (max-width: 700px) {
+    .editor-grid { grid-template-columns: 1fr; }
+    textarea { height: 220px; }
+  }
+</style>
+
+<script>
+  function utf8ToBase64(str: string): string {
+    return window.btoa(unescape(encodeURIComponent(str)));
+  }
+
+  function base64ToUtf8(str: string): string {
+    return decodeURIComponent(escape(window.atob(str)));
+  }
+
+  function initBase64Converter() {
+    let mode: 'encode' | 'decode' = 'encode';
+
+    const tabEncode = document.getElementById('tab-encode');
+    const tabDecode = document.getElementById('tab-decode');
+    const inputLabel = document.getElementById('input-label');
+    const outputLabel = document.getElementById('output-label');
+    const inputArea = document.getElementById('base64-input') as HTMLTextAreaElement;
+    const outputArea = document.getElementById('base64-output') as HTMLTextAreaElement;
+    const inputStats = document.getElementById('input-stats');
+    const outputStats = document.getElementById('output-stats');
+    const errorMsg = document.getElementById('error-msg');
+
+    const copyBtn = document.getElementById('copy-btn');
+    const downloadBtn = document.getElementById('download-btn');
+    const clearBtn = document.getElementById('clear-btn');
+
+    if (!inputArea || !outputArea) return;
+
+    function process() {
+      const text = inputArea.value;
+      if (inputStats) inputStats.textContent = `${text.length} caracteres`;
+
+      if (!text.trim()) {
+        outputArea.value = '';
+        if (outputStats) outputStats.textContent = '0 caracteres';
+        if (errorMsg) errorMsg.style.display = 'none';
+        return;
+      }
+
+      try {
+        if (mode === 'encode') {
+          const res = utf8ToBase64(text);
+          outputArea.value = res;
+          if (outputStats) outputStats.textContent = `${res.length} caracteres`;
+          if (errorMsg) errorMsg.style.display = 'none';
+        } else {
+          const res = base64ToUtf8(text.trim());
+          outputArea.value = res;
+          if (outputStats) outputStats.textContent = `${res.length} caracteres`;
+          if (errorMsg) errorMsg.style.display = 'none';
+        }
+      } catch (e) {
+        outputArea.value = '';
+        if (errorMsg) errorMsg.style.display = 'block';
+      }
+    }
+
+    tabEncode?.addEventListener('click', () => {
+      mode = 'encode';
+      tabEncode.classList.add('active');
+      tabDecode?.classList.remove('active');
+      if (inputLabel) inputLabel.textContent = '📥 Texto de Entrada:';
+      if (outputLabel) outputLabel.textContent = '📤 Resultado Base64:';
+      inputArea.placeholder = 'Escribe o pega el texto que deseas codificar...';
+      process();
+    });
+
+    tabDecode?.addEventListener('click', () => {
+      mode = 'decode';
+      tabDecode.classList.add('active');
+      tabEncode?.classList.remove('active');
+      if (inputLabel) inputLabel.textContent = '📥 Código Base64:';
+      if (outputLabel) outputLabel.textContent = '📤 Texto Decodificado:';
+      inputArea.placeholder = 'Pega aquí la cadena en Base64 para descodificarla...';
+      process();
+    });
+
+    inputArea.addEventListener('input', process);
+
+    clearBtn?.addEventListener('click', () => {
+      inputArea.value = '';
+      outputArea.value = '';
+      process();
+    });
+
+    copyBtn?.addEventListener('click', () => {
+      if (!outputArea.value) return;
+      navigator.clipboard.writeText(outputArea.value);
+      const orig = copyBtn.textContent;
+      copyBtn.textContent = '✅ ¡Copiado!';
+      setTimeout(() => { copyBtn.textContent = orig; }, 1500);
+    });
+
+    downloadBtn?.addEventListener('click', () => {
+      if (!outputArea.value) return;
+      const blob = new Blob([outputArea.value], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = mode === 'encode' ? 'base64_encoded.txt' : 'texto_decodificado.txt';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+  }
+
+  document.addEventListener('astro:page-load', initBase64Converter);
+</script>

@@ -1,0 +1,641 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Test: ¿Qué IA deberías usar?', url: '/herramientas/test-inteligencia-artificial' }
+];
+
+const faqs = [
+  {
+    question: '¿Por qué no es recomendable usar ChatGPT para todo?',
+    answer: 'Aunque ChatGPT es el más conocido, modelos como Claude 3.5 Sonnet son muy superiores para escribir código y redactar sin sonar robótico, DeepSeek ofrece razonamiento avanzado de forma 100% gratuita y Perplexity es infinitamente mejor para buscar fuentes reales en internet.'
+  },
+  {
+    question: '¿Las IAs recomendadas en este test son seguras y privadas?',
+    answer: 'Sí. Todos los modelos recomendados (OpenAI, Anthropic, DeepSeek, Perplexity) cuentan con políticas de privacidad estándar del sector y opciones para desactivar el entrenamiento con tus datos en sus paneles de configuración.'
+  },
+  {
+    question: '¿Puedo usar varias IAs a la vez sin pagar suscripciones?',
+    answer: 'Totalmente. Puedes combinar la versión gratuita de DeepSeek para razonamiento y programación, con Perplexity para buscar en Google y Claude para redactar textos de máxima calidad.'
+  }
+];
+---
+
+<BaseLayout
+  title="Test Interactivo: ¿Qué Inteligencia Artificial necesitas? | Guía 2026"
+  description="Responde a 4 preguntas rápidas y descubre qué IA es perfecta para ti: ChatGPT, Claude 3.5 Sonnet, DeepSeek R1 o Perplexity según tu trabajo y presupuesto."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Test de IA</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🧠 Quiz Personalizado 2026</div>
+      <h1>¿Qué Inteligencia Artificial deberías usar?</h1>
+      <p class="tool-subtitle">
+        Hay decenas de IAs en el mercado y elegir la incorrecta te hace perder tiempo y dinero. Responde 4 preguntas y encuentra tu herramienta ideal.
+      </p>
+    </header>
+
+    <div class="quiz-card">
+      <!-- PROGRESS BAR -->
+      <div class="quiz-progress-wrap">
+        <div class="progress-bar-fill" id="quiz-progress-bar" style="width: 25%;"></div>
+      </div>
+
+      <div class="step-indicator" id="step-indicator">Pregunta 1 de 4</div>
+
+      <!-- QUESTIONS CONTAINER -->
+      <div id="quiz-questions">
+        <!-- PREGUNTA 1 -->
+        <div class="quiz-step active" data-step="1">
+          <h2 class="question-title">🎯 ¿Cuál es tu objetivo principal al usar IA?</h2>
+          <div class="options-grid">
+            <button type="button" class="option-btn" data-answer="coding">
+              <span class="opt-icon">💻</span>
+              <div class="opt-text">
+                <strong>Programar y depurar código</strong>
+                <small>Python, JavaScript, bugs, automatizaciones</small>
+              </div>
+            </button>
+            <button type="button" class="option-btn" data-answer="writing">
+              <span class="opt-icon">📝</span>
+              <div class="opt-text">
+                <strong>Redactar textos y correos</strong>
+                <small>Ensayos, marketing, copy humano y natural</small>
+              </div>
+            </button>
+            <button type="button" class="option-btn" data-answer="research">
+              <span class="opt-icon">🔍</span>
+              <div class="opt-text">
+                <strong>Buscar datos e investigar con fuentes</strong>
+                <small>Información actualizada a tiempo real</small>
+              </div>
+            </button>
+            <button type="button" class="option-btn" data-answer="image">
+              <span class="opt-icon">🎨</span>
+              <div class="opt-text">
+                <strong>Crear imágenes y arte digital</strong>
+                <small>Diseños, ilustraciones, logos fotorrealistas</small>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- PREGUNTA 2 -->
+        <div class="quiz-step" data-step="2">
+          <h2 class="question-title">💰 ¿Cuál es tu presupuesto?</h2>
+          <div class="options-grid">
+            <button type="button" class="option-btn" data-answer="free">
+              <span class="opt-icon">🆓</span>
+              <div class="opt-text">
+                <strong>0€ - 100% Gratuito</strong>
+                <small>Quiero el máximo poder sin pagar un solo céntimo</small>
+              </div>
+            </button>
+            <button type="button" class="option-btn" data-answer="paid">
+              <span class="opt-icon">💳</span>
+              <div class="opt-text">
+                <strong>Puedo pagar suscripción (~20€/mes)</strong>
+                <small>Busco la mejor calidad absoluta y sin límites</small>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- PREGUNTA 3 -->
+        <div class="quiz-step" data-step="3">
+          <h2 class="question-title">📄 ¿Necesitas subir archivos grandes (PDFs, libros, Excel)?</h2>
+          <div class="options-grid">
+            <button type="button" class="option-btn" data-answer="files_yes">
+              <span class="opt-icon">📚</span>
+              <div class="opt-text">
+                <strong>Sí, analizo documentos pesados con frecuencia</strong>
+                <small>Libros enteros, informes financieros, bases de datos</small>
+              </div>
+            </button>
+            <button type="button" class="option-btn" data-answer="files_no">
+              <span class="opt-icon">💬</span>
+              <div class="opt-text">
+                <strong>No, solo preguntas directas y texto</strong>
+                <small>Consultas en el chat del día a día</small>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- PREGUNTA 4 -->
+        <div class="quiz-step" data-step="4">
+          <h2 class="question-title">⚡ ¿Qué valoras más en las respuestas?</h2>
+          <div class="options-grid">
+            <button type="button" class="option-btn" data-answer="deep">
+              <span class="opt-icon">🧠</span>
+              <div class="opt-text">
+                <strong>Razonamiento profundo paso a paso</strong>
+                <small>Que piense antes de hablar para no equivocarse</small>
+              </div>
+            </button>
+            <button type="button" class="option-btn" data-answer="fast">
+              <span class="opt-icon">🚀</span>
+              <div class="opt-text">
+                <strong>Velocidad instantánea</strong>
+                <small>Respuestas inmediatas sin esperas</small>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULT SECTION -->
+      <div id="quiz-result" class="quiz-result" style="display: none;">
+        <div class="result-badge" id="res-badge">✨ 99% Compatible Contigo</div>
+        <div class="result-icon" id="res-icon">🤖</div>
+        <h2 class="result-ai-title" id="res-title">DeepSeek R1 / V3</h2>
+        <p class="result-ai-desc" id="res-desc">
+          Es el modelo de inteligencia artificial revelación mundial. Ofrece razonamiento lógico y capacidad de programación al nivel de modelos de pago como OpenAI o1, pero de forma 100% gratuita y sin restricciones.
+        </p>
+
+        <div class="result-pros">
+          <h3>Puntos Fuertes:</h3>
+          <ul id="res-pros-list">
+            <li>✅ 100% Gratuito y de código abierto.</li>
+            <li>✅ Razonamiento matemático y lógica impecable.</li>
+            <li>✅ Especialista en código Python, JS y C++.</li>
+          </ul>
+        </div>
+
+        <div class="result-actions">
+          <a href="#" id="res-guide-link" class="btn-guide">
+            📖 Leer nuestra guía completa →
+          </a>
+          <button id="res-wa-btn" class="btn-share-wa" type="button">
+            💬 Compartir resultado en WhatsApp
+          </button>
+        </div>
+
+        <div class="restart-wrap">
+          <button type="button" id="restart-quiz-btn" class="btn-restart">
+            🔄 Repetir el test
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+      <h2>Preguntas Frecuentes sobre Modelos de IA</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page { padding: 2rem 0 4rem; max-width: 850px; margin: 0 auto; }
+  .breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 2rem;
+  }
+  .breadcrumb a { color: var(--text-muted, #94a3b8); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary, #6366f1); }
+
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--primary, #6366f1);
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 50px;
+    margin-bottom: 0.8rem;
+  }
+  .tool-header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .quiz-card {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 3rem;
+  }
+
+  .quiz-progress-wrap {
+    height: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 50px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #10b981);
+    border-radius: 50px;
+    transition: width 0.3s ease;
+  }
+
+  .step-indicator {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary, #6366f1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+  }
+
+  .quiz-step {
+    display: none;
+  }
+
+  .quiz-step.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: var(--text, #f1f5f9);
+  }
+
+  .options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .option-btn {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 1.1rem 1.4rem;
+    color: var(--text, #f1f5f9);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+  }
+
+  .option-btn:hover {
+    border-color: var(--primary, #6366f1);
+    background: rgba(99, 102, 241, 0.08);
+    transform: translateX(4px);
+  }
+
+  .opt-icon {
+    font-size: 2rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .opt-text strong {
+    display: block;
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .opt-text small {
+    color: var(--text-muted, #94a3b8);
+    font-size: 0.85rem;
+  }
+
+  /* RESULT STYLES */
+  .quiz-result {
+    text-align: center;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .result-badge {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    font-weight: 800;
+    font-size: 0.85rem;
+    border-radius: 50px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+
+  .result-icon {
+    font-size: 3.5rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-ai-title {
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-bottom: 0.75rem;
+    color: var(--text, #f1f5f9);
+  }
+
+  .result-ai-desc {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 650px;
+    margin: 0 auto 2rem;
+  }
+
+  .result-pros {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 1.5rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    text-align: left;
+  }
+
+  .result-pros h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1.05rem;
+  }
+
+  .result-pros ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    color: var(--text-muted, #94a3b8);
+    font-size: 0.95rem;
+  }
+
+  .result-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-guide {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    padding: 0.85rem 1.6rem;
+    border-radius: 10px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-guide:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    text-decoration: none;
+  }
+
+  .btn-share-wa {
+    background: #25D366;
+    color: white;
+    border: none;
+    padding: 0.85rem 1.6rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .btn-share-wa:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn-restart {
+    background: transparent;
+    border: none;
+    color: var(--text-muted, #94a3b8);
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .faq-section {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .faq-section h2 { font-size: 1.35rem; margin-bottom: 1.5rem; font-weight: 800; }
+  .faq-list { display: flex; flex-direction: column; gap: 1rem; }
+  .faq-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+  }
+  .faq-item summary { font-weight: 700; cursor: pointer; color: var(--text, #f1f5f9); }
+  .faq-item p { margin: 0.75rem 0 0; color: var(--text-muted, #94a3b8); font-size: 0.92rem; line-height: 1.6; }
+
+  @media (max-width: 650px) {
+    .quiz-card { padding: 1.5rem; }
+    .result-actions { flex-direction: column; }
+    .btn-guide, .btn-share-wa { width: 100%; text-align: center; }
+  }
+</style>
+
+<script>
+  function initAIQuiz() {
+    let currentStep = 1;
+    const answers: Record<string, string> = {};
+
+    const steps = document.querySelectorAll('.quiz-step');
+    const progressBar = document.getElementById('quiz-progress-bar');
+    const stepIndicator = document.getElementById('step-indicator');
+    const questionsContainer = document.getElementById('quiz-questions');
+    const resultContainer = document.getElementById('quiz-result');
+
+    const resBadge = document.getElementById('res-badge');
+    const resIcon = document.getElementById('res-icon');
+    const resTitle = document.getElementById('res-title');
+    const resDesc = document.getElementById('res-desc');
+    const resProsList = document.getElementById('res-pros-list');
+    const resGuideLink = document.getElementById('res-guide-link') as HTMLAnchorElement;
+    const resWaBtn = document.getElementById('res-wa-btn');
+    const restartBtn = document.getElementById('restart-quiz-btn');
+
+    function updateStep(step: number) {
+      currentStep = step;
+      steps.forEach(s => {
+        const sNum = parseInt(s.getAttribute('data-step') || '1');
+        if (sNum === step) {
+          s.classList.add('active');
+        } else {
+          s.classList.remove('active');
+        }
+      });
+
+      if (progressBar) progressBar.style.width = `${(step / 4) * 100}%`;
+      if (stepIndicator) stepIndicator.textContent = `Pregunta ${step} de 4`;
+    }
+
+    function calculateResult() {
+      if (questionsContainer) questionsContainer.style.display = 'none';
+      if (stepIndicator) stepIndicator.style.display = 'none';
+      if (resultContainer) resultContainer.style.display = 'block';
+
+      const goal = answers[1]; // coding, writing, research, image
+      const budget = answers[2]; // free, paid
+      const files = answers[3]; // files_yes, files_no
+      const reasoning = answers[4]; // deep, fast
+
+      let recommendation = {
+        title: 'DeepSeek R1 / V3',
+        icon: '🐋',
+        badge: '✨ 99% Compatible Contigo (Revolución Gratuita)',
+        desc: 'Para tu perfil, DeepSeek es imbatible. Es capaz de razonar problemas matemáticos complejos y generar código de alta calidad al nivel de OpenAI o1, pero de forma 100% gratuita y sin muros de pago.',
+        pros: [
+          '✅ 100% Gratuito y de código abierto sin límite de preguntas.',
+          '✅ Razonamiento paso a paso ultra detallado.',
+          '✅ Excelente en programación, algoritmos y depuración.'
+        ],
+        guide: '/blog/como-usar-deepseek-gratis-espanol'
+      };
+
+      if (goal === 'image') {
+        recommendation = {
+          title: 'Midjourney v6.1 & FLUX.1',
+          icon: '🎨',
+          badge: '✨ El Rey de la Creatividad Visual',
+          desc: 'Si buscas generar imágenes artísticas, logotipos, fondos o fotografía hiperrealista, ningún modelo de chat compite con los generadores dedicados como Midjourney y FLUX.',
+          pros: [
+            '✅ Fotorrealismo y texturas de piel impecables.',
+            '✅ Manejo perfecto de luces, sombras y composición.',
+            '✅ Ideal para marketing y diseñadores gráficos.'
+          ],
+          guide: '/blog/como-usar-midjourney-gratis-2026'
+        };
+      } else if (goal === 'research') {
+        recommendation = {
+          title: 'Perplexity AI',
+          icon: '🔍',
+          badge: '✨ El Buscador del Futuro',
+          desc: 'Para investigar y encontrar información verídica, Perplexity es la mejor opción. Busca en la web en tiempo real y cita cada una de las páginas y fuentes de donde extrae los datos.',
+          pros: [
+            '✅ Cita enlaces y páginas web reales verificables.',
+            '✅ Información actualizada al minuto.',
+            '✅ Sustituye con creces a las búsquedas tradicionales de Google.'
+          ],
+          guide: '/blog/perplexity-ai-vs-google-cuando-usar'
+        };
+      } else if (goal === 'coding' && budget === 'paid') {
+        recommendation = {
+          title: 'Claude 3.5 Sonnet',
+          icon: '⚡',
+          badge: '✨ El Líder Supremo en Programación',
+          desc: 'Claude 3.5 Sonnet es el modelo preferido por ingenieros de software y programadores de todo el mundo. Entiende repositorios enteros y crea aplicaciones completas a la primera.',
+          pros: [
+            '✅ La mejor capacidad de código del mercado (humano y limpio).',
+            '✅ Ventana de contexto gigante para leer libros y proyectos enteros.',
+            '✅ Redacción fluida sin clichés robóticos.'
+          ],
+          guide: '/blog/como-usar-claude-ai-gratis-espanol'
+        };
+      } else if (goal === 'writing') {
+        recommendation = {
+          title: 'Claude 3.5 Sonnet (Versión Gratuita / Pro)',
+          icon: '✍️',
+          badge: '✨ El Mejor Escritor Digital',
+          desc: 'Si odias que las IAs suenen robóticas o repitan frases como "en el vertiginoso mundo moderno", Claude es tu solución. Escribe con matices humanos, empatía y riqueza de vocabulario en español.',
+          pros: [
+            '✅ Tono natural, elegante y libre de frases cliché.',
+            '✅ Excelente para resumir documentos PDF y correos.',
+            '✅ Capacidad de seguir instrucciones de estilo muy precisas.'
+          ],
+          guide: '/blog/como-usar-claude-ai-gratis-espanol'
+        };
+      }
+
+      if (resBadge) resBadge.textContent = recommendation.badge;
+      if (resIcon) resIcon.textContent = recommendation.icon;
+      if (resTitle) resTitle.textContent = recommendation.title;
+      if (resDesc) resDesc.textContent = recommendation.desc;
+      if (resProsList) {
+        resProsList.innerHTML = recommendation.pros.map(p => `<li>${p}</li>`).join('');
+      }
+      if (resGuideLink) {
+        resGuideLink.href = recommendation.guide;
+      }
+
+      resWaBtn?.addEventListener('click', () => {
+        const text = `🧠 Acabo de hacer el test de IA y mi resultado es: ${recommendation.title}. ¡Descubre gratis cuál es la mejor IA para ti en GuíaTecnes: ${window.location.href}`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+      });
+    }
+
+    document.querySelectorAll('.option-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        const answer = target.getAttribute('data-answer') || '';
+        answers[currentStep] = answer;
+
+        if (currentStep < 4) {
+          updateStep(currentStep + 1);
+        } else {
+          calculateResult();
+        }
+      });
+    });
+
+    restartBtn?.addEventListener('click', () => {
+      if (questionsContainer) questionsContainer.style.display = 'block';
+      if (stepIndicator) stepIndicator.style.display = 'block';
+      if (resultContainer) resultContainer.style.display = 'none';
+      updateStep(1);
+    });
+
+    updateStep(1);
+  }
+
+  document.addEventListener('astro:page-load', initAIQuiz);
+</script>

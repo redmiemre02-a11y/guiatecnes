@@ -1,0 +1,122 @@
+---
+const pathname = Astro.url.pathname;
+---
+
+<nav class="mobile-bottom-nav" aria-label="Navegación móvil inferior">
+  <a href="/" class={`bottom-nav-item ${pathname === '/' ? 'active' : ''}`}>
+    <span class="nav-icon">🏠</span>
+    <span class="nav-text">Inicio</span>
+  </a>
+
+  <a href="/herramientas" class={`bottom-nav-item ${pathname.startsWith('/herramientas') ? 'active' : ''}`}>
+    <span class="nav-icon">🧲</span>
+    <span class="nav-text">Herramientas</span>
+  </a>
+
+  <button type="button" class="bottom-nav-item" id="mobile-search-btn" aria-label="Buscar artículos">
+    <span class="nav-icon">🔍</span>
+    <span class="nav-text">Buscar</span>
+  </button>
+
+  <a href="/categoria/ia" class={`bottom-nav-item ${pathname.includes('/categoria/ia') ? 'active' : ''}`}>
+    <span class="nav-icon">🤖</span>
+    <span class="nav-text">IA Tech</span>
+  </a>
+
+  <button type="button" class="bottom-nav-item" id="mobile-theme-btn" aria-label="Cambiar tema">
+    <span class="nav-icon" id="mobile-theme-icon">🌓</span>
+    <span class="nav-text">Tema</span>
+  </button>
+</nav>
+
+<style>
+  .mobile-bottom-nav {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .mobile-bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      z-index: 9998;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .bottom-nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      color: #94a3b8;
+      text-decoration: none;
+      background: transparent;
+      border: none;
+      padding: 0.35rem 0;
+      cursor: pointer;
+      font-family: inherit;
+      transition: color 0.2s, transform 0.15s;
+    }
+
+    .bottom-nav-item:active {
+      transform: scale(0.92);
+    }
+
+    .bottom-nav-item.active {
+      color: #6366f1;
+    }
+
+    .nav-icon {
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .nav-text {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    /* Add space to footer on mobile so bottom bar does not cover content */
+    :global(body) {
+      padding-bottom: 70px;
+    }
+  }
+</style>
+
+<script>
+  function initMobileNav() {
+    const searchBtn = document.getElementById('mobile-search-btn');
+    const themeBtn = document.getElementById('mobile-theme-btn');
+
+    searchBtn?.addEventListener('click', () => {
+      const headerSearch = document.querySelector('.search-trigger') as HTMLElement;
+      if (headerSearch) {
+        headerSearch.click();
+      }
+    });
+
+    themeBtn?.addEventListener('click', () => {
+      if ((window as any).toggleTheme) {
+        (window as any).toggleTheme();
+      } else {
+        const toggle = document.getElementById('theme-toggle');
+        if (toggle) toggle.click();
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initMobileNav);
+</script>
