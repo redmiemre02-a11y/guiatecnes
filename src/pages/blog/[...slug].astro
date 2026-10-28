@@ -73,6 +73,50 @@ if (post.body) {
 function getRelevantTool(title: string, tags: string[]) {
   const text = (title + ' ' + tags.join(' ')).toLowerCase();
 
+  if (text.includes('divisa') || text.includes('dolar') || text.includes('euro') || text.includes('peso') || text.includes('cripto') || text.includes('bitcoin') || text.includes('moneda')) {
+    return {
+      title: 'Conversor de Divisas y Criptomonedas en Vivo',
+      desc: 'Calcula el cambio exacto entre Euro, Dólar, Pesos latinoamericanos y Criptomonedas con tipos de cambio en tiempo real.',
+      btn: 'Abrir Conversor de Divisas',
+      url: '/herramientas/conversor-divisas',
+      icon: '💱',
+      badge: 'Finanzas & Cripto'
+    };
+  }
+
+  if (text.includes('utm') || text.includes('analytics') || text.includes('marketing') || text.includes('campaña') || text.includes('anuncio') || text.includes('trafico')) {
+    return {
+      title: 'Generador de Enlaces UTM para Google Analytics 4',
+      desc: 'Etiqueta tus enlaces para rastrear exactamente qué red social o campaña publicitaria te genera más clientes.',
+      btn: 'Generar Enlace UTM',
+      url: '/herramientas/generador-enlaces-utm',
+      icon: '🔗',
+      badge: 'Marketing & GA4'
+    };
+  }
+
+  if (text.includes('edad') || text.includes('cumpleaños') || text.includes('tiempo') || text.includes('nacimiento') || text.includes('calendario') || text.includes('fecha')) {
+    return {
+      title: 'Calculadora de Edad Exacta y Tiempo Vivido',
+      desc: 'Descubre cuántos días, horas y minutos has vivido, qué día de la semana naciste y cuántos días faltan para tu cumpleaños.',
+      btn: 'Calcular Mi Edad Exacta',
+      url: '/herramientas/calculadora-edad',
+      icon: '🎂',
+      badge: 'Tiempo & Fechas'
+    };
+  }
+
+  if (text.includes('paleta') || text.includes('color') || text.includes('rgb') || text.includes('hex') || text.includes('hsl') || text.includes('diseño')) {
+    return {
+      title: 'Generador de Paletas de Colores Armónicas',
+      desc: 'Crea combinaciones de colores complementarias, análogas y monocromáticas con códigos HEX, RGB y variables CSS.',
+      btn: 'Generar Paleta de Colores',
+      url: '/herramientas/generador-paletas-color',
+      icon: '🎨',
+      badge: 'Diseño Web'
+    };
+  }
+
   if (text.includes('ping') || text.includes('latencia') || text.includes('lag') || text.includes('gaming') || text.includes('valorant') || text.includes('cs2') || text.includes('servidor')) {
     return {
       title: '¿Sufres de Lag en tus Partidas Online?',
@@ -324,6 +368,8 @@ const breadcrumbs = [
   breadcrumbs={breadcrumbs}
 >
   <Header slot="header" />
+
+  <div id="reading-progress-bar" class="reading-progress-bar" aria-hidden="true"></div>
 
   <article class="article-page">
     <div class="container breadcrumb">
@@ -885,6 +931,18 @@ const breadcrumbs = [
     .article-sidebar { position: static; order: -1; }
     .article-sidebar .adsense-sidebar { display: none; }
   }
+  .reading-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3.5px;
+    background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+    z-index: 99999;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.7);
+    pointer-events: none;
+    transition: width 0.08s ease-out;
+  }
 </style>
 
 <script>
@@ -1294,5 +1352,34 @@ const breadcrumbs = [
     });
   }
 
-  document.addEventListener('astro:page-load', initCodeCopyButtons);
+  function initReadingProgressBar() {
+    const bar = document.getElementById('reading-progress-bar');
+    const article = document.querySelector('.article-main');
+    if (!bar || !article) return;
+
+    function onScroll() {
+      const rect = article.getBoundingClientRect();
+      const articleTop = rect.top + window.scrollY;
+      const articleHeight = rect.height;
+      const windowHeight = window.innerHeight;
+      const scrollY = window.scrollY;
+
+      const totalScrollable = articleHeight - windowHeight + 200;
+      if (totalScrollable <= 0) {
+        bar.style.width = '0%';
+        return;
+      }
+
+      const progress = Math.max(0, Math.min(100, ((scrollY - (articleTop - 100)) / totalScrollable) * 100));
+      bar.style.width = `${progress}%`;
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    initCodeCopyButtons();
+    initReadingProgressBar();
+  });
 </script>

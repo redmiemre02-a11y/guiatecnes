@@ -1,0 +1,594 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Generador de Enlaces UTM para Google Analytics 4', url: '/herramientas/generador-enlaces-utm' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué son los parámetros UTM y para qué sirven?',
+    answer: 'Los parámetros UTM (Urchin Tracking Module) son pequeñas etiquetas de texto que se añaden al final de una dirección web (URL) para que Google Analytics 4 identifique con precisión de dónde provienen tus visitas, qué anuncio convirtió o qué enlace de Instagram generó más ventas.'
+  },
+  {
+    question: '¿Cuáles son los parámetros obligatorios en una URL con UTM?',
+    answer: 'Los parámetros esenciales son utm_source (la plataforma, ej: instagram, newsletter) y utm_medium (el tipo de canal, ej: social, email, cpc). Para medir una acción concreta también se recomienda siempre utm_campaign.'
+  },
+  {
+    question: '¿Afectan los parámetros UTM al SEO o al posicionamiento en Google?',
+    answer: 'No afectan negativamente al SEO siempre que tu página cuente con una etiqueta canónica (rel="canonical") que apunte a la URL limpia sin parámetros, una práctica estándar en la mayoría de gestores de contenido como Astro, WordPress o Shopify.'
+  },
+  {
+    question: '¿Se deben usar mayúsculas o espacios en los UTMs?',
+    answer: 'No. Google Analytics 4 distingue entre mayúsculas y minúsculas (tratará "Instagram" y "instagram" como fuentes separadas). Se recomienda usar siempre minúsculas y sustituir los espacios por guiones bajos (_) o guiones medios (-).'
+  }
+];
+---
+
+<BaseLayout
+  title="Generador de Enlaces UTM para Google Analytics 4 (GA4) | GuiaTecnEs"
+  description="Crea enlaces con parámetros UTM para medir el tráfico de tus campañas de marketing, Instagram, TikTok y newsletters en Google Analytics 4 gratis."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Generador de Enlaces UTM</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">📊 Marketing Digital, GA4 & Analítica</div>
+      <h1>Generador de Enlaces UTM para Google Analytics 4</h1>
+      <p class="tool-subtitle">
+        Etiqueta tus enlaces para rastrear exactamente qué publicación de redes sociales, email o anuncio publicitario te genera más visitas y clientes.
+      </p>
+    </header>
+
+    <div class="utm-builder-layout">
+      <!-- FORMULARIO DE PARÁMETROS -->
+      <div class="card form-card">
+        <h3>🔗 Configuración de la URL y Campaña</h3>
+
+        <div class="input-group">
+          <label for="target-url">🌐 URL de tu sitio web o página de destino (*Obligatorio):</label>
+          <input type="url" id="target-url" value="https://guiatecnes.com/blog/ejemplo" placeholder="https://tuweb.com/oferta" />
+        </div>
+
+        <div class="form-row-2">
+          <!-- SOURCE -->
+          <div class="input-group">
+            <label for="utm-source">📍 Fuente de la campaña (utm_source) *:</label>
+            <input type="text" id="utm-source" value="instagram" placeholder="ej: instagram, newsletter, google" />
+            <div class="quick-chips">
+              <button type="button" class="chip-param" data-target="utm-source" data-val="instagram">Instagram</button>
+              <button type="button" class="chip-param" data-target="utm-source" data-val="tiktok">TikTok</button>
+              <button type="button" class="chip-param" data-target="utm-source" data-val="youtube">YouTube</button>
+              <button type="button" class="chip-param" data-target="utm-source" data-val="newsletter">Newsletter</button>
+              <button type="button" class="chip-param" data-target="utm-source" data-val="facebook">Facebook</button>
+            </div>
+          </div>
+
+          <!-- MEDIUM -->
+          <div class="input-group">
+            <label for="utm-medium">📢 Medio de la campaña (utm_medium) *:</label>
+            <input type="text" id="utm-medium" value="social_bio" placeholder="ej: social, email, cpc, referral" />
+            <div class="quick-chips">
+              <button type="button" class="chip-param" data-target="utm-medium" data-val="social_bio">Bio Social</button>
+              <button type="button" class="chip-param" data-target="utm-medium" data-val="cpc">CPC / Anuncios</button>
+              <button type="button" class="chip-param" data-target="utm-medium" data-val="email">Email</button>
+              <button type="button" class="chip-param" data-target="utm-medium" data-val="historia">Stories</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CAMPAIGN -->
+        <div class="input-group">
+          <label for="utm-campaign">🎯 Nombre de la campaña (utm_campaign) *:</label>
+          <input type="text" id="utm-campaign" value="promocion_2026" placeholder="ej: promo_verano, lanzamiento_producto" />
+        </div>
+
+        <div class="form-row-2">
+          <!-- TERM -->
+          <div class="input-group">
+            <label for="utm-term">🔑 Término o palabra clave (utm_term) [Opcional]:</label>
+            <input type="text" id="utm-term" placeholder="ej: zapatillas_running (para Google Ads)" />
+          </div>
+
+          <!-- CONTENT -->
+          <div class="input-group">
+            <label for="utm-content">🖼️ Contenido del anuncio (utm_content) [Opcional]:</label>
+            <input type="text" id="utm-content" placeholder="ej: banner_azul, boton_cta_arriba (para Tests A/B)" />
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTADOS EN VIVO -->
+      <div class="card result-card">
+        <h3>Tu Enlace Etiquetado Listo</h3>
+        <p class="result-desc">Copia esta dirección para usarla en tus publicaciones o botones:</p>
+
+        <div class="final-url-box">
+          <textarea id="final-url-output" readonly rows="4"></textarea>
+        </div>
+
+        <div class="action-buttons-flex">
+          <button type="button" id="btn-copy-utm" class="btn-copy-utm">
+            📋 Copiar Enlace UTM
+          </button>
+          <a href="#" target="_blank" rel="noopener noreferrer" id="btn-test-utm" class="btn-test-utm">
+            🚀 Probar Enlace
+          </a>
+        </div>
+
+        <!-- QR CODE -->
+        <div class="qr-preview-box">
+          <span class="qr-title">Código QR para folletos o historias:</span>
+          <img id="utm-qr-img" src="" alt="Código QR del enlace UTM" width="160" height="160" />
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO GUIDE -->
+    <section class="seo-guide-section card">
+      <h2>Buenas prácticas para crear UTMs en Google Analytics 4</h2>
+      <div class="guide-grid">
+        <div class="guide-box">
+          <h3>🔡 Escribe todo en minúsculas</h3>
+          <p>
+            GA4 es sensible a mayúsculas. Si utilizas <code>utm_source=Instagram</code> y <code>utm_source=instagram</code>, aparecerán como dos canales distintos en tus informes.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>➖ Evita los espacios en blanco</h3>
+          <p>
+            Los espacios se convierten en caracteres <code>%20</code> que dificultan la lectura. Sustituye siempre los espacios por guiones medios (-) o barras bajas (_).
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>🔒 No etiquetes enlaces internos</h3>
+          <p>
+            Nunca utilices parámetros UTM para enlaces entre páginas de tu propio sitio web, ya que reiniciarás la sesión del visitante y distorsionarás el porcentaje de rebote.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre Enlaces UTM</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    background: rgba(99, 102, 241, 0.12);
+    color: #6366f1;
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .tool-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .utm-builder-layout {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 1.75rem;
+    align-items: start;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 860px) {
+    .utm-builder-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1.25rem;
+  }
+
+  .form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .form-row-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .input-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-heading);
+  }
+
+  input[type="text"], input[type="url"], textarea {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color, #334155);
+    background: var(--input-bg, #0f172a);
+    color: var(--text-heading);
+    font-size: 0.95rem;
+    font-family: inherit;
+  }
+
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  }
+
+  .quick-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.35rem;
+  }
+
+  .chip-param {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.35rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .chip-param:hover {
+    background: #6366f1;
+    color: #fff;
+    border-color: #6366f1;
+  }
+
+  /* RESULT CARD */
+  .result-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .final-url-box textarea {
+    width: 100%;
+    color: #38bdf8;
+    background: #0b0f19;
+    border-color: rgba(99, 102, 241, 0.4);
+    font-family: ui-monospace, monospace;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    resize: none;
+    margin-bottom: 1rem;
+  }
+
+  .action-buttons-flex {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-copy-utm {
+    flex: 1.5;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #fff;
+    border: none;
+    padding: 0.85rem;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.15s;
+    text-align: center;
+  }
+
+  .btn-copy-utm:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+  }
+
+  .btn-test-utm {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-heading);
+    padding: 0.85rem;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    transition: background 0.15s;
+  }
+
+  .btn-test-utm:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .qr-preview-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color, #334155);
+  }
+
+  .qr-title {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .qr-preview-box img {
+    border-radius: 0.5rem;
+    background: #fff;
+    padding: 6px;
+  }
+
+  /* SEO GUIDE & FAQ */
+  .seo-guide-section {
+    margin-bottom: 2rem;
+  }
+
+  .seo-guide-section h2, .faq-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1rem;
+  }
+
+  .seo-guide-section p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .guide-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .guide-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-box p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+
+  .faq-section {
+    margin-bottom: 2rem;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initUtmBuilder() {
+    const targetUrlInput = document.getElementById('target-url') as HTMLInputElement;
+    const sourceInput = document.getElementById('utm-source') as HTMLInputElement;
+    const mediumInput = document.getElementById('utm-medium') as HTMLInputElement;
+    const campaignInput = document.getElementById('utm-campaign') as HTMLInputElement;
+    const termInput = document.getElementById('utm-term') as HTMLInputElement;
+    const contentInput = document.getElementById('utm-content') as HTMLInputElement;
+
+    const outputTextarea = document.getElementById('final-url-output') as HTMLTextAreaElement;
+    const btnCopy = document.getElementById('btn-copy-utm');
+    const btnTest = document.getElementById('btn-test-utm') as HTMLAnchorElement;
+    const qrImg = document.getElementById('utm-qr-img') as HTMLImageElement;
+    const chips = document.querySelectorAll('.chip-param');
+
+    function cleanParam(val: string): string {
+      return val.trim().toLowerCase().replace(/\s+/g, '_');
+    }
+
+    function buildUrl() {
+      let baseUrl = targetUrlInput.value.trim();
+      if (!baseUrl) {
+        if (outputTextarea) outputTextarea.value = '';
+        return;
+      }
+
+      if (!baseUrl.startsWith('http://') && !baseUrl.startsWith('https://')) {
+        baseUrl = 'https://' + baseUrl;
+      }
+
+      try {
+        const url = new URL(baseUrl);
+        const s = cleanParam(sourceInput.value);
+        const m = cleanParam(mediumInput.value);
+        const c = cleanParam(campaignInput.value);
+        const t = cleanParam(termInput.value);
+        const cnt = cleanParam(contentInput.value);
+
+        if (s) url.searchParams.set('utm_source', s);
+        else url.searchParams.delete('utm_source');
+
+        if (m) url.searchParams.set('utm_medium', m);
+        else url.searchParams.delete('utm_medium');
+
+        if (c) url.searchParams.set('utm_campaign', c);
+        else url.searchParams.delete('utm_campaign');
+
+        if (t) url.searchParams.set('utm_term', t);
+        else url.searchParams.delete('utm_term');
+
+        if (cnt) url.searchParams.set('utm_content', cnt);
+        else url.searchParams.delete('utm_content');
+
+        const fullString = url.toString();
+        if (outputTextarea) outputTextarea.value = fullString;
+        if (btnTest) btnTest.href = fullString;
+
+        // QR Code
+        if (qrImg) {
+          qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(fullString)}&margin=1`;
+        }
+      } catch (err) {
+        if (outputTextarea) outputTextarea.value = baseUrl;
+      }
+    }
+
+    [targetUrlInput, sourceInput, mediumInput, campaignInput, termInput, contentInput].forEach(el => {
+      el?.addEventListener('input', buildUrl);
+    });
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const targetId = chip.getAttribute('data-target');
+        const val = chip.getAttribute('data-val');
+        if (targetId && val) {
+          const targetEl = document.getElementById(targetId) as HTMLInputElement;
+          if (targetEl) {
+            targetEl.value = val;
+            buildUrl();
+          }
+        }
+      });
+    });
+
+    btnCopy?.addEventListener('click', () => {
+      if (outputTextarea && outputTextarea.value) {
+        navigator.clipboard.writeText(outputTextarea.value);
+        btnCopy.textContent = '¡Enlace UTM Copiado!';
+        setTimeout(() => {
+          btnCopy.textContent = '📋 Copiar Enlace UTM';
+        }, 1800);
+      }
+    });
+
+    buildUrl();
+  }
+
+  document.addEventListener('astro:page-load', initUtmBuilder);
+</script>

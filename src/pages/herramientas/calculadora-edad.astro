@@ -1,0 +1,681 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Edad Exacta y Tiempo Vivido', url: '/herramientas/calculadora-edad' }
+];
+
+const faqs = [
+  {
+    question: '¿Cómo calcula la herramienta la edad exacta?',
+    answer: 'La herramienta tiene en cuenta los años bisiestos de 366 días y la duración exacta de cada mes del calendario gregoriano para calcular los años, meses, días, horas y minutos exactos transcurridos desde tu fecha de nacimiento hasta el segundo actual.'
+  },
+  {
+    question: '¿Cómo se estiman los latidos del corazón y las horas de sueño?',
+    answer: 'Se basan en promedios médicos estándar: un ritmo cardíaco en reposo de aproximadamente 75 a 80 pulsaciones por minuto y una media recomendada de 8 horas diarias de sueño (aproximadamente un tercio de la vida).'
+  },
+  {
+    question: '¿Sirve para calcular la edad de mascotas o aniversarios?',
+    answer: 'Sí. Puedes introducir la fecha de adopción de tu mascota, la fecha de tu boda o el día en que fundaste tu proyecto para conocer con precisión el tiempo exacto transcurrido.'
+  },
+  {
+    question: '¿Es segura y privada?',
+    answer: 'Totalmente. El cálculo se realiza en tu propio dispositivo mediante JavaScript nativo. Nunca almacenamos ni transmitimos tu fecha de nacimiento a ningún servidor.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Edad Exacta, Tiempo Vivido y Próximo Cumpleaños | GuiaTecnEs"
+  description="Calcula tu edad exacta en años, meses, días, horas y minutos. Descubre qué día de la semana naciste y cuántos días faltan para tu próximo cumpleaños."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de Edad</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🎂 Tiempo, Calendario & Cumpleaños</div>
+      <h1>Calculadora de Edad Exacta y Tiempo Vivido</h1>
+      <p class="tool-subtitle">
+        Averigua cuántos años, meses, días, horas y minutos has vivido, qué día de la semana naciste y la cuenta atrás para tu próximo aniversario.
+      </p>
+    </header>
+
+    <div class="age-calc-grid">
+      <!-- FORMULARIO DE FECHA -->
+      <div class="card form-card">
+        <h3>📅 Selecciona tu Fecha de Nacimiento</h3>
+
+        <div class="input-group">
+          <label for="birth-date">Fecha de nacimiento:</label>
+          <input type="date" id="birth-date" value="1998-05-15" max="2026-10-28" />
+        </div>
+
+        <div class="input-group">
+          <label for="compare-date">Calcular edad a fecha de (por defecto hoy):</label>
+          <input type="date" id="compare-date" />
+        </div>
+
+        <!-- CUMPLEAÑOS Y DÍA DE LA SEMANA -->
+        <div class="birth-facts-box">
+          <div class="fact-item">
+            <span class="fact-label">Naciste en:</span>
+            <strong id="birth-weekday">Viernes</strong>
+          </div>
+          <div class="fact-item">
+            <span class="fact-label">Signo del zodíaco:</span>
+            <strong id="birth-zodiac">Tauro ♉</strong>
+          </div>
+        </div>
+
+        <div class="birthday-countdown-card">
+          <div class="cd-title">🎉 Próximo Cumpleaños en:</div>
+          <div class="cd-numbers" id="cd-countdown">-- días</div>
+          <span class="cd-sub" id="cd-target-date">15 de mayo de 2027</span>
+        </div>
+      </div>
+
+      <!-- RESULTADOS DE TIEMPO VIVIDO -->
+      <div class="card results-card">
+        <h3>Tu Edad Exacta</h3>
+
+        <div class="main-age-highlight">
+          <div class="age-years" id="exact-years">28</div>
+          <span class="age-label">Años cumplidos</span>
+          <div class="age-sub-detail" id="exact-sub-detail">4 meses y 13 días</div>
+        </div>
+
+        <h4 class="time-lived-title">⏳ Total de Tiempo Vivido:</h4>
+        <div class="time-stats-grid">
+          <div class="time-stat-box">
+            <span class="time-stat-icon">📅</span>
+            <div>
+              <strong id="total-days">--</strong>
+              <small>Días totales</small>
+            </div>
+          </div>
+          <div class="time-stat-box">
+            <span class="time-stat-icon">⏰</span>
+            <div>
+              <strong id="total-hours">--</strong>
+              <small>Horas de vida</small>
+            </div>
+          </div>
+          <div class="time-stat-box">
+            <span class="time-stat-icon">⏱️</span>
+            <div>
+              <strong id="total-minutes">--</strong>
+              <small>Minutos transcurridos</small>
+            </div>
+          </div>
+          <div class="time-stat-box">
+            <span class="time-stat-icon">💓</span>
+            <div>
+              <strong id="total-heartbeats">--</strong>
+              <small>Latidos de corazón (~80 bpm)</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="share-actions-row">
+          <button type="button" id="btn-share-age-wa" class="btn-share-wa">
+            💬 Compartir en WhatsApp
+          </button>
+          <button type="button" id="btn-copy-age" class="btn-copy-summary">
+            📋 Copiar Resumen
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO GUIDE -->
+    <section class="seo-guide-section card">
+      <h2>Curiosidades sobre el tiempo y la edad</h2>
+      <div class="guide-grid">
+        <div class="guide-box">
+          <h3>🌍 El impacto de los Años Bisiestos</h3>
+          <p>
+            Cada 4 años, el calendario añade el 29 de febrero para sincronizarse con la órbita terrestre. Esto significa que una persona de 28 años ha vivido 7 días adicionales respecto a un año normal.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>😴 Un tercio de la vida durmiendo</h3>
+          <p>
+            Si duermes una media de 8 horas al día, al cumplir 30 años habrás pasado aproximadamente 10 años completos soñando y descansando.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>💓 Una máquina incansable</h3>
+          <p>
+            El corazón humano late unas 100.000 veces al día y bombea cerca de 7.500 litros de sangre diarios sin detenerse ni un solo segundo.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre la Calculadora de Edad</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    background: rgba(236, 72, 153, 0.12);
+    color: #ec4899;
+    border: 1px solid rgba(236, 72, 153, 0.25);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .tool-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .age-calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+    align-items: start;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 860px) {
+    .age-calc-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1.25rem;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .input-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-heading);
+  }
+
+  input[type="date"] {
+    width: 100%;
+    padding: 0.75rem 0.85rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color, #334155);
+    background: var(--input-bg, #0f172a);
+    color: var(--text-heading);
+    font-size: 1.05rem;
+    font-weight: 600;
+    font-family: inherit;
+  }
+
+  input[type="date"]:focus {
+    outline: none;
+    border-color: #ec4899;
+    box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
+  }
+
+  .birth-facts-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .fact-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    text-align: center;
+  }
+
+  .fact-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 0.2rem;
+  }
+
+  .fact-item strong {
+    font-size: 1.05rem;
+    color: var(--text-heading);
+  }
+
+  .birthday-countdown-card {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.12), rgba(168, 85, 247, 0.1));
+    border: 1px solid rgba(236, 72, 153, 0.3);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .cd-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ec4899;
+    margin-bottom: 0.25rem;
+  }
+
+  .cd-numbers {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--text-heading);
+    line-height: 1.2;
+  }
+
+  .cd-sub {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  /* RESULTS CARD */
+  .main-age-highlight {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(139, 92, 246, 0.1));
+    border: 2px solid #ec4899;
+    border-radius: 0.85rem;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .age-years {
+    font-size: 3.6rem;
+    font-weight: 900;
+    color: #ec4899;
+    line-height: 1;
+  }
+
+  .age-label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-heading);
+    margin-top: 0.25rem;
+  }
+
+  .age-sub-detail {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-top: 0.35rem;
+  }
+
+  .time-lived-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+  }
+
+  .time-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .time-stat-box {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .time-stat-icon {
+    font-size: 1.5rem;
+  }
+
+  .time-stat-box strong {
+    display: block;
+    font-size: 1rem;
+    color: var(--text-heading);
+    font-family: ui-monospace, monospace;
+  }
+
+  .time-stat-box small {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .share-actions-row {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .btn-share-wa {
+    flex: 1.2;
+    background: #25d366;
+    color: #fff;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+
+  .btn-share-wa:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+  }
+
+  .btn-copy-summary {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-heading);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .btn-copy-summary:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  /* SEO GUIDE & FAQ */
+  .seo-guide-section {
+    margin-bottom: 2rem;
+  }
+
+  .seo-guide-section h2, .faq-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1rem;
+  }
+
+  .seo-guide-section p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .guide-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .guide-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-box p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+
+  .faq-section {
+    margin-bottom: 2rem;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initAgeCalculator() {
+    const birthDateInput = document.getElementById('birth-date') as HTMLInputElement;
+    const compareDateInput = document.getElementById('compare-date') as HTMLInputElement;
+
+    const exactYearsEl = document.getElementById('exact-years');
+    const exactSubDetailEl = document.getElementById('exact-sub-detail');
+    const birthWeekdayEl = document.getElementById('birth-weekday');
+    const birthZodiacEl = document.getElementById('birth-zodiac');
+
+    const cdCountdownEl = document.getElementById('cd-countdown');
+    const cdTargetDateEl = document.getElementById('cd-target-date');
+
+    const totalDaysEl = document.getElementById('total-days');
+    const totalHoursEl = document.getElementById('total-hours');
+    const totalMinutesEl = document.getElementById('total-minutes');
+    const totalHeartbeatsEl = document.getElementById('total-heartbeats');
+
+    const btnShareWa = document.getElementById('btn-share-age-wa');
+    const btnCopy = document.getElementById('btn-copy-age');
+
+    // Default compare date = today
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+    if (compareDateInput && !compareDateInput.value) {
+      compareDateInput.value = todayStr;
+    }
+
+    const weekdays = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+    function getZodiac(day: number, month: number): string {
+      // month is 1-12
+      if ((month == 1 && day <= 19) || (month == 12 && day >= 22)) return 'Capricornio ♑';
+      if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return 'Acuario ♒';
+      if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) return 'Piscis ♓';
+      if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return 'Aries ♈';
+      if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return 'Tauro ♉';
+      if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) return 'Géminis ♊';
+      if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) return 'Cáncer ♋';
+      if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return 'Leo ♌';
+      if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return 'Virgo ♍';
+      if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) return 'Libra ♎';
+      if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) return 'Escorpio ♏';
+      return 'Sagitario ♐';
+    }
+
+    function calculate() {
+      if (!birthDateInput.value) return;
+
+      const birth = new Date(birthDateInput.value + 'T00:00:00');
+      const target = compareDateInput.value ? new Date(compareDateInput.value + 'T00:00:00') : new Date();
+
+      if (isNaN(birth.getTime()) || isNaN(target.getTime()) || birth > target) return;
+
+      // Weekday & Zodiac
+      if (birthWeekdayEl) birthWeekdayEl.textContent = weekdays[birth.getDay()];
+      if (birthZodiacEl) birthZodiacEl.textContent = getZodiac(birth.getDate(), birth.getMonth() + 1);
+
+      // Years, Months, Days calculation
+      let years = target.getFullYear() - birth.getFullYear();
+      let monthsCount = target.getMonth() - birth.getMonth();
+      let days = target.getDate() - birth.getDate();
+
+      if (days < 0) {
+        monthsCount--;
+        const prevMonthDate = new Date(target.getFullYear(), target.getMonth(), 0);
+        days += prevMonthDate.getDate();
+      }
+
+      if (monthsCount < 0) {
+        years--;
+        monthsCount += 12;
+      }
+
+      if (exactYearsEl) exactYearsEl.textContent = years.toString();
+      if (exactSubDetailEl) exactSubDetailEl.textContent = `${monthsCount} meses y ${days} días`;
+
+      // Total units lived
+      const diffMs = target.getTime() - birth.getTime();
+      const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
+      const totalMinutes = Math.floor(diffMs / (1000 * 60));
+      const totalHeartbeats = Math.floor(totalMinutes * 80);
+
+      if (totalDaysEl) totalDaysEl.textContent = totalDays.toLocaleString('es-ES');
+      if (totalHoursEl) totalHoursEl.textContent = totalHours.toLocaleString('es-ES');
+      if (totalMinutesEl) totalMinutesEl.textContent = totalMinutes.toLocaleString('es-ES');
+      if (totalHeartbeatsEl) totalHeartbeatsEl.textContent = totalHeartbeats.toLocaleString('es-ES');
+
+      // Next Birthday Countdown
+      let nextBdayYear = target.getFullYear();
+      let nextBday = new Date(nextBdayYear, birth.getMonth(), birth.getDate());
+      if (nextBday < target) {
+        nextBday = new Date(nextBdayYear + 1, birth.getMonth(), birth.getDate());
+      }
+
+      const diffBdayMs = nextBday.getTime() - target.getTime();
+      const bdayDays = Math.ceil(diffBdayMs / (1000 * 60 * 60 * 24));
+
+      if (cdCountdownEl) cdCountdownEl.textContent = bdayDays === 0 ? '¡Hoy es tu cumpleaños! 🎂' : `${bdayDays} días`;
+      if (cdTargetDateEl) cdTargetDateEl.textContent = `${birth.getDate()} de ${months[birth.getMonth()]} de ${nextBday.getFullYear()}`;
+    }
+
+    [birthDateInput, compareDateInput].forEach(el => {
+      el?.addEventListener('input', calculate);
+      el?.addEventListener('change', calculate);
+    });
+
+    btnShareWa?.addEventListener('click', () => {
+      const y = exactYearsEl?.textContent || '0';
+      const sub = exactSubDetailEl?.textContent || '';
+      const days = totalDaysEl?.textContent || '0';
+      const msg = `🎂 ¡He calculado mi edad exacta con GuiaTecnEs!\nTengo *${y} años* (${sub}) y he vivido *${days} días*. ¿Y tú?`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    });
+
+    btnCopy?.addEventListener('click', () => {
+      const y = exactYearsEl?.textContent || '0';
+      const sub = exactSubDetailEl?.textContent || '';
+      const days = totalDaysEl?.textContent || '0';
+      const text = `Tengo ${y} años (${sub}) y he vivido ${days} días en total.`;
+      navigator.clipboard.writeText(text);
+      btnCopy.textContent = '¡Copiado!';
+      setTimeout(() => {
+        btnCopy.textContent = '📋 Copiar Resumen';
+      }, 1500);
+    });
+
+    calculate();
+  }
+
+  document.addEventListener('astro:page-load', initAgeCalculator);
+</script>

@@ -1,0 +1,784 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Generador de Paletas de Colores Armónicas', url: '/herramientas/generador-paletas-color' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es una paleta de colores complementaria?',
+    answer: 'Los colores complementarios son aquellos que se encuentran en extremos opuestos del círculo cromático (como el azul y el naranja, o el rojo y el verde). Proporcionan el mayor contraste visual posible y son ideales para destacar llamadas a la acción (botones CTA) y títulos.'
+  },
+  {
+    question: '¿Cómo puedo exportar la paleta de colores generada?',
+    answer: 'Puedes hacer clic en cualquiera de los códigos HEX o RGB para copiarlos individualmente al portapapeles, o presionar el botón «Copiar Variables CSS» para obtener el código listo para pegar en el archivo :root de tu hoja de estilos.'
+  },
+  {
+    question: '¿Qué es el modelo HSL y por qué es mejor que HEX?',
+    answer: 'HSL representa tono (Hue), saturación (Saturation) y luminosidad (Lightness). Es muy apreciado por los diseñadores web porque permite crear variaciones más claras u oscuras de un mismo color simplemente ajustando el porcentaje de luz sin alterar el matiz original.'
+  },
+  {
+    question: '¿Sirve para diseñar páginas web accesibles (WCAG)?',
+    answer: 'Sí. Al generar tonos claros y oscuros equilibrados, te permite combinar colores de fondo y texto con suficiente ratio de contraste (mínimo 4.5:1) para garantizar que cualquier persona pueda leer tu contenido con facilidad.'
+  }
+];
+---
+
+<BaseLayout
+  title="Generador de Paletas de Colores Armónicas (HEX, RGB, HSL) | GuiaTecnEs"
+  description="Crea combinaciones de colores armónicas para diseño web y branding. Esquemas complementarios, análogos y monocromáticos con variables CSS listas para copiar."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Generador de Paletas</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🎨 Diseño Web, UI/UX & Branding</div>
+      <h1>Generador de Paletas de Colores Armónicas</h1>
+      <p class="tool-subtitle">
+        Elige un color base o pulsa la barra espaciadora para generar paletas de colores profesionales con códigos HEX, RGB y variables CSS listas para tu web.
+      </p>
+    </header>
+
+    <div class="palette-builder-layout">
+      <!-- BARRA DE CONTROLES SUPERIOR -->
+      <div class="card toolbar-palette-card">
+        <div class="base-color-picker-flex">
+          <label for="base-color-input">Color Base:</label>
+          <div class="color-preview-box">
+            <input type="color" id="base-color-input" value="#6366f1" />
+            <input type="text" id="base-color-hex" value="#6366f1" maxlength="7" />
+          </div>
+        </div>
+
+        <div class="harmony-select-flex">
+          <label for="harmony-select">Regla Armónica:</label>
+          <select id="harmony-select">
+            <option value="analogous" selected>Análoga (Armonía suave)</option>
+            <option value="complementary">Complementaria (Alto contraste)</option>
+            <option value="triadic">Triádica (Equilibrada y vibrante)</option>
+            <option value="monochromatic">Monocromática (Gradación de tonos)</option>
+            <option value="tetradic">Tetrádica (4 colores ricos)</option>
+          </select>
+        </div>
+
+        <button type="button" id="btn-random-palette" class="btn-random">
+          🎲 Paleta Aleatoria
+        </button>
+      </div>
+
+      <!-- VISUALIZADOR DE PALETAS -->
+      <div class="card swatches-card">
+        <div id="palette-swatches" class="palette-swatches-grid">
+          <!-- 5 swatches rendered dynamically -->
+        </div>
+
+        <!-- EXPORT BAR -->
+        <div class="export-palette-bar">
+          <button type="button" id="btn-copy-css-vars" class="btn-export-palette">
+            📋 Copiar Variables CSS (:root)
+          </button>
+          <button type="button" id="btn-copy-hex-list" class="btn-export-palette secondary">
+            🏷️ Copiar Lista de HEX
+          </button>
+        </div>
+      </div>
+
+      <!-- PRESETS POPULARES -->
+      <div class="card presets-card">
+        <h3>⚡ Paletas Predefinidas Populares</h3>
+        <div class="presets-palettes-grid">
+          <div class="preset-item" data-c1="#0f172a" data-c2="#3b82f6" data-c3="#06b6d4" data-c4="#10b981" data-c5="#f8fafc">
+            <div class="preset-strip">
+              <span style="background: #0f172a;"></span>
+              <span style="background: #3b82f6;"></span>
+              <span style="background: #06b6d4;"></span>
+              <span style="background: #10b981;"></span>
+              <span style="background: #f8fafc;"></span>
+            </div>
+            <strong>Cyberpunk Dark</strong>
+          </div>
+
+          <div class="preset-item" data-c1="#fdf2f8" data-c2="#f472b6" data-c3="#ec4899" data-c4="#8b5cf6" data-c5="#4c1d95">
+            <div class="preset-strip">
+              <span style="background: #fdf2f8;"></span>
+              <span style="background: #f472b6;"></span>
+              <span style="background: #ec4899;"></span>
+              <span style="background: #8b5cf6;"></span>
+              <span style="background: #4c1d95;"></span>
+            </div>
+            <strong>Rose Aesthetic</strong>
+          </div>
+
+          <div class="preset-item" data-c1="#064e3b" data-c2="#047857" data-c3="#10b981" data-c4="#6ee7b7" data-c5="#ecfdf5">
+            <div class="preset-strip">
+              <span style="background: #064e3b;"></span>
+              <span style="background: #047857;"></span>
+              <span style="background: #10b981;"></span>
+              <span style="background: #6ee7b7;"></span>
+              <span style="background: #ecfdf5;"></span>
+            </div>
+            <strong>Emerald Forest</strong>
+          </div>
+
+          <div class="preset-item" data-c1="#1e1b4b" data-c2="#4338ca" data-c3="#6366f1" data-c4="#a5b4fc" data-c5="#e0e7ff">
+            <div class="preset-strip">
+              <span style="background: #1e1b4b;"></span>
+              <span style="background: #4338ca;"></span>
+              <span style="background: #6366f1;"></span>
+              <span style="background: #a5b4fc;"></span>
+              <span style="background: #e0e7ff;"></span>
+            </div>
+            <strong>Deep Indigo</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO GUIDE -->
+    <section class="seo-guide-section card">
+      <h2>La Regla 60-30-10 para Aplicar Colores en Diseño Web</h2>
+      <div class="guide-grid">
+        <div class="guide-box">
+          <h3>📐 60% Color Dominante (Fondo)</h3>
+          <p>
+            Suele ser un tono neutro (blanco, gris suave o negro azulado como #0f172a). Crea la base limpia y despejada sobre la que reposa todo el contenido.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>🧱 30% Color Secundario (Estructura)</h3>
+          <p>
+            Utilizado para tarjetas, barras de navegación, pie de página y títulos secundarios. Aporta personalidad a la marca sin saturar la vista.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>✨ 10% Color de Acento (Acción)</h3>
+          <p>
+            El color más vibrante y llamativo de la paleta. Reservado estrictamente para botones de compra, enlaces importantes y badges destacados.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre Paletas de Colores</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    background: rgba(99, 102, 241, 0.12);
+    color: #6366f1;
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .tool-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    margin-bottom: 1.75rem;
+  }
+
+  /* TOOLBAR */
+  .toolbar-palette-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.25rem 1.75rem;
+  }
+
+  .base-color-picker-flex, .harmony-select-flex {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .base-color-picker-flex label, .harmony-select-flex label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-heading);
+  }
+
+  .color-preview-box {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--input-bg, #0f172a);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  input[type="color"] {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    background: transparent;
+  }
+
+  #base-color-hex {
+    width: 75px;
+    border: none;
+    background: transparent;
+    color: var(--text-heading);
+    font-family: ui-monospace, monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  #base-color-hex:focus {
+    outline: none;
+  }
+
+  select {
+    padding: 0.55rem 0.85rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color, #334155);
+    background: var(--input-bg, #0f172a);
+    color: var(--text-heading);
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  .btn-random {
+    background: linear-gradient(135deg, #6366f1, #ec4899);
+    color: #fff;
+    border: none;
+    padding: 0.65rem 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+
+  .btn-random:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+  }
+
+  /* SWATCHES */
+  .palette-swatches-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 700px) {
+    .palette-swatches-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .swatch-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .swatch-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .swatch-color {
+    height: 140px;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .swatch-copy-hint {
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .swatch-card:hover .swatch-copy-hint {
+    opacity: 1;
+  }
+
+  .swatch-info {
+    background: #0f172a;
+    padding: 0.75rem;
+    text-align: center;
+  }
+
+  .swatch-hex {
+    display: block;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    font-family: ui-monospace, monospace;
+    margin-bottom: 0.2rem;
+  }
+
+  .swatch-rgb {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-family: ui-monospace, monospace;
+  }
+
+  /* EXPORT BAR */
+  .export-palette-bar {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-export-palette {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-heading);
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-export-palette:hover {
+    background: #6366f1;
+    color: #fff;
+    border-color: #6366f1;
+  }
+
+  /* PRESETS */
+  .presets-palettes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .preset-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem;
+    cursor: pointer;
+    transition: transform 0.15s, border-color 0.15s;
+    text-align: center;
+  }
+
+  .preset-item:hover {
+    transform: translateY(-2px);
+    border-color: #6366f1;
+  }
+
+  .preset-strip {
+    display: flex;
+    height: 38px;
+    border-radius: 0.4rem;
+    overflow: hidden;
+    margin-bottom: 0.65rem;
+  }
+
+  .preset-strip span {
+    flex: 1;
+    height: 100%;
+  }
+
+  .preset-item strong {
+    font-size: 0.85rem;
+    color: var(--text-heading);
+  }
+
+  /* SEO GUIDE & FAQ */
+  .seo-guide-section {
+    margin-bottom: 2rem;
+  }
+
+  .seo-guide-section h2, .faq-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1rem;
+  }
+
+  .seo-guide-section p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .guide-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .guide-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-box p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+
+  .faq-section {
+    margin-bottom: 2rem;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initPaletteGenerator() {
+    const baseColorInput = document.getElementById('base-color-input') as HTMLInputElement;
+    const baseColorHex = document.getElementById('base-color-hex') as HTMLInputElement;
+    const harmonySelect = document.getElementById('harmony-select') as HTMLSelectElement;
+    const btnRandom = document.getElementById('btn-random-palette');
+    const swatchesContainer = document.getElementById('palette-swatches');
+    const btnCopyCss = document.getElementById('btn-copy-css-vars');
+    const btnCopyHex = document.getElementById('btn-copy-hex-list');
+    const presetItems = document.querySelectorAll('.preset-item');
+
+    let currentColors: string[] = [];
+
+    // Helper functions for color math
+    function hexToHsl(hex: string): { h: number; s: number; l: number } {
+      let c = hex.replace('#', '');
+      if (c.length === 3) c = c.split('').map(x => x + x).join('');
+      const r = parseInt(c.substring(0, 2), 16) / 255;
+      const g = parseInt(c.substring(2, 4), 16) / 255;
+      const b = parseInt(c.substring(4, 6), 16) / 255;
+
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h = 0, s = 0, l = (max + min) / 2;
+
+      if (max !== min) {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+      }
+      return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+    }
+
+    function hslToHex(h: number, s: number, l: number): string {
+      h = (h % 360 + 360) % 360;
+      s = Math.max(0, Math.min(100, s)) / 100;
+      l = Math.max(0, Math.min(100, l)) / 100;
+
+      const c = (1 - Math.abs(2 * l - 1)) * s;
+      const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+      const m = l - c / 2;
+      let r = 0, g = 0, b = 0;
+
+      if (0 <= h && h < 60) { r = c; g = x; b = 0; }
+      else if (60 <= h && h < 120) { r = x; g = c; b = 0; }
+      else if (120 <= h && h < 180) { r = 0; g = c; b = x; }
+      else if (180 <= h && h < 240) { r = 0; g = x; b = c; }
+      else if (240 <= h && h < 300) { r = x; g = 0; b = c; }
+      else if (300 <= h && h < 360) { r = c; g = 0; b = x; }
+
+      const toHex = (n: number) => {
+        const hex = Math.round((n + m) * 255).toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+      };
+
+      return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+    }
+
+    function hexToRgb(hex: string): string {
+      let c = hex.replace('#', '');
+      if (c.length === 3) c = c.split('').map(x => x + x).join('');
+      const r = parseInt(c.substring(0, 2), 16);
+      const g = parseInt(c.substring(2, 4), 16);
+      const b = parseInt(c.substring(4, 6), 16);
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    function generatePalette() {
+      const hex = baseColorInput.value;
+      const harmony = harmonySelect.value;
+      const { h, s, l } = hexToHsl(hex);
+
+      let colors: string[] = [];
+
+      switch (harmony) {
+        case 'analogous':
+          colors = [
+            hslToHex(h - 40, s, Math.min(85, l + 10)),
+            hslToHex(h - 20, s, l),
+            hex,
+            hslToHex(h + 20, s, l),
+            hslToHex(h + 40, s, Math.max(20, l - 10))
+          ];
+          break;
+        case 'complementary':
+          colors = [
+            hslToHex(h, s, 85),
+            hex,
+            hslToHex(h, s, Math.max(15, l - 25)),
+            hslToHex(h + 180, s, l),
+            hslToHex(h + 180, s, 25)
+          ];
+          break;
+        case 'triadic':
+          colors = [
+            hex,
+            hslToHex(h + 120, s, l),
+            hslToHex(h + 240, s, l),
+            hslToHex(h + 120, s, Math.min(85, l + 20)),
+            hslToHex(h + 240, s, Math.max(20, l - 20))
+          ];
+          break;
+        case 'monochromatic':
+          colors = [
+            hslToHex(h, s, 90),
+            hslToHex(h, s, 70),
+            hex,
+            hslToHex(h, s, 35),
+            hslToHex(h, s, 15)
+          ];
+          break;
+        case 'tetradic':
+          colors = [
+            hex,
+            hslToHex(h + 90, s, l),
+            hslToHex(h + 180, s, l),
+            hslToHex(h + 270, s, l),
+            hslToHex(h, Math.max(10, s - 30), 85)
+          ];
+          break;
+      }
+
+      currentColors = colors;
+      renderSwatches();
+    }
+
+    function renderSwatches() {
+      if (!swatchesContainer) return;
+      swatchesContainer.innerHTML = '';
+
+      currentColors.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'swatch-card';
+        card.setAttribute('data-hex', c);
+
+        card.innerHTML = `
+          <div class="swatch-color" style="background-color: ${c};">
+            <span class="swatch-copy-hint">Copiar HEX</span>
+          </div>
+          <div class="swatch-info">
+            <span class="swatch-hex">${c.toUpperCase()}</span>
+            <span class="swatch-rgb">${hexToRgb(c)}</span>
+          </div>
+        `;
+
+        card.addEventListener('click', () => {
+          navigator.clipboard.writeText(c.toUpperCase());
+          const hint = card.querySelector('.swatch-copy-hint');
+          if (hint) {
+            hint.textContent = '¡Copiado!';
+            setTimeout(() => {
+              hint.textContent = 'Copiar HEX';
+            }, 1200);
+          }
+        });
+
+        swatchesContainer.appendChild(card);
+      });
+    }
+
+    baseColorInput?.addEventListener('input', () => {
+      baseColorHex.value = baseColorInput.value;
+      generatePalette();
+    });
+
+    baseColorHex?.addEventListener('input', () => {
+      let val = baseColorHex.value;
+      if (!val.startsWith('#')) val = '#' + val;
+      if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+        baseColorInput.value = val;
+        generatePalette();
+      }
+    });
+
+    harmonySelect?.addEventListener('change', generatePalette);
+
+    btnRandom?.addEventListener('click', () => {
+      const randHex = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+      baseColorInput.value = randHex;
+      baseColorHex.value = randHex;
+      generatePalette();
+    });
+
+    // Preset clicks
+    presetItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const c1 = item.getAttribute('data-c1') || '#000';
+        const c2 = item.getAttribute('data-c2') || '#333';
+        const c3 = item.getAttribute('data-c3') || '#666';
+        const c4 = item.getAttribute('data-c4') || '#999';
+        const c5 = item.getAttribute('data-c5') || '#fff';
+        currentColors = [c1, c2, c3, c4, c5];
+        baseColorInput.value = c3;
+        baseColorHex.value = c3;
+        renderSwatches();
+      });
+    });
+
+    btnCopyCss?.addEventListener('click', () => {
+      const cssVars = `:root {\n` + currentColors.map((c, i) => `  --color-${i + 1}: ${c.toUpperCase()};`).join('\n') + `\n}`;
+      navigator.clipboard.writeText(cssVars);
+      btnCopyCss.textContent = '¡Variables CSS Copiadas!';
+      setTimeout(() => {
+        btnCopyCss.textContent = '📋 Copiar Variables CSS (:root)';
+      }, 1800);
+    });
+
+    btnCopyHex?.addEventListener('click', () => {
+      const hexList = currentColors.map(c => c.toUpperCase()).join(', ');
+      navigator.clipboard.writeText(hexList);
+      btnCopyHex.textContent = '¡Lista HEX Copiada!';
+      setTimeout(() => {
+        btnCopyHex.textContent = '🏷️ Copiar Lista de HEX';
+      }, 1800);
+    });
+
+    generatePalette();
+  }
+
+  document.addEventListener('astro:page-load', initPaletteGenerator);
+</script>

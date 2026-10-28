@@ -215,6 +215,49 @@ def chat(client, system: str, user: str, temperature: float = 0.7) -> str:
     return r.choices[0].message.content.strip()
 
 
+
+# ============================================================
+# INTERAKTIF ARACLAR (AKILLI İÇ LİNKLEME İÇİN)
+# ============================================================
+SITE_TOOLS = [
+    {"name": "Conversor de Divisas y Cripto", "url": "/herramientas/conversor-divisas", "keys": ["divisa", "dolar", "euro", "peso", "cripto", "bitcoin", "dinero", "cambio"]},
+    {"name": "Generador de Enlaces UTM para GA4", "url": "/herramientas/generador-enlaces-utm", "keys": ["marketing", "utm", "analytics", "instagram", "campaña", "trafico", "redes"]},
+    {"name": "Calculadora de Edad y Tiempo Vivido", "url": "/herramientas/calculadora-edad", "keys": ["edad", "cumpleaños", "tiempo", "fecha", "año", "calendario"]},
+    {"name": "Generador de Paletas de Colores", "url": "/herramientas/generador-paletas-color", "keys": ["color", "paleta", "diseño", "ui", "hex", "web", "estilo"]},
+    {"name": "Test de Ping y Latencia Online", "url": "/herramientas/test-ping", "keys": ["ping", "latencia", "lag", "gaming", "cs2", "valorant", "servidor"]},
+    {"name": "Calculadora de Propinas y Cuentas", "url": "/herramientas/calculadora-propinas", "keys": ["propina", "cuenta", "restaurante", "bar", "amigos", "bizum"]},
+    {"name": "Conversor de Almacenamiento y Capacidad", "url": "/herramientas/conversor-almacenamiento", "keys": ["almacenamiento", "gb", "tb", "disco", "ssd", "memoria", "espacio"]},
+    {"name": "Generador de Gradientes CSS", "url": "/herramientas/generador-gradientes-css", "keys": ["gradiente", "css", "degradado", "fondo", "diseño"]},
+    {"name": "Calculadora de Sueldo Neto España", "url": "/herramientas/calculadora-sueldo-neto", "keys": ["sueldo", "nomina", "irpf", "salario", "contrato", "neto"]},
+    {"name": "Creador de Link en Bio", "url": "/herramientas/creador-link-bio", "keys": ["linktree", "bio", "instagram", "tiktok", "enlaces"]},
+    {"name": "Minificador de Código CSS y HTML", "url": "/herramientas/minificador-codigo", "keys": ["minificar", "pagespeed", "codigo", "css", "js", "html"]},
+    {"name": "Ruleta Aleatoria de Decisiones", "url": "/herramientas/ruleta-decisiones", "keys": ["ruleta", "sorteo", "azar", "decision", "juego"]},
+    {"name": "Calculadora de DPI / PPI de Pantalla", "url": "/herramientas/calculadora-ppi", "keys": ["pantalla", "monitor", "resolucion", "ppi", "4k", "oled", "tv"]},
+    {"name": "Generador de Link de WhatsApp con QR", "url": "/herramientas/generador-link-whatsapp", "keys": ["whatsapp", "wa.me", "contacto", "qr", "mensaje"]},
+    {"name": "Test: ¿Qué IA Necesitas?", "url": "/herramientas/test-inteligencia-artificial", "keys": ["ia", "chatgpt", "deepseek", "claude", "inteligencia"]},
+    {"name": "Test de Velocidad WiFi e Internet", "url": "/herramientas/test-velocidad", "keys": ["velocidad", "wifi", "internet", "fibra", "megas", "conexion"]},
+    {"name": "Generador de Contraseñas Seguras", "url": "/herramientas/generador-contrasenas", "keys": ["contraseña", "password", "seguridad", "clave", "hack"]},
+    {"name": "Compresor de Fotos e Imágenes", "url": "/herramientas/compresor-imagenes", "keys": ["comprimir", "imagen", "foto", "jpg", "png", "peso"]},
+    {"name": "Calculadora de Consumo Eléctrico", "url": "/herramientas/calculadora-luz", "keys": ["luz", "electricidad", "consumo", "kwh", "factura", "ahorro"]},
+    {"name": "Calculadora de Consumo de Datos", "url": "/herramientas/calculadora-datos", "keys": ["datos", "tarifa", "gigas", "streaming", "movil"]},
+    {"name": "Generador de Códigos QR Gratis", "url": "/herramientas/generador-qr", "keys": ["qr", "codigo qr"]},
+    {"name": "Calculadora Freelance y Tarifa/Hora", "url": "/herramientas/calculadora-freelance", "keys": ["freelance", "tarifa", "remoto", "hora", "precio"]}
+]
+
+def get_relevant_tools_for_article(topic: str, keyword: str, tag: str) -> str:
+    """Makalenin konusuyla en alakali GuiaTecnEs interaktif araclarini bulur."""
+    text = (topic + " " + keyword + " " + tag).lower()
+    matches = []
+    for tool in SITE_TOOLS:
+        score = sum(1 for k in tool["keys"] if k in text)
+        if score > 0:
+            matches.append((score, tool))
+    matches.sort(key=lambda x: x[0], reverse=True)
+    selected = [m[1] for m in matches[:3]]
+    if not selected:
+        selected = [SITE_TOOLS[14], SITE_TOOLS[15]]
+    return ", ".join([f"[{t['name']}]({t['url']})" for t in selected])
+
 def get_related_internal_links(tag: str, current_keyword: str) -> str:
     """Aynı kategorideki ve genel havuzdaki yazılmış makalelerden iç link önerileri seçer."""
     all_topics = load_topics()
@@ -246,8 +289,9 @@ tabla comparativa o de resumen (5+ columnas), y sección "## Preguntas frecuente
 
 
 def gen_article(client, topic: str, keyword: str, outline: str, tag: str = "tecnologia") -> str:
-    step("2/4 → Makale yazılıyor (EEAT uyumlu)...")
+    step("2/4 → Makale yazılıyor (EEAT + Akıllı Araç İç Linkleri)...")
     internal_links = get_related_internal_links(tag, keyword)
+    tool_links = get_relevant_tools_for_article(topic, keyword, tag)
     return chat(client,
         """Eres un ingeniero y analista de tecnología con 10 años de experiencia real. Español nativo, tono directo, práctico y cercano.
 REGLAS ESTRICTAS DE SEO Y CALIDAD:
@@ -260,12 +304,13 @@ REGLAS ESTRICTAS DE SEO Y CALIDAD:
 7) Extensión: 1.300-1.900 palabras de puro valor sin relleno.
 8) NO incluyas introducciones conversacionales ("Aquí tienes el artículo"). Escribe SOLO Markdown.
 9) NUNCA escribas literalmente "H1:", "H2:" o "H3:" en los títulos. Usa ## y ### directamente.
-10) ENLACES INTERNOS SEO: Inserta de forma natural entre 2 y 3 enlaces internos en el cuerpo del texto usando los enlaces proporcionados.""",
+10) ENLACES INTERNOS Y HERRAMIENTAS: Inserta de forma natural entre 2 y 3 enlaces a artículos y enlaza a al menos 1 de nuestras herramientas interactivas recomendadas dentro del texto.""",
         f"""Escribe el artículo completo siguiendo este esquema:
 {outline}
 
 TEMA: "{topic}" | KEYWORD: "{keyword}"
-ENLACES INTERNOS DISPONIBLES (integra 2 o 3 en el texto): {internal_links}
+ARTÍCULOS RELACIONADOS (integra 1 o 2 en el texto): {internal_links}
+HERRAMIENTAS INTERACTIVAS RECOMENDADAS (menciona y enlaza 1 en el texto): {tool_links}
 
 SALIDA: Devuelve ÚNICAMENTE código Markdown puro. Empieza directamente con ## ⚡ TL;DR""",
         temperature=0.7)

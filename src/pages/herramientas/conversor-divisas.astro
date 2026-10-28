@@ -1,0 +1,697 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Conversor de Divisas y Criptomonedas en Vivo', url: '/herramientas/conversor-divisas' }
+];
+
+const faqs = [
+  {
+    question: '¿Con qué frecuencia se actualizan los tipos de cambio?',
+    answer: 'Nuestra herramienta consulta las tasas de cambio de los mercados financieros y de criptomonedas en tiempo real. En caso de no haber conexión, utiliza una base de datos de respaldo con los tipos de cambio más recientes.'
+  },
+  {
+    question: '¿Por qué mi banco me cobra un precio diferente al cambiar divisas?',
+    answer: 'El valor que ves aquí es el tipo de cambio interbancario o «medio de mercado» (el precio real sin comisiones). Los bancos tradicionales y casas de cambio aplican un margen oculto sobre el tipo de cambio o una comisión por conversión de divisa que suele rondar entre el 1% y el 4%.'
+  },
+  {
+    question: '¿Se pueden convertir criptomonedas como Bitcoin o Ethereum a euros y dólares?',
+    answer: 'Sí. Puedes convertir directamente Bitcoin (BTC), Ethereum (ETH) y Tether (USDT) a euros, dólares, pesos mexicanos, colombianos o cualquier otra moneda fiat soportada.'
+  },
+  {
+    question: '¿Es gratuito y funciona en el móvil?',
+    answer: 'Es 100% gratuito, sin necesidad de registro ni descargas de apps pesadas. Está totalmente optimizado para cargar al instante en smartphones Android e iPhone.'
+  }
+];
+---
+
+<BaseLayout
+  title="Conversor de Divisas y Criptomonedas en Vivo | GuiaTecnEs"
+  description="Calcula el cambio exacto entre Euro, Dólar, Pesos (México, Colombia, Argentina) y Criptomonedas (Bitcoin, Ethereum). Tasas de mercado en tiempo real."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Conversor de Divisas</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">💱 Mercados Financieros & Cripto</div>
+      <h1>Conversor de Divisas y Criptomonedas</h1>
+      <p class="tool-subtitle">
+        Consulta el tipo de cambio interbancario en tiempo real entre las principales monedas del mundo y las criptomonedas más populares.
+      </p>
+    </header>
+
+    <div class="currency-converter-layout">
+      <!-- TARJETA CONVERSORA PRINCIPAL -->
+      <div class="card converter-main-card">
+        <div class="converter-inputs-grid">
+          <!-- MONEDA ORIGEN -->
+          <div class="currency-box">
+            <label for="amount-input">Importe a convertir:</label>
+            <div class="input-val-wrap">
+              <input type="number" id="amount-input" value="100" min="0" step="any" />
+            </div>
+            <select id="from-currency" class="currency-select">
+              <option value="EUR" selected>🇪🇸 EUR - Euro (€)</option>
+              <option value="USD">🇺🇸 USD - Dólar USA ($)</option>
+              <option value="MXN">🇲🇽 MXN - Peso Mexicano ($)</option>
+              <option value="COP">🇨🇴 COP - Peso Colombiano ($)</option>
+              <option value="ARS">🇦🇷 ARS - Peso Argentino ($)</option>
+              <option value="CLP">🇨🇱 CLP - Peso Chileno ($)</option>
+              <option value="PEN">🇵🇪 PEN - Sol Peruano (S/)</option>
+              <option value="GBP">🇬🇧 GBP - Libra Esterlina (£)</option>
+              <option value="BTC">₿ BTC - Bitcoin</option>
+              <option value="ETH">Ξ ETH - Ethereum</option>
+              <option value="USDT">₮ USDT - Tether USD</option>
+            </select>
+          </div>
+
+          <!-- BOTÓN INVERTIR -->
+          <div class="swap-btn-wrap">
+            <button type="button" id="btn-swap-currency" class="btn-swap" title="Invertir monedas">
+              ⇄
+            </button>
+          </div>
+
+          <!-- MONEDA DESTINO -->
+          <div class="currency-box">
+            <label for="converted-output">Resultado estimado:</label>
+            <div class="input-val-wrap">
+              <input type="text" id="converted-output" readonly value="---" />
+            </div>
+            <select id="to-currency" class="currency-select">
+              <option value="EUR">🇪🇸 EUR - Euro (€)</option>
+              <option value="USD" selected>🇺🇸 USD - Dólar USA ($)</option>
+              <option value="MXN">🇲🇽 MXN - Peso Mexicano ($)</option>
+              <option value="COP">🇨🇴 COP - Peso Colombiano ($)</option>
+              <option value="ARS">🇦🇷 ARS - Peso Argentino ($)</option>
+              <option value="CLP">🇨🇱 CLP - Peso Chileno ($)</option>
+              <option value="PEN">🇵🇪 PEN - Sol Peruano (S/)</option>
+              <option value="GBP">🇬🇧 GBP - Libra Esterlina (£)</option>
+              <option value="BTC">₿ BTC - Bitcoin</option>
+              <option value="ETH">Ξ ETH - Ethereum</option>
+              <option value="USDT">₮ USDT - Tether USD</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- TASA DE CAMBIO ACTUAL -->
+        <div class="rate-status-bar">
+          <div class="single-rate-info">
+            <span id="single-rate-text">1 EUR = 1.0850 USD</span>
+          </div>
+          <div class="update-time-badge">
+            <span class="live-pulse"></span>
+            <span id="rate-source-text">Tipo de cambio medio en vivo</span>
+          </div>
+        </div>
+
+        <!-- CHIPS DE ACCESO RÁPIDO -->
+        <div class="quick-amounts-bar">
+          <span>Importes rápidos:</span>
+          <div class="chips-list">
+            <button type="button" class="amount-chip" data-amount="10">10</button>
+            <button type="button" class="amount-chip" data-amount="50">50</button>
+            <button type="button" class="amount-chip" data-amount="100">100</button>
+            <button type="button" class="amount-chip" data-amount="500">500</button>
+            <button type="button" class="amount-chip" data-amount="1000">1.000</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABLA DE CAMBIO MULTI-DIVISA -->
+      <div class="card multi-currency-card">
+        <h3>Equivalencias Globales de <span id="table-amount-title">100 EUR</span></h3>
+        <p class="multi-sub">Conversión simultánea a las principales divisas y criptoactivos:</p>
+
+        <div class="multi-table-wrap">
+          <div class="currency-row"><span>🇺🇸 Dólar estadounidense (USD):</span> <strong id="rate-usd">---</strong></div>
+          <div class="currency-row"><span>🇲🇽 Peso mexicano (MXN):</span> <strong id="rate-mxn">---</strong></div>
+          <div class="currency-row"><span>🇨🇴 Peso colombiano (COP):</span> <strong id="rate-cop">---</strong></div>
+          <div class="currency-row"><span>🇦🇷 Peso argentino (ARS):</span> <strong id="rate-ars">---</strong></div>
+          <div class="currency-row"><span>🇵🇪 Sol peruano (PEN):</span> <strong id="rate-pen">---</strong></div>
+          <div class="currency-row"><span>🇬🇧 Libra esterlina (GBP):</span> <strong id="rate-gbp">---</strong></div>
+          <div class="currency-row crypto-row"><span>₿ Bitcoin (BTC):</span> <strong id="rate-btc">---</strong></div>
+          <div class="currency-row crypto-row"><span>Ξ Ethereum (ETH):</span> <strong id="rate-eth">---</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUÍA SEO -->
+    <section class="seo-guide-section card">
+      <h2>¿Cómo funciona el tipo de cambio interbancario?</h2>
+      <p>
+        El tipo de cambio interbancario es la tasa a la que los bancos e instituciones financieras se compran y venden divisas entre sí. Es el valor más puro y justo del mercado, sin ningún margen comercial añadido.
+      </p>
+
+      <div class="guide-grid">
+        <div class="guide-box">
+          <h3>🏦 Comisiones Bancarias Ocultas</h3>
+          <p>
+            Al viajar o pagar compras online en otra moneda con tu tarjeta de crédito convencional, muchos bancos suelen aplicar un sobrecoste oculto de entre el 2% y el 4% sobre la tasa oficial.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>⚡ Criptomonedas vs Fiat</h3>
+          <p>
+            Criptoactivos como Bitcoin y Ethereum cotizan las 24 horas del día, los 7 días de la semana en mercados globales descentralizados, por lo que su valor en euros o dólares fluctúa constantemente.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>🔒 Privacidad y Rapidez</h3>
+          <p>
+            Los cálculos se realizan directamente en tu navegador web. No solicitamos datos bancarios ni información de tus compras.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre el Conversor de Monedas</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .tool-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .currency-converter-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 1.75rem;
+    align-items: start;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 860px) {
+    .currency-converter-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.35rem;
+  }
+
+  .multi-sub {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+  }
+
+  /* MAIN CONVERTER */
+  .converter-inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 650px) {
+    .converter-inputs-grid {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+  }
+
+  .currency-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .currency-box label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .input-val-wrap input {
+    width: 100%;
+    padding: 0.75rem 0.85rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color, #334155);
+    background: var(--input-bg, #0f172a);
+    color: var(--text-heading);
+    font-size: 1.3rem;
+    font-weight: 800;
+  }
+
+  #converted-output {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.3);
+  }
+
+  .currency-select {
+    padding: 0.6rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color, #334155);
+    background: var(--input-bg, #0f172a);
+    color: var(--text-heading);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .currency-select:focus, .input-val-wrap input:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  }
+
+  .swap-btn-wrap {
+    display: flex;
+    justify-content: center;
+    padding-top: 1.2rem;
+  }
+
+  .btn-swap {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-heading);
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .btn-swap:hover {
+    background: #10b981;
+    color: #fff;
+    transform: rotate(180deg);
+  }
+
+  /* STATUS BAR */
+  .rate-status-bar {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .single-rate-info {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-heading);
+  }
+
+  .update-time-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .live-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+    animation: pulseGlow 1.5s infinite;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .quick-amounts-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+  }
+
+  .quick-amounts-bar span {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .chips-list {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .amount-chip {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.4rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .amount-chip:hover {
+    background: #10b981;
+    color: #fff;
+    border-color: #10b981;
+  }
+
+  /* MULTI TABLE */
+  .multi-table-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .currency-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.55rem 0.65rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 0.4rem;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+
+  .currency-row strong {
+    color: var(--text-heading);
+    font-family: ui-monospace, monospace;
+  }
+
+  .currency-row.crypto-row {
+    background: rgba(245, 158, 11, 0.05);
+    border: 1px solid rgba(245, 158, 11, 0.15);
+  }
+
+  .currency-row.crypto-row strong {
+    color: #f59e0b;
+  }
+
+  /* SEO GUIDE & FAQ */
+  .seo-guide-section {
+    margin-bottom: 2rem;
+  }
+
+  .seo-guide-section h2, .faq-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1rem;
+  }
+
+  .seo-guide-section p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .guide-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .guide-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-box p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+
+  .faq-section {
+    margin-bottom: 2rem;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initCurrencyConverter() {
+    const amountInput = document.getElementById('amount-input') as HTMLInputElement;
+    const fromSelect = document.getElementById('from-currency') as HTMLSelectElement;
+    const toSelect = document.getElementById('to-currency') as HTMLSelectElement;
+    const convertedOutput = document.getElementById('converted-output') as HTMLInputElement;
+    const btnSwap = document.getElementById('btn-swap-currency');
+    const singleRateText = document.getElementById('single-rate-text');
+    const tableAmountTitle = document.getElementById('table-amount-title');
+    const amountChips = document.querySelectorAll('.amount-chip');
+
+    // Multi table elements
+    const rateUsd = document.getElementById('rate-usd');
+    const rateMxn = document.getElementById('rate-mxn');
+    const rateCop = document.getElementById('rate-cop');
+    const rateArs = document.getElementById('rate-ars');
+    const ratePen = document.getElementById('rate-pen');
+    const rateGbp = document.getElementById('rate-gbp');
+    const rateBtc = document.getElementById('rate-btc');
+    const rateEth = document.getElementById('rate-eth');
+
+    // Baseline rates relative to EUR (updated fallback)
+    const baseRates: Record<string, number> = {
+      EUR: 1.0,
+      USD: 1.085,
+      MXN: 18.95,
+      COP: 4320.0,
+      ARS: 1045.0,
+      CLP: 1010.0,
+      PEN: 3.98,
+      GBP: 0.855,
+      BTC: 0.0000155, // ~64.500 € / BTC
+      ETH: 0.000375,  // ~2.660 € / ETH
+      USDT: 1.085
+    };
+
+    let activeRates = { ...baseRates };
+
+    // Try fetching live rates asynchronously
+    async function fetchLiveRates() {
+      try {
+        const res = await fetch('https://open.er-api.com/v6/latest/EUR');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.rates) {
+            Object.keys(baseRates).forEach(cur => {
+              if (data.rates[cur]) {
+                activeRates[cur] = data.rates[cur];
+              }
+            });
+            // Try fetching crypto
+            try {
+              const cryptoRes = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=eur');
+              if (cryptoRes.ok) {
+                const cData = await cryptoRes.json();
+                if (cData.bitcoin?.eur) activeRates.BTC = 1 / cData.bitcoin.eur;
+                if (cData.ethereum?.eur) activeRates.ETH = 1 / cData.ethereum.eur;
+              }
+            } catch (ce) {}
+            calculate();
+          }
+        }
+      } catch (e) {}
+    }
+
+    function calculate() {
+      const amount = parseFloat(amountInput.value) || 0;
+      const from = fromSelect.value;
+      const to = toSelect.value;
+
+      // Convert from 'from' to EUR, then EUR to 'to'
+      const eurRateFrom = activeRates[from] || 1;
+      const eurRateTo = activeRates[to] || 1;
+
+      // 1 from = (eurRateTo / eurRateFrom) to
+      const unitRate = eurRateTo / eurRateFrom;
+      const totalConverted = amount * unitRate;
+
+      function formatVal(val: number, cur: string): string {
+        if (cur === 'BTC' || cur === 'ETH') {
+          return val < 0.001 ? val.toFixed(6) : val.toFixed(4);
+        }
+        if (val >= 1000) return val.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        return val.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+      }
+
+      if (convertedOutput) convertedOutput.value = `${formatVal(totalConverted, to)} ${to}`;
+      if (singleRateText) singleRateText.textContent = `1 ${from} = ${formatVal(unitRate, to)} ${to}`;
+      if (tableAmountTitle) tableAmountTitle.textContent = `${amount.toLocaleString('es-ES')} ${from}`;
+
+      // Update multi-table
+      function getEq(cur: string): string {
+        const r = (activeRates[cur] || 1) / eurRateFrom;
+        return `${formatVal(amount * r, cur)} ${cur}`;
+      }
+
+      if (rateUsd) rateUsd.textContent = getEq('USD');
+      if (rateMxn) rateMxn.textContent = getEq('MXN');
+      if (rateCop) rateCop.textContent = getEq('COP');
+      if (rateArs) rateArs.textContent = getEq('ARS');
+      if (ratePen) ratePen.textContent = getEq('PEN');
+      if (rateGbp) rateGbp.textContent = getEq('GBP');
+      if (rateBtc) rateBtc.textContent = getEq('BTC');
+      if (rateEth) rateEth.textContent = getEq('ETH');
+    }
+
+    [amountInput, fromSelect, toSelect].forEach(el => {
+      el?.addEventListener('input', calculate);
+      el?.addEventListener('change', calculate);
+    });
+
+    btnSwap?.addEventListener('click', () => {
+      const temp = fromSelect.value;
+      fromSelect.value = toSelect.value;
+      toSelect.value = temp;
+      calculate();
+    });
+
+    amountChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const val = chip.getAttribute('data-amount');
+        if (val && amountInput) {
+          amountInput.value = val;
+          calculate();
+        }
+      });
+    });
+
+    calculate();
+    fetchLiveRates();
+  }
+
+  document.addEventListener('astro:page-load', initCurrencyConverter);
+</script>
