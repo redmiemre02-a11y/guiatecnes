@@ -1,0 +1,753 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Cronómetro y Temporizador Online con Vueltas', url: '/herramientas/cronometro-temporizador' }
+];
+
+const faqs = [
+  {
+    question: '¿El temporizador sigue sonando si cambio de pestaña en el navegador?',
+    answer: 'Sí. Utiliza la API de audio nativa de tu navegador y cálculos basados en marcas de tiempo precisas (Date.now()), garantizando que no se retrase aunque minimices la ventana o abras otra pestaña.'
+  },
+  {
+    question: '¿Para qué sirve el botón de vueltas (Laps) en el cronómetro?',
+    answer: 'Permite registrar tiempos parciales sin detener el tiempo total. Es especialmente útil en carreras de atletismo, natación, resolución de cubos de Rubik o control de tiempo por tareas en el trabajo.'
+  },
+  {
+    question: '¿Puedo usar el temporizador para la técnica Pomodoro?',
+    answer: 'Sí. Puedes seleccionar fácilmente nuestro ajuste predefinido de 25 minutos de concentración y 5 minutos de descanso con aviso acústico para maximizar tu productividad.'
+  },
+  {
+    question: '¿Tiene soporte para pantalla completa?',
+    answer: 'Sí. Incluye un botón para maximizar el cronómetro a pantalla completa, ideal para proyectores en aulas de clase, gimnasios o salas de reuniones.'
+  }
+];
+---
+
+<BaseLayout
+  title="Cronómetro y Temporizador Online con Vueltas y Alarma | GuiaTecnEs"
+  description="Cronómetro de precisión con registro de vueltas (laps) y temporizador de cuenta atrás con alarma sonora y pantalla completa gratis en tu navegador."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Cronómetro y Temporizador</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">⏱️ Productividad, Deporte & Estudio</div>
+      <h1>Cronómetro y Temporizador Online</h1>
+      <p class="tool-subtitle">
+        Mide tiempos al milisegundo con registro de vueltas o establece cuentas atrás con alarma sonora y modo pantalla completa.
+      </p>
+    </header>
+
+    <div class="timer-tool-card card" id="timer-stage">
+      <!-- SELECTOR DE MODO -->
+      <div class="mode-tabs">
+        <button type="button" class="mode-tab active" data-mode="stopwatch">⏱️ Cronómetro</button>
+        <button type="button" class="mode-tab" data-mode="countdown">⏳ Temporizador</button>
+      </div>
+
+      <!-- PRESETS TEMPORIZADOR -->
+      <div class="countdown-presets-bar" id="countdown-presets" style="display: none;">
+        <span>Tiempo rápido:</span>
+        <button type="button" class="btn-preset-time" data-mins="1">1 min</button>
+        <button type="button" class="btn-preset-time" data-mins="5">5 min</button>
+        <button type="button" class="btn-preset-time" data-mins="10">10 min</button>
+        <button type="button" class="btn-preset-time" data-mins="25">25 min (Pomodoro)</button>
+        <button type="button" class="btn-preset-time" data-mins="45">45 min</button>
+      </div>
+
+      <!-- DISPLAY DIGITAL GIGANTE -->
+      <div class="timer-display-box">
+        <div class="time-readout" id="time-display">00:00:00<span class="ms-unit">.00</span></div>
+      </div>
+
+      <!-- INPUT DE TIEMPO MANUAL PARA TEMPORIZADOR -->
+      <div class="timer-custom-inputs" id="timer-inputs-group" style="display: none;">
+        <div class="time-input-col">
+          <input type="number" id="input-hrs" value="0" min="0" max="99" />
+          <label>Horas</label>
+        </div>
+        <span class="colon">:</span>
+        <div class="time-input-col">
+          <input type="number" id="input-mins" value="10" min="0" max="59" />
+          <label>Minutos</label>
+        </div>
+        <span class="colon">:</span>
+        <div class="time-input-col">
+          <input type="number" id="input-secs" value="0" min="0" max="59" />
+          <label>Segundos</label>
+        </div>
+      </div>
+
+      <!-- BOTONES DE CONTROL -->
+      <div class="timer-controls-row">
+        <button type="button" id="btn-start" class="btn-ctrl primary">
+          ▶️ Iniciar
+        </button>
+        <button type="button" id="btn-lap" class="btn-ctrl secondary">
+          🚩 Vuelta (Lap)
+        </button>
+        <button type="button" id="btn-reset" class="btn-ctrl secondary">
+          🔄 Reiniciar
+        </button>
+        <button type="button" id="btn-fullscreen" class="btn-ctrl secondary" title="Pantalla completa">
+          ⛶ Pantalla Completa
+        </button>
+      </div>
+
+      <!-- TABLA DE VUELTAS (LAPS) -->
+      <div class="laps-container" id="laps-wrapper" style="display: none;">
+        <h4>🚩 Registro de Vueltas</h4>
+        <div class="laps-table-wrap">
+          <table class="laps-table">
+            <thead>
+              <tr>
+                <th>Vuelta</th>
+                <th>Tiempo Parcial</th>
+                <th>Tiempo Total</th>
+              </tr>
+            </thead>
+            <tbody id="laps-tbody">
+              <!-- Laps rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO GUIDE -->
+    <section class="seo-guide-section card">
+      <h2>Cómo sacarle partido a un cronómetro de precisión</h2>
+      <div class="guide-grid">
+        <div class="guide-box">
+          <h3>🍅 Método Pomodoro</h3>
+          <p>
+            Trabaja en bloques ininterrumpidos de 25 minutos y descansa 5 minutos. Mejora tu concentración y evita el agotamiento mental en jornadas intensas.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>🏃 Entrenamiento HIIT y Tabata</h3>
+          <p>
+            Cronometra intervalos de alta intensidad (ej. 40 segundos de esfuerzo y 20 segundos de recuperación) con precisión de centésimas de segundo.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>🎤 Ensayos de Presentaciones</h3>
+          <p>
+            Mide el tiempo exacto de tus discursos o exposiciones para ajustarte al límite permitido sin tener que mirar el teléfono continuamente.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre el Cronómetro</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    background: rgba(245, 158, 11, 0.12);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .tool-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    margin-bottom: 2rem;
+  }
+
+  .timer-tool-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+  }
+
+  .mode-tabs {
+    display: flex;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.35rem;
+    border-radius: 9999px;
+    margin-bottom: 1.5rem;
+  }
+
+  .mode-tab {
+    background: transparent;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 9999px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .mode-tab.active {
+    background: #f59e0b;
+    color: #000;
+  }
+
+  .countdown-presets-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .countdown-presets-bar span {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .btn-preset-time {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.4rem;
+    padding: 0.3rem 0.65rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-preset-time:hover {
+    background: #f59e0b;
+    color: #000;
+    border-color: #f59e0b;
+  }
+
+  .timer-display-box {
+    margin-bottom: 1.5rem;
+  }
+
+  .time-readout {
+    font-size: 5rem;
+    font-weight: 900;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: #f59e0b;
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+
+  .ms-unit {
+    font-size: 2.5rem;
+    opacity: 0.75;
+  }
+
+  @media (max-width: 600px) {
+    .time-readout {
+      font-size: 3rem;
+    }
+    .ms-unit {
+      font-size: 1.6rem;
+    }
+  }
+
+  .timer-custom-inputs {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .time-input-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .time-input-col input {
+    width: 75px;
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 800;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color, #334155);
+    background: var(--input-bg, #0f172a);
+    color: var(--text-heading);
+  }
+
+  .time-input-col label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .colon {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--text-muted);
+  }
+
+  .timer-controls-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.85rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .btn-ctrl {
+    border: none;
+    padding: 0.85rem 1.6rem;
+    border-radius: 0.65rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-ctrl.primary {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #000;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+  }
+
+  .btn-ctrl.primary:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+  }
+
+  .btn-ctrl.secondary {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-heading);
+  }
+
+  .btn-ctrl.secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  /* LAPS */
+  .laps-container {
+    width: 100%;
+    max-width: 500px;
+    border-top: 1px solid var(--border-color, #334155);
+    padding-top: 1.25rem;
+  }
+
+  .laps-container h4 {
+    margin: 0 0 0.85rem 0;
+    font-size: 1rem;
+    color: var(--text-heading);
+  }
+
+  .laps-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .laps-table th, .laps-table td {
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color, #334155);
+  }
+
+  .laps-table th {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+
+  .laps-table td {
+    font-family: ui-monospace, monospace;
+    color: var(--text-heading);
+  }
+
+  /* SEO GUIDE & FAQ */
+  .seo-guide-section {
+    margin-bottom: 2rem;
+  }
+
+  .seo-guide-section h2, .faq-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1rem;
+  }
+
+  .seo-guide-section p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .guide-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .guide-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-box p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+
+  .faq-section {
+    margin-bottom: 2rem;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initStopwatchTimer() {
+    const tabs = document.querySelectorAll('.mode-tab');
+    const displayEl = document.getElementById('time-display');
+    const countdownPresets = document.getElementById('countdown-presets');
+    const timerInputsGroup = document.getElementById('timer-inputs-group');
+    const lapsWrapper = document.getElementById('laps-wrapper');
+    const lapsTbody = document.getElementById('laps-tbody');
+
+    const inputHrs = document.getElementById('input-hrs') as HTMLInputElement;
+    const inputMins = document.getElementById('input-mins') as HTMLInputElement;
+    const inputSecs = document.getElementById('input-secs') as HTMLInputElement;
+
+    const btnStart = document.getElementById('btn-start');
+    const btnLap = document.getElementById('btn-lap');
+    const btnReset = document.getElementById('btn-reset');
+    const btnFullscreen = document.getElementById('btn-fullscreen');
+    const timerStage = document.getElementById('timer-stage');
+    const presetTimeBtns = document.querySelectorAll('.btn-preset-time');
+
+    let currentMode = 'stopwatch'; // 'stopwatch' or 'countdown'
+    let isRunning = false;
+    let animId = 0;
+
+    // Stopwatch state
+    let startTime = 0;
+    let elapsedBeforePause = 0;
+    let laps: Array<{ num: number; lapTime: number; totalTime: number }> = [];
+    let lastLapTotal = 0;
+
+    // Countdown state
+    let countdownTargetMs = 0;
+    let countdownTotalMs = 10 * 60 * 1000;
+    let countdownRemaining = 10 * 60 * 1000;
+
+    // Web Audio Synthesized Alarm
+    let audioCtx: AudioContext | null = null;
+    function playAlarmSound() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        for (let i = 0; i < 4; i++) {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(880, audioCtx.currentTime + i * 0.25);
+          gain.gain.setValueAtTime(0.3, audioCtx.currentTime + i * 0.25);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + i * 0.25 + 0.18);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(audioCtx.currentTime + i * 0.25);
+          osc.stop(audioCtx.currentTime + i * 0.25 + 0.18);
+        }
+      } catch (e) {}
+    }
+
+    function formatTime(ms: number, showMs = true): string {
+      const totalSec = Math.floor(ms / 1000);
+      const h = Math.floor(totalSec / 3600);
+      const m = Math.floor((totalSec % 3600) / 60);
+      const s = totalSec % 60;
+      const centis = Math.floor((ms % 1000) / 10);
+
+      const hh = h.toString().padStart(2, '0');
+      const mm = m.toString().padStart(2, '0');
+      const ss = s.toString().padStart(2, '0');
+      const cs = centis.toString().padStart(2, '0');
+
+      if (!showMs) return `${hh}:${mm}:${ss}`;
+      return `${hh}:${mm}:${ss}<span class="ms-unit">.${cs}</span>`;
+    }
+
+    function updateDisplay(ms: number) {
+      if (displayEl) displayEl.innerHTML = formatTime(Math.max(0, ms));
+    }
+
+    function step() {
+      if (currentMode === 'stopwatch') {
+        const currentElapsed = elapsedBeforePause + (Date.now() - startTime);
+        updateDisplay(currentElapsed);
+        animId = requestAnimationFrame(step);
+      } else {
+        const remaining = countdownTargetMs - Date.now();
+        if (remaining <= 0) {
+          isRunning = false;
+          countdownRemaining = 0;
+          updateDisplay(0);
+          if (btnStart) btnStart.innerHTML = '▶️ Iniciar';
+          playAlarmSound();
+          alert('⏰ ¡El tiempo del temporizador ha finalizado!');
+          return;
+        }
+        countdownRemaining = remaining;
+        updateDisplay(remaining);
+        animId = requestAnimationFrame(step);
+      }
+    }
+
+    function startTimer() {
+      isRunning = true;
+      if (btnStart) btnStart.innerHTML = '⏸️ Pausar';
+      if (currentMode === 'stopwatch') {
+        startTime = Date.now();
+        animId = requestAnimationFrame(step);
+      } else {
+        countdownTargetMs = Date.now() + countdownRemaining;
+        animId = requestAnimationFrame(step);
+      }
+    }
+
+    function pauseTimer() {
+      isRunning = false;
+      cancelAnimationFrame(animId);
+      if (btnStart) btnStart.innerHTML = '▶️ Reanudar';
+      if (currentMode === 'stopwatch') {
+        elapsedBeforePause += Date.now() - startTime;
+      }
+    }
+
+    function resetTimer() {
+      isRunning = false;
+      cancelAnimationFrame(animId);
+      if (btnStart) btnStart.innerHTML = '▶️ Iniciar';
+
+      if (currentMode === 'stopwatch') {
+        startTime = 0;
+        elapsedBeforePause = 0;
+        laps = [];
+        lastLapTotal = 0;
+        if (lapsWrapper) lapsWrapper.style.display = 'none';
+        if (lapsTbody) lapsTbody.innerHTML = '';
+        updateDisplay(0);
+      } else {
+        readCountdownInputs();
+        updateDisplay(countdownRemaining);
+      }
+    }
+
+    function addLap() {
+      if (currentMode !== 'stopwatch' || !isRunning) return;
+      const currentTotal = elapsedBeforePause + (Date.now() - startTime);
+      const lapTime = currentTotal - lastLapTotal;
+      lastLapTotal = currentTotal;
+
+      laps.unshift({ num: laps.length + 1, lapTime, totalTime: currentTotal });
+
+      if (lapsWrapper) lapsWrapper.style.display = 'block';
+      if (lapsTbody) {
+        lapsTbody.innerHTML = laps.map(l => `
+          <tr>
+            <td><strong>#${l.num}</strong></td>
+            <td>+${formatTime(l.lapTime, true)}</td>
+            <td>${formatTime(l.totalTime, true)}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    function readCountdownInputs() {
+      const h = parseInt(inputHrs.value, 10) || 0;
+      const m = parseInt(inputMins.value, 10) || 0;
+      const s = parseInt(inputSecs.value, 10) || 0;
+      countdownTotalMs = (h * 3600 + m * 60 + s) * 1000;
+      countdownRemaining = countdownTotalMs;
+    }
+
+    // Tabs switch
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentMode = tab.getAttribute('data-mode') || 'stopwatch';
+
+        resetTimer();
+
+        if (currentMode === 'stopwatch') {
+          if (countdownPresets) countdownPresets.style.display = 'none';
+          if (timerInputsGroup) timerInputsGroup.style.display = 'none';
+          if (btnLap) btnLap.style.display = 'inline-block';
+        } else {
+          if (countdownPresets) countdownPresets.style.display = 'flex';
+          if (timerInputsGroup) timerInputsGroup.style.display = 'flex';
+          if (btnLap) btnLap.style.display = 'none';
+          readCountdownInputs();
+          updateDisplay(countdownRemaining);
+        }
+      });
+    });
+
+    // Preset buttons for timer
+    presetTimeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mins = parseInt(btn.getAttribute('data-mins') || '5', 10);
+        if (inputHrs) inputHrs.value = '0';
+        if (inputMins) inputMins.value = mins.toString();
+        if (inputSecs) inputSecs.value = '0';
+        resetTimer();
+      });
+    });
+
+    [inputHrs, inputMins, inputSecs].forEach(el => {
+      el?.addEventListener('input', () => {
+        if (!isRunning) {
+          readCountdownInputs();
+          updateDisplay(countdownRemaining);
+        }
+      });
+    });
+
+    btnStart?.addEventListener('click', () => {
+      if (isRunning) pauseTimer();
+      else startTimer();
+    });
+
+    btnReset?.addEventListener('click', resetTimer);
+    btnLap?.addEventListener('click', addLap);
+
+    btnFullscreen?.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        timerStage?.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+
+    resetTimer();
+  }
+
+  document.addEventListener('astro:page-load', initStopwatchTimer);
+</script>

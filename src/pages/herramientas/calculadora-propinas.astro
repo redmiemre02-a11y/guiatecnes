@@ -132,6 +132,9 @@ const faqs = [
           <button type="button" id="btn-copy-summary" class="btn-copy-summary">
             📋 Copiar Resumen
           </button>
+          <button type="button" id="btn-print-tip" class="btn-print-summary">
+            📄 Imprimir / Guardar PDF
+          </button>
         </div>
       </div>
     </div>
@@ -583,6 +586,43 @@ const faqs = [
     color: var(--text-muted);
     line-height: 1.6;
   }
+
+  .btn-print-summary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-heading, #f8fafc);
+    padding: 0.75rem 1rem;
+    border-radius: 0.65rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    width: 100%;
+  }
+
+  .btn-print-summary:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  @media print {
+    header, footer, .breadcrumb, .seo-guide-section, .faq-section, .share-actions-wrap, .tool-page .tool-subtitle, .tool-badge {
+      display: none !important;
+    }
+    body {
+      background: #ffffff !important;
+      color: #0f172a !important;
+    }
+    .tip-calc-grid {
+      grid-template-columns: 1fr 1fr !important;
+      gap: 1.5rem !important;
+    }
+    .card {
+      box-shadow: none !important;
+      border: 1px solid #cbd5e1 !important;
+      background: #ffffff !important;
+      color: #0f172a !important;
+    }
+  }
 </style>
 
 <script>
@@ -694,6 +734,10 @@ const faqs = [
       setTimeout(() => {
         btnCopySummary.textContent = '📋 Copiar Resumen';
       }, 1500);
+    });
+
+    document.getElementById('btn-print-tip')?.addEventListener('click', () => {
+      window.print();
     });
 
     calculate();

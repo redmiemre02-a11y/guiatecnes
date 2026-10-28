@@ -1,0 +1,507 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Generador de Texto Invertido y Efecto Espejo', url: '/herramientas/texto-invertido' }
+];
+
+const faqs = [
+  {
+    question: '¿Cómo funciona el texto invertido o cabeza abajo?',
+    answer: 'Utiliza caracteres especiales del estándar Unicode que representan letras y símbolos girados 180 grados. Al combinarlos en orden inverso, el texto resultante se lee completamente al revés en cualquier red social o aplicación de mensajería.'
+  },
+  {
+    question: '¿Qué es el texto Zalgo o Glitch?',
+    answer: 'El texto Zalgo aprovecha las marcas de combinación diacrítica de Unicode (tildes, acentos y signos) apilándolas unas sobre otras de forma caótica para crear un efecto visual de «letra corrupta o hackeada».'
+  },
+  {
+    question: '¿Dónde puedo utilizar estos textos invertidos?',
+    answer: 'Puedes usarlos en tu biografía o nombre de Instagram, estados de WhatsApp, servidores de Discord, vídeos de TikTok, apodos de videojuegos (Free Fire, Roblox) o para enviar mensajes secretos a tus amigos.'
+  },
+  {
+    question: '¿Es compatible con cualquier móvil u ordenador?',
+    answer: 'Sí. Al tratarse de caracteres Unicode nativos y no de imágenes, se pueden copiar y pegar en cualquier dispositivo Android, iPhone, Windows o Mac sin perder el formato.'
+  }
+];
+---
+
+<BaseLayout
+  title="Generador de Texto Invertido y Efecto Espejo (Flip Text) | GuiaTecnEs"
+  description="Escribe al revés, gira tus letras cabeza abajo (flip text) o crea texto glitch Zalgo para copiar y pegar en Instagram, WhatsApp, Discord y TikTok gratis."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Texto Invertido</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">✨ Redes Sociales, Discord & Instagram</div>
+      <h1>Generador de Texto Invertido y Efecto Espejo</h1>
+      <p class="tool-subtitle">
+        Transforma tu texto normal en letras cabeza abajo (flip text), texto en espejo o estilo glitch maldito para destacar en cualquier chat o perfil social.
+      </p>
+    </header>
+
+    <div class="flip-text-layout">
+      <!-- ÁREA DE ENTRADA -->
+      <div class="card input-card">
+        <label for="input-text">✍️ Escribe o pega tu texto aquí:</label>
+        <textarea id="input-text" rows="3" placeholder="Escribe algo aquí para voltearlo...">Hola amigos, bienvenidos a GuiaTecnEs</textarea>
+      </div>
+
+      <!-- RESULTADOS VOLTEADOS -->
+      <div class="results-grid">
+        <!-- 1. TEXTO CABEZA ABAJO -->
+        <div class="card result-card">
+          <div class="result-header">
+            <div>
+              <span class="style-icon">🔄</span>
+              <strong>Cabeza Abajo (Flip Text)</strong>
+            </div>
+            <button type="button" class="btn-copy-card" data-target="out-flip">📋 Copiar</button>
+          </div>
+          <div id="out-flip" class="result-display">---</div>
+        </div>
+
+        <!-- 2. TEXTO ESPEJO / REVERSO -->
+        <div class="card result-card">
+          <div class="result-header">
+            <div>
+              <span class="style-icon">🪞</span>
+              <strong>Texto Espejo (Reverso)</strong>
+            </div>
+            <button type="button" class="btn-copy-card" data-target="out-mirror">📋 Copiar</button>
+          </div>
+          <div id="out-mirror" class="result-display">---</div>
+        </div>
+
+        <!-- 3. TEXTO GLITCH ZALGO -->
+        <div class="card result-card">
+          <div class="result-header">
+            <div>
+              <span class="style-icon">👾</span>
+              <strong>Texto Corrupto (Zalgo Glitch)</strong>
+            </div>
+            <button type="button" class="btn-copy-card" data-target="out-zalgo">📋 Copiar</button>
+          </div>
+          <div id="out-zalgo" class="result-display">---</div>
+        </div>
+
+        <!-- 4. TEXTO BURBUJAS -->
+        <div class="card result-card">
+          <div class="result-header">
+            <div>
+              <span class="style-icon">🫧</span>
+              <strong>Texto en Círculos (Burbujas)</strong>
+            </div>
+            <button type="button" class="btn-copy-card" data-target="out-bubbles">---</button>
+          </div>
+          <div id="out-bubbles" class="result-display">---</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO GUIDE -->
+    <section class="seo-guide-section card">
+      <h2>¿Para qué sirve escribir texto al revés o cabeza abajo?</h2>
+      <div class="guide-grid">
+        <div class="guide-box">
+          <h3>📱 Perfiles llamativos en Redes</h3>
+          <p>
+            Destaca sobre el resto de usuarios en la biografía de Instagram o los comentarios de TikTok llamando la atención de forma inmediata.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>🎮 Nicks y Gamertags Pro</h3>
+          <p>
+            Crea apodos únicos para Free Fire, Valorant, Roblox o Discord con letras invertidas que ningún otro jugador tiene.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>🧩 Acertijos y Spoilers</h3>
+          <p>
+            Escribe respuestas a adivinanzas o spoilers de películas al revés para que la otra persona solo pueda leerlo si gira voluntariamente su móvil.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre Texto Volteado</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    background: rgba(168, 85, 247, 0.12);
+    color: #a855f7;
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .tool-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .input-card {
+    margin-bottom: 1.5rem;
+  }
+
+  .input-card label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.65rem;
+  }
+
+  textarea {
+    width: 100%;
+    padding: 0.85rem;
+    border-radius: 0.65rem;
+    border: 1px solid var(--border-color, #334155);
+    background: var(--input-bg, #0f172a);
+    color: var(--text-heading);
+    font-family: inherit;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    resize: vertical;
+  }
+
+  textarea:focus {
+    outline: none;
+    border-color: #a855f7;
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .results-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .result-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem;
+  }
+
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.85rem;
+  }
+
+  .result-header div {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.92rem;
+    color: var(--text-heading);
+  }
+
+  .style-icon {
+    font-size: 1.1rem;
+  }
+
+  .btn-copy-card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-heading);
+    padding: 0.35rem 0.8rem;
+    border-radius: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-copy-card:hover {
+    background: #a855f7;
+    color: #fff;
+    border-color: #a855f7;
+  }
+
+  .result-display {
+    background: #0b0f19;
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.5rem;
+    padding: 0.85rem;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: #38bdf8;
+    min-height: 65px;
+    word-break: break-all;
+    user-select: all;
+  }
+
+  /* SEO GUIDE & FAQ */
+  .seo-guide-section {
+    margin-bottom: 2rem;
+  }
+
+  .seo-guide-section h2, .faq-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 1rem;
+  }
+
+  .seo-guide-section p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .guide-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .guide-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-box p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+
+  .faq-section {
+    margin-bottom: 2rem;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initFlipText() {
+    const input = document.getElementById('input-text') as HTMLTextAreaElement;
+    const outFlip = document.getElementById('out-flip');
+    const outMirror = document.getElementById('out-mirror');
+    const outZalgo = document.getElementById('out-zalgo');
+    const outBubbles = document.getElementById('out-bubbles');
+    const copyBtns = document.querySelectorAll('.btn-copy-card');
+
+    // Flip text map
+    const flipMap: Record<string, string> = {
+      'a': 'ɐ', 'b': 'q', 'c': 'ɔ', 'd': 'p', 'e': 'ǝ', 'f': 'ɟ', 'g': 'ƃ',
+      'h': 'ɥ', 'i': 'ᴉ', 'j': 'ɾ', 'k': 'ʞ', 'l': 'l', 'm': 'ɯ', 'n': 'u',
+      'o': 'o', 'p': 'd', 'q': 'b', 'r': 'ɹ', 's': 's', 't': 'ʇ', 'u': 'n',
+      'v': 'ʌ', 'w': 'ʍ', 'x': 'x', 'y': 'ʎ', 'z': 'z',
+      'A': '∀', 'B': '𐐒', 'C': 'Ɔ', 'D': 'p', 'E': 'Ǝ', 'F': 'Ⅎ', 'G': '⅁',
+      'H': 'H', 'I': 'I', 'J': 'ſ', 'K': 'ʞ', 'L': '˥', 'M': 'W', 'N': 'N',
+      'O': 'O', 'P': 'Ԁ', 'Q': 'Ό', 'R': 'ᴚ', 'S': 'S', 'T': '⊥', 'U': '∩',
+      'V': 'Λ', 'W': 'M', 'X': 'X', 'Y': '⅄', 'Z': 'Z',
+      '0': '0', '1': 'Ɩ', '2': 'ᄅ', '3': 'Ɛ', '4': 'ㄣ', '5': 'ϛ', '6': '9',
+      '7': 'ㄥ', '8': '8', '9': '6',
+      '.': '˙', ',': "'", "'": ',', '"': '„', '!': '¡', '?': '¿', '<': '>',
+      '>': '<', '&': '⅋', '_': '‾'
+    };
+
+    // Bubble map
+    const bubbleMap: Record<string, string> = {
+      'a': 'ⓐ', 'b': 'ⓑ', 'c': 'ⓒ', 'd': 'ⓓ', 'e': 'ⓔ', 'f': 'ⓕ', 'g': 'ⓖ',
+      'h': 'ⓗ', 'i': 'ⓘ', 'j': 'ⓙ', 'k': 'ⓚ', 'l': 'ⓛ', 'm': 'ⓜ', 'n': 'ⓝ',
+      'o': 'ⓞ', 'p': 'ⓟ', 'q': 'ⓠ', 'r': 'ⓡ', 's': 'ⓢ', 't': 'ⓣ', 'u': 'ⓤ',
+      'v': 'ⓥ', 'w': 'ⓦ', 'x': 'ⓧ', 'y': 'ⓨ', 'z': 'ⓩ',
+      'A': 'Ⓐ', 'B': 'Ⓑ', 'C': 'Ⓒ', 'D': 'Ⓓ', 'E': 'Ⓔ', 'F': 'Ⓕ', 'G': 'Ⓖ',
+      'H': 'Ⓗ', 'I': 'Ⓘ', 'J': 'Ⓙ', 'K': 'Ⓚ', 'L': 'Ⓛ', 'M': 'Ⓜ', 'N': 'Ⓝ',
+      'O': 'Ⓞ', 'P': 'Ⓟ', 'Q': 'Ⓠ', 'R': 'Ⓡ', 'S': 'Ⓢ', 'T': 'Ⓣ', 'U': 'Ⓤ',
+      'V': 'Ⓥ', 'W': 'Ⓦ', 'X': 'Ⓧ', 'Y': 'Ⓨ', 'Z': 'Ⓩ',
+      '1': '①', '2': '②', '3': '③', '4': '④', '5': '⑤', '6': '⑥', '7': '⑦', '8': '⑧', '9': '⑨', '0': '⓪'
+    };
+
+    // Zalgo combining chars
+    const zalgoUp = ['\u030d', '\u030e', '\u0304', '\u0305', '\u033f', '\u0311', '\u0306', '\u0310', '\u0352', '\u0357'];
+    const zalgoDown = ['\u0316', '\u0317', '\u0318', '\u0319', '\u031c', '\u0320', '\u0324', '\u0325', '\u0326', '\u0330'];
+
+    function transform() {
+      const text = input.value;
+      if (!text) {
+        if (outFlip) outFlip.textContent = '';
+        if (outMirror) outMirror.textContent = '';
+        if (outZalgo) outZalgo.textContent = '';
+        if (outBubbles) outBubbles.textContent = '';
+        return;
+      }
+
+      // 1. Flip (upside down + reverse)
+      let flipped = '';
+      for (let i = text.length - 1; i >= 0; i--) {
+        const ch = text[i];
+        flipped += flipMap[ch] || ch;
+      }
+      if (outFlip) outFlip.textContent = flipped;
+
+      // 2. Mirror (plain reverse)
+      const mirrored = text.split('').reverse().join('');
+      if (outMirror) outMirror.textContent = mirrored;
+
+      // 3. Zalgo Glitch
+      let zalgo = '';
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        zalgo += ch;
+        if (ch !== ' ' && Math.random() > 0.3) {
+          zalgo += zalgoUp[Math.floor(Math.random() * zalgoUp.length)];
+          zalgo += zalgoDown[Math.floor(Math.random() * zalgoDown.length)];
+        }
+      }
+      if (outZalgo) outZalgo.textContent = zalgo;
+
+      // 4. Bubbles
+      let bubbles = '';
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        bubbles += bubbleMap[ch] || ch;
+      }
+      if (outBubbles) outBubbles.textContent = bubbles;
+    }
+
+    input?.addEventListener('input', transform);
+
+    copyBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        if (targetId) {
+          const el = document.getElementById(targetId);
+          if (el && el.textContent) {
+            navigator.clipboard.writeText(el.textContent);
+            btn.textContent = '¡Copiado!';
+            setTimeout(() => {
+              btn.textContent = '📋 Copiar';
+            }, 1500);
+          }
+        }
+      });
+    });
+
+    transform();
+  }
+
+  document.addEventListener('astro:page-load', initFlipText);
+</script>

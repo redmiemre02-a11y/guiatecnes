@@ -5,6 +5,42 @@ import Footer from '../../components/Footer.astro';
 
 const tools = [
   {
+    title: 'Calculadora de Porcentajes Completa',
+    desc: 'Calcula el porcentaje de una cantidad, descuentos en compras, aumentos de precio y variación porcentual con fórmulas.',
+    url: '/herramientas/calculadora-porcentajes',
+    icon: '🧮',
+    badge: 'Matemáticas',
+    color: '#10b981',
+    category: 'finanzas'
+  },
+  {
+    title: 'Generador de Texto Invertido y Espejo',
+    desc: 'Gira tus letras cabeza abajo (flip text), crea texto al revés en espejo o estilo glitch maldito Zalgo para Instagram y Discord.',
+    url: '/herramientas/texto-invertido',
+    icon: '🔠',
+    badge: 'Viral & Redes',
+    color: '#a855f7',
+    category: 'social'
+  },
+  {
+    title: 'Cronómetro y Temporizador Online con Laps',
+    desc: 'Mide tiempos al milisegundo con registro de vueltas o programa cuentas atrás con alarma sonora y pantalla completa.',
+    url: '/herramientas/cronometro-temporizador',
+    icon: '⏱️',
+    badge: 'Productividad',
+    color: '#f59e0b',
+    category: 'gaming'
+  },
+  {
+    title: 'Generador de Meta Tags Open Graph y 𝕏 Cards',
+    desc: 'Previsualiza cómo se verá tu enlace en Twitter/X, Facebook, WhatsApp y Google. Genera etiquetas HTML para el head.',
+    url: '/herramientas/generador-meta-tags',
+    icon: '🏷️',
+    badge: 'SEO & Web',
+    color: '#06b6d4',
+    category: 'social'
+  },
+  {
     title: 'Conversor de Divisas y Criptomonedas',
     desc: 'Calcula el cambio exacto entre Euro, Dólar, Pesos latinoamericanos, Bitcoin y Ethereum con tasas de mercado en vivo.',
     url: '/herramientas/conversor-divisas',
@@ -264,30 +300,55 @@ const tools = [
 ---
 
 <BaseLayout
-  title="32 Herramientas Online Gratuitas de Tecnología, Ciberseguridad y Redes | GuíaTecnes"
-  description="Colección de 24 utilidades online gratuitas: Ruleta de la suerte, link en bio, sueldo neto España, minificador de código, WhatsApp QR y más."
+  title="36 Herramientas Online Gratuitas de Tecnología, Ciberseguridad y Redes | GuíaTecnes"
+  description="Colección de 36 utilidades online gratuitas: Calculadora de porcentajes, texto invertido, cronómetro, meta tags, divisas, sueldo neto y más."
 >
   <Header slot="header" />
 
   <main class="hub-container">
     <div class="hub-hero">
-      <span class="badge">🧲 32 Utilidades 100% Gratuitas</span>
+      <span class="badge">🧲 36 Utilidades 100% Gratuitas</span>
       <h1>Herramientas Digitales y Utilidades Online</h1>
       <p class="subtitle">Herramientas prácticas, rápidas y privadas diseñadas para solucionar problemas del día a día. Sin registros, sin suscripciones y sin trampas.</p>
+
+      <!-- BUSCADOR EN VIVO Y FILTROS POR CATEGORÍA -->
+      <div class="hub-search-wrapper">
+        <div class="search-input-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="tool-search-input" placeholder="Buscar entre las 36 herramientas gratis (ej: sueldo, wifi, porcentajes, qr)..." />
+          <button type="button" id="btn-clear-search" style="display: none;">✕</button>
+        </div>
+
+        <div class="hub-filter-chips">
+          <button type="button" class="filter-chip active" data-cat="all">Todas (36)</button>
+          <button type="button" class="filter-chip" data-cat="finanzas">💰 Finanzas & Nómina</button>
+          <button type="button" class="filter-chip" data-cat="diseno">🎨 Diseño & Web</button>
+          <button type="button" class="filter-chip" data-cat="gaming">⚡ Redes & Gaming</button>
+          <button type="button" class="filter-chip" data-cat="social">📱 Social & Utilidades</button>
+          <button type="button" class="filter-chip btn-random-hub" id="btn-random-tool">🎲 Probar al azar</button>
+        </div>
+
+        <div class="tools-count-feedback" id="tools-counter">
+          Mostrando 36 herramientas disponibles
+        </div>
+      </div>
     </div>
 
-    <div class="tools-grid">
-      {tools.map(t => (
-        <a href={t.url} class="tool-card">
-          <div class="card-header">
-            <span class="tool-icon">{t.icon}</span>
-            <span class="tool-badge" style={`color: ${t.color}; background: ${t.color}15; border-color: ${t.color}35;`}>{t.badge}</span>
-          </div>
-          <h3>{t.title}</h3>
-          <p>{t.desc}</p>
-          <span class="tool-cta">Abrir herramienta →</span>
-        </a>
-      ))}
+    <div class="tools-grid" id="tools-grid">
+      {tools.map(t => {
+        const cat = t.category || (t.url.includes('sueldo') || t.url.includes('propina') || t.url.includes('iva') || t.url.includes('divisas') || t.url.includes('porcentajes') || t.url.includes('freelance') || t.url.includes('luz') ? 'finanzas' : (t.url.includes('paleta') || t.url.includes('gradiente') || t.url.includes('compresor') || t.url.includes('letras') || t.url.includes('base64') || t.url.includes('minificador') ? 'diseno' : (t.url.includes('ping') || t.url.includes('velocidad') || t.url.includes('nombres') || t.url.includes('ppi') || t.url.includes('descarga') || t.url.includes('datos') || t.url.includes('cronometro') ? 'gaming' : 'social')));
+        return (
+          <a href={t.url} class="tool-card" data-title={t.title.toLowerCase()} data-desc={t.desc.toLowerCase()} data-cat={cat}>
+            <div class="card-header">
+              <span class="tool-icon">{t.icon}</span>
+              <span class="tool-badge" style={`color: ${t.color}; background: ${t.color}15; border-color: ${t.color}35;`}>{t.badge}</span>
+            </div>
+            <h3>{t.title}</h3>
+            <p>{t.desc}</p>
+            <span class="tool-cta">Abrir herramienta →</span>
+          </a>
+        );
+      })}
     </div>
   </main>
 
@@ -416,4 +477,172 @@ const tools = [
       grid-template-columns: 1fr;
     }
   }
+
+  /* HUB SEARCH & FILTER */
+  .hub-search-wrapper {
+    margin-top: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .search-input-box {
+    position: relative;
+    width: 100%;
+    max-width: 580px;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    font-size: 1.1rem;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  #tool-search-input {
+    width: 100%;
+    padding: 0.85rem 2.8rem 0.85rem 3rem;
+    border-radius: 9999px;
+    border: 1px solid var(--border-color, #334155);
+    background: var(--card-bg, #1e293b);
+    color: var(--text-heading, #f8fafc);
+    font-size: 0.95rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s;
+  }
+
+  #tool-search-input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+  }
+
+  #btn-clear-search {
+    position: absolute;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+
+  .hub-filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .filter-chip {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 9999px;
+    padding: 0.45rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted, #94a3b8);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-chip:hover {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .filter-chip.active {
+    background: #6366f1;
+    color: #ffffff;
+    border-color: #6366f1;
+    box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35);
+  }
+
+  .filter-chip.btn-random-hub {
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+    color: #ffffff;
+    border: none;
+    font-weight: 700;
+  }
+
+  .tools-count-feedback {
+    font-size: 0.82rem;
+    color: var(--text-muted, #94a3b8);
+  }
 </style>
+
+<script>
+  function initToolsHubFilter() {
+    const input = document.getElementById('tool-search-input') as HTMLInputElement;
+    const btnClear = document.getElementById('btn-clear-search');
+    const filterChips = document.querySelectorAll('.filter-chip');
+    const cards = document.querySelectorAll<HTMLElement>('.tool-card');
+    const counter = document.getElementById('tools-counter');
+    const btnRandom = document.getElementById('btn-random-tool');
+
+    if (!input || cards.length === 0) return;
+
+    let activeCat = 'all';
+
+    function filterTools() {
+      const q = (input.value || '').trim().toLowerCase();
+      if (btnClear) btnClear.style.display = q ? 'block' : 'none';
+
+      let visibleCount = 0;
+      cards.forEach(card => {
+        const title = card.getAttribute('data-title') || '';
+        const desc = card.getAttribute('data-desc') || '';
+        const cat = card.getAttribute('data-cat') || 'general';
+
+        const matchesQuery = !q || title.includes(q) || desc.includes(q);
+        const matchesCat = activeCat === 'all' || cat === activeCat;
+
+        if (matchesQuery && matchesCat) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (counter) {
+        counter.textContent = `Mostrando ${visibleCount} de ${cards.length} herramientas`;
+      }
+    }
+
+    input.addEventListener('input', filterTools);
+    btnClear?.addEventListener('click', () => {
+      input.value = '';
+      filterTools();
+      input.focus();
+    });
+
+    filterChips.forEach(chip => {
+      if (chip.id === 'btn-random-tool') return;
+      chip.addEventListener('click', () => {
+        filterChips.forEach(c => {
+          if (c.id !== 'btn-random-tool') c.classList.remove('active');
+        });
+        chip.classList.add('active');
+        activeCat = chip.getAttribute('data-cat') || 'all';
+        filterTools();
+      });
+    });
+
+    btnRandom?.addEventListener('click', () => {
+      const allUrls = Array.from(cards).map(c => c.getAttribute('href')).filter(Boolean) as string[];
+      if (allUrls.length > 0) {
+        const randUrl = allUrls[Math.floor(Math.random() * allUrls.length)];
+        window.location.href = randUrl;
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initToolsHubFilter);
+</script>
+
