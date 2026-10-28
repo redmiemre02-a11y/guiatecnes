@@ -5,6 +5,42 @@ import Footer from '../../components/Footer.astro';
 
 const tools = [
   {
+    title: 'Contador de Caracteres para Redes Sociales',
+    desc: 'Comprueba al instante si tu texto cabe en X/Twitter (280), Instagram bio y pie de foto, TikTok, LinkedIn y YouTube.',
+    url: '/herramientas/contador-caracteres-redes',
+    icon: '📱',
+    badge: 'Social Media',
+    color: '#6366f1',
+    category: 'social'
+  },
+  {
+    title: 'Generador de Gamertags y Nombres de Usuario',
+    desc: 'Crea nicknames épicos, tryhards, cyberpunk o estéticos para Fortnite, Steam, Valorant, Minecraft, Twitch y Discord.',
+    url: '/herramientas/generador-gamertags',
+    icon: '🎮',
+    badge: 'Gaming & Twitch',
+    color: '#a855f7',
+    category: 'gaming'
+  },
+  {
+    title: 'Conversor Universal de Unidades',
+    desc: 'Convierte longitud, masa/peso, temperatura, velocidad y volumen: pulgadas a cm, libras a kg, Celsius a Fahrenheit y más.',
+    url: '/herramientas/conversor-unidades',
+    icon: '📐',
+    badge: 'Medidas & Ciencia',
+    color: '#10b981',
+    category: 'finanzas'
+  },
+  {
+    title: 'Generador de Hash Criptográfico (SHA-256, MD5)',
+    desc: 'Calcula resúmenes hash de texto o archivos locales en tu navegador con SHA-256, SHA-512, SHA-1 y MD5 con verificador.',
+    url: '/herramientas/generador-hash',
+    icon: '🔒',
+    badge: 'Ciberseguridad',
+    color: '#06b6d4',
+    category: 'social'
+  },
+  {
     title: 'Calculadora de Porcentajes Completa',
     desc: 'Calcula el porcentaje de una cantidad, descuentos en compras, aumentos de precio y variación porcentual con fórmulas.',
     url: '/herramientas/calculadora-porcentajes',
@@ -300,14 +336,14 @@ const tools = [
 ---
 
 <BaseLayout
-  title="36 Herramientas Online Gratuitas de Tecnología, Ciberseguridad y Redes | GuíaTecnes"
-  description="Colección de 36 utilidades online gratuitas: Calculadora de porcentajes, texto invertido, cronómetro, meta tags, divisas, sueldo neto y más."
+  title="40 Herramientas Online Gratuitas de Tecnología, Ciberseguridad y Redes | GuíaTecnes"
+  description="Colección de 40 utilidades online gratuitas: Contador de redes, gamertags, conversor de unidades, hashes, calculadora de porcentajes, sueldo neto y más."
 >
   <Header slot="header" />
 
   <main class="hub-container">
     <div class="hub-hero">
-      <span class="badge">🧲 36 Utilidades 100% Gratuitas</span>
+      <span class="badge">🧲 40 Utilidades 100% Gratuitas</span>
       <h1>Herramientas Digitales y Utilidades Online</h1>
       <p class="subtitle">Herramientas prácticas, rápidas y privadas diseñadas para solucionar problemas del día a día. Sin registros, sin suscripciones y sin trampas.</p>
 
@@ -315,12 +351,13 @@ const tools = [
       <div class="hub-search-wrapper">
         <div class="search-input-box">
           <span class="search-icon">🔍</span>
-          <input type="text" id="tool-search-input" placeholder="Buscar entre las 36 herramientas gratis (ej: sueldo, wifi, porcentajes, qr)..." />
+          <input type="text" id="tool-search-input" placeholder="Buscar entre las 40 herramientas gratis (ej: sueldo, wifi, porcentajes, qr)..." />
           <button type="button" id="btn-clear-search" style="display: none;">✕</button>
         </div>
 
         <div class="hub-filter-chips">
-          <button type="button" class="filter-chip active" data-cat="all">Todas (36)</button>
+          <button type="button" class="filter-chip active" data-cat="all">Todas (40)</button>
+          <button type="button" class="filter-chip btn-fav-filter" data-cat="fav">⭐ Favoritas (<span id="fav-chip-count">0</span>)</button>
           <button type="button" class="filter-chip" data-cat="finanzas">💰 Finanzas & Nómina</button>
           <button type="button" class="filter-chip" data-cat="diseno">🎨 Diseño & Web</button>
           <button type="button" class="filter-chip" data-cat="gaming">⚡ Redes & Gaming</button>
@@ -329,7 +366,7 @@ const tools = [
         </div>
 
         <div class="tools-count-feedback" id="tools-counter">
-          Mostrando 36 herramientas disponibles
+          Mostrando 40 herramientas disponibles
         </div>
       </div>
     </div>
@@ -341,7 +378,10 @@ const tools = [
           <a href={t.url} class="tool-card" data-title={t.title.toLowerCase()} data-desc={t.desc.toLowerCase()} data-cat={cat}>
             <div class="card-header">
               <span class="tool-icon">{t.icon}</span>
-              <span class="tool-badge" style={`color: ${t.color}; background: ${t.color}15; border-color: ${t.color}35;`}>{t.badge}</span>
+              <div class="header-right-badges">
+                <span class="tool-badge" style={`color: ${t.color}; background: ${t.color}15; border-color: ${t.color}35;`}>{t.badge}</span>
+                <button type="button" class="btn-fav-star" data-url={t.url} title="Guardar en favoritas">☆</button>
+              </div>
             </div>
             <h3>{t.title}</h3>
             <p>{t.desc}</p>
@@ -478,6 +518,39 @@ const tools = [
     }
   }
 
+  
+  .header-right-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .btn-fav-star {
+    background: transparent;
+    border: none;
+    font-size: 1.15rem;
+    color: var(--text-muted, #94a3b8);
+    cursor: pointer;
+    padding: 0 0.2rem;
+    line-height: 1;
+    transition: transform 0.15s, color 0.15s;
+    z-index: 2;
+  }
+
+  .btn-fav-star:hover {
+    transform: scale(1.25);
+    color: #f59e0b;
+  }
+
+  .btn-fav-star.is-fav {
+    color: #f59e0b;
+  }
+
+  .btn-fav-filter.has-favs {
+    border-color: #f59e0b;
+    color: #f59e0b;
+  }
+
   /* HUB SEARCH & FILTER */
   .hub-search-wrapper {
     margin-top: 1.75rem;
@@ -589,6 +662,44 @@ const tools = [
 
     let activeCat = 'all';
 
+    function getFavUrls(): string[] {
+      try {
+        return JSON.parse(localStorage.getItem('gt_user_fav_tools') || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveFavUrls(urls: string[]) {
+      try {
+        localStorage.setItem('gt_user_fav_tools', JSON.stringify(urls));
+        updateFavsUI();
+      } catch (e) {}
+    }
+
+    function updateFavsUI() {
+      const favs = getFavUrls();
+      const favCountBadge = document.getElementById('fav-chip-count');
+      const favFilterBtn = document.querySelector('.btn-fav-filter');
+
+      if (favCountBadge) favCountBadge.textContent = favs.length.toString();
+      if (favFilterBtn) {
+        if (favs.length > 0) favFilterBtn.classList.add('has-favs');
+        else favFilterBtn.classList.remove('has-favs');
+      }
+
+      document.querySelectorAll('.btn-fav-star').forEach(star => {
+        const u = star.getAttribute('data-url');
+        if (u && favs.includes(u)) {
+          star.textContent = '⭐';
+          star.classList.add('is-fav');
+        } else {
+          star.textContent = '☆';
+          star.classList.remove('is-fav');
+        }
+      });
+    }
+
     function filterTools() {
       const q = (input.value || '').trim().toLowerCase();
       if (btnClear) btnClear.style.display = q ? 'block' : 'none';
@@ -599,8 +710,11 @@ const tools = [
         const desc = card.getAttribute('data-desc') || '';
         const cat = card.getAttribute('data-cat') || 'general';
 
+        const cardUrl = card.getAttribute('href') || '';
+        const isFav = getFavUrls().includes(cardUrl);
+
         const matchesQuery = !q || title.includes(q) || desc.includes(q);
-        const matchesCat = activeCat === 'all' || cat === activeCat;
+        const matchesCat = activeCat === 'all' ? true : (activeCat === 'fav' ? isFav : cat === activeCat);
 
         if (matchesQuery && matchesCat) {
           card.style.display = 'flex';
@@ -641,6 +755,26 @@ const tools = [
         window.location.href = randUrl;
       }
     });
+
+    // Star toggle clicks
+    document.querySelectorAll('.btn-fav-star').forEach(star => {
+      star.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const u = star.getAttribute('data-url');
+        if (!u) return;
+        let favs = getFavUrls();
+        if (favs.includes(u)) {
+          favs = favs.filter(x => x !== u);
+        } else {
+          favs.push(u);
+        }
+        saveFavUrls(favs);
+        filterTools();
+      });
+    });
+
+    updateFavsUI();
   }
 
   document.addEventListener('astro:page-load', initToolsHubFilter);

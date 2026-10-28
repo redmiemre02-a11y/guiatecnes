@@ -1,0 +1,972 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Generador de Hash Criptográfico Online', url: '/herramientas/generador-hash' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es una función hash criptográfica?',
+    answer: 'Es un algoritmo matemático unidireccional que transforma cualquier entrada de datos (un texto, una contraseña o un archivo de varios gigabytes) en una cadena alfanumérica de longitud fija única (huella digital).'
+  },
+  {
+    question: '¿Se suben mis archivos o contraseñas a algún servidor?',
+    answer: 'No. El cálculo se ejecuta al 100% en tu propio navegador web mediante la Web Crypto API nativa de JavaScript. Tus textos y archivos nunca abandonan tu dispositivo, garantizando privacidad total.'
+  },
+  {
+    question: '¿Cuál es la diferencia entre MD5, SHA-1 y SHA-256?',
+    answer: 'MD5 y SHA-1 son algoritmos clásicos que hoy en día se consideran vulnerables ante colisiones deliberadas y solo deben usarse para comprobación de errores en descargas. SHA-256 y SHA-512 son el estándar criptográfico moderno seguro utilizado en blockchain, certificados SSL/TLS y seguridad bancaria.'
+  },
+  {
+    question: '¿Para qué sirve comparar un checksum o hash de un archivo?',
+    answer: 'Te permite verificar que un archivo o instalador descargado de internet es exactamente idéntico al original publicado por el autor y que no ha sufrido corrupción durante la descarga ni ha sido manipulado con malware.'
+  }
+];
+---
+
+<BaseLayout
+  title="Generador de Hash Criptográfico SHA-256, MD5 y SHA-512 | GuiaTecnEs"
+  description="Calcula hashes de texto y archivos locales en tu navegador (SHA-256, SHA-1, SHA-512, MD5). Privado, instantáneo y con comparador de integridad."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Generador de Hash</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🔒 Ciberseguridad, Desarrollo & Privacidad</div>
+      <h1>Generador de Hash Criptográfico</h1>
+      <p class="tool-subtitle">
+        Calcula la huella digital (checksum) de cualquier texto o archivo local en SHA-256, SHA-512, SHA-1 y MD5. Procesamiento 100% privado en tu navegador sin enviar datos a servidores.
+      </p>
+    </header>
+
+    <div class="hash-tool-layout">
+      <!-- PANEL DE ENTRADA -->
+      <div class="card input-card">
+        <!-- PESTAÑAS MODO -->
+        <div class="mode-tabs">
+          <button type="button" class="mode-tab active" data-mode="text">📝 Texto Plano</button>
+          <button type="button" class="mode-tab" data-mode="file">📁 Archivo Local (Checksum)</button>
+        </div>
+
+        <!-- MODO TEXTO -->
+        <div class="mode-content" id="mode-text-box">
+          <label for="hash-text-input">Texto o Contraseña a Hashear:</label>
+          <textarea
+            id="hash-text-input"
+            placeholder="Escribe o pega aquí el texto para calcular sus hashes..."
+            rows="5"
+          >Hola Mundo</textarea>
+        </div>
+
+        <!-- MODO ARCHIVO -->
+        <div class="mode-content" id="mode-file-box" style="display: none;">
+          <div class="drop-zone" id="file-drop-zone">
+            <span class="drop-icon">📂</span>
+            <p class="drop-title">Arrastra tu archivo aquí o <strong>haz clic para seleccionar</strong></p>
+            <p class="drop-sub">El archivo se analiza localmente en tu memoria RAM. Límite recomendado: hasta 500 MB.</p>
+            <input type="file" id="file-selector-input" style="display: none;" />
+          </div>
+          <div class="file-loaded-info" id="file-info-badge" style="display: none;">
+            <span class="file-name" id="selected-file-name"></span>
+            <span class="file-size" id="selected-file-size"></span>
+          </div>
+        </div>
+
+        <!-- OPCIONES -->
+        <div class="hash-options-bar">
+          <label class="toggle-checkbox">
+            <input type="checkbox" id="toggle-uppercase" />
+            <span>Salida en Mayúsculas (A-F)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- RESULTADOS DE HASHES -->
+      <div class="card results-card">
+        <h3>🔑 Resultados Criptográficos</h3>
+
+        <div class="hash-output-list">
+          <!-- SHA-256 -->
+          <div class="hash-item">
+            <div class="hash-meta">
+              <span class="algo-name">SHA-256 <span class="badge-rec">Estándar Seguro</span></span>
+              <button type="button" class="btn-copy-hash" data-target="hash-sha256">📋 Copiar</button>
+            </div>
+            <div class="hash-value-wrap">
+              <input type="text" id="hash-sha256" readonly />
+            </div>
+          </div>
+
+          <!-- SHA-512 -->
+          <div class="hash-item">
+            <div class="hash-meta">
+              <span class="algo-name">SHA-512 <span class="badge-rec">Alta Seguridad</span></span>
+              <button type="button" class="btn-copy-hash" data-target="hash-sha512">📋 Copiar</button>
+            </div>
+            <div class="hash-value-wrap">
+              <input type="text" id="hash-sha512" readonly />
+            </div>
+          </div>
+
+          <!-- SHA-1 -->
+          <div class="hash-item">
+            <div class="hash-meta">
+              <span class="algo-name">SHA-1 <span class="badge-legacy">Legacy / Git</span></span>
+              <button type="button" class="btn-copy-hash" data-target="hash-sha1">📋 Copiar</button>
+            </div>
+            <div class="hash-value-wrap">
+              <input type="text" id="hash-sha1" readonly />
+            </div>
+          </div>
+
+          <!-- MD5 -->
+          <div class="hash-item">
+            <div class="hash-meta">
+              <span class="algo-name">MD5 <span class="badge-legacy">Checksum Rápido</span></span>
+              <button type="button" class="btn-copy-hash" data-target="hash-md5">📋 Copiar</button>
+            </div>
+            <div class="hash-value-wrap">
+              <input type="text" id="hash-md5" readonly />
+            </div>
+          </div>
+        </div>
+
+        <!-- COMPARADOR DE VERIFICACIÓN -->
+        <div class="verifier-box">
+          <label for="verify-hash-input">🔍 Comparar e Integrar Checksum:</label>
+          <div class="verify-input-group">
+            <input type="text" id="verify-hash-input" placeholder="Pega el hash esperado para verificar coincidencia..." />
+          </div>
+          <div class="verify-status" id="verify-status-msg" style="display: none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUÍA SEO -->
+    <section class="seo-guide-section card">
+      <h2>¿Cuándo utilizar cada algoritmo de Hash?</h2>
+      <p>
+        Las funciones de resumen o hash tienen propósitos muy concretos según el entorno técnico:
+      </p>
+
+      <div class="guide-grid">
+        <div class="guide-box">
+          <h3>🛡️ SHA-256 (Recomendado)</h3>
+          <p>
+            Es el estándar criptográfico de la NSA y el consorcio NIST. Utilizado en la minería de Bitcoin, firmas digitales SSL, autenticación JWT y comprobaciones de integridad gubernamentales. No se conocen colisiones viables.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>📦 SHA-1 y Git</h3>
+          <p>
+            Históricamente empleado para identificar commits y objetos en sistemas de control de versiones Git y repositorios de paquetes Linux. Está en desuso para firmas TLS por colisiones demostradas.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>⚡ MD5 (Solo verificación simple)</h3>
+          <p>
+            Genera un resumen de 128 bits sumamente veloz. Se usa comúnmente en descargas masivas ISO para verificar que el archivo no se ha cortado a mitad de transferencia, pero nunca debe usarse para almacenar contraseñas.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQS -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre Hashing</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    padding: 2rem 1rem 4rem;
+    max-width: 1050px;
+    margin: 0 auto;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted, #94a3b8);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: #06b6d4;
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: rgba(6, 182, 212, 0.1);
+    color: #06b6d4;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(6, 182, 212, 0.2);
+  }
+
+  .tool-header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .hash-tool-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    gap: 1.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .hash-tool-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* MODE TABS */
+  .mode-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-color, #334155);
+    padding-bottom: 0.75rem;
+  }
+
+  .mode-tab {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-muted, #94a3b8);
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .mode-tab:hover {
+    background: rgba(6, 182, 212, 0.15);
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .mode-tab.active {
+    background: #06b6d4;
+    color: #ffffff;
+    border-color: #06b6d4;
+    box-shadow: 0 2px 10px rgba(6, 182, 212, 0.35);
+  }
+
+  .mode-content label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 0.4rem;
+  }
+
+  #hash-text-input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border-color, #334155);
+    background: rgba(15, 23, 42, 0.6);
+    color: var(--text-heading, #f8fafc);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    font-family: inherit;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+
+  #hash-text-input:focus {
+    outline: none;
+    border-color: #06b6d4;
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.25);
+  }
+
+  /* DROP ZONE */
+  .drop-zone {
+    border: 2px dashed var(--border-color, #334155);
+    border-radius: 0.75rem;
+    padding: 2.25rem 1rem;
+    text-align: center;
+    background: rgba(15, 23, 42, 0.4);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color: #06b6d4;
+    background: rgba(6, 182, 212, 0.08);
+  }
+
+  .drop-icon {
+    font-size: 2.2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .drop-title {
+    font-size: 0.95rem;
+    color: var(--text-heading, #f8fafc);
+    margin: 0 0 0.35rem;
+  }
+
+  .drop-sub {
+    font-size: 0.78rem;
+    color: var(--text-muted, #94a3b8);
+    margin: 0;
+  }
+
+  .file-loaded-info {
+    margin-top: 0.75rem;
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.25);
+    border-radius: 0.5rem;
+    padding: 0.6rem 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+  }
+
+  .file-name {
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 250px;
+  }
+
+  .file-size {
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .hash-options-bar {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--border-color, #334155);
+  }
+
+  .toggle-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    cursor: pointer;
+  }
+
+  .toggle-checkbox input {
+    accent-color: #06b6d4;
+  }
+
+  /* RESULTS CARD */
+  .results-card h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 1.25rem;
+  }
+
+  .hash-output-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .hash-item {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.6rem;
+    padding: 0.75rem 0.85rem;
+  }
+
+  .hash-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+  }
+
+  .algo-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .badge-rec {
+    font-size: 0.7rem;
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    padding: 0.1rem 0.45rem;
+    border-radius: 9999px;
+  }
+
+  .badge-legacy {
+    font-size: 0.7rem;
+    background: rgba(148, 163, 184, 0.15);
+    color: #94a3b8;
+    padding: 0.1rem 0.45rem;
+    border-radius: 9999px;
+  }
+
+  .btn-copy-hash {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-muted, #94a3b8);
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .btn-copy-hash:hover {
+    color: var(--text-heading, #f8fafc);
+    background: rgba(6, 182, 212, 0.25);
+  }
+
+  .btn-copy-hash.copied {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #10b981;
+  }
+
+  .hash-value-wrap input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #06b6d4;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.82rem;
+    padding: 0.1rem 0;
+    outline: none;
+  }
+
+  /* VERIFIER BOX */
+  .verifier-box {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.75rem;
+    padding: 1rem;
+  }
+
+  .verifier-box label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 0.4rem;
+  }
+
+  .verify-input-group input {
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.5rem;
+    color: var(--text-heading, #f8fafc);
+    font-size: 0.85rem;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    box-sizing: border-box;
+  }
+
+  .verify-input-group input:focus {
+    outline: none;
+    border-color: #06b6d4;
+  }
+
+  .verify-status {
+    margin-top: 0.65rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .verify-status.match {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.4);
+  }
+
+  .verify-status.mismatch {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+  }
+
+  /* SEO & GUIDE */
+  .seo-guide-section, .faq-section {
+    margin-top: 2rem;
+  }
+
+  .seo-guide-section h2, .faq-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 1rem;
+  }
+
+  .seo-guide-section p {
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .guide-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .guide-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-box p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    line-height: 1.6;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  // Pure JS fast MD5 implementation for client-side checksum
+  function md5(string: string | ArrayBuffer): string {
+    function rotateLeft(lValue: number, iShiftBits: number) {
+      return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits));
+    }
+    function addUnsigned(lX: number, lY: number) {
+      const lX8 = (lX & 0x80000000);
+      const lY8 = (lY & 0x80000000);
+      const lX4 = (lX & 0x40000000);
+      const lY4 = (lY & 0x40000000);
+      const lResult = (lX & 0x3FFFFFFF) + (lY & 0x3FFFFFFF);
+      if (lX4 & lY4) return (lResult ^ 0x80000000 ^ lX8 ^ lY8);
+      if (lX4 | lY4) {
+        if (lResult & 0x40000000) return (lResult ^ 0xC0000000 ^ lX8 ^ lY8);
+        return (lResult ^ 0x40000000 ^ lX8 ^ lY8);
+      }
+      return (lResult ^ lX8 ^ lY8);
+    }
+    function F(x: number, y: number, z: number) { return (x & y) | ((~x) & z); }
+    function G(x: number, y: number, z: number) { return (x & z) | (y & (~z)); }
+    function H(x: number, y: number, z: number) { return (x ^ y ^ z); }
+    function I(x: number, y: number, z: number) { return (y ^ (x | (~z))); }
+
+    function FF(a: number, b: number, c: number, d: number, x: number, s: number, ac: number) {
+      a = addUnsigned(a, addUnsigned(addUnsigned(F(b, c, d), x), ac));
+      return addUnsigned(rotateLeft(a, s), b);
+    }
+    function GG(a: number, b: number, c: number, d: number, x: number, s: number, ac: number) {
+      a = addUnsigned(a, addUnsigned(addUnsigned(G(b, c, d), x), ac));
+      return addUnsigned(rotateLeft(a, s), b);
+    }
+    function HH(a: number, b: number, c: number, d: number, x: number, s: number, ac: number) {
+      a = addUnsigned(a, addUnsigned(addUnsigned(H(b, c, d), x), ac));
+      return addUnsigned(rotateLeft(a, s), b);
+    }
+    function II(a: number, b: number, c: number, d: number, x: number, s: number, ac: number) {
+      a = addUnsigned(a, addUnsigned(addUnsigned(I(b, c, d), x), ac));
+      return addUnsigned(rotateLeft(a, s), b);
+    }
+
+    let bytes: Uint8Array;
+    if (typeof string === 'string') {
+      bytes = new TextEncoder().encode(string);
+    } else {
+      bytes = new Uint8Array(string);
+    }
+
+    const words: number[] = [];
+    const len = bytes.length;
+    for (let i = 0; i < len; i++) {
+      words[i >> 2] |= (bytes[i] & 0xFF) << ((i % 4) * 8);
+    }
+    words[len >> 2] |= 0x80 << ((len % 4) * 8);
+    words[(((len + 8) >> 6) << 4) + 14] = len * 8;
+
+    let a = 0x67452301;
+    let b = 0xefcdab89;
+    let c = 0x98badcfe;
+    let d = 0x10325476;
+
+    for (let i = 0; i < words.length; i += 16) {
+      const aa = a; const bb = b; const cc = c; const dd = d;
+
+      a = FF(a, b, c, d, words[i + 0] || 0, 7, 0xd76aa478);
+      d = FF(d, a, b, c, words[i + 1] || 0, 12, 0xe8c7b756);
+      c = FF(c, d, a, b, words[i + 2] || 0, 17, 0x242070db);
+      b = FF(b, c, d, a, words[i + 3] || 0, 22, 0xc1bdceee);
+      a = FF(a, b, c, d, words[i + 4] || 0, 7, 0xf57c0faf);
+      d = FF(d, a, b, c, words[i + 5] || 0, 12, 0x4787c62a);
+      c = FF(c, d, a, b, words[i + 6] || 0, 17, 0xa8304613);
+      b = FF(b, c, d, a, words[i + 7] || 0, 22, 0xfd469501);
+      a = FF(a, b, c, d, words[i + 8] || 0, 7, 0x698098d8);
+      d = FF(d, a, b, c, words[i + 9] || 0, 12, 0x8b44f7af);
+      c = FF(c, d, a, b, words[i + 10] || 0, 17, 0xffff5bb1);
+      b = FF(b, c, d, a, words[i + 11] || 0, 22, 0x895cd7be);
+      a = FF(a, b, c, d, words[i + 12] || 0, 7, 0x6b901122);
+      d = FF(d, a, b, c, words[i + 13] || 0, 12, 0xfd987193);
+      c = FF(c, d, a, b, words[i + 14] || 0, 17, 0xa679438e);
+      b = FF(b, c, d, a, words[i + 15] || 0, 22, 0x49b40821);
+
+      a = GG(a, b, c, d, words[i + 1] || 0, 5, 0xf61e2562);
+      d = GG(d, a, b, c, words[i + 6] || 0, 9, 0xc040b340);
+      c = GG(c, d, a, b, words[i + 11] || 0, 14, 0x265e5a51);
+      b = GG(b, c, d, a, words[i + 0] || 0, 20, 0xe9b6c7aa);
+      a = GG(a, b, c, d, words[i + 5] || 0, 5, 0xd62f105d);
+      d = GG(d, a, b, c, words[i + 10] || 0, 9, 0x02441453);
+      c = GG(c, d, a, b, words[i + 15] || 0, 14, 0xd8a1e681);
+      b = GG(b, c, d, a, words[i + 4] || 0, 20, 0xe7d3fbc8);
+      a = GG(a, b, c, d, words[i + 9] || 0, 5, 0x21e1cde6);
+      d = GG(d, a, b, c, words[i + 14] || 0, 9, 0xc33707d6);
+      c = GG(c, d, a, b, words[i + 3] || 0, 14, 0xf4d50d87);
+      b = GG(b, c, d, a, words[i + 8] || 0, 20, 0x455a14ed);
+      a = GG(a, b, c, d, words[i + 13] || 0, 5, 0xa9e3e905);
+      d = GG(d, a, b, c, words[i + 2] || 0, 9, 0xfcefa3f8);
+      c = GG(c, d, a, b, words[i + 7] || 0, 14, 0x676f02d9);
+      b = GG(b, c, d, a, words[i + 12] || 0, 20, 0x8d2a4c8a);
+
+      a = HH(a, b, c, d, words[i + 5] || 0, 4, 0xfffa3942);
+      d = HH(d, a, b, c, words[i + 8] || 0, 11, 0x8771f681);
+      c = HH(c, d, a, b, words[i + 11] || 0, 16, 0x6d9d6122);
+      b = HH(b, c, d, a, words[i + 14] || 0, 23, 0xfde5380c);
+      a = HH(a, b, c, d, words[i + 1] || 0, 4, 0xa4beea44);
+      d = HH(d, a, b, c, words[i + 4] || 0, 11, 0x4bdecfa9);
+      c = HH(c, d, a, b, words[i + 7] || 0, 16, 0xf6bb4b60);
+      b = HH(b, c, d, a, words[i + 10] || 0, 23, 0xbebfbc70);
+      a = HH(a, b, c, d, words[i + 13] || 0, 4, 0x289b7ec6);
+      d = HH(d, a, b, c, words[i + 0] || 0, 11, 0xeaa127fa);
+      c = HH(c, d, a, b, words[i + 3] || 0, 16, 0xd4ef3085);
+      b = HH(b, c, d, a, words[i + 6] || 0, 23, 0x04881d05);
+      a = HH(a, b, c, d, words[i + 9] || 0, 4, 0xd9d4d039);
+      d = HH(d, a, b, c, words[i + 12] || 0, 11, 0xe6db99e5);
+      c = HH(c, d, a, b, words[i + 15] || 0, 16, 0x1fa27cf8);
+      b = HH(b, c, d, a, words[i + 2] || 0, 23, 0xc4ac5665);
+
+      a = II(a, b, c, d, words[i + 0] || 0, 6, 0xf4292244);
+      d = II(d, a, b, c, words[i + 7] || 0, 10, 0x432aff97);
+      c = II(c, d, a, b, words[i + 14] || 0, 15, 0xab9423a7);
+      b = II(b, c, d, a, words[i + 5] || 0, 21, 0xfc93a039);
+      a = II(a, b, c, d, words[i + 12] || 0, 6, 0x655b59c3);
+      d = II(d, a, b, c, words[i + 3] || 0, 10, 0x8f0ccc92);
+      c = II(c, d, a, b, words[i + 10] || 0, 15, 0xffeff47d);
+      b = II(b, c, d, a, words[i + 1] || 0, 21, 0x85845dd1);
+      a = II(a, b, c, d, words[i + 8] || 0, 6, 0x6fa87e4f);
+      d = II(d, a, b, c, words[i + 15] || 0, 10, 0xfe2ce6e0);
+      c = II(c, d, a, b, words[i + 6] || 0, 15, 0xa3014314);
+      b = II(b, c, d, a, words[i + 13] || 0, 21, 0x4e0811a1);
+      a = II(a, b, c, d, words[i + 4] || 0, 6, 0xf7537e82);
+      d = II(d, a, b, c, words[i + 11] || 0, 10, 0xbd3af235);
+      c = II(c, d, a, b, words[i + 2] || 0, 15, 0x2ad7d2bb);
+      b = II(b, c, d, a, words[i + 9] || 0, 21, 0xeb86d391);
+
+      a = addUnsigned(a, aa);
+      b = addUnsigned(b, bb);
+      c = addUnsigned(c, cc);
+      d = addUnsigned(d, dd);
+    }
+
+    function wordToHex(val: number) {
+      let str = '';
+      for (let j = 0; j <= 3; j++) {
+        const b = (val >>> (j * 8)) & 255;
+        str += ('0' + b.toString(16)).slice(-2);
+      }
+      return str;
+    }
+
+    return wordToHex(a) + wordToHex(b) + wordToHex(c) + wordToHex(d);
+  }
+
+  function initHashGenerator() {
+    const modeTabs = document.querySelectorAll('.mode-tab');
+    const textModeBox = document.getElementById('mode-text-box');
+    const fileModeBox = document.getElementById('mode-file-box');
+    const textInput = document.getElementById('hash-text-input') as HTMLTextAreaElement;
+    const dropZone = document.getElementById('file-drop-zone');
+    const fileSelector = document.getElementById('file-selector-input') as HTMLInputElement;
+    const fileInfoBadge = document.getElementById('file-info-badge');
+    const fileNameEl = document.getElementById('selected-file-name');
+    const fileSizeEl = document.getElementById('selected-file-size');
+    const toggleUpper = document.getElementById('toggle-uppercase') as HTMLInputElement;
+
+    const outSha256 = document.getElementById('hash-sha256') as HTMLInputElement;
+    const outSha512 = document.getElementById('hash-sha512') as HTMLInputElement;
+    const outSha1 = document.getElementById('hash-sha1') as HTMLInputElement;
+    const outMd5 = document.getElementById('hash-md5') as HTMLInputElement;
+
+    const verifyInput = document.getElementById('verify-hash-input') as HTMLInputElement;
+    const verifyStatus = document.getElementById('verify-status-msg');
+
+    if (!outSha256 || !textInput) return;
+
+    let activeMode = 'text';
+    let fileBuffer: ArrayBuffer | null = null;
+
+    async function cryptoDigest(algo: string, buffer: ArrayBuffer): Promise<string> {
+      try {
+        const hashBuf = await crypto.subtle.digest(algo, buffer);
+        const hashArr = Array.from(new Uint8Array(hashBuf));
+        return hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
+      } catch (e) {
+        return 'No soportado';
+      }
+    }
+
+    function formatBytes(bytes: number): string {
+      if (bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    async function calculateHashes() {
+      let buffer: ArrayBuffer;
+
+      if (activeMode === 'text') {
+        const str = textInput.value;
+        buffer = new TextEncoder().encode(str).buffer;
+      } else {
+        if (!fileBuffer) return;
+        buffer = fileBuffer;
+      }
+
+      const isUpper = toggleUpper.checked;
+
+      const [sha256, sha512, sha1] = await Promise.all([
+        cryptoDigest('SHA-256', buffer),
+        cryptoDigest('SHA-512', buffer),
+        cryptoDigest('SHA-1', buffer),
+      ]);
+
+      const md5Hash = md5(buffer);
+
+      const applyCase = (s: string) => isUpper ? s.toUpperCase() : s.toLowerCase();
+
+      outSha256.value = applyCase(sha256);
+      outSha512.value = applyCase(sha512);
+      outSha1.value = applyCase(sha1);
+      outMd5.value = applyCase(md5Hash);
+
+      checkVerification();
+    }
+
+    function checkVerification() {
+      if (!verifyInput || !verifyStatus) return;
+      const expected = verifyInput.value.trim().toLowerCase();
+      if (!expected) {
+        verifyStatus.style.display = 'none';
+        return;
+      }
+
+      const computed = [
+        outSha256.value.toLowerCase(),
+        outSha512.value.toLowerCase(),
+        outSha1.value.toLowerCase(),
+        outMd5.value.toLowerCase()
+      ];
+
+      verifyStatus.style.display = 'block';
+      if (computed.includes(expected)) {
+        verifyStatus.className = 'verify-status match';
+        verifyStatus.textContent = '✅ ¡Checksum verificado! Coincide exactamente con el hash generado.';
+      } else {
+        verifyStatus.className = 'verify-status mismatch';
+        verifyStatus.textContent = '❌ No coincide con ninguno de los hashes generados (SHA-256, SHA-512, SHA-1 o MD5).';
+      }
+    }
+
+    modeTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        modeTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        activeMode = tab.getAttribute('data-mode') || 'text';
+
+        if (activeMode === 'text') {
+          if (textModeBox) textModeBox.style.display = 'block';
+          if (fileModeBox) fileModeBox.style.display = 'none';
+          calculateHashes();
+        } else {
+          if (textModeBox) textModeBox.style.display = 'none';
+          if (fileModeBox) fileModeBox.style.display = 'block';
+          if (fileBuffer) calculateHashes();
+        }
+      });
+    });
+
+    textInput.addEventListener('input', calculateHashes);
+    toggleUpper.addEventListener('change', calculateHashes);
+    verifyInput?.addEventListener('input', checkVerification);
+
+    // File handling
+    function loadFile(file: File) {
+      if (!file) return;
+      if (fileNameEl) fileNameEl.textContent = file.name;
+      if (fileSizeEl) fileSizeEl.textContent = formatBytes(file.size);
+      if (fileInfoBadge) fileInfoBadge.style.display = 'flex';
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target?.result instanceof ArrayBuffer) {
+          fileBuffer = e.target.result;
+          calculateHashes();
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    dropZone?.addEventListener('click', () => fileSelector.click());
+    fileSelector?.addEventListener('change', () => {
+      if (fileSelector.files && fileSelector.files[0]) {
+        loadFile(fileSelector.files[0]);
+      }
+    });
+
+    dropZone?.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('drag-over');
+    });
+
+    dropZone?.addEventListener('dragleave', () => {
+      dropZone.classList.remove('drag-over');
+    });
+
+    dropZone?.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+      if (e.dataTransfer?.files && e.dataTransfer.files[0]) {
+        loadFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    // Copy buttons
+    document.querySelectorAll('.btn-copy-hash').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const targetId = btn.getAttribute('data-target');
+        const targetInput = document.getElementById(targetId || '') as HTMLInputElement;
+        if (!targetInput || !targetInput.value) return;
+
+        try {
+          await navigator.clipboard.writeText(targetInput.value);
+          const orig = btn.textContent;
+          btn.textContent = '✅ ¡Copiado!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = orig;
+            btn.classList.remove('copied');
+          }, 1500);
+        } catch (e) {}
+      });
+    });
+
+    calculateHashes();
+  }
+
+  document.addEventListener('astro:page-load', initHashGenerator);
+</script>

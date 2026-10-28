@@ -371,6 +371,49 @@ const breadcrumbs = [
 
   <div id="reading-progress-bar" class="reading-progress-bar" aria-hidden="true"></div>
 
+  <!-- CONTROL BAR MODO LECTURA ZEN -->
+  <div class="zen-bar-control" id="zen-bar-control" style="display: none;">
+    <div class="zen-control-inner">
+      <div class="zen-font-controls">
+        <button type="button" id="zen-font-minus" title="Reducir letra">A-</button>
+        <span id="zen-font-label">100%</span>
+        <button type="button" id="zen-font-plus" title="Aumentar letra">A+</button>
+      </div>
+      <div class="zen-theme-controls">
+        <button type="button" class="zen-theme-btn active" data-theme="dark" title="Modo Oscuro">🌙 Oscuro</button>
+        <button type="button" class="zen-theme-btn" data-theme="sepia" title="Modo Sepia">📜 Sepia</button>
+        <button type="button" class="zen-theme-btn" data-theme="light" title="Modo Claro">☀️ Claro</button>
+      </div>
+      <button type="button" id="btn-close-zen" class="btn-close-zen" title="Salir del Modo Lectura">✕ Salir</button>
+    </div>
+  </div>
+
+  <!-- FLOATING SHARE DOCK -->
+  <aside class="floating-share-dock" id="floating-share-dock" aria-label="Compartir este artículo">
+    <a
+      href={`https://wa.me/?text=${encodeURIComponent(post.data.title + ' ' + Astro.url.toString())}`}
+      target="_blank" rel="noopener noreferrer"
+      class="dock-share-btn dock-wa"
+      title="Enviar a WhatsApp"
+    >
+      <span>💬</span><span class="dock-txt">WhatsApp</span>
+    </a>
+    <a
+      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(Astro.url.toString())}`}
+      target="_blank" rel="noopener noreferrer"
+      class="dock-share-btn dock-x"
+      title="Compartir en 𝕏"
+    >
+      <span>𝕏</span><span class="dock-txt">Twitter</span>
+    </a>
+    <button type="button" class="dock-share-btn dock-native" id="dock-btn-native" title="Compartir enlace">
+      <span>📲</span><span class="dock-txt">Compartir</span>
+    </button>
+    <button type="button" class="dock-share-btn dock-copy" id="dock-btn-copy" title="Copiar enlace">
+      <span id="dock-copy-icon">🔗</span><span class="dock-txt" id="dock-copy-text">Copiar</span>
+    </button>
+  </aside>
+
   <article class="article-page">
     <div class="container breadcrumb">
       <a href="/">Inicio</a>
@@ -408,6 +451,7 @@ const breadcrumbs = [
                 {primaryTag}
               </a>
               <button id="tts-btn" class="tts-btn" title="Escuchar artículo">🎧 Escuchar</button>
+              <button id="zen-mode-btn" class="zen-mode-btn" type="button" title="Modo Lectura sin distracciones">👓 Modo Lectura</button>
             </div>
             {post.data.readingTime && (
               <span class="reading-time">⏱ {post.data.readingTime} min de lectura</span>
@@ -943,6 +987,186 @@ const breadcrumbs = [
     pointer-events: none;
     transition: width 0.08s ease-out;
   }
+
+  /* ZEN MODE BUTTON IN HEADER */
+  .zen-mode-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-heading, #f8fafc);
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .zen-mode-btn:hover {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: #6366f1;
+    color: #ffffff;
+  }
+
+  /* ZEN BAR CONTROL */
+  .zen-bar-control {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99999;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 9999px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    padding: 0.4rem 0.8rem;
+  }
+  .zen-control-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+  .zen-font-controls, .zen-theme-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .zen-font-controls button, .zen-theme-controls button, .btn-close-zen {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #f8fafc;
+    border-radius: 9999px;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .zen-font-controls button:hover, .zen-theme-controls button:hover {
+    background: rgba(99, 102, 241, 0.3);
+  }
+  .zen-theme-btn.active {
+    background: #6366f1;
+    border-color: #6366f1;
+  }
+  #zen-font-label {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    min-width: 38px;
+    text-align: center;
+  }
+  .btn-close-zen {
+    background: rgba(239, 68, 68, 0.2) !important;
+    border-color: #ef4444 !important;
+    color: #fca5a5 !important;
+  }
+  .btn-close-zen:hover {
+    background: #ef4444 !important;
+    color: #ffffff !important;
+  }
+
+  /* ZEN ACTIVE BODY OVERRIDES */
+  body.zen-active header,
+  body.zen-active footer,
+  body.zen-active .article-sidebar,
+  body.zen-active .hero-image-wrap,
+  body.zen-active .breadcrumb,
+  body.zen-active .author-box,
+  body.zen-active #disqus_thread,
+  body.zen-active .related-posts,
+  body.zen-active .share-bar,
+  body.zen-active .article-meta,
+  body.zen-active .article-meta-top,
+  body.zen-active .floating-share-dock,
+  body.zen-active .adsbygoogle {
+    display: none !important;
+  }
+  body.zen-active .article-layout {
+    grid-template-columns: 1fr !important;
+    max-width: 760px !important;
+    margin: 3rem auto !important;
+    padding: 0 1.25rem;
+  }
+  body.zen-active.zen-theme-sepia {
+    background: #fbf0d9 !important;
+    color: #433422 !important;
+  }
+  body.zen-active.zen-theme-sepia .prose,
+  body.zen-active.zen-theme-sepia .article-title,
+  body.zen-active.zen-theme-sepia .article-desc {
+    color: #433422 !important;
+  }
+  body.zen-active.zen-theme-light {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+  body.zen-active.zen-theme-light .prose,
+  body.zen-active.zen-theme-light .article-title,
+  body.zen-active.zen-theme-light .article-desc {
+    color: #0f172a !important;
+  }
+
+  /* FLOATING SHARE DOCK */
+  .floating-share-dock {
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 9999px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    z-index: 999;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .dock-share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.15s;
+    color: #ffffff;
+  }
+  .dock-share-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+    text-decoration: none;
+  }
+  .dock-wa { background: #25d366; }
+  .dock-x { background: #000000; border: 1px solid rgba(255, 255, 255, 0.2); }
+  .dock-native { background: #6366f1; }
+  .dock-copy { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
+
+  @media (max-width: 600px) {
+    .floating-share-dock {
+      width: 90%;
+      max-width: 380px;
+      justify-content: space-around;
+      padding: 0.35rem 0.5rem;
+      bottom: 12px;
+    }
+    .dock-share-btn {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.78rem;
+    }
+    .dock-txt {
+      display: none;
+    }
+  }
+
 </style>
 
 <script>
@@ -1326,6 +1550,94 @@ const breadcrumbs = [
 </style>
 
 <script>
+  
+  function initZenMode() {
+    const btnOpen = document.getElementById('zen-mode-btn');
+    const bar = document.getElementById('zen-bar-control');
+    const btnClose = document.getElementById('btn-close-zen');
+    const fontMinus = document.getElementById('zen-font-minus');
+    const fontPlus = document.getElementById('zen-font-plus');
+    const fontLabel = document.getElementById('zen-font-label');
+    const themeBtns = document.querySelectorAll('.zen-theme-btn');
+    const prose = document.querySelector('.prose') as HTMLElement;
+
+    if (!btnOpen || !bar) return;
+
+    let fontScale = 100;
+
+    btnOpen.addEventListener('click', () => {
+      document.body.classList.add('zen-active');
+      bar.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    btnClose?.addEventListener('click', () => {
+      document.body.classList.remove('zen-active', 'zen-theme-sepia', 'zen-theme-light');
+      bar.style.display = 'none';
+      if (prose) prose.style.fontSize = '';
+    });
+
+    fontMinus?.addEventListener('click', () => {
+      if (fontScale > 80) fontScale -= 10;
+      if (fontLabel) fontLabel.textContent = `${fontScale}%`;
+      if (prose) prose.style.fontSize = `${fontScale}%`;
+    });
+
+    fontPlus?.addEventListener('click', () => {
+      if (fontScale < 160) fontScale += 10;
+      if (fontLabel) fontLabel.textContent = `${fontScale}%`;
+      if (prose) prose.style.fontSize = `${fontScale}%`;
+    });
+
+    themeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        themeBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const theme = btn.getAttribute('data-theme') || 'dark';
+
+        document.body.classList.remove('zen-theme-sepia', 'zen-theme-light');
+        if (theme === 'sepia') {
+          document.body.classList.add('zen-theme-sepia');
+        } else if (theme === 'light') {
+          document.body.classList.add('zen-theme-light');
+        }
+      });
+    });
+  }
+
+  function initFloatingShareDock() {
+    const btnNative = document.getElementById('dock-btn-native');
+    const btnCopy = document.getElementById('dock-btn-copy');
+    const copyTxt = document.getElementById('dock-copy-text');
+    const copyIcon = document.getElementById('dock-copy-icon');
+
+    btnNative?.addEventListener('click', async () => {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: document.title,
+            url: window.location.href,
+          });
+        } catch (e) {}
+      } else {
+        // Fallback to clipboard
+        btnCopy?.click();
+      }
+    });
+
+    btnCopy?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        if (copyTxt) copyTxt.textContent = '¡Copiado!';
+        if (copyIcon) copyIcon.textContent = '✅';
+        setTimeout(() => {
+          if (copyTxt) copyTxt.textContent = 'Copiar';
+          if (copyIcon) copyIcon.textContent = '🔗';
+        }, 1500);
+      } catch (e) {}
+    });
+  }
+
   function initCodeCopyButtons() {
     document.querySelectorAll('.prose pre').forEach(pre => {
       if (pre.querySelector('.code-copy-btn')) return;
@@ -1381,5 +1693,7 @@ const breadcrumbs = [
   document.addEventListener('astro:page-load', () => {
     initCodeCopyButtons();
     initReadingProgressBar();
+    initZenMode();
+    initFloatingShareDock();
   });
 </script>

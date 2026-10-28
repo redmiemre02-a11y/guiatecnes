@@ -1,0 +1,801 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Contador de Caracteres para Redes Sociales', url: '/herramientas/contador-caracteres-redes' }
+];
+
+const faqs = [
+  {
+    question: '¿Cuál es el límite de caracteres en X (Twitter)?',
+    answer: 'En cuentas estándar sin suscripción a X Premium, el límite máximo por tweet es de 280 caracteres. Los usuarios con X Premium pueden publicar posts de hasta 25.000 caracteres.'
+  },
+  {
+    question: '¿Cuántos caracteres permite la biografía y descripción de Instagram?',
+    answer: 'La biografía de Instagram admite un máximo de 150 caracteres. Por su parte, el texto o pie de foto (caption) de las publicaciones permite hasta 2.200 caracteres y un máximo de 30 hashtags recomendados (entre 3 y 5 según el algoritmo moderno).'
+  },
+  {
+    question: '¿Cuál es el tamaño ideal de un post en LinkedIn?',
+    answer: 'El límite técnico de una publicación en LinkedIn es de 3.000 caracteres, pero el corte del botón «Ver más» ocurre alrededor de los primeros 140 a 210 caracteres, por lo que el gancho inicial es fundamental.'
+  },
+  {
+    question: '¿Los espacios y los saltos de línea cuentan como caracteres?',
+    answer: 'Sí. Prácticamente todas las redes sociales contabilizan tanto los espacios en blanco como los saltos de línea (retornos de carro) como caracteres individuales.'
+  }
+];
+---
+
+<BaseLayout
+  title="Contador de Caracteres para Redes Sociales con Límites Reales | GuiaTecnEs"
+  description="Comprueba si tu texto cabe en X/Twitter (280), Instagram bio y caption (150/2200), TikTok, LinkedIn y YouTube en vivo. Sin cortes ni sorpresas."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Contador de Caracteres Redes Sociales</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">📱 Social Media & Copywriting</div>
+      <h1>Contador de Caracteres para Redes Sociales</h1>
+      <p class="tool-subtitle">
+        Escribe o pega tu texto y visualiza en tiempo real si cumple los límites exactos de Twitter/X, Instagram, TikTok, LinkedIn y YouTube antes de publicar.
+      </p>
+    </header>
+
+    <div class="social-counter-layout">
+      <!-- EDITOR PRINCIPAL -->
+      <div class="card editor-card">
+        <div class="editor-header">
+          <div class="editor-title-box">
+            <h3>✍️ Tu Texto o Publicación</h3>
+            <span class="live-indicator">● En vivo</span>
+          </div>
+          <div class="editor-actions">
+            <button type="button" class="btn-action" id="btn-copy-text" title="Copiar texto al portapapeles">📋 Copiar</button>
+            <button type="button" class="btn-action btn-clear" id="btn-clear-text" title="Limpiar texto">🗑️ Borrar</button>
+          </div>
+        </div>
+
+        <textarea
+          id="social-text-input"
+          placeholder="Escribe o pega aquí el post para tus redes sociales (puedes incluir hashtags # y emojis)..."
+          rows="8"
+        ></textarea>
+
+        <!-- EMOJIS RÁPIDOS -->
+        <div class="quick-emojis-bar">
+          <span class="quick-label">Insertar:</span>
+          <div class="emoji-chips">
+            <button type="button" class="emoji-chip" data-emoji="🔥">🔥</button>
+            <button type="button" class="emoji-chip" data-emoji="👇">👇</button>
+            <button type="button" class="emoji-chip" data-emoji="🚀">🚀</button>
+            <button type="button" class="emoji-chip" data-emoji="💡">💡</button>
+            <button type="button" class="emoji-chip" data-emoji="👉">👉</button>
+            <button type="button" class="emoji-chip" data-emoji="✨">✨</button>
+            <button type="button" class="emoji-chip" data-emoji="🧵">🧵</button>
+            <button type="button" class="emoji-chip" data-emoji="✅">✅</button>
+            <button type="button" class="emoji-chip" data-emoji="💥">💥</button>
+            <button type="button" class="emoji-chip" data-emoji="👀">👀</button>
+          </div>
+        </div>
+
+        <!-- MÉTRICAS GENERALES -->
+        <div class="general-metrics-grid">
+          <div class="metric-box">
+            <span class="metric-num" id="stat-chars">0</span>
+            <span class="metric-label">Caracteres (con espacios)</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-num" id="stat-chars-no-spaces">0</span>
+            <span class="metric-label">Sin espacios</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-num" id="stat-words">0</span>
+            <span class="metric-label">Palabras</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-num" id="stat-paragraphs">0</span>
+            <span class="metric-label">Párrafos</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-num" id="stat-hashtags">0</span>
+            <span class="metric-label">Hashtags (#)</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-num" id="stat-reading-time">0 min</span>
+            <span class="metric-label">Lectura est.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- LÍMITES POR RED SOCIAL -->
+      <div class="card limits-card">
+        <h3>📊 Límites Oficiales por Plataforma</h3>
+        <p class="limits-intro">Comprueba al instante si tu texto cabe o si sobrepasa los límites fijados por cada red:</p>
+
+        <div class="network-bars-list">
+          <!-- X / TWITTER -->
+          <div class="network-item" id="net-x">
+            <div class="net-info">
+              <span class="net-name"><span class="net-icon">𝕏</span> X (Twitter)</span>
+              <span class="net-count"><strong id="cnt-x">0</strong> / 280</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar" id="bar-x" style="width: 0%;"></div>
+            </div>
+            <div class="net-feedback" id="fb-x">280 caracteres restantes</div>
+          </div>
+
+          <!-- INSTAGRAM BIO -->
+          <div class="network-item" id="net-ig-bio">
+            <div class="net-info">
+              <span class="net-name"><span class="net-icon">📸</span> Instagram Biografía</span>
+              <span class="net-count"><strong id="cnt-ig-bio">0</strong> / 150</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar" id="bar-ig-bio" style="width: 0%;"></div>
+            </div>
+            <div class="net-feedback" id="fb-ig-bio">150 caracteres restantes</div>
+          </div>
+
+          <!-- INSTAGRAM POST / CAPTION -->
+          <div class="network-item" id="net-ig-post">
+            <div class="net-info">
+              <span class="net-name"><span class="net-icon">📸</span> Instagram Pie de Foto</span>
+              <span class="net-count"><strong id="cnt-ig-post">0</strong> / 2.200</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar" id="bar-ig-post" style="width: 0%;"></div>
+            </div>
+            <div class="net-feedback" id="fb-ig-post">2.200 caracteres restantes</div>
+          </div>
+
+          <!-- TIKTOK CAPTION -->
+          <div class="network-item" id="net-tiktok">
+            <div class="net-info">
+              <span class="net-name"><span class="net-icon">🎵</span> TikTok Descripción</span>
+              <span class="net-count"><strong id="cnt-tiktok">0</strong> / 2.200</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar" id="bar-tiktok" style="width: 0%;"></div>
+            </div>
+            <div class="net-feedback" id="fb-tiktok">2.200 caracteres restantes</div>
+          </div>
+
+          <!-- LINKEDIN POST -->
+          <div class="network-item" id="net-linkedin">
+            <div class="net-info">
+              <span class="net-name"><span class="net-icon">💼</span> LinkedIn Publicación</span>
+              <span class="net-count"><strong id="cnt-linkedin">0</strong> / 3.000</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar" id="bar-linkedin" style="width: 0%;"></div>
+            </div>
+            <div class="net-feedback" id="fb-linkedin">3.000 caracteres restantes</div>
+          </div>
+
+          <!-- YOUTUBE TÍTULO -->
+          <div class="network-item" id="net-yt-title">
+            <div class="net-info">
+              <span class="net-name"><span class="net-icon">▶️</span> YouTube Título de Vídeo</span>
+              <span class="net-count"><strong id="cnt-yt-title">0</strong> / 100</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar" id="bar-yt-title" style="width: 0%;"></div>
+            </div>
+            <div class="net-feedback" id="fb-yt-title">100 caracteres restantes</div>
+          </div>
+
+          <!-- FACEBOOK POST -->
+          <div class="network-item" id="net-fb">
+            <div class="net-info">
+              <span class="net-name"><span class="net-icon">👥</span> Facebook Post Recomendado</span>
+              <span class="net-count"><strong id="cnt-fb">0</strong> / 63.206</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar" id="bar-fb" style="width: 0%;"></div>
+            </div>
+            <div class="net-feedback" id="fb-fb">Límite prácticamente ilimitado</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUÍA SEO -->
+    <section class="seo-guide-section card">
+      <h2>Límites de caracteres en Redes Sociales en 2026: Tabla Resumen</h2>
+      <p>
+        Para conseguir el mayor alcance orgánico y evitar que tus frases queden cortadas a la mitad con el temido «ver más» en momentos inoportunos, consulta las mejores prácticas por plataforma:
+      </p>
+
+      <div class="table-responsive">
+        <table class="limits-table">
+          <thead>
+            <tr>
+              <th>Plataforma</th>
+              <th>Límite Máximo Técnico</th>
+              <th>Extensión Óptima Recomendada</th>
+              <th>Hashtags aconsejados</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>𝕏 (Twitter)</strong></td>
+              <td>280 caracteres</td>
+              <td>70 - 140 caracteres</td>
+              <td>1 a 2 hashtags</td>
+            </tr>
+            <tr>
+              <td><strong>Instagram Bio</strong></td>
+              <td>150 caracteres</td>
+              <td>120 - 140 caracteres</td>
+              <td>0 a 1 hashtag de marca</td>
+            </tr>
+            <tr>
+              <td><strong>Instagram Caption</strong></td>
+              <td>2.200 caracteres</td>
+              <td>150 - 300 caracteres (o microblogging)</td>
+              <td>3 a 5 relevantes</td>
+            </tr>
+            <tr>
+              <td><strong>TikTok</strong></td>
+              <td>2.200 caracteres</td>
+              <td>100 - 150 caracteres (SEO)</td>
+              <td>3 a 6 hashtags nicho</td>
+            </tr>
+            <tr>
+              <td><strong>LinkedIn</strong></td>
+              <td>3.000 caracteres</td>
+              <td>800 - 1.500 caracteres (storytelling)</td>
+              <td>3 a 5 hashtags</td>
+            </tr>
+            <tr>
+              <td><strong>YouTube Título</strong></td>
+              <td>100 caracteres</td>
+              <td>50 - 65 caracteres (evita corte móvil)</td>
+              <td>En descripción</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FAQS -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre el Conteo de Caracteres</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    padding: 2rem 1rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted, #94a3b8);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: #6366f1;
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+  }
+
+  .tool-header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .social-counter-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .social-counter-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* EDITOR */
+  .editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .editor-title-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .editor-title-box h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .live-indicator {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.15);
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+  }
+
+  .editor-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-action {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-heading, #f8fafc);
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-action:hover {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: #6366f1;
+  }
+
+  .btn-clear:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+  }
+
+  #social-text-input {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    color: var(--text-heading, #f8fafc);
+    font-size: 1rem;
+    line-height: 1.6;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+  }
+
+  #social-text-input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  }
+
+  /* QUICK EMOJIS */
+  .quick-emojis-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .quick-label {
+    font-size: 0.8rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .emoji-chips {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+  }
+
+  .emoji-chip {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 6px;
+    padding: 0.2rem 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.1s, background 0.1s;
+  }
+
+  .emoji-chip:hover {
+    background: rgba(99, 102, 241, 0.25);
+    transform: scale(1.15);
+  }
+
+  /* METRICS GRID */
+  .general-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  @media (max-width: 600px) {
+    .general-metrics-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .metric-box {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.5rem;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+  }
+
+  .metric-num {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #6366f1;
+  }
+
+  .metric-label {
+    font-size: 0.75rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  /* LIMITS CARD */
+  .limits-card h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .limits-intro {
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 1.25rem;
+  }
+
+  .network-bars-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .network-item {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .net-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .net-name {
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .net-icon {
+    font-size: 1rem;
+  }
+
+  .net-count {
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .net-count strong {
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .progress-track {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-bottom: 0.35rem;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: #10b981;
+    border-radius: 9999px;
+    transition: width 0.15s ease, background-color 0.15s ease;
+  }
+
+  .progress-bar.warning {
+    background: #f59e0b;
+  }
+
+  .progress-bar.danger {
+    background: #ef4444;
+  }
+
+  .net-feedback {
+    font-size: 0.78rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .net-feedback.over-limit {
+    color: #ef4444;
+    font-weight: 700;
+  }
+
+  /* SEO & FAQS */
+  .seo-guide-section, .faq-section {
+    margin-top: 2rem;
+  }
+
+  .seo-guide-section h2, .faq-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 1rem;
+  }
+
+  .seo-guide-section p {
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .limits-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    text-align: left;
+  }
+
+  .limits-table th, .limits-table td {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color, #334155);
+  }
+
+  .limits-table th {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .limits-table td {
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initSocialCounter() {
+    const input = document.getElementById('social-text-input') as HTMLTextAreaElement;
+    if (!input) return;
+
+    // General stats
+    const statChars = document.getElementById('stat-chars');
+    const statCharsNoSpaces = document.getElementById('stat-chars-no-spaces');
+    const statWords = document.getElementById('stat-words');
+    const statParagraphs = document.getElementById('stat-paragraphs');
+    const statHashtags = document.getElementById('stat-hashtags');
+    const statReadingTime = document.getElementById('stat-reading-time');
+
+    // Platforms config
+    const platforms = [
+      { id: 'x', max: 280, name: 'X (Twitter)' },
+      { id: 'ig-bio', max: 150, name: 'Instagram Bio' },
+      { id: 'ig-post', max: 2200, name: 'Instagram Post' },
+      { id: 'tiktok', max: 2200, name: 'TikTok' },
+      { id: 'linkedin', max: 3000, name: 'LinkedIn' },
+      { id: 'yt-title', max: 100, name: 'YouTube Título' },
+      { id: 'fb', max: 63206, name: 'Facebook' },
+    ];
+
+    function update() {
+      const text = input.value;
+      const totalChars = text.length;
+      const charsNoSpaces = text.replace(/\s+/g, '').length;
+
+      // Words
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+
+      // Paragraphs
+      const paragraphs = text.trim() ? text.split(/\n+/).filter(p => p.trim().length > 0).length : 0;
+
+      // Hashtags
+      const hashtagsMatch = text.match(/#[a-zA-Z0-9_\u00C0-\u017F]+/g);
+      const hashtagsCount = hashtagsMatch ? hashtagsMatch.length : 0;
+
+      // Reading time (average 200 words per minute)
+      const minutes = Math.max(1, Math.ceil(words / 200));
+
+      if (statChars) statChars.textContent = totalChars.toLocaleString('es-ES');
+      if (statCharsNoSpaces) statCharsNoSpaces.textContent = charsNoSpaces.toLocaleString('es-ES');
+      if (statWords) statWords.textContent = words.toLocaleString('es-ES');
+      if (statParagraphs) statParagraphs.textContent = paragraphs.toString();
+      if (statHashtags) statHashtags.textContent = hashtagsCount.toString();
+      if (statReadingTime) statReadingTime.textContent = words > 0 ? `${minutes} min` : '0 min';
+
+      // Update each platform bar
+      platforms.forEach(p => {
+        const cntEl = document.getElementById(`cnt-${p.id}`);
+        const barEl = document.getElementById(`bar-${p.id}`);
+        const fbEl = document.getElementById(`fb-${p.id}`);
+
+        if (cntEl) cntEl.textContent = totalChars.toLocaleString('es-ES');
+
+        const pct = Math.min(100, (totalChars / p.max) * 100);
+        if (barEl) {
+          barEl.style.width = `${pct}%`;
+          barEl.classList.remove('warning', 'danger');
+
+          if (totalChars > p.max) {
+            barEl.classList.add('danger');
+          } else if (totalChars > p.max * 0.85) {
+            barEl.classList.add('warning');
+          }
+        }
+
+        if (fbEl) {
+          fbEl.classList.remove('over-limit');
+          if (p.id === 'fb') {
+            fbEl.textContent = 'Límite prácticamente ilimitado';
+          } else if (totalChars > p.max) {
+            const diff = totalChars - p.max;
+            fbEl.textContent = `⚠️ Te pasas por ${diff} ${diff === 1 ? 'carácter' : 'caracteres'}`;
+            fbEl.classList.add('over-limit');
+          } else {
+            const remaining = p.max - totalChars;
+            fbEl.textContent = `${remaining.toLocaleString('es-ES')} caracteres restantes`;
+          }
+        }
+      });
+    }
+
+    input.addEventListener('input', update);
+
+    // Emoji chips
+    document.querySelectorAll('.emoji-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const emoji = btn.getAttribute('data-emoji') || '';
+        const start = input.selectionStart || input.value.length;
+        const end = input.selectionEnd || input.value.length;
+        input.value = input.value.substring(0, start) + emoji + input.value.substring(end);
+        input.selectionStart = input.selectionEnd = start + emoji.length;
+        input.focus();
+        update();
+      });
+    });
+
+    // Copy text
+    const btnCopy = document.getElementById('btn-copy-text');
+    btnCopy?.addEventListener('click', async () => {
+      if (!input.value) return;
+      try {
+        await navigator.clipboard.writeText(input.value);
+        const originalText = btnCopy.textContent;
+        btnCopy.textContent = '✅ ¡Copiado!';
+        setTimeout(() => {
+          btnCopy.textContent = originalText;
+        }, 1500);
+      } catch (e) {}
+    });
+
+    // Clear text
+    const btnClear = document.getElementById('btn-clear-text');
+    btnClear?.addEventListener('click', () => {
+      input.value = '';
+      update();
+      input.focus();
+    });
+
+    update();
+  }
+
+  document.addEventListener('astro:page-load', initSocialCounter);
+</script>
