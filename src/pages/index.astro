@@ -138,6 +138,31 @@ const categories = [
     </div>
   </section>
 
+  <!-- TRENDING TOPICS / POPULAR TAGS BAR -->
+  <section class="trending-bar-section">
+    <div class="container">
+      <div class="trending-bar-inner">
+        <div class="trending-badge">
+          <span class="trending-fire">🔥</span>
+          <span class="trending-title-text">Tendencias:</span>
+        </div>
+        <div class="trending-tags-track">
+          <a href="/categoria/ia" class="trend-tag">#ChatGPT</a>
+          <a href="/categoria/tutoriales" class="trend-tag">#Windows11</a>
+          <a href="/categoria/seguridad" class="trend-tag">#Ciberseguridad</a>
+          <a href="/categoria/ia" class="trend-tag">#InteligenciaArtificial</a>
+          <a href="/herramientas/calculadora-hipoteca" class="trend-tag highlight">#Hipoteca</a>
+          <a href="/categoria/comparativas" class="trend-tag">#AlternativasGratis</a>
+          <a href="/herramientas/calculadora-sueldo-neto" class="trend-tag highlight">#SueldoNeto</a>
+          <a href="/categoria/software" class="trend-tag">#Productividad</a>
+          <a href="/categoria/errores" class="trend-tag">#SolucionErrores</a>
+          <a href="/categoria/hardware" class="trend-tag">#Hardware</a>
+          <a href="/categoria/trucos" class="trend-tag">#TrucosTech</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <AdSenseBanner variant="banner" />
 
 
@@ -247,6 +272,98 @@ const categories = [
 </BaseLayout>
 
 <style>
+  /* TRENDING TAGS BAR */
+  .trending-bar-section {
+    padding: 0 1rem 1.75rem;
+    margin-top: -1.75rem;
+    position: relative;
+    z-index: 10;
+  }
+  .trending-bar-inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+    backdrop-filter: blur(12px);
+    border-radius: 9999px;
+    padding: 0.5rem 1.15rem;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.25);
+  }
+  .trending-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--text, #f1f5f9);
+    white-space: nowrap;
+  }
+  .trending-fire {
+    font-size: 1.1rem;
+    animation: flame-pulse 2s infinite ease-in-out;
+  }
+  @keyframes flame-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+  .trending-tags-track {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-right: 0.5rem;
+    mask-image: linear-gradient(to right, black 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+  }
+  .trending-tags-track::-webkit-scrollbar {
+    display: none;
+  }
+  .trend-tag {
+    white-space: nowrap;
+    padding: 0.32rem 0.8rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted, #94a3b8);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  .trend-tag:hover {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: var(--primary, #6366f1);
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 10px rgba(99, 102, 241, 0.25);
+  }
+  .trend-tag.highlight {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #34d399;
+  }
+  .trend-tag.highlight:hover {
+    background: rgba(16, 185, 129, 0.25);
+    border-color: #10b981;
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+  }
+  @media (max-width: 640px) {
+    .trending-bar-inner {
+      border-radius: 14px;
+      padding: 0.6rem 0.85rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.45rem;
+    }
+    .trending-tags-track {
+      width: 100%;
+    }
+  }
+
   /* HERO */
   .hero {
     position: relative;
