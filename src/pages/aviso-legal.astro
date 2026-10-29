@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Aviso Legal y Términos de Uso - GuíaTecnes"
+  description="Aviso legal, condiciones generales de uso y propiedad intelectual de GuíaTecnes en cumplimiento con la normativa europea y española (LSSI-CE)."
+>
+  <Header slot="header" />
+
+  <div class="container-sm" style="padding: 3rem 1.5rem; max-width: 800px; margin: 0 auto;">
+    <h1>Aviso Legal y Condiciones de Uso</h1>
+    <p><em>Última actualización: {new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</em></p>
+
+    <h2>1. Datos Identificativos</h2>
+    <p>
+      En cumplimiento con el deber de información estipulado en el artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y del Comercio Electrónico (LSSI-CE), se hace constar que el presente sitio web <strong>https://guiatecnes.com</strong> (en adelante, «el Sitio Web») es un portal divulgativo e informativo sobre tecnología, inteligencia artificial y herramientas digitales gestionado por el equipo editorial de <strong>GuíaTecnes</strong>.
+    </p>
+    <p>Para cualquier consulta o sugerencia, los usuarios pueden dirigirse a nuestro formulario oficial de <a href="/contacto">Contacto</a>.</p>
+
+    <h2>2. Objeto y Condiciones Generales de Uso</h2>
+    <p>
+      El acceso y uso de este sitio web atribuye la condición de USUARIO, quien acepta plenamente las presentes Condiciones de Uso desde el momento en que navega por sus páginas. Las herramientas interactivas, calculadoras y artículos se proporcionan de forma libre, abierta y gratuita con fines puramente educativos e informativos.
+    </p>
+
+    <h2>3. Responsabilidad sobre Contenidos y Herramientas</h2>
+    <p>
+      El equipo de GuíaTecnes realiza los mayores esfuerzos para asegurar la exactitud, actualización y fiabilidad de los contenidos y cálculos ofrecidos. No obstante, las herramientas financieras, fiscales o de estimación (como sueldo neto, hipotecas o divisas) ofrecen cálculos meramente orientativos y simulados. GuíaTecnes no se hace responsable de decisiones económicas, laborales o contractuales tomadas basándose en los resultados de dichas herramientas sin asesoramiento profesional previo.
+    </p>
+
+    <h2>4. Propiedad Intelectual e Industrial</h2>
+    <p>
+      Todos los contenidos, textos descriptivos, logotipos, diseños, código fuente y aplicaciones interactivas de GuíaTecnes son propiedad de sus autores o cuentan con licencia de uso. Queda expresamente prohibida la reproducción, distribución o comunicación pública total o parcial de los artículos con fines comerciales sin autorización previa por escrito. Se permite la inserción de herramientas mediante iframe siempre que se mantenga el enlace de atribución a la fuente original.
+    </p>
+
+    <h2>5. Publicidad y Enlaces Externos</h2>
+    <p>
+      El sitio web muestra publicidad programática gestionada por <strong>Google AdSense</strong> y puede incluir enlaces a páginas web de terceros. GuíaTecnes no ejerce control alguno sobre dichos sitios externos ni asume responsabilidad sobre sus contenidos o políticas de privacidad.
+    </p>
+
+    <h2>6. Legislación Aplicable y Jurisdicción</h2>
+    <p>
+      Para la resolución de cualquier controversia o cuestión relacionada con el presente sitio web, será de aplicación la legislación española y europea vigente, sometiéndose las partes a los juzgados y tribunales competentes.
+    </p>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  h1 { font-size: 2.2rem; font-weight: 800; color: var(--text-heading, #f8fafc); margin-bottom: 0.5rem; }
+  h2 { font-size: 1.35rem; font-weight: 700; color: var(--text-heading, #f8fafc); margin: 2rem 0 0.75rem; }
+  p { color: var(--text-muted, #94a3b8); line-height: 1.75; margin-bottom: 1rem; }
+  em { color: var(--text-muted, #94a3b8); font-size: 0.9rem; }
+  a { color: var(--primary, #6366f1); text-decoration: underline; }
+  strong { color: var(--text-heading, #f8fafc); }
+</style>
