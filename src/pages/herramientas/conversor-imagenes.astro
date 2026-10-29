@@ -1,0 +1,700 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Conversor de Imágenes WebP, PNG y JPG', url: '/herramientas/conversor-imagenes' }
+];
+
+const faqs = [
+  {
+    question: '¿Por qué es recomendable convertir imágenes a formato WebP?',
+    answer: 'WebP es el estándar moderno desarrollado por Google que reduce el peso de las imágenes entre un 25% y un 35% en comparación con JPEG y PNG, manteniendo una calidad visual prácticamente idéntica. Esto acelera drásticamente la carga de páginas web y mejora el posicionamiento SEO.'
+  },
+  {
+    question: '¿Se suben mis fotos a algún servidor o base de datos externa?',
+    answer: 'No. Todo el proceso de compresión y conversión de formato ocurre al 100% en el procesador de tu propio dispositivo utilizando la API Canvas nativa de tu navegador. Tus fotos nunca viajan por internet, garantizando total privacidad.'
+  },
+  {
+    question: '¿Qué diferencia hay entre WebP, PNG y JPG?',
+    answer: 'PNG es un formato sin pérdidas ideal para gráficos, capturas con texto y logotipos con fondos transparentes. JPG es excelente para fotografías complejas pero no admite transparencias. WebP combina lo mejor de ambos mundos: alta compresión, transparencia alfa y compatibilidad con todos los navegadores modernos.'
+  },
+  {
+    question: '¿Puedo convertir imágenes con fondo transparente a JPG?',
+    answer: 'Sí, pero ten en cuenta que el formato JPG no soporta transparencias. Si conviertes un archivo PNG o WebP con fondo transparente a JPG, las áreas transparentes se sustituirán automáticamente por un fondo blanco liso.'
+  }
+];
+---
+
+<BaseLayout
+  title="Conversor de Imágenes Online Gratis a WebP, PNG y JPG | GuiaTecnEs"
+  description="Convierte tus imágenes a WebP, PNG o JPG gratis en tu navegador. Sin límites, sin registros, con ajuste de calidad y 100% privado."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Conversor de Imágenes</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🖼️ Diseño Web, Optimización & SEO</div>
+      <h1>Conversor de Imágenes a WebP, PNG y JPG</h1>
+      <p class="tool-subtitle">
+        Pasa tus fotos a formato WebP ligero para tu web o conviértelas a PNG y JPG de alta resolución. Procesamiento instantáneo en tu navegador con privacidad absoluta.
+      </p>
+    </header>
+
+    <div class="image-converter-layout">
+      <!-- PANEL DE CONTROL Y SUBIDA -->
+      <div class="card converter-card">
+        <!-- ZONA DROP -->
+        <div class="drop-zone" id="img-drop-zone">
+          <span class="drop-icon">🖼️</span>
+          <p class="drop-title">Arrastra tu imagen aquí o <strong>haz clic para examinar</strong></p>
+          <p class="drop-sub">Compatible con JPG, PNG, WebP, GIF, BMP y AVIF. Sin límite de peso.</p>
+          <input type="file" id="img-file-input" accept="image/*" style="display: none;" />
+        </div>
+
+        <!-- CONTROLES DE CONVERSIÓN -->
+        <div class="converter-controls" id="converter-controls" style="display: none;">
+          <div class="controls-grid">
+            <div class="ctrl-group">
+              <label for="target-format">Formato de Salida Deseado:</label>
+              <select id="target-format">
+                <option value="image/webp" selected>WebP (Ultra ligero para Web & SEO)</option>
+                <option value="image/jpeg">JPG / JPEG (Universal y equilibrado)</option>
+                <option value="image/png">PNG (Máxima nitidez y transparencia)</option>
+              </select>
+            </div>
+
+            <div class="ctrl-group" id="quality-group">
+              <div class="label-with-val">
+                <label for="quality-range">Calidad de Imagen:</label>
+                <span class="ctrl-val-badge" id="quality-val-badge">85%</span>
+              </div>
+              <input type="range" id="quality-range" min="10" max="100" value="85" step="5" class="custom-slider" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL DE RESULTADOS / COMPARADOR -->
+      <div class="card preview-card" id="preview-card" style="display: none;">
+        <h3>Comparativa y Descarga</h3>
+
+        <div class="preview-stage">
+          <img id="converted-preview-img" alt="Vista previa de imagen convertida" />
+        </div>
+
+        <div class="metrics-comparison-grid">
+          <div class="metric-col">
+            <span class="col-label">Original:</span>
+            <strong id="orig-size-val">0 KB</strong>
+            <span class="sub-format" id="orig-format-val">JPG</span>
+          </div>
+          <div class="metric-arrow">➔</div>
+          <div class="metric-col">
+            <span class="col-label">Convertida:</span>
+            <strong id="new-size-val" class="highlight-green">0 KB</strong>
+            <span class="sub-format" id="new-format-val">WebP</span>
+          </div>
+          <div class="metric-col saving-col">
+            <span class="col-label">Ahorro:</span>
+            <strong id="saving-pct-val" class="highlight-saving">-0%</strong>
+            <span class="sub-format">de reducción</span>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button type="button" class="btn-download-main" id="btn-download">
+            ⬇️ Descargar Imagen Convertida
+          </button>
+          <button type="button" class="btn-reset" id="btn-reset">
+            🔄 Convertir otra foto
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUÍA SEO -->
+    <section class="seo-guide-section card">
+      <h2>¿Por qué deberías usar imágenes en formato WebP en tu web?</h2>
+      <p>
+        Google premia la velocidad en los resultados de búsqueda mediante las métricas Core Web Vitals (especialmente el Largest Contentful Paint o LCP). Optimizar tus fotos con WebP aporta ventajas insustituibles:
+      </p>
+
+      <div class="guide-grid">
+        <div class="guide-box">
+          <h3>⚡ 30% Menor Consumo de Ancho de Banda</h3>
+          <p>
+            Al pesar sustancialmente menos que un JPG equivalente, tus páginas cargan en menos de un segundo en teléfonos móviles con conexiones lentas o redes 4G/5G inestables.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>💎 Transparencias sin el Peso de un PNG</h3>
+          <p>
+            Antes, si necesitabas un fondo transparente para un logotipo o producto e-commerce estabas obligado a usar PNG pesados de varios megabytes. WebP admite canal alfa con un peso hasta 3 veces menor.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>🔒 Privacidad Total sin Servidores</h3>
+          <p>
+            Muchos conversores online suben tus fotos privadas a servidores desconocidos en la nube. Nuestra herramienta procesa todo localmente en la memoria RAM de tu navegador sin transmitir datos.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQS -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre Conversión de Imágenes</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    padding: 2rem 1rem 4rem;
+    max-width: 1050px;
+    margin: 0 auto;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted, #94a3b8);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: #06b6d4;
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: rgba(6, 182, 212, 0.1);
+    color: #06b6d4;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(6, 182, 212, 0.2);
+  }
+
+  .tool-header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .image-converter-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  /* DROP ZONE */
+  .drop-zone {
+    border: 2px dashed var(--border-color, #334155);
+    border-radius: 0.85rem;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    background: rgba(15, 23, 42, 0.4);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .drop-zone:hover, .drop-zone.dragover {
+    border-color: #06b6d4;
+    background: rgba(6, 182, 212, 0.08);
+  }
+
+  .drop-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .drop-title {
+    font-size: 1.1rem;
+    color: var(--text-heading, #f8fafc);
+    margin: 0 0 0.4rem;
+  }
+
+  .drop-sub {
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin: 0;
+  }
+
+  /* CONTROLS */
+  .converter-controls {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-color, #334155);
+  }
+
+  .controls-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  @media (max-width: 650px) {
+    .controls-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .ctrl-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 0.4rem;
+  }
+
+  .label-with-val {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ctrl-val-badge {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #06b6d4;
+  }
+
+  .ctrl-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.6rem;
+    color: var(--text-heading, #f8fafc);
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+
+  .custom-slider {
+    width: 100%;
+    accent-color: #06b6d4;
+    cursor: pointer;
+  }
+
+  /* PREVIEW CARD */
+  .preview-card h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 1.25rem;
+  }
+
+  .preview-stage {
+    display: flex;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    max-height: 340px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .preview-stage img {
+    max-width: 100%;
+    max-height: 320px;
+    object-fit: contain;
+    border-radius: 0.5rem;
+  }
+
+  .metrics-comparison-grid {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.75rem;
+    padding: 1.25rem 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .col-label {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 0.2rem;
+    text-transform: uppercase;
+  }
+
+  .metric-col strong {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .sub-format {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .highlight-green {
+    color: #10b981 !important;
+  }
+
+  .highlight-saving {
+    color: #06b6d4 !important;
+  }
+
+  .metric-arrow {
+    font-size: 1.4rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .action-buttons {
+      flex-direction: column;
+    }
+  }
+
+  .btn-download-main {
+    flex: 2;
+    background: linear-gradient(135deg, #06b6d4, #3b82f6);
+    color: #ffffff;
+    border: none;
+    padding: 0.85rem 1.5rem;
+    border-radius: 0.65rem;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.15s;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+  }
+
+  .btn-download-main:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+  }
+
+  .btn-reset {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-heading, #f8fafc);
+    padding: 0.85rem;
+    border-radius: 0.65rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-reset:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* SEO & FAQS */
+  .seo-guide-section, .faq-section {
+    margin-top: 2rem;
+  }
+
+  .seo-guide-section h2, .faq-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 1rem;
+  }
+
+  .seo-guide-section p {
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .guide-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .guide-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-box p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    line-height: 1.6;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initImageConverter() {
+    const dropZone = document.getElementById('img-drop-zone');
+    const fileInput = document.getElementById('img-file-input') as HTMLInputElement;
+    const controls = document.getElementById('converter-controls');
+    const previewCard = document.getElementById('preview-card');
+    const targetFormatSelect = document.getElementById('target-format') as HTMLSelectElement;
+    const qualityRange = document.getElementById('quality-range') as HTMLInputElement;
+    const qualityBadge = document.getElementById('quality-val-badge');
+    const qualityGroup = document.getElementById('quality-group');
+
+    const previewImg = document.getElementById('converted-preview-img') as HTMLImageElement;
+    const origSizeVal = document.getElementById('orig-size-val');
+    const origFormatVal = document.getElementById('orig-format-val');
+    const newSizeVal = document.getElementById('new-size-val');
+    const newFormatVal = document.getElementById('new-format-val');
+    const savingPctVal = document.getElementById('saving-pct-val');
+
+    const btnDownload = document.getElementById('btn-download');
+    const btnReset = document.getElementById('btn-reset');
+
+    if (!dropZone || !fileInput) return;
+
+    let loadedImage: HTMLImageElement | null = null;
+    let originalFile: File | null = null;
+    let convertedBlob: Blob | null = null;
+
+    function formatBytes(bytes: number): string {
+      if (bytes === 0) return '0 KB';
+      return (bytes / 1024).toFixed(1) + ' KB';
+    }
+
+    function processImage() {
+      if (!loadedImage || !originalFile) return;
+
+      const format = targetFormatSelect.value;
+      const quality = parseInt(qualityRange.value, 10) / 100;
+
+      // Quality applies to webp and jpeg, not png
+      if (qualityGroup) {
+        qualityGroup.style.display = format === 'image/png' ? 'none' : 'block';
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = loadedImage.naturalWidth || loadedImage.width;
+      canvas.height = loadedImage.naturalHeight || loadedImage.height;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      // If converting to JPEG, draw white background behind transparencies
+      if (format === 'image/jpeg') {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+
+      ctx.drawImage(loadedImage, 0, 0);
+
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        convertedBlob = blob;
+
+        const newUrl = URL.createObjectURL(blob);
+        if (previewImg) previewImg.src = newUrl;
+
+        const extMap: Record<string, string> = {
+          'image/webp': 'WebP',
+          'image/jpeg': 'JPG',
+          'image/png': 'PNG'
+        };
+
+        if (origSizeVal) origSizeVal.textContent = formatBytes(originalFile.size);
+        if (origFormatVal) origFormatVal.textContent = originalFile.name.split('.').pop()?.toUpperCase() || 'IMG';
+
+        if (newSizeVal) newSizeVal.textContent = formatBytes(blob.size);
+        if (newFormatVal) newFormatVal.textContent = extMap[format] || 'IMG';
+
+        const diff = originalFile.size - blob.size;
+        const savingPct = Math.round((diff / originalFile.size) * 100);
+
+        if (savingPctVal) {
+          if (savingPct > 0) {
+            savingPctVal.textContent = `-${savingPct}%`;
+            savingPctVal.className = 'highlight-saving';
+          } else {
+            savingPctVal.textContent = `+${Math.abs(savingPct)}%`;
+            savingPctVal.className = '';
+          }
+        }
+
+        if (controls) controls.style.display = 'block';
+        if (previewCard) previewCard.style.display = 'block';
+      }, format, quality);
+    }
+
+    function handleFile(file: File) {
+      if (!file || !file.type.startsWith('image/')) return;
+      originalFile = file;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          loadedImage = img;
+          processImage();
+        };
+        img.src = e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files && fileInput.files[0]) {
+        handleFile(fileInput.files[0]);
+      }
+    });
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      if (e.dataTransfer?.files && e.dataTransfer.files[0]) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    targetFormatSelect?.addEventListener('change', processImage);
+    qualityRange?.addEventListener('input', () => {
+      if (qualityBadge) qualityBadge.textContent = `${qualityRange.value}%`;
+      processImage();
+    });
+
+    btnDownload?.addEventListener('click', () => {
+      if (!convertedBlob || !originalFile) return;
+
+      const extMap: Record<string, string> = {
+        'image/webp': 'webp',
+        'image/jpeg': 'jpg',
+        'image/png': 'png'
+      };
+
+      const baseName = originalFile.name.replace(/\.[^/.]+$/, '');
+      const newExt = extMap[targetFormatSelect.value] || 'webp';
+      const fileName = `${baseName}-guiatecnes.${newExt}`;
+
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(convertedBlob);
+      link.download = fileName;
+      link.click();
+    });
+
+    btnReset?.addEventListener('click', () => {
+      fileInput.value = '';
+      loadedImage = null;
+      originalFile = null;
+      convertedBlob = null;
+      if (controls) controls.style.display = 'none';
+      if (previewCard) previewCard.style.display = 'none';
+      dropZone.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initImageConverter);
+</script>

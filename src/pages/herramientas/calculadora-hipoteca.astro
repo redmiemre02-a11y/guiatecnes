@@ -1,0 +1,959 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Hipotecas y Préstamos', url: '/herramientas/calculadora-hipoteca' }
+];
+
+const faqs = [
+  {
+    question: '¿Cómo se calcula la cuota mensual de una hipoteca en España?',
+    answer: 'En España y la mayoría de países se utiliza el sistema de amortización francés, caracterizado por cuotas mensuales constantes. La fórmula matemática es: C = P * (i / (1 - (1 + i)^(-n))), donde P es el capital prestado, i es el tipo de interés mensual (TIN / 12 / 100) y n es el número total de mensualidades.'
+  },
+  {
+    question: '¿Qué diferencia hay entre una hipoteca fija, variable y mixta?',
+    answer: 'En una hipoteca fija la cuota mensual se mantiene exactamente igual durante toda la vida del préstamo. En una hipoteca variable, la cuota se revisa anual o semestralmente según la evolución del Euríbor más un diferencial. En una hipoteca mixta, se aplica un tipo fijo los primeros años (ej: 5 o 10 años) y posteriormente pasa a ser variable.'
+  },
+  {
+    question: '¿Qué porcentaje del precio de una vivienda financia el banco?',
+    answer: 'Generalmente los bancos en España conceden hasta el 80% del valor de tasación o compraventa (el menor de ambos) para primera vivienda, y entre el 60% y el 70% para segundas residencias. El comprador debe aportar el 20% restante más un 10%-12% adicional para gastos e impuestos (ITP o IVA, notaría, registro y gestoría).'
+  },
+  {
+    question: '¿Qué porcentaje de mis ingresos debería destinar a la hipoteca?',
+    answer: 'El Banco de España recomienda que la cuota hipotecaria más otros préstamos personales no supere nunca el 30% - 35% de los ingresos netos mensuales de la unidad familiar (ratio de endeudamiento).'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Hipoteca y Cuota Mensual 2026 | GuiaTecnEs"
+  description="Calcula tu cuota mensual de hipoteca fija o variable, intereses totales y tabla de amortización completa en España. Con opción de imprimir o guardar en PDF."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de Hipoteca</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🏡 Finanzas, Inmuebles & Vivienda</div>
+      <h1>Calculadora de Hipotecas y Préstamos</h1>
+      <p class="tool-subtitle">
+        Calcula la cuota mensual exacta de tu vivienda, descubre cuánto pagarás de intereses al banco y visualiza la tabla de amortización año a año según el sistema francés.
+      </p>
+    </header>
+
+    <div class="mortgage-calc-grid">
+      <!-- FORMULARIO DE ENTRADA -->
+      <div class="card form-card">
+        <h3>📋 Parámetros del Préstamo</h3>
+
+        <!-- PRESETS RÁPIDOS -->
+        <div class="presets-box">
+          <span class="preset-title">Ejemplos rápidos:</span>
+          <div class="presets-chips">
+            <button type="button" class="preset-btn" data-amt="120000" data-years="20" data-rate="2.9">120k€ / 20a</button>
+            <button type="button" class="preset-btn active" data-amt="180000" data-years="25" data-rate="3.2">180k€ / 25a</button>
+            <button type="button" class="preset-btn" data-amt="250000" data-years="30" data-rate="3.4">250k€ / 30a</button>
+            <button type="button" class="preset-btn" data-amt="350000" data-years="30" data-rate="3.5">350k€ / 30a</button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="loan-amount">Importe del Préstamo Hipotecario (€):</label>
+          <div class="input-currency-wrapper">
+            <input type="number" id="loan-amount" value="180000" min="10000" max="2000000" step="5000" />
+            <span class="currency-symbol">€</span>
+          </div>
+          <span class="input-helper">La cantidad neta que solicitas al banco (ej: el 80% del valor del inmueble).</span>
+        </div>
+
+        <div class="input-group">
+          <div class="range-header">
+            <label for="loan-years">Plazo de Devolución:</label>
+            <span class="range-val" id="years-display">25 años</span>
+          </div>
+          <input type="range" id="loan-years" min="5" max="40" step="1" value="25" class="custom-range" />
+          <div class="range-ticks">
+            <span>5a</span>
+            <span>15a</span>
+            <span>25a</span>
+            <span>30a</span>
+            <span>40a</span>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="interest-rate">Tipo de Interés Anual Nominal (TIN %):</label>
+          <div class="input-currency-wrapper">
+            <input type="number" id="interest-rate" value="3.20" min="0.1" max="15" step="0.05" />
+            <span class="currency-symbol">%</span>
+          </div>
+          <span class="input-helper">Si es hipoteca variable, indica Euríbor + diferencial estimado.</span>
+        </div>
+
+        <div class="input-group">
+          <label for="mortgage-type">Modalidad de Hipoteca:</label>
+          <select id="mortgage-type">
+            <option value="fija" selected>Hipoteca Fija (Cuota constante)</option>
+            <option value="variable">Hipoteca Variable (Euríbor + Diferencial)</option>
+            <option value="mixta">Hipoteca Mixta (Tramo fijo inicial)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- RESULTADOS EN VIVO -->
+      <div class="card results-card">
+        <h3>Tu Cuota y Coste Total</h3>
+
+        <div class="monthly-payment-hero">
+          <span class="hero-label">Cuota mensual estimada:</span>
+          <div class="hero-amount" id="monthly-payment">872,55 €</div>
+          <span class="hero-sub" id="hero-months-sub">en 300 cuotas mensuales (25 años)</span>
+        </div>
+
+        <!-- BARRA DESGLOSE CAPITAL VS INTERESES -->
+        <div class="breakdown-bar-section">
+          <div class="breakdown-labels">
+            <span>Capital prestado: <strong id="lbl-capital">180.000 €</strong></span>
+            <span>Intereses: <strong id="lbl-interest">81.765 €</strong></span>
+          </div>
+          <div class="ratio-progress-track">
+            <div class="ratio-bar bar-capital" id="bar-capital" style="width: 68%;"></div>
+            <div class="ratio-bar bar-interest" id="bar-interest" style="width: 32%;"></div>
+          </div>
+          <div class="ratio-legend">
+            <span class="legend-dot dot-cap"></span> Capital (<span id="pct-cap">68%</span>)
+            <span class="legend-dot dot-int" style="margin-left: 1rem;"></span> Intereses pagados (<span id="pct-int">32%</span>)
+          </div>
+        </div>
+
+        <!-- TABLA RESUMEN -->
+        <div class="summary-key-values">
+          <div class="key-val-row">
+            <span>Total intereses pagados:</span>
+            <strong id="total-interest-val">81.765,00 €</strong>
+          </div>
+          <div class="key-val-row">
+            <span>Coste total del préstamo (Capital + Intereses):</span>
+            <strong id="total-loan-cost" class="highlight-total">261.765,00 €</strong>
+          </div>
+          <div class="key-val-row">
+            <span>Ingresos netos recomendados al mes:</span>
+            <span id="recommended-income">~2.493 € / mes</span>
+          </div>
+        </div>
+
+        <!-- ACCIONES -->
+        <div class="mortgage-actions">
+          <button type="button" class="btn-print-mortgage" id="btn-print-mortgage">
+            📄 Guardar en PDF / Imprimir Cuadro
+          </button>
+          <button type="button" class="btn-toggle-table" id="btn-toggle-table">
+            📊 Ver Tabla de Amortización Anual
+          </button>
+          <button type="button" class="btn-embed-tool" id="btn-embed-tool" title="Obtener código iframe para insertar en tu blog">
+            ‹/› Insertar en tu Web
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLA DE AMORTIZACIÓN DETALLADA (DESPLEGABLE) -->
+    <div class="card amortization-card" id="amortization-table-card" style="display: none;">
+      <div class="amort-header">
+        <h3>📊 Cuadro de Amortización Anual (Sistema Francés)</h3>
+        <span class="amort-desc">Evolución de cómo el capital pendiente disminuye con cada año de cuotas:</span>
+      </div>
+      <div class="table-responsive">
+        <table class="amort-table" id="amort-table">
+          <thead>
+            <tr>
+              <th>Año</th>
+              <th>Cuota Anual</th>
+              <th>Capital Amortizado</th>
+              <th>Intereses del Año</th>
+              <th>Capital Pendiente</th>
+            </tr>
+          </thead>
+          <tbody id="amort-table-body">
+            <!-- Filas dinámicas -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- GUÍA SEO -->
+    <section class="seo-guide-section card">
+      <h2>Consejos clave antes de firmar una hipoteca en 2026</h2>
+      <p>
+        Contratar un préstamo hipotecario es la decisión financiera más importante de la vida de la mayoría de personas. Ten en cuenta estos factores clave para ahorrar miles de euros:
+      </p>
+
+      <div class="guide-grid">
+        <div class="guide-box">
+          <h3>⚖️ TIN frente a TAE: ¿Qué debes comparar?</h3>
+          <p>
+            El <strong>TIN</strong> (Tipo de Interés Nominal) es solo el porcentaje que cobra el banco por prestarte el dinero. La <strong>TAE</strong> (Tasa Anual Equivalente) incluye el TIN más todas las comisiones y los gastos de vinculación obligatorios (seguros de vida, hogar o alarmas). Compara siempre ofertas por su TAE.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>📉 Amortización Anticipada: ¿Reducir Cuota o Plazo?</h3>
+          <p>
+            Si dispones de ahorros extra, amortizar anticipadamente reduciendo el <strong>plazo de años</strong> ahorra infinitamente más dinero en intereses totales que reducir la cuota mensual.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>💰 Los Gastos de Compraventa</h3>
+          <p>
+            Recuerda que la hipoteca solo financia la casa. Debes disponer de entre un <strong>10% y un 12% extra en ahorros</strong> para pagar el Impuesto de Transmisiones Patrimoniales (ITP en segunda mano) o IVA (10% en obra nueva) más notario y registro.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQS -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre Hipotecas</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    padding: 2rem 1rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted, #94a3b8);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: #10b981;
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  .tool-header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .mortgage-calc-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 1.75rem;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 900px) {
+    .mortgage-calc-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* PRESETS */
+  .presets-box {
+    margin-bottom: 1.25rem;
+  }
+
+  .preset-title {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 0.4rem;
+  }
+
+  .presets-chips {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .preset-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-muted, #94a3b8);
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .preset-btn:hover {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .preset-btn.active {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #10b981;
+  }
+
+  /* INPUTS */
+  .input-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .input-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 0.4rem;
+  }
+
+  .input-currency-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-currency-wrapper input {
+    width: 100%;
+    padding: 0.8rem 2.5rem 0.8rem 1rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.6rem;
+    color: var(--text-heading, #f8fafc);
+    font-size: 1.2rem;
+    font-weight: 800;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+
+  .input-currency-wrapper input:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  }
+
+  .currency-symbol {
+    position: absolute;
+    right: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .input-helper {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted, #94a3b8);
+    margin-top: 0.35rem;
+  }
+
+  .range-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+  }
+
+  .range-header label {
+    margin: 0;
+  }
+
+  .range-val {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #10b981;
+  }
+
+  .custom-range {
+    width: 100%;
+    accent-color: #10b981;
+    cursor: pointer;
+  }
+
+  .range-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-muted, #94a3b8);
+    margin-top: 0.2rem;
+  }
+
+  .input-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.6rem;
+    color: var(--text-heading, #f8fafc);
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+
+  /* RESULTS CARD */
+  .monthly-payment-hero {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
+    border: 2px solid #10b981;
+    border-radius: 0.85rem;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted, #94a3b8);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.35rem;
+  }
+
+  .hero-amount {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #10b981;
+    line-height: 1.1;
+    margin-bottom: 0.35rem;
+  }
+
+  .hero-sub {
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  /* BREAKDOWN BAR */
+  .breakdown-bar-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .breakdown-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 0.4rem;
+  }
+
+  .breakdown-labels strong {
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .ratio-progress-track {
+    height: 12px;
+    display: flex;
+    border-radius: 9999px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.08);
+    margin-bottom: 0.4rem;
+  }
+
+  .ratio-bar {
+    height: 100%;
+    transition: width 0.3s ease;
+  }
+
+  .bar-capital {
+    background: #10b981;
+  }
+
+  .bar-interest {
+    background: #f59e0b;
+  }
+
+  .ratio-legend {
+    display: flex;
+    align-items: center;
+    font-size: 0.78rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 0.35rem;
+  }
+
+  .dot-cap { background: #10b981; }
+  .dot-int { background: #f59e0b; }
+
+  /* SUMMARY KEY VALUES */
+  .summary-key-values {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .key-val-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.45rem 0;
+    font-size: 0.88rem;
+    color: var(--text-muted, #94a3b8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .key-val-row:last-child {
+    border-bottom: none;
+  }
+
+  .key-val-row strong {
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .highlight-total {
+    color: #f59e0b !important;
+    font-size: 1rem;
+  }
+
+  /* ACTIONS */
+  .mortgage-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .btn-print-mortgage {
+    width: 100%;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #ffffff;
+    border: none;
+    padding: 0.85rem;
+    border-radius: 0.65rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+
+  .btn-print-mortgage:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+  }
+
+  .btn-toggle-table {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-heading, #f8fafc);
+    padding: 0.75rem;
+    border-radius: 0.65rem;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-embed-tool {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed var(--border-color, #334155);
+    color: var(--text-muted, #94a3b8);
+    padding: 0.65rem;
+    border-radius: 0.65rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-embed-tool:hover {
+    border-color: #10b981;
+    color: var(--text-heading, #f8fafc);
+    background: rgba(16, 185, 129, 0.08);
+  }
+
+  .btn-toggle-table:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* AMORTIZATION CARD */
+  .amortization-card {
+    margin-bottom: 2rem;
+  }
+
+  .amort-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .amort-header h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1.2rem;
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .amort-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    max-height: 480px;
+  }
+
+  .amort-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    text-align: right;
+  }
+
+  .amort-table th, .amort-table td {
+    padding: 0.65rem 0.85rem;
+    border: 1px solid var(--border-color, #334155);
+  }
+
+  .amort-table th {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-heading, #f8fafc);
+    position: sticky;
+    top: 0;
+    background: #1e293b;
+  }
+
+  .amort-table td {
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .amort-table tr:hover td {
+    background: rgba(16, 185, 129, 0.08);
+  }
+
+  .amort-table td:first-child, .amort-table th:first-child {
+    text-align: center;
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+  }
+
+  /* SEO & GUIDE */
+  .seo-guide-section, .faq-section {
+    margin-top: 2rem;
+  }
+
+  .seo-guide-section h2, .faq-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 1rem;
+  }
+
+  .seo-guide-section p {
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .guide-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .guide-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-box p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    line-height: 1.6;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.6;
+  }
+
+  @media print {
+    header, footer, .breadcrumb, .seo-guide-section, .faq-section, .mortgage-actions, .presets-box, .tool-page .tool-subtitle, .tool-badge {
+      display: none !important;
+    }
+    body {
+      background: #ffffff !important;
+      color: #0f172a !important;
+    }
+    .mortgage-calc-grid {
+      grid-template-columns: 1fr 1fr !important;
+      gap: 1.5rem !important;
+    }
+    .card {
+      box-shadow: none !important;
+      border: 1px solid #cbd5e1 !important;
+      background: #ffffff !important;
+      color: #0f172a !important;
+    }
+    .amortization-card {
+      display: block !important;
+    }
+    .table-responsive {
+      max-height: none !important;
+    }
+  }
+</style>
+
+<script>
+  function initMortgageCalculator() {
+    const loanAmountInput = document.getElementById('loan-amount') as HTMLInputElement;
+    const loanYearsRange = document.getElementById('loan-years') as HTMLInputElement;
+    const yearsDisplay = document.getElementById('years-display');
+    const interestRateInput = document.getElementById('interest-rate') as HTMLInputElement;
+    const presetBtns = document.querySelectorAll('.preset-btn');
+
+    // Outputs
+    const monthlyPaymentEl = document.getElementById('monthly-payment');
+    const heroMonthsSub = document.getElementById('hero-months-sub');
+    const lblCapital = document.getElementById('lbl-capital');
+    const lblInterest = document.getElementById('lbl-interest');
+    const barCapital = document.getElementById('bar-capital');
+    const barInterest = document.getElementById('bar-interest');
+    const pctCap = document.getElementById('pct-cap');
+    const pctInt = document.getElementById('pct-int');
+    const totalInterestVal = document.getElementById('total-interest-val');
+    const totalLoanCost = document.getElementById('total-loan-cost');
+    const recommendedIncome = document.getElementById('recommended-income');
+
+    // Amortization Table
+    const btnToggleTable = document.getElementById('btn-toggle-table');
+    const tableCard = document.getElementById('amortization-table-card');
+    const tableBody = document.getElementById('amort-table-body');
+    const btnPrint = document.getElementById('btn-print-mortgage');
+
+    if (!loanAmountInput || !monthlyPaymentEl) return;
+
+    function formatEuro(num: number): string {
+      return num.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    }
+
+    function calculate() {
+      const P = parseFloat(loanAmountInput.value) || 0;
+      const years = parseInt(loanYearsRange.value, 10) || 25;
+      const annualRate = parseFloat(interestRateInput.value) || 0;
+
+      if (yearsDisplay) yearsDisplay.textContent = `${years} ${years === 1 ? 'año' : 'años'}`;
+
+      if (P <= 0 || annualRate <= 0 || years <= 0) {
+        monthlyPaymentEl.textContent = '0,00 €';
+        return;
+      }
+
+      const totalMonths = years * 12;
+      const monthlyRate = (annualRate / 100) / 12;
+
+      // French amortization formula: C = P * [ i / (1 - (1+i)^-n) ]
+      const monthlyPayment = P * (monthlyRate / (1 - Math.pow(1 + monthlyRate, -totalMonths)));
+      const totalPaid = monthlyPayment * totalMonths;
+      const totalInterest = totalPaid - P;
+
+      monthlyPaymentEl.textContent = formatEuro(monthlyPayment);
+      if (heroMonthsSub) heroMonthsSub.textContent = `en ${totalMonths} cuotas mensuales (${years} años)`;
+
+      if (lblCapital) lblCapital.textContent = formatEuro(P);
+      if (lblInterest) lblInterest.textContent = formatEuro(totalInterest);
+
+      const capPct = Math.round((P / totalPaid) * 100);
+      const intPct = 100 - capPct;
+
+      if (barCapital) barCapital.style.width = `${capPct}%`;
+      if (barInterest) barInterest.style.width = `${intPct}%`;
+      if (pctCap) pctCap.textContent = `${capPct}%`;
+      if (pctInt) pctInt.textContent = `${intPct}%`;
+
+      if (totalInterestVal) totalInterestVal.textContent = formatEuro(totalInterest);
+      if (totalLoanCost) totalLoanCost.textContent = formatEuro(totalPaid);
+
+      // Recommended minimum income (cuota <= 35% de ingresos)
+      const minIncome = monthlyPayment / 0.35;
+      if (recommendedIncome) recommendedIncome.textContent = `~${formatEuro(minIncome)} / mes`;
+
+      // Build annual amortization schedule
+      if (tableBody) {
+        let remainingBalance = P;
+        let html = '';
+
+        for (let y = 1; y <= years; y++) {
+          let yearInterest = 0;
+          let yearPrincipal = 0;
+
+          for (let m = 1; m <= 12; m++) {
+            const interestPayment = remainingBalance * monthlyRate;
+            const principalPayment = monthlyPayment - interestPayment;
+            yearInterest += interestPayment;
+            yearPrincipal += principalPayment;
+            remainingBalance = Math.max(0, remainingBalance - principalPayment);
+          }
+
+          const yearTotal = yearPrincipal + yearInterest;
+
+          html += `
+            <tr>
+              <td>Año ${y}</td>
+              <td>${formatEuro(yearTotal)}</td>
+              <td>${formatEuro(yearPrincipal)}</td>
+              <td>${formatEuro(yearInterest)}</td>
+              <td><strong>${formatEuro(remainingBalance)}</strong></td>
+            </tr>
+          `;
+        }
+        tableBody.innerHTML = html;
+      }
+    }
+
+    loanYearsRange.addEventListener('input', calculate);
+    [loanAmountInput, interestRateInput].forEach(el => {
+      el.addEventListener('input', calculate);
+      el.addEventListener('change', calculate);
+    });
+
+    presetBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        presetBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const amt = btn.getAttribute('data-amt');
+        const yrs = btn.getAttribute('data-years');
+        const rate = btn.getAttribute('data-rate');
+
+        if (amt) loanAmountInput.value = amt;
+        if (yrs) loanYearsRange.value = yrs;
+        if (rate) interestRateInput.value = rate;
+
+        calculate();
+      });
+    });
+
+    btnToggleTable?.addEventListener('click', () => {
+      if (!tableCard) return;
+      const isVisible = tableCard.style.display !== 'none';
+      tableCard.style.display = isVisible ? 'none' : 'block';
+      btnToggleTable.textContent = isVisible ? '📊 Ver Tabla de Amortización Anual' : '▲ Ocultar Tabla de Amortización';
+      if (!isVisible) {
+        tableCard.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    btnPrint?.addEventListener('click', () => {
+      if (tableCard) tableCard.style.display = 'block';
+      window.print();
+    });
+
+    document.getElementById('btn-embed-tool')?.addEventListener('click', async () => {
+      const code = '<iframe src="https://guiatecnes.com/herramientas/calculadora-hipoteca" width="100%" height="650" style="border:1px solid #cbd5e1; border-radius:12px;" title="Calculadora de Hipotecas - GuiaTecnEs"></iframe>\n<p style="font-size:12px; text-align:center;">Fuente: <a href="https://guiatecnes.com/herramientas/calculadora-hipoteca" target="_blank" rel="noopener">GuiaTecnEs</a></p>';
+      try {
+        await navigator.clipboard.writeText(code);
+        const btn = document.getElementById('btn-embed-tool');
+        if (btn) {
+          const orig = btn.textContent;
+          btn.textContent = '✅ ¡Código iframe copiado!';
+          setTimeout(() => { btn.textContent = orig; }, 2500);
+        }
+      } catch (e) {}
+    });
+
+    calculate();
+  }
+
+  document.addEventListener('astro:page-load', initMortgageCalculator);
+</script>

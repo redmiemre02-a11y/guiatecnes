@@ -1,0 +1,725 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Días entre Dos Fechas', url: '/herramientas/contador-dias-fechas' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué diferencia hay entre días naturales y días hábiles o laborables?',
+    answer: 'Los días naturales corresponden a todos los días consecutivos del calendario (365 o 366 días al año, incluyendo fines de semana y festivos). Los días hábiles o laborables excluyen los fines de semana (sábados y domingos) y, según el ámbito legal o administrativo, los festivos nacionales o autonómicos.'
+  },
+  {
+    question: '¿La fecha de inicio y de fin se incluyen en el cálculo?',
+    answer: 'Por norma general y de acuerdo con el estándar ISO, se calcula la diferencia neta de días (es decir, excluyendo el día de inicio y contando hasta el día de fin). Nuestra herramienta te permite activar o desactivar la opción de incluir ambos días en el cómputo final.'
+  },
+  {
+    question: '¿Cómo sumar o restar un número determinado de días a una fecha?',
+    answer: 'En la pestaña «Sumar o Restar Días», selecciona tu fecha de partida, indica cuántos días deseas añadir o sustraer y la calculadora te dará automáticamente la fecha exacta resultante, indicando qué día de la semana caerá.'
+  },
+  {
+    question: '¿Se tienen en cuenta los años bisiestos?',
+    answer: 'Sí. El motor de cálculo computa con total precisión los años bisiestos con 366 días (mes de febrero de 29 días) pasados y futuros.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Días entre Dos Fechas y Días Laborables | GuiaTecnEs"
+  description="Calcula cuántos días, semanas, meses y días hábiles hay entre dos fechas. Incluye o excluye fines de semana y suma/resta días fácilmente."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Contador de Días entre Fechas</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">📅 Calendario, Tiempo & Trámites</div>
+      <h1>Calculadora de Días entre Dos Fechas</h1>
+      <p class="tool-subtitle">
+        Averigua cuántos días naturales y laborables faltan para un evento, calcula plazos administrativos o suma días a una fecha en un segundo.
+      </p>
+    </header>
+
+    <div class="dates-calc-card card">
+      <!-- PESTAÑAS DE MODO -->
+      <div class="mode-tabs">
+        <button type="button" class="mode-tab active" data-mode="diff">📆 Días entre Dos Fechas</button>
+        <button type="button" class="mode-tab" data-mode="add">➕ Sumar o Restar Días</button>
+      </div>
+
+      <!-- MODO 1: DIFERENCIA DE FECHAS -->
+      <div class="mode-view" id="view-diff">
+        <div class="dates-inputs-grid">
+          <div class="date-input-box">
+            <label for="date-start">Fecha de Inicio:</label>
+            <input type="date" id="date-start" />
+          </div>
+
+          <div class="date-swap-box">
+            <button type="button" id="btn-today-start" class="btn-quick-date">Hoy</button>
+            <button type="button" id="btn-swap-dates" class="btn-swap-dates" title="Intercambiar fechas">⇄</button>
+            <button type="button" id="btn-today-end" class="btn-quick-date">Fin de Año</button>
+          </div>
+
+          <div class="date-input-box">
+            <label for="date-end">Fecha de Fin:</label>
+            <input type="date" id="date-end" />
+          </div>
+        </div>
+
+        <div class="include-end-check">
+          <label class="toggle-checkbox">
+            <input type="checkbox" id="check-include-end" />
+            <span>Incluir ambos días en el recuento (+1 día)</span>
+          </label>
+        </div>
+
+        <!-- RESULTADO HERO -->
+        <div class="result-hero-box">
+          <span class="hero-label">Diferencia total:</span>
+          <div class="hero-days-val" id="diff-days-result">0 días</div>
+          <span class="hero-breakdown" id="diff-breakdown-sub">0 semanas y 0 días</span>
+        </div>
+
+        <!-- DESGLOSE DETALLADO -->
+        <div class="detailed-metrics-grid">
+          <div class="metric-card">
+            <span class="metric-num" id="stat-workdays">0</span>
+            <span class="metric-desc">Días Laborables (Lun-Vie)</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-num" id="stat-weekends">0</span>
+            <span class="metric-desc">Fines de Semana (Sáb-Dom)</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-num" id="stat-weeks">0</span>
+            <span class="metric-desc">Semanas Completas</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-num" id="stat-hours">0 h</span>
+            <span class="metric-desc">Horas Totales</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODO 2: SUMAR / RESTAR DÍAS -->
+      <div class="mode-view" id="view-add" style="display: none;">
+        <div class="add-days-form-grid">
+          <div class="date-input-box">
+            <label for="base-date">Fecha de Partida:</label>
+            <input type="date" id="base-date" />
+          </div>
+
+          <div class="operator-box">
+            <label for="add-operator">Operación:</label>
+            <select id="add-operator">
+              <option value="add" selected>➕ Sumar (+) días</option>
+              <option value="sub">➖ Restar (-) días</option>
+            </select>
+          </div>
+
+          <div class="amount-days-box">
+            <label for="amount-days-input">Número de Días:</label>
+            <input type="number" id="amount-days-input" value="30" min="1" max="10000" />
+          </div>
+        </div>
+
+        <div class="result-hero-box add-result-box">
+          <span class="hero-label">Fecha resultante:</span>
+          <div class="hero-date-val" id="calc-future-date">-</div>
+          <span class="hero-breakdown" id="calc-day-of-week">-</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUÍA SEO -->
+    <section class="seo-guide-section card">
+      <h2>Cómo calcular plazos legales y administrativos en días hábiles</h2>
+      <p>
+        En España y en la mayoría de administraciones públicas (Ley 39/2015 del Procedimiento Administrativo Común), el cómputo de plazos legales exige mucha atención:
+      </p>
+
+      <div class="guide-grid">
+        <div class="guide-box">
+          <h3>⚖️ Cómputo en Días Hábiles</h3>
+          <p>
+            Cuando los plazos se señalan por días hábiles, se entienden que están excluidos del cómputo los <strong>sábados, los domingos</strong> y los días declarados festivos oficiales. El plazo comienza a contar a partir del día siguiente a la notificación.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>📅 Cómputo de Fecha a Fecha</h3>
+          <p>
+            Si el plazo está fijado en <strong>meses o años</strong>, se computará de fecha a fecha. Si en el mes de vencimiento no hubiera día equivalente (por ejemplo, notifican el 31 de marzo con 1 mes de plazo), se entenderá que el plazo expira el último día del mes (30 de abril).
+          </p>
+        </div>
+        <div class="guide-box">
+          <h3>🏖️ Vacaciones y Días Laborables</h3>
+          <p>
+            En el Estatuto de los Trabajadores, el mínimo legal son <strong>30 días naturales</strong> o <strong>22 días laborables</strong> de vacaciones retribuidas al año para contratos a jornada completa.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQS -->
+    <section class="faq-section card">
+      <h2>Preguntas Frecuentes sobre el Conteo de Días</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question"><strong>{faq.question}</strong></summary>
+            <p class="faq-answer">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    padding: 2rem 1rem 4rem;
+    max-width: 950px;
+    margin: 0 auto;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted, #94a3b8);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: #f59e0b;
+  }
+
+  .tool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .tool-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  .tool-header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  /* MODE TABS */
+  .mode-tabs {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--border-color, #334155);
+    padding-bottom: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .mode-tab {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-muted, #94a3b8);
+    padding: 0.55rem 1.15rem;
+    border-radius: 9999px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .mode-tab:hover {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .mode-tab.active {
+    background: #f59e0b;
+    color: #0f172a;
+    font-weight: 800;
+    border-color: #f59e0b;
+    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.35);
+  }
+
+  /* DATES INPUTS GRID */
+  .dates-inputs-grid, .add-days-form-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1rem;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 700px) {
+    .dates-inputs-grid, .add-days-form-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .date-input-box label, .operator-box label, .amount-days-box label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 0.4rem;
+  }
+
+  .date-input-box input, .amount-days-box input, .operator-box select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.6rem;
+    color: var(--text-heading, #f8fafc);
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+
+  .date-input-box input:focus, .amount-days-box input:focus, .operator-box select:focus {
+    outline: none;
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+  }
+
+  .date-swap-box {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    justify-content: center;
+    padding-bottom: 0.2rem;
+  }
+
+  .btn-quick-date {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-muted, #94a3b8);
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+
+  .btn-quick-date:hover {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .btn-swap-dates {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color, #334155);
+    color: var(--text-heading, #f8fafc);
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .btn-swap-dates:hover {
+    background: #f59e0b;
+    color: #0f172a;
+    transform: rotate(180deg);
+  }
+
+  .include-end-check {
+    margin: 1rem 0 1.5rem;
+  }
+
+  .toggle-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    cursor: pointer;
+  }
+
+  .toggle-checkbox input {
+    accent-color: #f59e0b;
+  }
+
+  /* RESULT HERO */
+  .result-hero-box {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(234, 88, 12, 0.1));
+    border: 2px solid #f59e0b;
+    border-radius: 0.85rem;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted, #94a3b8);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.35rem;
+  }
+
+  .hero-days-val, .hero-date-val {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #f59e0b;
+    line-height: 1.1;
+    margin-bottom: 0.35rem;
+  }
+
+  .hero-date-val {
+    font-size: 2.2rem;
+  }
+
+  .hero-breakdown {
+    font-size: 0.9rem;
+    color: var(--text-heading, #f8fafc);
+    font-weight: 600;
+  }
+
+  /* METRICS GRID */
+  .detailed-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.85rem;
+  }
+
+  @media (max-width: 650px) {
+    .detailed-metrics-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .metric-card {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 0.5rem;
+    text-align: center;
+  }
+
+  .metric-num {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .metric-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  /* SEO & FAQS */
+  .seo-guide-section, .faq-section {
+    margin-top: 2rem;
+  }
+
+  .seo-guide-section h2, .faq-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 1rem;
+  }
+
+  .seo-guide-section p {
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+
+  .guide-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color, #334155);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .guide-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-heading, #f8fafc);
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-box p {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    line-height: 1.6;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .faq-question {
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-heading, #f8fafc);
+  }
+
+  .faq-answer {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initDatesCalculator() {
+    const modeTabs = document.querySelectorAll('.mode-tab');
+    const viewDiff = document.getElementById('view-diff');
+    const viewAdd = document.getElementById('view-add');
+
+    // View Diff elements
+    const dateStartInput = document.getElementById('date-start') as HTMLInputElement;
+    const dateEndInput = document.getElementById('date-end') as HTMLInputElement;
+    const checkIncludeEnd = document.getElementById('check-include-end') as HTMLInputElement;
+    const btnTodayStart = document.getElementById('btn-today-start');
+    const btnTodayEnd = document.getElementById('btn-today-end');
+    const btnSwap = document.getElementById('btn-swap-dates');
+
+    const diffDaysResult = document.getElementById('diff-days-result');
+    const diffBreakdownSub = document.getElementById('diff-breakdown-sub');
+    const statWorkdays = document.getElementById('stat-workdays');
+    const statWeekends = document.getElementById('stat-weekends');
+    const statWeeks = document.getElementById('stat-weeks');
+    const statHours = document.getElementById('stat-hours');
+
+    // View Add elements
+    const baseDateInput = document.getElementById('base-date') as HTMLInputElement;
+    const addOperatorSelect = document.getElementById('add-operator') as HTMLSelectElement;
+    const amountDaysInput = document.getElementById('amount-days-input') as HTMLInputElement;
+    const calcFutureDate = document.getElementById('calc-future-date');
+    const calcDayOfWeek = document.getElementById('calc-day-of-week');
+
+    if (!dateStartInput || !dateEndInput) return;
+
+    // Helper: format YYYY-MM-DD
+    function toISODate(d: Date): string {
+      return d.toISOString().split('T')[0];
+    }
+
+    const today = new Date();
+    dateStartInput.value = toISODate(today);
+
+    // End of year default
+    const endOfYear = new Date(today.getFullYear(), 11, 31);
+    dateEndInput.value = toISODate(endOfYear);
+
+    if (baseDateInput) baseDateInput.value = toISODate(today);
+
+    function calculateDiff() {
+      if (!dateStartInput.value || !dateEndInput.value) return;
+
+      const d1 = new Date(dateStartInput.value + 'T00:00:00');
+      const d2 = new Date(dateEndInput.value + 'T00:00:00');
+
+      let start = d1;
+      let end = d2;
+      let isNegative = false;
+
+      if (d1 > d2) {
+        start = d2;
+        end = d1;
+        isNegative = true;
+      }
+
+      const oneDay = 24 * 60 * 60 * 1000;
+      let rawDiffDays = Math.round((end.getTime() - start.getTime()) / oneDay);
+
+      if (checkIncludeEnd.checked && rawDiffDays >= 0) {
+        rawDiffDays += 1;
+      }
+
+      // Count workdays & weekends
+      let workdays = 0;
+      let weekends = 0;
+      const cur = new Date(start);
+
+      const loopLimit = checkIncludeEnd.checked ? rawDiffDays : rawDiffDays;
+      for (let i = 0; i < loopLimit; i++) {
+        const dayOfWeek = cur.getDay(); // 0 is Sun, 6 is Sat
+        if (dayOfWeek === 0 || dayOfWeek === 6) {
+          weekends++;
+        } else {
+          workdays++;
+        }
+        cur.setDate(cur.getDate() + 1);
+      }
+
+      const weeks = Math.floor(rawDiffDays / 7);
+      const remainingDays = rawDiffDays % 7;
+      const hours = rawDiffDays * 24;
+
+      if (diffDaysResult) {
+        const sign = isNegative ? 'Pasaron hace ' : '';
+        diffDaysResult.textContent = `${sign}${rawDiffDays.toLocaleString('es-ES')} ${rawDiffDays === 1 ? 'día' : 'días'}`;
+      }
+
+      if (diffBreakdownSub) {
+        diffBreakdownSub.textContent = `Equivalente a ${weeks} semanas y ${remainingDays} días`;
+      }
+
+      if (statWorkdays) statWorkdays.textContent = workdays.toLocaleString('es-ES');
+      if (statWeekends) statWeekends.textContent = weekends.toLocaleString('es-ES');
+      if (statWeeks) statWeeks.textContent = weeks.toLocaleString('es-ES');
+      if (statHours) statHours.textContent = hours.toLocaleString('es-ES') + ' h';
+    }
+
+    function calculateAdd() {
+      if (!baseDateInput?.value || !amountDaysInput?.value) return;
+
+      const base = new Date(baseDateInput.value + 'T00:00:00');
+      const days = parseInt(amountDaysInput.value, 10) || 0;
+      const op = addOperatorSelect.value;
+
+      const target = new Date(base);
+      if (op === 'add') {
+        target.setDate(target.getDate() + days);
+      } else {
+        target.setDate(target.getDate() - days);
+      }
+
+      const formatted = target.toLocaleDateString('es-ES', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+      if (calcFutureDate) {
+        calcFutureDate.textContent = target.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      }
+
+      if (calcDayOfWeek) {
+        calcDayOfWeek.textContent = formatted.charAt(0).toUpperCase() + formatted.slice(1);
+      }
+    }
+
+    modeTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        modeTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const mode = tab.getAttribute('data-mode');
+
+        if (mode === 'diff') {
+          if (viewDiff) viewDiff.style.display = 'block';
+          if (viewAdd) viewAdd.style.display = 'none';
+          calculateDiff();
+        } else {
+          if (viewDiff) viewDiff.style.display = 'none';
+          if (viewAdd) viewAdd.style.display = 'block';
+          calculateAdd();
+        }
+      });
+    });
+
+    [dateStartInput, dateEndInput, checkIncludeEnd].forEach(el => {
+      el?.addEventListener('input', calculateDiff);
+      el?.addEventListener('change', calculateDiff);
+    });
+
+    [baseDateInput, addOperatorSelect, amountDaysInput].forEach(el => {
+      el?.addEventListener('input', calculateAdd);
+      el?.addEventListener('change', calculateAdd);
+    });
+
+    btnTodayStart?.addEventListener('click', () => {
+      dateStartInput.value = toISODate(new Date());
+      calculateDiff();
+    });
+
+    btnTodayEnd?.addEventListener('click', () => {
+      const eoy = new Date(new Date().getFullYear(), 11, 31);
+      dateEndInput.value = toISODate(eoy);
+      calculateDiff();
+    });
+
+    btnSwap?.addEventListener('click', () => {
+      const prev = dateStartInput.value;
+      dateStartInput.value = dateEndInput.value;
+      dateEndInput.value = prev;
+      calculateDiff();
+    });
+
+    calculateDiff();
+    calculateAdd();
+  }
+
+  document.addEventListener('astro:page-load', initDatesCalculator);
+</script>

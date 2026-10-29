@@ -5,6 +5,42 @@ import Footer from '../../components/Footer.astro';
 
 const tools = [
   {
+    title: 'Calculadora de Hipotecas y Préstamos',
+    desc: 'Calcula tu cuota mensual de hipoteca fija o variable, intereses totales y tabla de amortización anual según el sistema francés.',
+    url: '/herramientas/calculadora-hipoteca',
+    icon: '🏡',
+    badge: 'Finanzas & Vivienda',
+    color: '#10b981',
+    category: 'finanzas'
+  },
+  {
+    title: 'Conversor de Imágenes a WebP, PNG y JPG',
+    desc: 'Convierte y comprime fotos en tu navegador sin subirlas a servidores. Ajusta calidad y reduce el peso para acelerar tu web.',
+    url: '/herramientas/conversor-imagenes',
+    icon: '🖼️',
+    badge: 'Diseño & Web',
+    color: '#06b6d4',
+    category: 'diseno'
+  },
+  {
+    title: 'Extractor de Paletas de Colores de una Imagen',
+    desc: 'Sube cualquier foto o logotipo y extrae automáticamente los 6 colores dominantes con códigos HEX, RGB y variables CSS.',
+    url: '/herramientas/extractor-colores-imagen',
+    icon: '🎨',
+    badge: 'Diseño & UI',
+    color: '#8b5cf6',
+    category: 'diseno'
+  },
+  {
+    title: 'Calculadora de Días entre Dos Fechas',
+    desc: 'Calcula cuántos días naturales, semanas completas y días hábiles / laborables hay entre dos fechas o suma/resta días.',
+    url: '/herramientas/contador-dias-fechas',
+    icon: '📅',
+    badge: 'Calendario & Tiempo',
+    color: '#f59e0b',
+    category: 'social'
+  },
+  {
     title: 'Contador de Caracteres para Redes Sociales',
     desc: 'Comprueba al instante si tu texto cabe en X/Twitter (280), Instagram bio y pie de foto, TikTok, LinkedIn y YouTube.',
     url: '/herramientas/contador-caracteres-redes',
@@ -336,14 +372,14 @@ const tools = [
 ---
 
 <BaseLayout
-  title="40 Herramientas Online Gratuitas de Tecnología, Ciberseguridad y Redes | GuíaTecnes"
-  description="Colección de 40 utilidades online gratuitas: Contador de redes, gamertags, conversor de unidades, hashes, calculadora de porcentajes, sueldo neto y más."
+  title="44 Herramientas Online Gratuitas de Tecnología, Ciberseguridad y Redes | GuíaTecnes"
+  description="Colección de 44 utilidades online gratuitas: Calculadora de hipotecas, conversor de imágenes WebP, extractor de colores, calculadora de fechas, sueldo neto y más."
 >
   <Header slot="header" />
 
   <main class="hub-container">
     <div class="hub-hero">
-      <span class="badge">🧲 40 Utilidades 100% Gratuitas</span>
+      <span class="badge">🧲 44 Utilidades 100% Gratuitas</span>
       <h1>Herramientas Digitales y Utilidades Online</h1>
       <p class="subtitle">Herramientas prácticas, rápidas y privadas diseñadas para solucionar problemas del día a día. Sin registros, sin suscripciones y sin trampas.</p>
 
@@ -351,12 +387,12 @@ const tools = [
       <div class="hub-search-wrapper">
         <div class="search-input-box">
           <span class="search-icon">🔍</span>
-          <input type="text" id="tool-search-input" placeholder="Buscar entre las 40 herramientas gratis (ej: sueldo, wifi, porcentajes, qr)..." />
+          <input type="text" id="tool-search-input" placeholder="Buscar entre las 44 herramientas gratis (ej: sueldo, wifi, porcentajes, qr)..." />
           <button type="button" id="btn-clear-search" style="display: none;">✕</button>
         </div>
 
         <div class="hub-filter-chips">
-          <button type="button" class="filter-chip active" data-cat="all">Todas (40)</button>
+          <button type="button" class="filter-chip active" data-cat="all">Todas (44)</button>
           <button type="button" class="filter-chip btn-fav-filter" data-cat="fav">⭐ Favoritas (<span id="fav-chip-count">0</span>)</button>
           <button type="button" class="filter-chip" data-cat="finanzas">💰 Finanzas & Nómina</button>
           <button type="button" class="filter-chip" data-cat="diseno">🎨 Diseño & Web</button>
@@ -366,7 +402,7 @@ const tools = [
         </div>
 
         <div class="tools-count-feedback" id="tools-counter">
-          Mostrando 40 herramientas disponibles
+          Mostrando 44 herramientas disponibles
         </div>
       </div>
     </div>

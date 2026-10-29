@@ -183,6 +183,9 @@ const faqs = [
           <button type="button" class="btn-print" id="btn-print-calc">
             📄 Guardar en PDF / Imprimir Nómina
           </button>
+          <button type="button" class="btn-embed-tool" id="btn-embed-sueldo" title="Insertar esta calculadora en tu blog">
+            ‹/› Insertar en tu Web
+          </button>
         </div>
       </div>
     </div>
@@ -670,6 +673,24 @@ const faqs = [
     gap: 0.5rem;
   }
 
+  .btn-embed-tool {
+    width: 100%;
+    margin-top: 0.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed var(--border-color, #334155);
+    color: var(--text-muted, #94a3b8);
+    padding: 0.65rem;
+    border-radius: 0.65rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-embed-tool:hover {
+    border-color: #10b981;
+    color: var(--text-heading, #f8fafc);
+    background: rgba(16, 185, 129, 0.08);
+  }
+
   .btn-print:hover {
     transform: translateY(-2px);
     opacity: 0.95;
@@ -861,6 +882,19 @@ const faqs = [
 
     document.getElementById('btn-print-calc')?.addEventListener('click', () => {
       window.print();
+    });
+
+    document.getElementById('btn-embed-sueldo')?.addEventListener('click', async () => {
+      const code = '<iframe src="https://guiatecnes.com/herramientas/calculadora-sueldo-neto" width="100%" height="750" style="border:1px solid #cbd5e1; border-radius:12px;" title="Calculadora de Sueldo Neto - GuiaTecnEs"></iframe>\n<p style="font-size:12px; text-align:center;">Fuente: <a href="https://guiatecnes.com/herramientas/calculadora-sueldo-neto" target="_blank" rel="noopener">GuiaTecnEs</a></p>';
+      try {
+        await navigator.clipboard.writeText(code);
+        const btn = document.getElementById('btn-embed-sueldo');
+        if (btn) {
+          const orig = btn.textContent;
+          btn.textContent = '✅ ¡Código iframe copiado!';
+          setTimeout(() => { btn.textContent = orig; }, 2500);
+        }
+      } catch (e) {}
     });
 
     calculate();
