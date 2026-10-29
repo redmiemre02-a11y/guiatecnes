@@ -1,0 +1,936 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Jubilación y Ahorro', url: '/herramientas/calculadora-jubilacion' }
+];
+
+const faqs = [
+  {
+    question: '¿A qué edad me podré jubilar en España?',
+    answer: 'En España la edad legal ordinaria de jubilación es de 67 años (o 65 años si se han cotizado al menos 38 años y 6 meses a la Seguridad Social). La jubilación anticipada voluntaria es posible hasta 2 años antes sufriendo coeficientes reductores en la pensión.'
+  },
+  {
+    question: '¿Qué es la tasa de reemplazo de las pensiones en España?',
+    answer: 'La tasa de reemplazo mide el porcentaje del último sueldo que cubre la pensión pública. Tradicionalmente en España rondaba el 75%-80%, pero los expertos y organismos internacionales estiman que caerá hacia el 55%-60% en las próximas décadas debido al envejecimiento demográfico.'
+  },
+  {
+    question: '¿Cuánto dinero debería tener ahorrado para jubilarme con tranquilidad?',
+    answer: 'La regla clásica del 4% (Bengen) y la regla de Fidelity sugieren tener acumulado el equivalente a 8-10 veces tu salario anual a los 67 años para complementar la pensión pública y poder retirar un 4% anual sin agotar el capital.'
+  },
+  {
+    question: '¿Qué ventajas fiscales tienen los planes de pensiones individuales?',
+    answer: 'Permiten desgravar las aportaciones en la base imponible del IRPF hasta un límite de 1.500 euros anuales (o hasta 8.500 euros en planes de pensiones de empleo de empresas).'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Jubilación y Ahorro para el Retiro 2026 | GuiaTecnEs"
+  description="Calcula cuánto dinero necesitas para jubilarte, qué pensión mensual privada obtendrás y cómo crecerán tus ahorros hasta los 67 años. 100% privado y gratuito."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de Jubilación</span>
+    </div>
+
+    <!-- HEADER TOOL -->
+    <div class="tool-header">
+      <div class="tool-icon-wrap">⏳</div>
+      <div class="tool-title-wrap">
+        <span class="tool-badge-top">Finanzas & Jubilación</span>
+        <h1>Calculadora de Jubilación y Ahorro</h1>
+        <p class="tool-subtitle">Planifica tu futuro financiero: calcula cuánto capital tendrás acumulado al retirarte y la renta mensual complementaria que podrás disfrutar sin depender exclusivamente de la pensión pública.</p>
+      </div>
+    </div>
+
+    <!-- CALCULATOR MAIN GRID -->
+    <div class="calc-grid">
+      <!-- INPUT PANEL -->
+      <div class="card input-card">
+        <div class="card-title-row">
+          <h2>Tus Objetivos de Retiro</h2>
+          <button type="button" class="btn-reset" id="btn-reset" title="Restablecer valores">🔄 Reiniciar</button>
+        </div>
+
+        <!-- Presets -->
+        <div class="presets-box">
+          <span class="preset-title">Objetivos habituales:</span>
+          <div class="presets-chips">
+            <button type="button" class="preset-btn" data-age="30" data-ret="67" data-save="200">🎯 Joven Previsor (30 a 67 años - 200€)</button>
+            <button type="button" class="preset-btn active" data-age="40" data-ret="67" data-save="300">⚖️ Ahorro Medio (40 a 67 años - 300€)</button>
+            <button type="button" class="preset-btn" data-age="45" data-ret="63" data-save="500">🏖️ Retiro Anticipado (45 a 63 años - 500€)</button>
+          </div>
+        </div>
+
+        <!-- Edades -->
+        <div class="grid-2-cols">
+          <div class="input-group">
+            <label for="input-curr-age">Edad actual:</label>
+            <div class="input-unit-wrapper">
+              <input type="number" id="input-curr-age" value="40" min="18" max="75" step="1" />
+              <span class="unit-symbol">años</span>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="input-ret-age">Edad de jubilación:</label>
+            <div class="input-unit-wrapper">
+              <input type="number" id="input-ret-age" value="67" min="50" max="80" step="1" />
+              <span class="unit-symbol">años</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ahorro inicial acumulado -->
+        <div class="input-group">
+          <div class="range-header">
+            <label for="input-initial-fund">Ahorro / Plan de pensiones actual:</label>
+            <span class="range-val" id="val-initial-display">12.000 €</span>
+          </div>
+          <div class="input-unit-wrapper">
+            <input type="number" id="input-initial-fund" value="12000" min="0" max="1000000" step="500" />
+            <span class="unit-symbol">€</span>
+          </div>
+          <input type="range" id="range-initial-fund" min="0" max="100000" step="1000" value="12000" class="custom-range" />
+        </div>
+
+        <!-- Ahorro mensual -->
+        <div class="input-group">
+          <div class="range-header">
+            <label for="input-monthly-save">Ahorro mensual destinado:</label>
+            <span class="range-val" id="val-monthly-display">300 € / mes</span>
+          </div>
+          <div class="input-unit-wrapper">
+            <input type="number" id="input-monthly-save" value="300" min="20" max="5000" step="10" />
+            <span class="unit-symbol">€ / mes</span>
+          </div>
+          <input type="range" id="range-monthly-save" min="50" max="1500" step="25" value="300" class="custom-range" />
+        </div>
+
+        <!-- Rentabilidad e Inflación -->
+        <div class="grid-2-cols">
+          <div class="input-group">
+            <label for="input-pension-rate">Rentabilidad anual:</label>
+            <div class="input-unit-wrapper">
+              <input type="number" id="input-pension-rate" value="6.0" min="1.0" max="15.0" step="0.5" />
+              <span class="unit-symbol">%</span>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="input-pension-years">Años cobrando pensión:</label>
+            <div class="input-unit-wrapper">
+              <input type="number" id="input-pension-years" value="22" min="10" max="35" step="1" />
+              <span class="unit-symbol">años</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTS PANEL -->
+      <div class="card result-card">
+        <div class="result-header">
+          <h3>Proyección al Retirarte</h3>
+          <span class="badge-live">⚡ Simulación a Futuro</span>
+        </div>
+
+        <div class="main-metric-box">
+          <span class="metric-label">Renta Mensual Privada Estimada:</span>
+          <div class="main-price-row">
+            <span class="main-amount" id="res-monthly-pension">1.185 €</span>
+            <span class="main-sub" id="res-pension-sub">al mes durante 22 años</span>
+          </div>
+        </div>
+
+        <div class="secondary-metrics-grid">
+          <div class="sec-metric">
+            <span class="sm-label">Fondo Total Acumulado:</span>
+            <span class="sm-val" id="res-total-fund" style="color: #60a5fa;">312.980 €</span>
+          </div>
+          <div class="sec-metric">
+            <span class="sm-label">Ahorrado por Ti:</span>
+            <span class="sm-val" id="res-total-contributed" style="color: #cbd5e1;">109.200 €</span>
+          </div>
+          <div class="sec-metric">
+            <span class="sm-label">Intereses y Plusvalías:</span>
+            <span class="sm-val" id="res-total-gains" style="color: #34d399;">203.780 €</span>
+          </div>
+          <div class="sec-metric">
+            <span class="sm-label">Años Restantes para Ahorrar:</span>
+            <span class="sm-val" id="res-years-left">27 años</span>
+          </div>
+        </div>
+
+        <!-- PROGRESS BAR -->
+        <div class="visual-bar-wrap">
+          <div class="vb-labels">
+            <span class="vb-leg vb-princ">● Aporte directo (<span id="txt-bar-princ">35%</span>)</span>
+            <span class="vb-leg vb-int">● Rendimientos fondo (<span id="txt-bar-int">65%</span>)</span>
+          </div>
+          <div class="compound-bar">
+            <div class="bar-part-princ" id="bar-princ" style="width: 35%;"></div>
+            <div class="bar-part-int" id="bar-int" style="width: 65%;"></div>
+          </div>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="tool-actions-box">
+          <button type="button" class="btn-tool-action btn-copy-summary" id="btn-copy-summary">
+            📋 Copiar Plan de Jubilación
+          </button>
+          <button type="button" class="btn-tool-action btn-print-sheet" id="btn-print-sheet">
+            📄 Imprimir / Guardar en PDF
+          </button>
+          <button type="button" class="btn-tool-action btn-embed-tool" id="btn-toggle-embed">
+            ‹/› Insertar en tu Web
+          </button>
+        </div>
+
+        <!-- EMBED MODAL SNIPPET -->
+        <div class="embed-box" id="embed-box" style="display: none;">
+          <p class="embed-desc">Copia y pega este código HTML en cualquier artículo de finanzas:</p>
+          <textarea readonly class="embed-code" id="embed-code">&lt;iframe src="https://guiatecnes.com/herramientas/calculadora-jubilacion" width="100%" height="720" frameborder="0" style="border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);" title="Calculadora de Jubilación"&gt;&lt;/iframe&gt;
+&lt;p style="font-size:12px;text-align:right;"&gt;Calculadora cortesía de &lt;a href="https://guiatecnes.com/herramientas/calculadora-jubilacion" target="_blank" rel="noopener"&gt;GuíaTecnes&lt;/a&gt;&lt;/p&gt;</textarea>
+          <button type="button" class="btn-copy-embed" id="btn-copy-embed">Copiar código iframe</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO GUIDE CONTENT & TIPS -->
+    <section class="seo-guide-section card">
+      <h2>Cómo complementar la pensión pública para jubilarte sin perder poder adquisitivo</h2>
+      <p>El sistema público de pensiones en España funciona mediante reparto solidario (las cotizaciones de los trabajadores actuales pagan las pensiones de los jubilados de hoy). Ante la jubilación inminente de la generación del «baby boom», la relación entre cotizantes y pensionistas se tensará notablemente. Construir un colchón privado complementario desde joven es la mejor garantía para mantener tu nivel de vida.</p>
+
+      <div class="tips-grid">
+        <div class="tip-card">
+          <span class="tip-icon">📈</span>
+          <h3>Fondos Indexados vs Planes Tradicionales</h3>
+          <p>Muchos planes de pensiones bancarios tradicionales cobran comisiones elevadas y tienen rentabilidades bajas. Los fondos indexados globales permiten rentabilidades históricas superiores.</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-icon">🛡️</span>
+          <h3>Regla del 4% para Retiros</h3>
+          <p>Retirar un 4% de tu cartera total el primer año de jubilación e indexar esa cantidad a la inflación en los años siguientes minimiza la posibilidad de agotar tus ahorros en 30 años.</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-icon">🏠</span>
+          <h3>Vivienda Pagada</h3>
+          <p>Llegar a los 67 años sin cuota hipotecaria ni alquiler pendiente reduce los gastos mensuales fijos en más de un 40%, permitiendo un retiro mucho más holgado con menos ingresos.</p>
+        </div>
+      </div>
+
+      <!-- FAQ ACCORDION -->
+      <div class="faq-container">
+        <h3>Preguntas Frecuentes sobre Ahorro para la Jubilación</h3>
+        {faqs.map((faq, i) => (
+          <details class="faq-item" open={i === 0}>
+            <summary class="faq-question">{faq.question}</summary>
+            <div class="faq-answer">
+              <p>{faq.answer}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-page {
+    padding-top: 1.5rem;
+    padding-bottom: 4rem;
+  }
+  .breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 1.5rem;
+  }
+  .breadcrumb a {
+    color: var(--text-muted, #94a3b8);
+    text-decoration: none;
+  }
+  .breadcrumb a:hover {
+    color: var(--primary, #6366f1);
+  }
+
+  .tool-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .tool-icon-wrap {
+    font-size: 2.8rem;
+    background: rgba(139, 92, 246, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    flex-shrink: 0;
+  }
+  .tool-badge-top {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #a78bfa;
+    background: rgba(139, 92, 246, 0.15);
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .tool-title-wrap h1 {
+    font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+    font-weight: 800;
+    margin: 0.3rem 0;
+    color: var(--text, #f1f5f9);
+    line-height: 1.2;
+  }
+  .tool-subtitle {
+    color: var(--text-muted, #94a3b8);
+    font-size: 0.95rem;
+    max-width: 820px;
+    margin: 0;
+  }
+
+  .calc-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 1.75rem;
+    margin-bottom: 2.5rem;
+  }
+  @media (max-width: 900px) {
+    .calc-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card {
+    background: var(--card-bg, #1e293b);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 1.2rem;
+    padding: 1.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+  .card-title-row h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text, #f1f5f9);
+  }
+  .btn-reset {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    color: var(--text-muted, #94a3b8);
+    padding: 0.3rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-reset:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+  }
+
+  .presets-box {
+    margin-bottom: 1.25rem;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .preset-title {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 0.4rem;
+  }
+  .presets-chips {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .preset-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted, #94a3b8);
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .preset-btn:hover {
+    background: rgba(139, 92, 246, 0.15);
+    border-color: #8b5cf6;
+    color: #ffffff;
+  }
+  .preset-btn.active {
+    background: #8b5cf6;
+    color: #ffffff;
+    border-color: #8b5cf6;
+  }
+
+  .grid-2-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .input-group {
+    margin-bottom: 1.25rem;
+  }
+  .input-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text, #f1f5f9);
+    margin-bottom: 0.4rem;
+  }
+  .range-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.3rem;
+  }
+  .range-header label { margin: 0; }
+  .range-val {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #a78bfa;
+  }
+  .custom-range {
+    width: 100%;
+    accent-color: #8b5cf6;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+
+  .input-unit-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  .input-unit-wrapper input {
+    width: 100%;
+    padding: 0.75rem 4rem 0.75rem 1rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.15));
+    border-radius: 0.6rem;
+    color: var(--text, #f1f5f9);
+    font-size: 1.15rem;
+    font-weight: 700;
+    box-sizing: border-box;
+  }
+  .input-unit-wrapper input:focus {
+    outline: none;
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+  }
+  .unit-symbol {
+    position: absolute;
+    right: 1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  /* RESULTS CARD */
+  .result-card {
+    background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+    border-color: rgba(139, 92, 246, 0.25);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+  .result-header h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text, #f1f5f9);
+  }
+  .badge-live {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #a78bfa;
+    background: rgba(139, 92, 246, 0.15);
+    padding: 0.2rem 0.5rem;
+    border-radius: 9999px;
+  }
+
+  .main-metric-box {
+    background: rgba(139, 92, 246, 0.08);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .metric-label {
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .main-price-row {
+    margin-top: 0.4rem;
+  }
+  .main-amount {
+    font-size: clamp(2.4rem, 5vw, 3.2rem);
+    font-weight: 900;
+    color: #c4b5fd;
+    line-height: 1.1;
+    display: block;
+  }
+  .main-sub {
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin-top: 0.2rem;
+    display: inline-block;
+  }
+
+  .secondary-metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .sec-metric {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 0.85rem;
+    border-radius: 0.75rem;
+  }
+  .sm-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 0.25rem;
+  }
+  .sm-val {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text, #f1f5f9);
+  }
+
+  /* BAR PROPORTION */
+  .visual-bar-wrap {
+    margin-bottom: 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 0.85rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .vb-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .vb-princ { color: #60a5fa; }
+  .vb-int { color: #34d399; }
+  .compound-bar {
+    display: flex;
+    height: 14px;
+    border-radius: 7px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .bar-part-princ {
+    background: #3b82f6;
+    transition: width 0.3s ease;
+  }
+  .bar-part-int {
+    background: #10b981;
+    transition: width 0.3s ease;
+  }
+
+  .tool-actions-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .btn-tool-action {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border-radius: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .btn-copy-summary {
+    background: #8b5cf6;
+    color: #ffffff;
+  }
+  .btn-copy-summary:hover {
+    background: #7c3aed;
+  }
+  .btn-print-sheet {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text, #f1f5f9);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.15));
+  }
+  .btn-print-sheet:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+  .btn-embed-tool {
+    background: transparent;
+    color: var(--text-muted, #94a3b8);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    font-size: 0.8rem;
+  }
+  .btn-embed-tool:hover {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+  }
+
+  .embed-box {
+    margin-top: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    padding: 1rem;
+  }
+  .embed-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted, #94a3b8);
+    margin: 0 0 0.5rem;
+  }
+  .embed-code {
+    width: 100%;
+    height: 70px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #93c5fd;
+    font-family: monospace;
+    font-size: 0.75rem;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    resize: none;
+  }
+  .btn-copy-embed {
+    margin-top: 0.5rem;
+    width: 100%;
+    padding: 0.5rem;
+    background: rgba(139, 92, 246, 0.2);
+    border: 1px solid #8b5cf6;
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* SEO GUIDE SECTION */
+  .seo-guide-section {
+    margin-top: 2rem;
+  }
+  .seo-guide-section h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text, #f1f5f9);
+    margin-bottom: 0.75rem;
+  }
+  .seo-guide-section p {
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .tip-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+  .tip-icon {
+    font-size: 1.6rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  .tip-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text, #f1f5f9);
+    margin: 0 0 0.4rem;
+  }
+  .tip-card p {
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .faq-container h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text, #f1f5f9);
+  }
+  .faq-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0.6rem;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+  }
+  .faq-question {
+    padding: 0.9rem 1.25rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text, #f1f5f9);
+    cursor: pointer;
+    user-select: none;
+  }
+  .faq-answer {
+    padding: 0 1.25rem 1rem;
+    font-size: 0.9rem;
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.5;
+  }
+
+  @media print {
+    header, footer, .breadcrumb, .tool-actions-box, .embed-box, .faq-container {
+      display: none !important;
+    }
+    body {
+      background: #ffffff !important;
+      color: #000000 !important;
+    }
+    .card {
+      box-shadow: none !important;
+      border: 1px solid #ccc !important;
+      background: #fff !important;
+      color: #000 !important;
+    }
+    .main-amount {
+      color: #000000 !important;
+    }
+  }
+</style>
+
+<script>
+  function initRetirementCalculator() {
+    const inputCurrAge = document.getElementById('input-curr-age') as HTMLInputElement;
+    const inputRetAge = document.getElementById('input-ret-age') as HTMLInputElement;
+
+    const inputInitFund = document.getElementById('input-initial-fund') as HTMLInputElement;
+    const rangeInitFund = document.getElementById('range-initial-fund') as HTMLInputElement;
+    const valInitDisplay = document.getElementById('val-initial-display');
+
+    const inputMonthlySave = document.getElementById('input-monthly-save') as HTMLInputElement;
+    const rangeMonthlySave = document.getElementById('range-monthly-save') as HTMLInputElement;
+    const valMonthlyDisplay = document.getElementById('val-monthly-display');
+
+    const inputRate = document.getElementById('input-pension-rate') as HTMLInputElement;
+    const inputPayoutYears = document.getElementById('input-pension-years') as HTMLInputElement;
+
+    const resMonthlyPension = document.getElementById('res-monthly-pension');
+    const resPensionSub = document.getElementById('res-pension-sub');
+    const resTotalFund = document.getElementById('res-total-fund');
+    const resTotalContributed = document.getElementById('res-total-contributed');
+    const resTotalGains = document.getElementById('res-total-gains');
+    const resYearsLeft = document.getElementById('res-years-left');
+
+    const barPrinc = document.getElementById('bar-princ');
+    const barInt = document.getElementById('bar-int');
+    const txtBarPrinc = document.getElementById('txt-bar-princ');
+    const txtBarInt = document.getElementById('txt-bar-int');
+
+    const btnReset = document.getElementById('btn-reset');
+    const btnCopySummary = document.getElementById('btn-copy-summary');
+    const btnPrintSheet = document.getElementById('btn-print-sheet');
+    const btnToggleEmbed = document.getElementById('btn-toggle-embed');
+    const embedBox = document.getElementById('embed-box');
+    const btnCopyEmbed = document.getElementById('btn-copy-embed');
+
+    if (!inputCurrAge || !inputRetAge || !inputInitFund || !inputMonthlySave) return;
+
+    function formatEUR(val: number) {
+      return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(val);
+    }
+
+    function calculate() {
+      const currAge = parseInt(inputCurrAge.value, 10) || 40;
+      const retAge = parseInt(inputRetAge.value, 10) || 67;
+      const yearsLeft = Math.max(1, retAge - currAge);
+
+      const p = parseFloat(inputInitFund.value) || 0;
+      const pmt = parseFloat(inputMonthlySave.value) || 0;
+      const annualRate = (parseFloat(inputRate.value) || 0) / 100;
+      const payoutYears = parseInt(inputPayoutYears.value, 10) || 20;
+
+      // Accumulation phase
+      const monthlyRate = annualRate / 12;
+      const totalMonths = yearsLeft * 12;
+
+      let balance = p;
+      let totalContributed = p;
+
+      for (let m = 1; m <= totalMonths; m++) {
+        balance = (balance + pmt) * (1 + monthlyRate);
+        totalContributed += pmt;
+      }
+
+      const totalGains = Math.max(0, balance - totalContributed);
+      const intPct = balance > 0 ? Math.round((totalGains / balance) * 100) : 0;
+      const princPct = 100 - intPct;
+
+      // Decumulation phase (Renta mensual durante payoutYears)
+      // Presuming conservative 3% during retirement drawdown
+      const decumRateMonthly = 0.03 / 12;
+      const decumMonths = payoutYears * 12;
+      const monthlyPayout = (balance * decumRateMonthly) / (1 - Math.pow(1 + decumRateMonthly, -decumMonths));
+
+      // Display
+      if (valInitDisplay) valInitDisplay.textContent = formatEUR(p);
+      if (valMonthlyDisplay) valMonthlyDisplay.textContent = `${formatEUR(pmt)} / mes`;
+
+      if (resMonthlyPension) resMonthlyPension.textContent = formatEUR(monthlyPayout);
+      if (resPensionSub) resPensionSub.textContent = `al mes durante ${payoutYears} años`;
+      if (resTotalFund) resTotalFund.textContent = formatEUR(balance);
+      if (resTotalContributed) resTotalContributed.textContent = formatEUR(totalContributed);
+      if (resTotalGains) resTotalGains.textContent = formatEUR(totalGains);
+      if (resYearsLeft) resYearsLeft.textContent = `${yearsLeft} años`;
+
+      if (barPrinc) barPrinc.style.width = `${princPct}%`;
+      if (barInt) barInt.style.width = `${intPct}%`;
+      if (txtBarPrinc) txtBarPrinc.textContent = `${princPct}%`;
+      if (txtBarInt) txtBarInt.textContent = `${intPct}%`;
+    }
+
+    function bindSlider(num: HTMLInputElement, range: HTMLInputElement) {
+      num.addEventListener('input', () => { range.value = num.value; calculate(); });
+      range.addEventListener('input', () => { num.value = range.value; calculate(); });
+    }
+
+    bindSlider(inputInitFund, rangeInitFund);
+    bindSlider(inputMonthlySave, rangeMonthlySave);
+
+    [inputCurrAge, inputRetAge, inputRate, inputPayoutYears].forEach(el => {
+      el.addEventListener('input', calculate);
+      el.addEventListener('change', calculate);
+    });
+
+    // Presets
+    const presetBtns = document.querySelectorAll('.preset-btn');
+    presetBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        presetBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const a = btn.getAttribute('data-age');
+        const r = btn.getAttribute('data-ret');
+        const s = btn.getAttribute('data-save');
+        if (a) inputCurrAge.value = a;
+        if (r) inputRetAge.value = r;
+        if (s) {
+          inputMonthlySave.value = s;
+          rangeMonthlySave.value = s;
+        }
+        calculate();
+      });
+    });
+
+    // Reset
+    btnReset?.addEventListener('click', () => {
+      inputCurrAge.value = '40';
+      inputRetAge.value = '67';
+      inputInitFund.value = '12000';
+      rangeInitFund.value = '12000';
+      inputMonthlySave.value = '300';
+      rangeMonthlySave.value = '300';
+      inputRate.value = '6.0';
+      inputPayoutYears.value = '22';
+      presetBtns.forEach(b => b.classList.toggle('active', b.getAttribute('data-save') === '300'));
+      calculate();
+    });
+
+    // Copy Summary
+    btnCopySummary?.addEventListener('click', async () => {
+      const fund = resTotalFund?.textContent || '';
+      const monthly = resMonthlyPension?.textContent || '';
+      const years = resYearsLeft?.textContent || '';
+
+      const text = `⏳ *Plan de Ahorro para la Jubilación*\n` +
+                   `• Tiempo de ahorro: ${years}\n` +
+                   `• Fondo acumulado al jubilarte: ${fund}\n` +
+                   `• *Renta privada mensual complementaria:* ${monthly}\n` +
+                   `Calculado en GuíaTecnes: https://guiatecnes.com/herramientas/calculadora-jubilacion`;
+      try {
+        await navigator.clipboard.writeText(text);
+        btnCopySummary.textContent = '✅ ¡Plan Copiado al portapapeles!';
+        setTimeout(() => {
+          btnCopySummary.textContent = '📋 Copiar Plan de Jubilación';
+        }, 2000);
+      } catch (e) {}
+    });
+
+    // Print
+    btnPrintSheet?.addEventListener('click', () => window.print());
+
+    // Embed Toggle
+    btnToggleEmbed?.addEventListener('click', () => {
+      if (!embedBox) return;
+      embedBox.style.display = embedBox.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // Copy Embed
+    btnCopyEmbed?.addEventListener('click', async () => {
+      const code = (document.getElementById('embed-code') as HTMLTextAreaElement)?.value || '';
+      try {
+        await navigator.clipboard.writeText(code);
+        btnCopyEmbed.textContent = '✅ ¡Código Iframe Copiado!';
+        setTimeout(() => {
+          btnCopyEmbed.textContent = 'Copiar código iframe';
+        }, 2000);
+      } catch (e) {}
+    });
+
+    calculate();
+  }
+
+  document.addEventListener('astro:page-load', initRetirementCalculator);
+</script>

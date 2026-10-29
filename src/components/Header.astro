@@ -65,6 +65,10 @@ const currentPath = Astro.url.pathname;
         <span>🔍</span>
         <kbd class="search-kbd">Ctrl K</kbd>
       </button>
+      <button class="theme-toggle btn-favs-trigger" id="btn-open-favs" aria-label="Ver favoritos guardados" title="Mis herramientas y artículos guardados">
+        <span>⭐</span>
+        <span class="favs-badge-count" id="header-fav-count" style="display:none;">0</span>
+      </button>
       <button class="theme-toggle" onclick="window.toggleTheme()" aria-label="Cambiar tema">
         <span id="theme-icon">☀️</span>
       </button>
@@ -80,6 +84,32 @@ const currentPath = Astro.url.pathname;
       <a href={link.href} class="mobile-link">{link.label}</a>
     ))}
   </nav>
+
+  <!-- FAVORITES SLIDE-OVER DRAWER -->
+  <div class="favs-drawer-overlay" id="favs-overlay"></div>
+  <aside class="favs-drawer" id="favs-drawer" aria-label="Elementos guardados" aria-hidden="true">
+    <div class="favs-drawer-header">
+      <div class="favs-drawer-title">
+        <span class="favs-star-icon">⭐</span>
+        <h3>Mis Guardados</h3>
+      </div>
+      <button type="button" class="btn-close-favs" id="btn-close-favs" aria-label="Cerrar favoritos">✕</button>
+    </div>
+
+    <div class="favs-drawer-tabs">
+      <button type="button" class="fav-tab active" data-tab="all">Todos (<span id="fav-count-all">0</span>)</button>
+      <button type="button" class="fav-tab" data-tab="tool">Herramientas (<span id="fav-count-tools">0</span>)</button>
+      <button type="button" class="fav-tab" data-tab="article">Artículos (<span id="fav-count-articles">0</span>)</button>
+    </div>
+
+    <div class="favs-drawer-content" id="favs-content-list">
+      <!-- Dynamic list rendered via JS -->
+    </div>
+
+    <div class="favs-drawer-footer">
+      <button type="button" class="btn-clear-all-favs" id="btn-clear-all-favs">🗑️ Vaciar todo</button>
+    </div>
+  </aside>
 </header>
 
 <script>
@@ -121,6 +151,178 @@ const currentPath = Astro.url.pathname;
   });
 
   menu?.addEventListener('click', (e) => e.stopPropagation());
+
+  // FAVORITES DRAWER MANAGEMENT
+  const FAVS_KEY = 'gt_saved_items_v2';
+
+  function getSavedItems() {
+    try {
+      const raw = localStorage.getItem(FAVS_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return [];
+  }
+
+  function saveItems(items) {
+    try {
+      localStorage.setItem(FAVS_KEY, JSON.stringify(items));
+      window.dispatchEvent(new CustomEvent('gt:favs-changed', { detail: { items } }));
+    } catch (e) {}
+  }
+
+  window.gtGetFavs = getSavedItems;
+  window.gtIsFav = function(url) {
+    const cleanUrl = url.split('?')[0].split('#')[0].replace(/\/$/, '');
+    return getSavedItems().some(i => i.url.replace(/\/$/, '') === cleanUrl);
+  };
+  window.gtToggleFav = function(item) {
+    const items = getSavedItems();
+    const cleanUrl = item.url.split('?')[0].split('#')[0].replace(/\/$/, '');
+    const idx = items.findIndex(i => i.url.replace(/\/$/, '') === cleanUrl);
+    let isNowFav = false;
+    if (idx >= 0) {
+      items.splice(idx, 1);
+      isNowFav = false;
+    } else {
+      items.unshift({
+        url: cleanUrl,
+        title: item.title || 'Guía / Herramienta',
+        type: item.type || (cleanUrl.includes('/herramientas') ? 'tool' : 'article'),
+        icon: item.icon || (cleanUrl.includes('/herramientas') ? '🧲' : '📄')
+      });
+      isNowFav = true;
+    }
+    saveItems(items);
+    return isNowFav;
+  };
+
+  let activeFavTab = 'all';
+
+  function renderFavsDrawer() {
+    const items = getSavedItems();
+    const badge = document.getElementById('header-fav-count');
+    const cntAll = document.getElementById('fav-count-all');
+    const cntTools = document.getElementById('fav-count-tools');
+    const cntArticles = document.getElementById('fav-count-articles');
+    const list = document.getElementById('favs-content-list');
+
+    const toolCount = items.filter(i => i.type === 'tool').length;
+    const articleCount = items.filter(i => i.type === 'article').length;
+
+    if (badge) {
+      if (items.length > 0) {
+        badge.style.display = 'inline-flex';
+        badge.textContent = items.length > 99 ? '99+' : items.length.toString();
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+
+    if (cntAll) cntAll.textContent = items.length.toString();
+    if (cntTools) cntTools.textContent = toolCount.toString();
+    if (cntArticles) cntArticles.textContent = articleCount.toString();
+
+    if (!list) return;
+
+    const filtered = items.filter(i => {
+      if (activeFavTab === 'tool') return i.type === 'tool';
+      if (activeFavTab === 'article') return i.type === 'article';
+      return true;
+    });
+
+    if (filtered.length === 0) {
+      list.innerHTML = `
+        <div class="favs-empty-state">
+          <span class="fes-icon">⭐</span>
+          <h4>No tienes nada guardado aún</h4>
+          <p>Pulsa en la estrella ⭐ en cualquier herramienta o artículo para tenerlo siempre a mano aquí.</p>
+          <a href="/herramientas" class="btn-browse-tools">Ver Herramientas →</a>
+        </div>
+      `;
+      return;
+    }
+
+    list.innerHTML = filtered.map(item => `
+      <div class="fav-item-row" data-url="${item.url}">
+        <a href="${item.url}" class="fav-item-link">
+          <span class="fav-item-icon">${item.icon || (item.type === 'tool' ? '🧲' : '📄')}</span>
+          <div class="fav-item-info">
+            <span class="fav-item-badge ${item.type}">${item.type === 'tool' ? 'Herramienta' : 'Artículo'}</span>
+            <span class="fav-item-title">${item.title}</span>
+          </div>
+        </a>
+        <button type="button" class="btn-remove-fav" data-url="${item.url}" title="Quitar de guardados" aria-label="Quitar">✕</button>
+      </div>
+    `).join('');
+
+    // Attach remove handlers
+    list.querySelectorAll('.btn-remove-fav').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const u = btn.getAttribute('data-url');
+        if (u) {
+          window.gtToggleFav({ url: u });
+        }
+      });
+    });
+  }
+
+  function initFavsDrawer() {
+    const btnOpen = document.getElementById('btn-open-favs');
+    const btnClose = document.getElementById('btn-close-favs');
+    const overlay = document.getElementById('favs-overlay');
+    const drawer = document.getElementById('favs-drawer');
+    const btnClearAll = document.getElementById('btn-clear-all-favs');
+    const tabs = document.querySelectorAll('.fav-tab');
+
+    function openDrawer() {
+      if (!drawer || !overlay) return;
+      drawer.classList.add('open');
+      overlay.style.display = 'block';
+      renderFavsDrawer();
+    }
+
+    function closeDrawer() {
+      if (!drawer || !overlay) return;
+      drawer.classList.remove('open');
+      overlay.style.display = 'none';
+    }
+
+    btnOpen?.addEventListener('click', openDrawer);
+    btnClose?.addEventListener('click', closeDrawer);
+    overlay?.addEventListener('click', closeDrawer);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer?.classList.contains('open')) {
+        closeDrawer();
+      }
+    });
+
+    btnClearAll?.addEventListener('click', () => {
+      if (confirm('¿Quieres vaciar todos tus elementos guardados?')) {
+        saveItems([]);
+        renderFavsDrawer();
+      }
+    });
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        activeFavTab = tab.getAttribute('data-tab') || 'all';
+        renderFavsDrawer();
+      });
+    });
+
+    window.addEventListener('gt:favs-changed', () => {
+      renderFavsDrawer();
+    });
+
+    renderFavsDrawer();
+  }
+
+  document.addEventListener('astro:page-load', initFavsDrawer);
+
 </script>
 
 <style>
@@ -325,4 +527,260 @@ const currentPath = Astro.url.pathname;
     .dropdown-menu { min-width: 300px; right: -60px; }
     .dropdown-grid { grid-template-columns: repeat(2, 1fr); }
   }
+
+  /* FAVORITES TRIGGER & BADGE */
+  .btn-favs-trigger {
+    position: relative;
+  }
+  .favs-badge-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 800;
+    min-width: 17px;
+    height: 17px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid var(--bg-card, #0f172a);
+    line-height: 1;
+    animation: badge-pop 0.25s ease-out;
+  }
+  @keyframes badge-pop {
+    0% { transform: scale(0.5); }
+    100% { transform: scale(1); }
+  }
+
+  /* FAVORITES DRAWER */
+  .favs-drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 9998;
+  }
+  .favs-drawer {
+    position: fixed;
+    top: 0;
+    right: -420px;
+    bottom: 0;
+    width: 380px;
+    max-width: 90vw;
+    background: var(--bg-card, #0f172a);
+    border-left: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+    z-index: 9999;
+    box-shadow: -10px 0 35px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .favs-drawer.open {
+    right: 0;
+  }
+
+  .favs-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.25rem 1rem;
+    border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  }
+  .favs-drawer-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .favs-star-icon {
+    font-size: 1.3rem;
+  }
+  .favs-drawer-title h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text, #f1f5f9);
+  }
+  .btn-close-favs {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    color: var(--text-muted, #94a3b8);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.15s;
+  }
+  .btn-close-favs:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+  }
+
+  .favs-drawer-tabs {
+    display: flex;
+    padding: 0.65rem 1rem;
+    gap: 0.4rem;
+    border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.06));
+    background: rgba(0, 0, 0, 0.2);
+  }
+  .fav-tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-muted, #94a3b8);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.4rem 0.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .fav-tab:hover {
+    color: var(--text, #f1f5f9);
+  }
+  .fav-tab.active {
+    background: rgba(99, 102, 241, 0.2);
+    color: #818cf8;
+  }
+
+  .favs-drawer-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .favs-empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted, #94a3b8);
+  }
+  .fes-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.75rem;
+    opacity: 0.7;
+  }
+  .favs-empty-state h4 {
+    font-size: 1.05rem;
+    color: var(--text, #f1f5f9);
+    margin: 0 0 0.5rem;
+  }
+  .favs-empty-state p {
+    font-size: 0.82rem;
+    line-height: 1.45;
+    margin: 0 0 1.25rem;
+  }
+  .btn-browse-tools {
+    display: inline-block;
+    background: var(--primary, #6366f1);
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .fav-item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    gap: 0.6rem;
+    transition: all 0.15s;
+  }
+  .fav-item-row:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+  .fav-item-link {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none;
+    flex: 1;
+    min-width: 0;
+  }
+  .fav-item-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .fav-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+  .fav-item-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    width: fit-content;
+  }
+  .fav-item-badge.tool { color: #10b981; }
+  .fav-item-badge.article { color: #60a5fa; }
+  .fav-item-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text, #f1f5f9);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .fav-item-link:hover .fav-item-title {
+    color: var(--primary, #6366f1);
+  }
+  .btn-remove-fav {
+    background: transparent;
+    border: none;
+    color: var(--text-muted, #94a3b8);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.3rem 0.4rem;
+    border-radius: 4px;
+    opacity: 0.6;
+    transition: all 0.15s;
+  }
+  .btn-remove-fav:hover {
+    opacity: 1;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.15);
+  }
+
+  .favs-drawer-footer {
+    padding: 0.85rem 1.25rem;
+    border-top: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    background: rgba(0, 0, 0, 0.2);
+  }
+  .btn-clear-all-favs {
+    width: 100%;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    padding: 0.45rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-clear-all-favs:hover {
+    background: #ef4444;
+    color: #ffffff;
+  }
+
 </style>

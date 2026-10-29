@@ -415,6 +415,9 @@ const breadcrumbs = [
     <button type="button" class="dock-share-btn dock-pdf" id="dock-btn-print" title="Guardar artículo en PDF o imprimir">
       <span>📄</span><span class="dock-txt">PDF</span>
     </button>
+    <button type="button" class="dock-share-btn dock-fav" id="dock-btn-fav" title="Guardar en favoritos">
+      <span id="dock-fav-icon">⭐</span><span class="dock-txt" id="dock-fav-text">Guardar</span>
+    </button>
   </aside>
 
   <article class="article-page">
@@ -497,6 +500,9 @@ const breadcrumbs = [
             </button>
             <button id="btn-print-article" class="share-btn share-pdf" type="button" title="Guardar artículo como PDF o imprimir">
               <span>📄</span> <span class="share-pdf-text">PDF / Imprimir</span>
+            </button>
+            <button id="btn-fav-article" class="share-btn share-fav" type="button" title="Guardar artículo en favoritos">
+              <span id="fav-article-icon">⭐</span> <span id="fav-article-text">Guardar</span>
             </button>
           </div>
         </header>
@@ -813,6 +819,31 @@ const breadcrumbs = [
   .dock-pdf:hover {
     background: #ef4444;
     color: #ffffff;
+  }
+
+  .share-fav {
+    background: rgba(245, 158, 11, 0.12);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .share-fav:hover, .share-fav.is-saved {
+    background: #f59e0b;
+    color: #000000;
+    border-color: #f59e0b;
+    font-weight: 700;
+  }
+  .dock-fav {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+  .dock-fav:hover, .dock-fav.is-saved {
+    background: #f59e0b;
+    color: #000000;
   }
 
   /* Font size widget */
@@ -1904,7 +1935,51 @@ const breadcrumbs = [
     initReadingProgressBar();
     initZenMode();
     initFloatingShareDock();
+
+  function initArticleFavorite() {
+    const btnFav = document.getElementById('btn-fav-article');
+    const dockBtnFav = document.getElementById('dock-btn-fav');
+    const favText = document.getElementById('fav-article-text');
+    const dockFavText = document.getElementById('dock-fav-text');
+    const title = document.querySelector('.article-title')?.textContent?.trim() || document.title;
+    const url = window.location.pathname;
+
+    function updateBtnState() {
+      const isFav = typeof (window as any).gtIsFav === 'function' && (window as any).gtIsFav(url);
+      if (isFav) {
+        btnFav?.classList.add('is-saved');
+        dockBtnFav?.classList.add('is-saved');
+        if (favText) favText.textContent = 'Guardado';
+        if (dockFavText) dockFavText.textContent = 'Guardado';
+      } else {
+        btnFav?.classList.remove('is-saved');
+        dockBtnFav?.classList.remove('is-saved');
+        if (favText) favText.textContent = 'Guardar';
+        if (dockFavText) dockFavText.textContent = 'Guardar';
+      }
+    }
+
+    function toggle() {
+      if (typeof (window as any).gtToggleFav === 'function') {
+        (window as any).gtToggleFav({
+          url,
+          title,
+          type: 'article',
+          icon: '📄'
+        });
+        updateBtnState();
+      }
+    }
+
+    btnFav?.addEventListener('click', toggle);
+    dockBtnFav?.addEventListener('click', toggle);
+
+    window.addEventListener('gt:favs-changed', updateBtnState);
+    updateBtnState();
+  }
+
     initPrintArticle();
     initFontSizeWidget();
+    initArticleFavorite();
   });
 </script>

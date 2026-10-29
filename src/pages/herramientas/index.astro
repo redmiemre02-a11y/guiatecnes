@@ -5,6 +5,42 @@ import Footer from '../../components/Footer.astro';
 
 const tools = [
   {
+    title: 'Calculadora de Gasolina y Gasto de Viaje',
+    desc: 'Calcula el consumo de combustible, litros necesarios, coste total del viaje y reparto equitativo por pasajero en coche compartido.',
+    url: '/herramientas/calculadora-gasolina-viaje',
+    icon: '🚗',
+    badge: 'Finanzas & Movilidad',
+    color: '#10b981',
+    category: 'finanzas'
+  },
+  {
+    title: 'Calculadora de Interés Compuesto e Inversión',
+    desc: 'Simula el crecimiento exponencial de tus ahorros con aportaciones mensuales periódicas, gráfico visual y desglose año a año.',
+    url: '/herramientas/calculadora-interes-compuesto',
+    icon: '📈',
+    badge: 'Finanzas & Inversión',
+    color: '#6366f1',
+    category: 'finanzas'
+  },
+  {
+    title: 'Calculadora de Finiquito e Indemnización por Despido',
+    desc: 'Calcula tu indemnización laboral por despido improcedente, objetivo o fin de contrato y liquidación de vacaciones no disfrutadas en España.',
+    url: '/herramientas/calculadora-finiquito-indemnizacion',
+    icon: '💼',
+    badge: 'Laboral & Legal',
+    color: '#f59e0b',
+    category: 'finanzas'
+  },
+  {
+    title: 'Calculadora de Jubilación y Ahorro para el Retiro',
+    desc: 'Planifica tu pensión privada: calcula cuánto capital tendrás acumulado a los 67 años y qué renta mensual vitalicia podrás cobrar.',
+    url: '/herramientas/calculadora-jubilacion',
+    icon: '⏳',
+    badge: 'Finanzas & Retiro',
+    color: '#8b5cf6',
+    category: 'finanzas'
+  },
+  {
     title: 'Calculadora de Hipotecas y Préstamos',
     desc: 'Calcula tu cuota mensual de hipoteca fija o variable, intereses totales y tabla de amortización anual según el sistema francés.',
     url: '/herramientas/calculadora-hipoteca',
@@ -372,14 +408,14 @@ const tools = [
 ---
 
 <BaseLayout
-  title="44 Herramientas Online Gratuitas de Tecnología, Ciberseguridad y Redes | GuíaTecnes"
-  description="Colección de 44 utilidades online gratuitas: Calculadora de hipotecas, conversor de imágenes WebP, extractor de colores, calculadora de fechas, sueldo neto y más."
+  title="48 Herramientas Online Gratuitas de Tecnología, Ciberseguridad y Redes | GuíaTecnes"
+  description="Colección de 48 utilidades online gratuitas: Calculadora de hipotecas, conversor de imágenes WebP, extractor de colores, calculadora de fechas, sueldo neto y más."
 >
   <Header slot="header" />
 
   <main class="hub-container">
     <div class="hub-hero">
-      <span class="badge">🧲 44 Utilidades 100% Gratuitas</span>
+      <span class="badge">🧲 48 Utilidades 100% Gratuitas</span>
       <h1>Herramientas Digitales y Utilidades Online</h1>
       <p class="subtitle">Herramientas prácticas, rápidas y privadas diseñadas para solucionar problemas del día a día. Sin registros, sin suscripciones y sin trampas.</p>
 
@@ -387,12 +423,12 @@ const tools = [
       <div class="hub-search-wrapper">
         <div class="search-input-box">
           <span class="search-icon">🔍</span>
-          <input type="text" id="tool-search-input" placeholder="Buscar entre las 44 herramientas gratis (ej: sueldo, wifi, porcentajes, qr)..." />
+          <input type="text" id="tool-search-input" placeholder="Buscar entre las 48 herramientas gratis (ej: sueldo, wifi, porcentajes, qr)..." />
           <button type="button" id="btn-clear-search" style="display: none;">✕</button>
         </div>
 
         <div class="hub-filter-chips">
-          <button type="button" class="filter-chip active" data-cat="all">Todas (44)</button>
+          <button type="button" class="filter-chip active" data-cat="all">Todas (48)</button>
           <button type="button" class="filter-chip btn-fav-filter" data-cat="fav">⭐ Favoritas (<span id="fav-chip-count">0</span>)</button>
           <button type="button" class="filter-chip" data-cat="finanzas">💰 Finanzas & Nómina</button>
           <button type="button" class="filter-chip" data-cat="diseno">🎨 Diseño & Web</button>
@@ -402,7 +438,7 @@ const tools = [
         </div>
 
         <div class="tools-count-feedback" id="tools-counter">
-          Mostrando 44 herramientas disponibles
+          Mostrando 48 herramientas disponibles
         </div>
       </div>
     </div>
@@ -699,18 +735,15 @@ const tools = [
     let activeCat = 'all';
 
     function getFavUrls(): string[] {
+      if (typeof (window as any).gtGetFavs === 'function') {
+        return (window as any).gtGetFavs().filter((i: any) => i.type === 'tool').map((i: any) => i.url);
+      }
       try {
-        return JSON.parse(localStorage.getItem('gt_user_fav_tools') || '[]');
+        const raw = JSON.parse(localStorage.getItem('gt_saved_items_v2') || '[]');
+        return raw.filter((i: any) => i.type === 'tool').map((i: any) => i.url);
       } catch (e) {
         return [];
       }
-    }
-
-    function saveFavUrls(urls: string[]) {
-      try {
-        localStorage.setItem('gt_user_fav_tools', JSON.stringify(urls));
-        updateFavsUI();
-      } catch (e) {}
     }
 
     function updateFavsUI() {
@@ -799,15 +832,21 @@ const tools = [
         e.stopPropagation();
         const u = star.getAttribute('data-url');
         if (!u) return;
-        let favs = getFavUrls();
-        if (favs.includes(u)) {
-          favs = favs.filter(x => x !== u);
-        } else {
-          favs.push(u);
+        const card = star.closest('.tool-card');
+        const title = card?.querySelector('h3')?.textContent || 'Herramienta';
+        const icon = card?.querySelector('.tool-icon')?.textContent || '🧲';
+
+        if (typeof (window as any).gtToggleFav === 'function') {
+          (window as any).gtToggleFav({ url: u, title, type: 'tool', icon });
         }
-        saveFavUrls(favs);
+        updateFavsUI();
         filterTools();
       });
+    });
+
+    window.addEventListener('gt:favs-changed', () => {
+      updateFavsUI();
+      filterTools();
     });
 
     updateFavsUI();
