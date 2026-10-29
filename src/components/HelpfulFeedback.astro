@@ -1,0 +1,258 @@
+---
+interface Props {
+  targetName?: string;
+}
+
+const { targetName = 'este contenido' } = Astro.props;
+---
+
+<div class="helpful-feedback-widget" id="helpful-widget">
+  <div class="hw-inner">
+    <div class="hw-initial" id="hw-initial">
+      <div class="hw-text-wrap">
+        <span class="hw-icon">💬</span>
+        <span class="hw-title">¿Te ha resultado útil esta información?</span>
+      </div>
+      <div class="hw-buttons">
+        <button type="button" class="btn-hw btn-hw-yes" id="btn-hw-yes" aria-label="Sí, me ha resultado útil">
+          <span>👍</span> Sí, me ayudó
+        </button>
+        <button type="button" class="btn-hw btn-hw-no" id="btn-hw-no" aria-label="No me ha parecido del todo útil">
+          <span>👎</span> Podría mejorar
+        </button>
+      </div>
+    </div>
+
+    <!-- Thank you state -->
+    <div class="hw-thankyou" id="hw-thankyou" style="display: none;">
+      <span class="hw-ty-icon">🎉</span>
+      <div class="hw-ty-content">
+        <h4>¡Muchas gracias por tu valoración!</h4>
+        <p>Tu opinión nos ayuda a mantener GuíaTecnes siempre actualizada, precisa y 100% gratuita.</p>
+      </div>
+    </div>
+
+    <!-- Feedback input state -->
+    <div class="hw-improve-box" id="hw-improve" style="display: none;">
+      <p class="hw-improve-title">¿Qué podríamos añadir o mejorar para que sea perfecta?</p>
+      <div class="hw-input-row">
+        <input type="text" id="hw-suggest-input" placeholder="Tu sugerencia (opcional)..." maxlength="150" />
+        <button type="button" id="btn-hw-send">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .helpful-feedback-widget {
+    margin: 2.5rem 0;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s ease;
+  }
+  .helpful-feedback-widget:hover {
+    border-color: rgba(99, 102, 241, 0.25);
+  }
+
+  .hw-initial {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .hw-text-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .hw-icon {
+    font-size: 1.3rem;
+  }
+  .hw-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text, #f1f5f9);
+  }
+
+  .hw-buttons {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .btn-hw {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+
+  .btn-hw-yes {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #34d399;
+  }
+  .btn-hw-yes:hover {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #10b981;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  }
+
+  .btn-hw-no {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: var(--text-muted, #94a3b8);
+  }
+  .btn-hw-no:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #f87171;
+    transform: translateY(-1px);
+  }
+
+  /* Thank you state */
+  .hw-thankyou {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    animation: fade-in 0.3s ease-out;
+  }
+  .hw-ty-icon {
+    font-size: 2rem;
+    animation: pop 0.4s ease-out;
+  }
+  .hw-ty-content h4 {
+    margin: 0 0 0.2rem;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #34d399;
+  }
+  .hw-ty-content p {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
+  /* Improvement state */
+  .hw-improve-box {
+    animation: fade-in 0.3s ease-out;
+  }
+  .hw-improve-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text, #f1f5f9);
+    margin: 0 0 0.5rem;
+  }
+  .hw-input-row {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .hw-input-row input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.15));
+    border-radius: 6px;
+    padding: 0.45rem 0.75rem;
+    color: var(--text, #f1f5f9);
+    font-size: 0.82rem;
+  }
+  .hw-input-row input:focus {
+    outline: none;
+    border-color: var(--primary, #6366f1);
+  }
+  .hw-input-row button {
+    background: var(--primary, #6366f1);
+    color: #ffffff;
+    border: none;
+    padding: 0.45rem 1rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .hw-input-row button:hover {
+    background: #4f46e5;
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pop {
+    0% { transform: scale(0.6); }
+    70% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  @media print {
+    .helpful-feedback-widget {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  function initHelpfulFeedback() {
+    const widget = document.getElementById('helpful-widget');
+    if (!widget) return;
+
+    const initial = document.getElementById('hw-initial');
+    const thankyou = document.getElementById('hw-thankyou');
+    const improve = document.getElementById('hw-improve');
+    const btnYes = document.getElementById('btn-hw-yes');
+    const btnNo = document.getElementById('btn-hw-no');
+    const btnSend = document.getElementById('btn-hw-send');
+    const inputSuggest = document.getElementById('hw-suggest-input') as HTMLInputElement;
+
+    const storageKey = 'gt_helpful_vote_' + window.location.pathname.replace(/\/$/, '');
+
+    // Check if already voted
+    try {
+      const savedVote = localStorage.getItem(storageKey);
+      if (savedVote) {
+        if (initial) initial.style.display = 'none';
+        if (thankyou) {
+          thankyou.style.display = 'flex';
+          const p = thankyou.querySelector('p');
+          if (p) p.textContent = 'Ya registraste tu voto anteriormente en esta página. ¡Gracias por participar!';
+        }
+        return;
+      }
+    } catch (e) {}
+
+    btnYes?.addEventListener('click', () => {
+      try { localStorage.setItem(storageKey, 'yes'); } catch (e) {}
+      if (initial) initial.style.display = 'none';
+      if (thankyou) thankyou.style.display = 'flex';
+    });
+
+    btnNo?.addEventListener('click', () => {
+      if (initial) initial.style.display = 'none';
+      if (improve) improve.style.display = 'block';
+    });
+
+    btnSend?.addEventListener('click', () => {
+      try {
+        localStorage.setItem(storageKey, 'no_feedback:' + (inputSuggest?.value || ''));
+      } catch (e) {}
+      if (improve) improve.style.display = 'none';
+      if (thankyou) thankyou.style.display = 'flex';
+    });
+  }
+
+  document.addEventListener('astro:page-load', initHelpfulFeedback);
+</script>

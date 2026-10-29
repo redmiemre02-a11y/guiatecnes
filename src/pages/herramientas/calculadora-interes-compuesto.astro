@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import HelpfulFeedback from '../../components/HelpfulFeedback.astro';
 
 const breadcrumbs = [
   { name: 'Inicio', url: '/' },
@@ -257,6 +258,41 @@ const faqs = [
         ))}
       </div>
     </section>
+
+    <!-- TOPIC CLUSTER: RELATED ARTICLES -->
+    <div class="card related-guides-card">
+      <div class="rg-header">
+        <span class="rg-badge">📖 Guías Relacionadas</span>
+        <h3 class="rg-title">Aprende más y toma mejores decisiones</h3>
+      </div>
+      <div class="related-guides-grid">
+        <a href="/blog/ingresos-pasivos-desde-casa-poco-dinero-2026" class="related-guide-item">
+          <span class="rgi-icon">💎</span>
+          <div>
+            <h4>Cómo generar ingresos pasivos y multiplicar tu capital desde casa</h4>
+            <span class="rgi-read">8 min de lectura →</span>
+          </div>
+        </a>
+        <a href="/blog/apps-controlar-gastos-no-quedarse-sin-dinero" class="related-guide-item">
+          <span class="rgi-icon">📊</span>
+          <div>
+            <h4>Control sistemático de gastos para aumentar tu capacidad de ahorro</h4>
+            <span class="rgi-read">5 min de lectura →</span>
+          </div>
+        </a>
+        <a href="/blog/declarar-criptomonedas-renta-espana-2026" class="related-guide-item">
+          <span class="rgi-icon">⚖️</span>
+          <div>
+            <h4>Fiscalidad de inversiones y cuentas remuneradas en España</h4>
+            <span class="rgi-read">6 min de lectura →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- HELPFUL CONTENT FEEDBACK -->
+    <HelpfulFeedback targetName="esta Calculadora de Interés Compuesto" />
+
   </main>
 
   <Footer slot="footer" />
@@ -803,6 +839,73 @@ const faqs = [
       color: #000000 !important;
     }
   }
+
+  /* RELATED GUIDES CLUSTER */
+  .related-guides-card {
+    margin-top: 2rem;
+  }
+  .rg-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+  .rg-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary, #6366f1);
+    background: rgba(99, 102, 241, 0.12);
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+  }
+  .rg-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text, #f1f5f9);
+  }
+  .related-guides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+  .related-guide-item {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    border-radius: 0.85rem;
+    padding: 1rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  .related-guide-item:hover {
+    background: rgba(99, 102, 241, 0.08);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-2px);
+  }
+  .rgi-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+  }
+  .related-guide-item h4 {
+    margin: 0 0 0.3rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--text, #f1f5f9);
+  }
+  .related-guide-item:hover h4 {
+    color: var(--primary, #6366f1);
+  }
+  .rgi-read {
+    font-size: 0.75rem;
+    color: var(--text-muted, #94a3b8);
+  }
+
 </style>
 
 <script>
