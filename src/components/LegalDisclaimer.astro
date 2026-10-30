@@ -1,0 +1,65 @@
+---
+interface Props {
+  type?: 'finance' | 'legal' | 'tax' | 'general';
+}
+
+const { type = 'general' } = Astro.props;
+
+const textMap = {
+  finance: 'Aviso Legal & Financiero: Esta calculadora y sus simulaciones tienen carácter meramente orientativo, divulgativo y educativo. No constituyen asesoramiento financiero, crediticio, bancario ni una oferta vinculante. Los tipos de interés, cuotas y condiciones reales dependen exclusivamente de cada entidad bancaria u organismo oficial. Consulte siempre con un asesor financiero acreditado antes de tomar decisiones de inversión o contratación.',
+  legal: 'Descargo de Responsabilidad Laboral & Legal: Esta herramienta realiza una estimación basada en la normativa laboral general española (Estatuto de los Trabajadores). No sustituye el asesoramiento legal, jurídico ni sindical personalizado. Los convenios colectivos específicos de sector o empresa pueden estipular condiciones particulares. Para despidos, reclamaciones de cantidad o finiquitos, consulte con un abogado laboralista o graduado social colegiado.',
+  tax: 'Aviso Fiscal y Tributario: Las estimaciones de impuestos (IRPF, IVA u otras retenciones) son meramente informativas y aproximadas según los tramos generales estatales. Las comunidades autónomas pueden aplicar deducciones o escalas autonómicas distintas. Para la presentación formal de declaraciones, consulte con la Agencia Tributaria (AEAT) o un gestor fiscal colegiado.',
+  general: 'Descargo de Responsabilidad: Los cálculos, datos y resultados proporcionados por esta herramienta son estimaciones orientativas y no vinculantes. GuíaTecnes no asume responsabilidad sobre decisiones personales, económicas o comerciales adoptadas a partir del uso de esta aplicación.'
+};
+
+const disclaimerText = textMap[type] || textMap.general;
+---
+
+<div class="legal-disclaimer-card" role="note" aria-label="Descargo de responsabilidad">
+  <div class="ld-icon">⚖️</div>
+  <div class="ld-content">
+    <strong class="ld-title">Descargo de Responsabilidad y Advertencia Legal</strong>
+    <p class="ld-text">{disclaimerText}</p>
+  </div>
+</div>
+
+<style>
+  .legal-disclaimer-card {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    background: rgba(245, 158, 11, 0.05);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    margin: 2rem 0 1.5rem;
+  }
+  .ld-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    line-height: 1;
+    margin-top: 0.1rem;
+  }
+  .ld-title {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fbbf24;
+    margin-bottom: 0.3rem;
+  }
+  .ld-text {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.55;
+  }
+  @media print {
+    .legal-disclaimer-card {
+      background: #fefce8 !important;
+      border: 1px solid #ca8a04 !important;
+      color: #713f12 !important;
+    }
+    .ld-title { color: #854d0e !important; }
+    .ld-text { color: #713f12 !important; }
+  }
+</style>

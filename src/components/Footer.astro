@@ -33,8 +33,13 @@
   </div>
 
   <div class="footer-bottom">
-    <p>© {new Date().getFullYear()} GuíaTecnes. Todos los derechos reservados.</p>
-    <p>Hecho con ❤️ para hispanohablantes de todo el mundo.</p>
+    <p class="footer-trademark-notice">
+      Aviso Legal & Marcas: GuíaTecnes es un portal divulgativo e independiente. Todas las marcas registradas, nombres de productos y logotipos citados pertenecen a sus respectivos propietarios legales y se mencionan exclusivamente con fines didácticos, de análisis técnico y comparativos amparados por el derecho de cita (Art. 32 LPI).
+    </p>
+    <div class="footer-bottom-copy">
+      <p>© {new Date().getFullYear()} GuíaTecnes. Todos los derechos reservados.</p>
+      <p>Hecho con ❤️ para hispanohablantes de todo el mundo.</p>
+    </div>
   </div>
 </footer>
 
@@ -123,18 +128,31 @@
   .footer-bottom {
     border-top: 1px solid var(--border);
     padding: 1.25rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-trademark-notice {
+    font-size: 0.72rem !important;
+    color: var(--text-muted) !important;
+    opacity: 0.75;
+    line-height: 1.5;
+    margin: 0 0 0.85rem !important;
+    text-align: center;
+  }
+
+  .footer-bottom-copy {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 0.5rem;
-    max-width: 1200px;
-    margin: 0 auto;
   }
 
-  .footer-bottom p {
+  .footer-bottom-copy p {
     font-size: 0.82rem;
     color: var(--text-muted);
+    margin: 0;
   }
 
   @media (max-width: 768px) {

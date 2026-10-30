@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
 
 const breadcrumbs = [
   { name: 'Inicio', url: '/' },
@@ -193,6 +194,10 @@ const faqs = [
         </table>
       </div>
     </div>
+
+    
+    <!-- AVISO LEGAL Y RESPONSABILIDAD -->
+    <LegalDisclaimer type="finance" />
 
     <!-- GUÍA SEO -->
     <section class="seo-guide-section card">
