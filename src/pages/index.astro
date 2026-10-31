@@ -1,781 +1,1594 @@
 ---
+
 import { getCollection } from 'astro:content';
+
 import BaseLayout from '../layouts/BaseLayout.astro';
+
 import Header from '../components/Header.astro';
+
 import Footer from '../components/Footer.astro';
+
 import PostCard from '../components/PostCard.astro';
+
 import AdSenseBanner from '../components/AdSenseBanner.astro';
+
 import TechTip from '../components/TechTip.astro';
 
+
+
 const allPosts = await getCollection('blog');
+
 const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const recentPosts = sortedPosts.slice(0, 12);
+
+const recentPosts = sortedPosts.slice(0, 24);
+
+
+
 
 
 const featuredTools = [
+
   {
-    title: 'Test de Velocidad WiFi',
-    desc: 'Mide tu conexión y latencia en vivo con indicador en tiempo real.',
-    url: '/herramientas/test-velocidad',
-    icon: '⚡',
-    badge: 'Popular',
+
+    title: 'Calculadora Sueldo Neto',
+
+    desc: 'Calcula tu nómina exacta mes a mes con retenciones IRPF y Seguridad Social.',
+
+    url: '/herramientas/calculadora-sueldo-neto',
+
+    icon: '💶',
+
+    badge: 'Destacada',
+
+    color: '#10b981'
+
+  },
+
+  {
+
+    title: 'Calculadora de Hipoteca',
+
+    desc: 'Simula cuotas mensuales fija o variable con cuadro de amortización francés.',
+
+    url: '/herramientas/calculadora-hipoteca',
+
+    icon: '🏠',
+
+    badge: 'Finanzas',
+
     color: '#6366f1'
+
   },
+
   {
-    title: 'Compresor de Fotos',
-    desc: 'Reduce hasta un 85% el tamaño de imágenes JPG, PNG y WebP.',
-    url: '/herramientas/compresor-imagenes',
-    icon: '🖼️',
-    badge: 'Sin Pérdida',
-    color: '#10b981'
+
+    title: 'Finiquito e Indemnización',
+
+    desc: 'Calcula tu liquidación por despido, fin de contrato o baja voluntaria.',
+
+    url: '/herramientas/calculadora-finiquito-indemnizacion',
+
+    icon: '⚖️',
+
+    badge: 'Laboral',
+
+    color: '#ef4444'
+
   },
+
   {
-    title: 'Calculadora de Descarga',
-    desc: 'Averigua cuántos minutos tardará tu juego o película según tus megas.',
-    url: '/herramientas/calculadora-descarga',
-    icon: '⏳',
-    badge: 'Gaming',
+
+    title: 'Calculadora de Jubilación',
+
+    desc: 'Conoce tu edad legal de retiro y la pensión estimada según tus años cotizados.',
+
+    url: '/herramientas/calculadora-jubilacion',
+
+    icon: '🏖️',
+
+    badge: 'Pensión',
+
     color: '#f59e0b'
+
   },
+
   {
-    title: 'Consumo de Datos (GB)',
-    desc: 'Calcula cuántos Gigas gastas con Netflix, YouTube y TikTok al mes.',
-    url: '/herramientas/calculadora-datos',
-    icon: '📶',
-    badge: 'Ahorro',
+
+    title: 'Test de Velocidad WiFi',
+
+    desc: 'Mide tu conexión y latencia en vivo con indicador en tiempo real.',
+
+    url: '/herramientas/test-velocidad',
+
+    icon: '⚡',
+
+    badge: 'Popular',
+
     color: '#38bdf8'
+
   },
+
   {
-    title: 'Generador de Códigos QR',
-    desc: 'Crea códigos QR permanentes en alta resolución para WiFi o enlaces.',
-    url: '/herramientas/generador-qr',
-    icon: '📲',
-    badge: 'Gratis',
-    color: '#06b6d4'
+
+    title: 'Tarifa Autónomo Freelance',
+
+    desc: 'Calcula cuánto cobrar por hora o proyecto y tus impuestos trimestrales.',
+
+    url: '/herramientas/calculadora-freelance',
+
+    icon: '💼',
+
+    badge: 'Autónomos',
+
+    color: '#8b5cf6'
+
   },
+
   {
-    title: 'Generador de Contraseñas',
-    desc: 'Claves seguras indescifrables y estimador de tiempo de hackeo.',
-    url: '/herramientas/generador-contrasenas',
-    icon: '🛡️',
-    badge: 'Seguridad',
+
+    title: 'Compresor de Fotos WebP',
+
+    desc: 'Reduce hasta un 85% el tamaño de imágenes JPG, PNG y WebP para web.',
+
+    url: '/herramientas/compresor-imagenes',
+
+    icon: '🖼️',
+
+    badge: 'Sin Pérdida',
+
     color: '#10b981'
+
+  },
+
+  {
+
+    title: 'Generador WhatsApp Directo',
+
+    desc: 'Crea enlaces directos wa.me con mensaje personalizado para clientes.',
+
+    url: '/herramientas/generador-link-whatsapp',
+
+    icon: '📲',
+
+    badge: 'Marketing',
+
+    color: '#06b6d4'
+
   }
+
 ];
+
+
 
 const categories = [
+
   {
+
     name: 'IA Herramientas',     slug: 'ia',             icon: '🤖', desc: 'Las mejores herramientas de IA analizadas y comparadas.',        color: '#6366f1', bg: 'rgba(99,102,241,0.1)',
+
   },
+
   { name: 'Solución de Errores', slug: 'errores',        icon: '🛠️', desc: 'Cómo solucionar fallos en móviles, PC, apps, WiFi y redes.',    color: '#ef4444', bg: 'rgba(239,68,68,0.1)',
+
   },
+
   { name: 'Comparativas 2026',   slug: 'comparativas',   icon: '⚖️', desc: 'Comparativas cara a cara de móviles, portátiles y software.',    color: '#0ea5e9', bg: 'rgba(14,165,233,0.1)',
+
   },
+
   { name: 'Alternativas Gratis', slug: 'alternativas',   icon: '🔄', desc: 'Alternativas gratuitas a los programas de pago más populares.',  color: '#10b981', bg: 'rgba(16,185,129,0.1)',
+
   },
+
   { name: 'Streaming y TV',      slug: 'streaming',      icon: '📺', desc: 'Trucos para Smart TV, Fire Stick, Android TV y plataformas.',   color: '#e11d48', bg: 'rgba(225,29,72,0.1)',
+
   },
+
   { name: 'Windows, Mac y Linux',slug: 'windows-linux',  icon: '🖥️', desc: 'Optimización, trucos ocultos y rendimiento para tu ordenador.',  color: '#2563eb', bg: 'rgba(37,99,235,0.1)',
+
   },
+
   { name: 'Trabajo Remoto',      slug: 'freelance',      icon: '💼', desc: 'Plataformas, herramientas y guías para teletrabajar desde casa.',color: '#d97706', bg: 'rgba(217,119,6,0.1)',
+
   },
+
   { name: 'Finanzas Digitales',  slug: 'finanzas',       icon: '💰', desc: 'Inversión, neobancos, cripto y apps para gestionar tu dinero.',  color: '#eab308', bg: 'rgba(234,179,8,0.1)',
+
   },
+
   { name: 'Ciberseguridad',      slug: 'ciberseguridad', icon: '🔒', desc: 'VPNs, antivirus, privacidad y cómo protegerte de estafas.',      color: '#dc2626', bg: 'rgba(220,38,38,0.1)',
+
   },
+
   { name: 'Ganar Dinero Online', slug: 'emprendimiento', icon: '🚀', desc: 'Formas reales y probadas de generar ingresos en internet.',      color: '#f97316', bg: 'rgba(249,115,22,0.1)',
+
   },
+
   { name: 'Salud Digital',       slug: 'salud',          icon: '🏥', desc: 'Apps de bienestar, smartwatches y tecnología para vivir sano.',  color: '#14b8a6', bg: 'rgba(20,184,166,0.1)',
+
   },
+
   { name: 'Hogar Inteligente',   slug: 'hogar',          icon: '🏠', desc: 'Gadgets y domótica barata para automatizar tu casa fácil.',      color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)',
+
   },
+
   { name: 'Gaming y PC',         slug: 'gaming',         icon: '🎮', desc: 'Juegos, hardware, subir FPS y optimización de PC para gamers.',  color: '#ec4899', bg: 'rgba(236,72,153,0.1)',
+
   },
+
   { name: 'Apps y Trucos Móvil', slug: 'movil',          icon: '📱', desc: 'Las mejores apps y ajustes ocultos para Android e iPhone.',      color: '#06b6d4', bg: 'rgba(6,182,212,0.1)',
+
   },
+
   { name: 'Familia y Niños',     slug: 'familia',        icon: '👶', desc: 'Internet seguro para niños, control parental y apps edu.',       color: '#f59e0b', bg: 'rgba(245,158,11,0.1)',
+
   },
+
   { name: 'Educación Online',    slug: 'educacion',      icon: '🎓', desc: 'Cursos gratis con certificado oficial y aprende con IA.',        color: '#3b82f6', bg: 'rgba(59,130,246,0.1)',
+
   },
+
   { name: 'Productividad',       slug: 'productividad',  icon: '⚡', desc: 'Apps, extensiones y técnicas para trabajar más inteligente.',    color: '#10b981', bg: 'rgba(16,185,129,0.1)',
+
   },
+
   { name: 'Tecnología',          slug: 'tecnologia',     icon: '💻', desc: 'Noticias, redes WiFi y trucos tecnológicos del día a día.',     color: '#64748b', bg: 'rgba(100,116,139,0.1)',
+
   },
+
   { name: 'Guías y Tutoriales',  slug: 'guias',          icon: '📖', desc: 'Paso a paso para dominar cualquier herramienta digital.',        color: '#a855f7', bg: 'rgba(168,85,247,0.1)',
+
   },
+
 ];
+
 ---
 
+
+
 <BaseLayout
+
   title="GuíaTecnes - Herramientas de IA, Solución de Errores y Tecnología en Español"
+
   description="Descubre las mejores herramientas de inteligencia artificial, solución de errores paso a paso, comparativas y alternativas gratuitas en español."
+
 >
+
   <Header slot="header" />
 
+
+
   <!-- HERO SECTION -->
+
   <section class="hero">
+
     <div class="container">
+
       <div class="hero-badge">🚀 La guía de tecnología más completa en español</div>
+
       <h1 class="hero-title">
+
         Domina la <span class="gradient-text">Inteligencia Artificial</span><br />
+
         y la Tecnología Moderna
+
       </h1>
+
       <p class="hero-subtitle">
+
         Análisis honestos, solución de errores, alternativas gratuitas y guías paso a paso.<br />
+
         Sin tecnicismos innecesarios, directo al grano.
+
       </p>
+
       <div class="hero-actions">
+
         <a href="/herramientas" class="btn-primary">🧲 Probar Herramientas Online →</a>
+
         <a href="/categoria/ia" class="btn-secondary">🤖 Herramientas de IA</a>
+
         <a href="/categoria/errores" class="btn-outline-hero">🛠️ Solución de Errores</a>
+
       </div>
+
       <div class="hero-stats">
+
         <div class="stat"><strong>{allPosts.length}+</strong><span>Artículos Guía</span></div>
+
         <div class="stat"><strong>48+</strong><span>Herramientas Gratis</span></div>
+
         <div class="stat"><strong>100%</strong><span>En Español</span></div>
+
         <div class="stat"><strong>0€</strong><span>Siempre gratis</span></div>
+
       </div>
+
     </div>
+
   </section>
+
+
 
   <!-- TRENDING TOPICS / POPULAR TAGS BAR -->
+
   <section class="trending-bar-section">
+
     <div class="container">
+
       <div class="trending-bar-inner">
+
         <div class="trending-badge">
+
           <span class="trending-fire">🔥</span>
+
           <span class="trending-title-text">Tendencias:</span>
+
         </div>
+
         <div class="trending-tags-track">
+
           <a href="/categoria/ia" class="trend-tag">#ChatGPT</a>
+
           <a href="/categoria/tutoriales" class="trend-tag">#Windows11</a>
+
           <a href="/categoria/seguridad" class="trend-tag">#Ciberseguridad</a>
+
           <a href="/categoria/ia" class="trend-tag">#InteligenciaArtificial</a>
+
           <a href="/herramientas/calculadora-hipoteca" class="trend-tag highlight">#Hipoteca</a>
+
           <a href="/categoria/comparativas" class="trend-tag">#AlternativasGratis</a>
+
           <a href="/herramientas/calculadora-sueldo-neto" class="trend-tag highlight">#SueldoNeto</a>
+
           <a href="/categoria/software" class="trend-tag">#Productividad</a>
+
           <a href="/categoria/errores" class="trend-tag">#SolucionErrores</a>
+
           <a href="/categoria/hardware" class="trend-tag">#Hardware</a>
+
           <a href="/categoria/trucos" class="trend-tag">#TrucosTech</a>
+
         </div>
+
       </div>
+
     </div>
+
   </section>
 
+
+
   <AdSenseBanner variant="banner" />
+
+
+
 
 
   <!-- FEATURED INTERACTIVE TOOLS SHOWCASE -->
+
   <section class="section featured-tools-section">
+
     <div class="container">
+
       <div class="section-header">
+
         <span class="badge-interactive">⚡ Utilidades en Vivo</span>
+
         <h2>Herramientas Online Gratuitas</h2>
+
         <p>Prácticas, sin registros molestos y 100% privadas. Diseñadas para resolver tus tareas al instante.</p>
+
       </div>
+
+
 
       <div class="home-tools-grid">
+
         {featuredTools.map(tool => (
+
           <a href={tool.url} class="home-tool-card">
+
             <div class="home-tool-top">
+
               <span class="home-tool-icon">{tool.icon}</span>
+
               <span class="home-tool-badge" style={`color: ${tool.color}; background: ${tool.color}15; border-color: ${tool.color}35;`}>{tool.badge}</span>
+
             </div>
+
             <h3>{tool.title}</h3>
+
             <p>{tool.desc}</p>
+
             <span class="home-tool-cta">Abrir herramienta →</span>
+
           </a>
+
         ))}
+
       </div>
+
+
 
       <div class="view-all-tools-wrap">
+
         <a href="/herramientas" class="btn-all-tools">
+
           <span>🧲</span> Ver las 48 herramientas disponibles →
+
         </a>
+
       </div>
+
     </div>
+
   </section>
+
+
 
   <!-- CATEGORIES SECTION -->
+
   <section class="section">
+
     <div class="container">
+
       <div class="section-header">
+
         <h2>Explora por Categoría</h2>
+
         <p>Todo lo que necesitas saber, organizado para ti</p>
+
       </div>
+
       <div class="categories-grid">
+
         {categories.map(cat => (
+
           <a href={`/categoria/${cat.slug}`} class="category-card" style={`--cat-color: ${cat.color}; --cat-bg: ${cat.bg}`}>
+
             <span class="cat-icon">{cat.icon}</span>
+
             <h3>{cat.name}</h3>
+
             <p>{cat.desc}</p>
+
             <span class="cat-link">Ver artículos →</span>
+
           </a>
+
         ))}
+
       </div>
+
     </div>
+
   </section>
+
+
 
   <!-- RECENT POSTS SECTION -->
+
   <section class="section">
+
     <div class="container">
+
       <div class="section-header">
+
         <h2>Artículos Recientes</h2>
+
         <p>Actualizados a diario con lo último en tecnología, trucos y soluciones</p>
+
       </div>
 
+
+
       {recentPosts.length > 0 ? (
+
         <div class="posts-grid">
+
           {recentPosts.map(post => (
+
             <PostCard
+
               title={post.data.title}
+
               description={post.data.description}
+
               slug={post.id.replace(/\.[^/.]+$/, "")}
+
               pubDate={post.data.pubDate}
+
               tags={post.data.tags}
+
               author={post.data.author}
+
               readingTime={post.data.readingTime || 5}
+
               heroImage={post.data.heroImage}
+
             />
+
           ))}
+
         </div>
+
       ) : (
+
         <div class="empty-state">
+
           <p>🚀 Los artículos están en camino. ¡Vuelve pronto!</p>
+
         </div>
+
       )}
+
     </div>
+
   </section>
+
+
 
   <AdSenseBanner variant="banner" />
 
+
+
   <div class="container"><TechTip /></div>
 
+
+
   <!-- NEWSLETTER SECTION -->
+
   <section class="section newsletter-section">
+
     <div class="container-sm">
+
       <div class="newsletter-card">
+
         <span class="nl-emoji">📬</span>
+
         <h2>Suscríbete al boletín semanal</h2>
+
         <p>Recibe las mejores herramientas de IA y alternativas gratuitas directamente en tu bandeja de entrada. Sin spam, solo lo mejor.</p>
+
         <form class="nl-form" action="https://formspree.io/f/xppzwgrq" method="POST">
+
           <input type="email" name="email" placeholder="tu@email.com" required />
+
           <button type="submit">Suscribirme gratis →</button>
+
         </form>
+
         <small>✅ Más de 1.000 lectores. Cancela cuando quieras.</small>
+
       </div>
+
     </div>
+
   </section>
 
+
+
   <Footer slot="footer" />
+
 </BaseLayout>
 
+
+
 <style>
+
   /* TRENDING TAGS BAR */
+
   .trending-bar-section {
+
     padding: 0 1rem 1.75rem;
+
     margin-top: -1.75rem;
+
     position: relative;
+
     z-index: 10;
+
   }
+
   .trending-bar-inner {
+
     display: flex;
+
     align-items: center;
+
     gap: 1rem;
+
     background: rgba(15, 23, 42, 0.75);
+
     border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+
     backdrop-filter: blur(12px);
+
     border-radius: 9999px;
+
     padding: 0.5rem 1.15rem;
+
     box-shadow: 0 4px 25px rgba(0, 0, 0, 0.25);
+
   }
+
   .trending-badge {
+
     display: flex;
+
     align-items: center;
+
     gap: 0.35rem;
+
     font-weight: 700;
+
     font-size: 0.85rem;
+
     color: var(--text, #f1f5f9);
+
     white-space: nowrap;
+
   }
+
   .trending-fire {
+
     font-size: 1.1rem;
+
     animation: flame-pulse 2s infinite ease-in-out;
+
   }
+
   @keyframes flame-pulse {
+
     0%, 100% { transform: scale(1); }
+
     50% { transform: scale(1.2); }
+
   }
+
   .trending-tags-track {
+
     display: flex;
+
     align-items: center;
+
     gap: 0.5rem;
+
     overflow-x: auto;
+
     scrollbar-width: none;
+
     -ms-overflow-style: none;
+
     padding-right: 0.5rem;
+
     mask-image: linear-gradient(to right, black 90%, transparent 100%);
+
     -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+
   }
+
   .trending-tags-track::-webkit-scrollbar {
+
     display: none;
+
   }
+
   .trend-tag {
+
     white-space: nowrap;
+
     padding: 0.32rem 0.8rem;
+
     border-radius: 9999px;
+
     font-size: 0.8rem;
+
     font-weight: 600;
+
     background: rgba(255, 255, 255, 0.05);
+
     border: 1px solid rgba(255, 255, 255, 0.1);
+
     color: var(--text-muted, #94a3b8);
+
     text-decoration: none;
+
     transition: all 0.2s ease;
+
   }
+
   .trend-tag:hover {
+
     background: rgba(99, 102, 241, 0.2);
+
     border-color: var(--primary, #6366f1);
+
     color: #ffffff;
+
     transform: translateY(-1px);
+
     box-shadow: 0 2px 10px rgba(99, 102, 241, 0.25);
+
   }
+
   .trend-tag.highlight {
+
     background: rgba(16, 185, 129, 0.12);
+
     border-color: rgba(16, 185, 129, 0.3);
+
     color: #34d399;
+
   }
+
   .trend-tag.highlight:hover {
+
     background: rgba(16, 185, 129, 0.25);
+
     border-color: #10b981;
+
     color: #ffffff;
+
     box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+
   }
+
   @media (max-width: 640px) {
+
     .trending-bar-inner {
+
       border-radius: 14px;
+
       padding: 0.6rem 0.85rem;
+
       flex-direction: column;
+
       align-items: flex-start;
+
       gap: 0.45rem;
+
     }
+
     .trending-tags-track {
+
       width: 100%;
+
     }
+
   }
+
+
 
   /* HERO */
+
   .hero {
+
     position: relative;
+
     padding: 7rem 1.5rem 6rem;
+
     text-align: center;
+
     background: radial-gradient(ellipse at 50% -20%, rgba(99, 102, 241, 0.25), rgba(6, 182, 212, 0.1), transparent 70%);
+
     overflow: hidden;
+
   }
+
+
 
   /* Noktalı Arka Plan Deseni (Modern Teknoloji Hissi) */
+
   .hero::before {
+
     content: '';
+
     position: absolute;
+
     top: 0; left: 0; right: 0; bottom: 0;
+
     background-image: radial-gradient(var(--border) 1px, transparent 1px);
+
     background-size: 30px 30px;
+
     opacity: 0.4;
+
     z-index: -1;
+
   }
+
+
 
   .hero-badge {
+
     display: inline-block;
+
     background: rgba(99, 102, 241, 0.1);
+
     color: var(--primary);
+
     border: 1px solid rgba(99, 102, 241, 0.4);
+
     border-radius: 50px;
+
     padding: 0.45rem 1.25rem;
+
     font-size: 0.85rem;
+
     font-weight: 700;
+
     margin-bottom: 2rem;
+
     letter-spacing: 0.03em;
+
     box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+
     animation: pulse-glow 3s infinite alternate;
+
   }
+
+
 
   @keyframes pulse-glow {
+
     0% { box-shadow: 0 0 10px rgba(99, 102, 241, 0.1); }
+
     100% { box-shadow: 0 0 30px rgba(99, 102, 241, 0.3); }
+
   }
+
+
 
   .hero-title {
+
     font-size: clamp(2rem, 6vw, 4.5rem);
+
     font-weight: 900;
+
     line-height: 1.1;
+
     margin-bottom: 1.5rem;
+
     letter-spacing: -0.03em;
+
     color: var(--heading);
+
   }
+
+
 
   .gradient-text {
+
     background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #06b6d4 100%);
+
     -webkit-background-clip: text;
+
     -webkit-text-fill-color: transparent;
+
     background-clip: text;
+
     text-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+
   }
+
+
 
   .hero-subtitle {
+
     font-size: clamp(1rem, 4vw, 1.25rem);
+
     color: var(--text-muted);
+
     max-width: 620px;
+
     margin: 0 auto 2.5rem;
+
     line-height: 1.6;
+
     font-weight: 400;
+
   }
+
+
 
   .hero-actions {
+
     display: flex;
+
     gap: 1.25rem;
+
     justify-content: center;
+
     flex-wrap: wrap;
+
     margin-bottom: 4rem;
+
   }
+
+
 
   .btn-primary {
+
     background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
+
     color: white;
+
     padding: 1rem 2.2rem;
+
     border-radius: 12px;
+
     font-weight: 700;
+
     font-size: 1.05rem;
+
     text-decoration: none;
+
     transition: all 0.3s ease;
+
     box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+
     border: 1px solid rgba(255,255,255,0.1);
+
   }
+
+
 
   .btn-primary:hover {
+
     transform: translateY(-3px) scale(1.02);
+
     box-shadow: 0 15px 35px rgba(99, 102, 241, 0.5);
+
     color: white;
+
   }
+
+
 
   .btn-secondary {
+
     background: rgba(255, 255, 255, 0.03);
+
     backdrop-filter: blur(10px);
+
     color: var(--heading);
+
     border: 1px solid var(--border);
+
     padding: 1rem 2.2rem;
+
     border-radius: 12px;
+
     font-weight: 700;
+
     font-size: 1.05rem;
+
     text-decoration: none;
+
     transition: all 0.3s ease;
+
   }
+
+
 
   .btn-secondary:hover {
+
     border-color: var(--primary);
+
     background: rgba(99, 102, 241, 0.08);
+
     color: var(--primary);
+
     transform: translateY(-2px);
+
   }
+
+
 
   .hero-stats {
+
     display: flex;
+
     justify-content: center;
+
     gap: 1.5rem;
+
     flex-wrap: wrap;
+
   }
+
+
 
   .stat {
+
     display: flex;
+
     align-items: center;
+
     gap: 0.75rem;
+
     background: rgba(255, 255, 255, 0.03);
+
     border: 1px solid var(--border);
+
     padding: 0.75rem 1.5rem;
+
     border-radius: 100px; /* Hap görünümü */
+
     backdrop-filter: blur(10px);
+
     transition: all 0.3s ease;
+
   }
+
+
 
   .stat:hover {
+
     border-color: rgba(99, 102, 241, 0.5);
+
     background: rgba(99, 102, 241, 0.08);
+
     transform: translateY(-3px);
+
     box-shadow: 0 5px 15px rgba(99, 102, 241, 0.1);
+
   }
+
+
 
   .stat strong { 
+
     font-size: 1.25rem; 
+
     font-weight: 800; 
+
     color: var(--primary); 
+
   }
+
   .stat span { 
+
     font-size: 0.85rem; 
+
     font-weight: 600;
+
     color: var(--text-muted); 
+
     text-transform: uppercase;
+
     letter-spacing: 0.05em;
+
   }
+
+
 
   /* SECTION */
+
   .section { padding: 4rem 0; }
 
+
+
   .section-header {
+
     text-align: center;
+
     margin-bottom: 2.5rem;
+
   }
 
+
+
   .section-header h2 {
+
     font-size: clamp(1.4rem, 5vw, 1.8rem);
+
     font-weight: 800;
+
     margin-bottom: 0.5rem;
+
   }
+
+
 
   .section-header p { color: var(--text-muted); }
 
+
+
   /* CATEGORIES */
+
   .categories-grid {
+
     display: grid;
+
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+
     gap: 1.25rem;
+
   }
+
+
 
   .category-card {
+
     background: var(--bg-card);
+
     border: 1px solid var(--border);
+
     border-radius: var(--radius);
+
     padding: 1.5rem;
+
     text-decoration: none;
+
     transition: all 0.25s;
+
     display: flex;
+
     flex-direction: column;
+
     gap: 0.5rem;
+
   }
 
+
+
   .category-card:hover {
+
     border-color: var(--cat-color);
+
     background: var(--cat-bg);
+
     transform: translateY(-4px);
+
     box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+
     text-decoration: none;
+
   }
+
+
 
   .cat-icon { font-size: 2rem; }
 
+
+
   .category-card h3 {
+
     font-size: 1rem;
+
     font-weight: 700;
+
     color: var(--text);
+
   }
+
+
 
   .category-card p {
+
     font-size: 0.85rem;
+
     color: var(--text-muted);
+
     line-height: 1.5;
+
     flex: 1;
+
   }
+
+
 
   .cat-link {
+
     font-size: 0.85rem;
+
     font-weight: 600;
+
     color: var(--cat-color);
+
     margin-top: 0.25rem;
+
   }
+
+
 
   /* POSTS GRID */
+
   .posts-grid {
+
     display: grid;
+
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+
     gap: 1.25rem;
+
   }
+
+
 
   .empty-state {
+
     text-align: center;
+
     padding: 3rem;
+
     color: var(--text-muted);
+
     background: var(--bg-card);
+
     border-radius: var(--radius);
+
     border: 1px dashed var(--border);
+
   }
+
+
 
   /* NEWSLETTER */
+
   .newsletter-section { padding: 3rem 0 5rem; }
 
+
+
   .newsletter-card {
+
     background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(6,182,212,0.08) 100%);
+
     border: 1px solid rgba(99,102,241,0.2);
+
     border-radius: 20px;
+
     padding: 3rem 2rem;
+
     text-align: center;
+
   }
+
+
 
   .nl-emoji { font-size: 2.5rem; }
 
+
+
   .newsletter-card h2 {
+
     font-size: 1.6rem;
+
     font-weight: 800;
+
     margin: 0.75rem 0 0.5rem;
+
   }
+
+
 
   .newsletter-card p {
+
     color: var(--text-muted);
+
     max-width: 480px;
+
     margin: 0 auto 1.5rem;
+
     line-height: 1.6;
+
   }
+
+
 
   .nl-form {
+
     display: flex;
+
     gap: 0.75rem;
+
     max-width: 420px;
+
     margin: 0 auto 0.75rem;
+
     flex-wrap: wrap;
+
   }
 
+
+
   .nl-form input {
+
     flex: 1;
+
     min-width: 200px;
+
     padding: 0.75rem 1rem;
+
     border: 1px solid var(--border);
+
     border-radius: 10px;
+
     background: var(--bg-card);
+
     color: var(--text);
+
     font-family: var(--font);
+
     font-size: 0.9rem;
+
   }
+
+
 
   .nl-form input:focus { outline: 2px solid var(--primary); border-color: transparent; }
 
+
+
   .nl-form button {
+
     background: var(--primary);
+
     color: white;
+
     border: none;
+
     padding: 0.75rem 1.25rem;
+
     border-radius: 10px;
+
     font-weight: 600;
+
     font-size: 0.9rem;
+
     cursor: pointer;
+
     font-family: var(--font);
+
     transition: background 0.2s;
+
     white-space: nowrap;
+
   }
+
+
 
   .nl-form button:hover { background: var(--primary-dark); }
 
+
+
   .newsletter-card small { font-size: 0.8rem; color: var(--text-muted); }
+
 </style>
+
+
 
 <style>
+
   .btn-outline-hero {
+
     background: rgba(255, 255, 255, 0.08);
+
     border: 1px solid rgba(255, 255, 255, 0.15);
+
     color: var(--text, #f1f5f9);
+
     padding: 0.85rem 1.6rem;
+
     border-radius: 12px;
+
     font-weight: 700;
+
     text-decoration: none;
+
     transition: all 0.25s;
+
     font-size: 0.95rem;
-  }
-  .btn-outline-hero:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: white;
+
   }
 
-  /* FEATURED TOOLS SECTION */
-  .featured-tools-section {
-    background: linear-gradient(180deg, rgba(99, 102, 241, 0.04) 0%, transparent 100%);
-    padding-top: 2rem;
-  }
-  .badge-interactive {
-    display: inline-block;
-    padding: 0.3rem 0.8rem;
-    background: rgba(16, 185, 129, 0.12);
-    color: #10b981;
-    font-size: 0.8rem;
-    font-weight: 700;
-    border-radius: 50px;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .home-tools-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2.5rem;
-  }
-  .home-tool-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 1.6rem;
-    text-decoration: none;
-    color: var(--text);
-    display: flex;
-    flex-direction: column;
-    transition: all 0.25s ease;
-  }
-  .home-tool-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--primary);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  }
-  .home-tool-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-  .home-tool-icon {
-    font-size: 2.2rem;
-    line-height: 1;
-  }
-  .home-tool-badge {
-    font-size: 0.72rem;
-    font-weight: 700;
-    padding: 0.2rem 0.6rem;
-    border-radius: 50px;
-    border: 1px solid;
-    text-transform: uppercase;
-  }
-  .home-tool-card h3 {
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: var(--text);
-  }
-  .home-tool-card p {
-    font-size: 0.88rem;
-    color: var(--text-muted);
-    line-height: 1.5;
-    margin-bottom: 1.25rem;
-    flex: 1;
-  }
-  .home-tool-cta {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--primary);
-  }
-  .view-all-tools-wrap {
-    text-align: center;
-  }
-  .btn-all-tools {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.85rem 2rem;
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  .btn-outline-hero:hover {
+
+    background: rgba(255, 255, 255, 0.15);
+
     color: white;
+
+  }
+
+
+
+  /* FEATURED TOOLS SECTION */
+
+  .featured-tools-section {
+
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.04) 0%, transparent 100%);
+
+    padding-top: 2rem;
+
+  }
+
+  .badge-interactive {
+
+    display: inline-block;
+
+    padding: 0.3rem 0.8rem;
+
+    background: rgba(16, 185, 129, 0.12);
+
+    color: #10b981;
+
+    font-size: 0.8rem;
+
     font-weight: 700;
+
+    border-radius: 50px;
+
+    margin-bottom: 0.5rem;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+
+  }
+
+  .home-tools-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+    gap: 1.5rem;
+
+    margin-bottom: 2.5rem;
+
+  }
+
+  .home-tool-card {
+
+    background: var(--bg-card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    padding: 1.6rem;
+
+    text-decoration: none;
+
+    color: var(--text);
+
+    display: flex;
+
+    flex-direction: column;
+
+    transition: all 0.25s ease;
+
+  }
+
+  .home-tool-card:hover {
+
+    transform: translateY(-4px);
+
+    border-color: var(--primary);
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+  }
+
+  .home-tool-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 1rem;
+
+  }
+
+  .home-tool-icon {
+
+    font-size: 2.2rem;
+
+    line-height: 1;
+
+  }
+
+  .home-tool-badge {
+
+    font-size: 0.72rem;
+
+    font-weight: 700;
+
+    padding: 0.2rem 0.6rem;
+
+    border-radius: 50px;
+
+    border: 1px solid;
+
+    text-transform: uppercase;
+
+  }
+
+  .home-tool-card h3 {
+
+    font-size: 1.15rem;
+
+    font-weight: 700;
+
+    margin-bottom: 0.5rem;
+
+    color: var(--text);
+
+  }
+
+  .home-tool-card p {
+
+    font-size: 0.88rem;
+
+    color: var(--text-muted);
+
+    line-height: 1.5;
+
+    margin-bottom: 1.25rem;
+
+    flex: 1;
+
+  }
+
+  .home-tool-cta {
+
+    font-size: 0.85rem;
+
+    font-weight: 700;
+
+    color: var(--primary);
+
+  }
+
+  .view-all-tools-wrap {
+
+    text-align: center;
+
+  }
+
+  .btn-all-tools {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 0.5rem;
+
+    padding: 0.85rem 2rem;
+
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+
+    color: white;
+
+    font-weight: 700;
+
     font-size: 0.95rem;
+
     border-radius: 12px;
+
     text-decoration: none;
+
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+
     transition: transform 0.2s, box-shadow 0.2s;
+
   }
+
   .btn-all-tools:hover {
+
     transform: translateY(-2px);
+
     box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+
     text-decoration: none;
+
   }
+
 </style>
+
