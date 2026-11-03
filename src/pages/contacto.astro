@@ -12,7 +12,15 @@ import Footer from '../components/Footer.astro';
 
   <div class="container-sm contact-page">
     <h1>Contáctanos</h1>
-    <p class="lead">¿Tienes una pregunta, quieres que analicemos una herramienta o tienes una propuesta? Escríbenos y te responderemos en menos de 48 horas.</p>
+    <p class="lead">¿Tienes una pregunta, quieres que analicemos una herramienta o tienes una propuesta? Escríbenos directamente a nuestro correo electrónico oficial o rellena el formulario y te responderemos en menos de 48 horas.</p>
+
+    <div class="direct-contact-box">
+      <span class="direct-icon">✉️</span>
+      <div>
+        <strong>Correo electrónico directo:</strong>
+        <p><a href="mailto:emretknis0@gmail.com" class="email-link">emretknis0@gmail.com</a></p>
+      </div>
+    </div>
 
     <form class="contact-form" action="https://formspree.io/f/xppzwgrq" method="POST">
       <div class="form-group">
@@ -51,7 +59,22 @@ import Footer from '../components/Footer.astro';
 <style>
   .contact-page { padding: 3rem 1.5rem; }
   h1 { font-size: 2rem; font-weight: 800; margin-bottom: 1rem; }
-  .lead { color: var(--text-muted); line-height: 1.7; margin-bottom: 2.5rem; font-size: 1.05rem; }
+  .lead { color: var(--text-muted); line-height: 1.7; margin-bottom: 2rem; font-size: 1.05rem; }
+
+  .direct-contact-box {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .direct-icon { font-size: 2rem; }
+  .direct-contact-box strong { font-size: 0.95rem; color: var(--text); display: block; margin-bottom: 0.25rem; }
+  .direct-contact-box p { margin: 0; }
+  .email-link { color: var(--primary); font-size: 1.15rem; font-weight: 700; text-decoration: underline; }
 
   .contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
 
