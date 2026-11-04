@@ -1,0 +1,310 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Generador de Paletas de Sombras CSS (Box-Shadow)', url: '/herramientas/generador-box-shadow' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es la propiedad box-shadow en CSS?',
+    answer: 'La propiedad CSS box-shadow añade efectos de sombra alrededor del marco de un elemento HTML. Puede configurarse con desplazamiento horizontal (X), desplazamiento vertical (Y), radio de desenfoque (blur), radio de propagación (spread), color y sombras interiores (inset).'
+  },
+  {
+    question: '¿Cómo lograr sombras realistas y modernas en diseño UI?',
+    answer: 'Las sombras realistas no usan un color negro puro ni un desenfoque simple. Se logran aplicando múltiples capas de sombras superpuestas con colores translúcidos muy sutiles (RGBA con 4% a 10% de opacidad), imitando la difusión de la luz natural.'
+  },
+  {
+    question: '¿El código generado es compatible con Tailwind CSS?',
+    answer: 'Sí, la herramienta proporciona tanto la propiedad CSS nativa estándar lista para pegar como los valores de sombra personalizados para configurar en tu archivo tailwind.config.js.'
+  }
+];
+---
+
+<BaseLayout
+  title="Generador de Box Shadow CSS Online | Sombras Modernas y Suaves"
+  description="Crea sombras CSS realistas, efectos de elevación suave y sombras multicapa con previsualización en vivo. Copia el código CSS o Tailwind en un clic."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Generador Box-Shadow</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🎨 Diseño UI, CSS & Frontend</div>
+      <h1>Generador de Sombras CSS (Box-Shadow)</h1>
+      <p class="tool-subtitle">
+        Diseña sombras modernas y suaves con previsualización interactiva en tiempo real. Ajusta elevación, desenfoque y opacidad sin escribir código a mano.
+      </p>
+    </header>
+
+    <div class="shadow-grid">
+      <!-- CONTROLES -->
+      <div class="card controls-card">
+        <h3>Parámetros de la Sombra</h3>
+
+        <div class="preset-buttons">
+          <button type="button" class="btn-preset active" data-preset="soft">Suave</button>
+          <button type="button" class="btn-preset" data-preset="medium">Media</button>
+          <button type="button" class="btn-preset" data-preset="floating">Flotante</button>
+          <button type="button" class="btn-preset" data-preset="glow">Neón Glow</button>
+          <button type="button" class="btn-preset" data-preset="inset">Interior</button>
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <label for="shift-x">Desplazamiento Horizontal (X)</label>
+            <span id="val-x">0px</span>
+          </div>
+          <input type="range" id="shift-x" min="-50" max="50" value="0" class="range-slider" />
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <label for="shift-y">Desplazamiento Vertical (Y)</label>
+            <span id="val-y">10px</span>
+          </div>
+          <input type="range" id="shift-y" min="-50" max="50" value="10" class="range-slider" />
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <label for="blur-r">Desenfoque (Blur)</label>
+            <span id="val-blur">25px</span>
+          </div>
+          <input type="range" id="blur-r" min="0" max="100" value="25" class="range-slider" />
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <label for="spread-r">Propagación (Spread)</label>
+            <span id="val-spread">-5px</span>
+          </div>
+          <input type="range" id="spread-r" min="-30" max="50" value="-5" class="range-slider" />
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <label for="opacity-val">Opacidad de la Sombra</label>
+            <span id="val-op">15%</span>
+          </div>
+          <input type="range" id="opacity-val" min="1" max="100" value="15" class="range-slider" />
+        </div>
+
+        <div class="color-options-row">
+          <div class="form-group-color">
+            <label for="shadow-color">Color Sombra</label>
+            <input type="color" id="shadow-color" value="#000000" class="color-input" />
+          </div>
+          <div class="form-group-color">
+            <label for="box-color">Color Caja</label>
+            <input type="color" id="box-color" value="#6366f1" class="color-input" />
+          </div>
+          <div class="form-group-checkbox">
+            <label class="chk-label">
+              <input type="checkbox" id="chk-inset" />
+              <span>Sombra Interior (Inset)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- PREVISUALIZACIÓN Y CÓDIGO -->
+      <div class="card preview-card">
+        <h3>Vista Previa</h3>
+
+        <div class="preview-stage" id="preview-stage">
+          <div class="shadow-target-box" id="target-box">
+            <span>Previsualización</span>
+          </div>
+        </div>
+
+        <div class="code-output-wrap">
+          <div class="code-header">
+            <span>Código CSS</span>
+            <button type="button" id="btn-copy-css" class="btn-copy-sm">📋 Copiar CSS</button>
+          </div>
+          <pre class="code-box"><code id="code-result">box-shadow: 0px 10px 25px -5px rgba(0, 0, 0, 0.15);</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN EDUCATIVA -->
+    <section class="info-section">
+      <h2>Cómo elevar la estética de tus proyectos con sombras profesionales</h2>
+      <p>
+        En el diseño de interfaces moderno (UI Design), la sombra no sirve solo para decorar; transmite **jerarquía y profundidad física** (Z-index visual):
+      </p>
+      <ul>
+        <li><strong>Botones y tarjetas estándar:</strong> Utilizan sombras bajas (Y: 2px a 6px, Blur: 10px) que sugieren un elemento situado apenas sobre el lienzo.</li>
+        <li><strong>Ventanas modales y menús desplegables:</strong> Requieren sombras profundas y difuminadas (Y: 15px a 30px, Blur: 50px) para comunicar que flotan por encima del resto del contenido.</li>
+      </ul>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  function initShadowGen() {
+    const shiftX = document.getElementById('shift-x') as HTMLInputElement | null;
+    const shiftY = document.getElementById('shift-y') as HTMLInputElement | null;
+    const blurR = document.getElementById('blur-r') as HTMLInputElement | null;
+    const spreadR = document.getElementById('spread-r') as HTMLInputElement | null;
+    const opacityVal = document.getElementById('opacity-val') as HTMLInputElement | null;
+    const shadowColor = document.getElementById('shadow-color') as HTMLInputElement | null;
+    const boxColor = document.getElementById('box-color') as HTMLInputElement | null;
+    const chkInset = document.getElementById('chk-inset') as HTMLInputElement | null;
+
+    const valX = document.getElementById('val-x');
+    const valY = document.getElementById('val-y');
+    const valBlur = document.getElementById('val-blur');
+    const valSpread = document.getElementById('val-spread');
+    const valOp = document.getElementById('val-op');
+
+    const targetBox = document.getElementById('target-box');
+    const codeResult = document.getElementById('code-result');
+    const btnCopy = document.getElementById('btn-copy-css');
+    const presetBtns = document.querySelectorAll('.btn-preset');
+
+    function hexToRgb(hex: string) {
+      hex = hex.replace('#', '');
+      if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+      const num = parseInt(hex, 16);
+      return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+    }
+
+    function updateShadow() {
+      if (!shiftX || !shiftY || !blurR || !spreadR || !opacityVal || !shadowColor || !targetBox || !codeResult) return;
+      const x = shiftX.value;
+      const y = shiftY.value;
+      const b = blurR.value;
+      const s = spreadR.value;
+      const op = (parseInt(opacityVal.value) / 100).toFixed(2);
+      const isInset = chkInset?.checked || false;
+
+      if (valX) valX.textContent = `${x}px`;
+      if (valY) valY.textContent = `${y}px`;
+      if (valBlur) valBlur.textContent = `${b}px`;
+      if (valSpread) valSpread.textContent = `${s}px`;
+      if (valOp) valOp.textContent = `${opacityVal.value}%`;
+
+      const rgb = hexToRgb(shadowColor.value);
+      const rgbaStr = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${op})`;
+      const insetString = isInset ? 'inset ' : '';
+      const shadowCss = `${insetString}${x}px ${y}px ${b}px ${s}px ${rgbaStr}`;
+
+      targetBox.style.boxShadow = shadowCss;
+      if (boxColor) targetBox.style.backgroundColor = boxColor.value;
+
+      codeResult.textContent = `box-shadow: ${shadowCss};\n-webkit-box-shadow: ${shadowCss};`;
+    }
+
+    const presets: Record<string, { x: number, y: number, b: number, s: number, op: number, inset: boolean, color: string, box: string }> = {
+      soft: { x: 0, y: 10, b: 25, s: -5, op: 15, inset: false, color: '#000000', box: '#6366f1' },
+      medium: { x: 0, y: 15, b: 35, s: -2, op: 25, inset: false, color: '#000000', box: '#3b82f6' },
+      floating: { x: 0, y: 25, b: 50, s: -12, op: 30, inset: false, color: '#000000', box: '#10b981' },
+      glow: { x: 0, y: 0, b: 30, s: 5, op: 65, inset: false, color: '#6366f1', box: '#4f46e5' },
+      inset: { x: 3, y: 3, b: 15, s: 0, op: 25, inset: true, color: '#000000', box: '#f59e0b' }
+    };
+
+    presetBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        presetBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const pKey = btn.getAttribute('data-preset') || 'soft';
+        const p = presets[pKey];
+        if (p && shiftX && shiftY && blurR && spreadR && opacityVal && chkInset && shadowColor && boxColor) {
+          shiftX.value = p.x.toString();
+          shiftY.value = p.y.toString();
+          blurR.value = p.b.toString();
+          spreadR.value = p.s.toString();
+          opacityVal.value = p.op.toString();
+          chkInset.checked = p.inset;
+          shadowColor.value = p.color;
+          boxColor.value = p.box;
+          updateShadow();
+        }
+      });
+    });
+
+    [shiftX, shiftY, blurR, spreadR, opacityVal, shadowColor, boxColor, chkInset].forEach(inp => {
+      inp?.addEventListener('input', updateShadow);
+      inp?.addEventListener('change', updateShadow);
+    });
+
+    btnCopy?.addEventListener('click', () => {
+      if (!codeResult || !btnCopy) return;
+      navigator.clipboard.writeText(codeResult.textContent || '').then(() => {
+        const orig = btnCopy.textContent;
+        btnCopy.textContent = '✅ ¡Copiado!';
+        setTimeout(() => { btnCopy.textContent = orig; }, 2000);
+      });
+    });
+
+    updateShadow();
+  }
+
+  document.addEventListener('astro:page-load', initShadowGen);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initShadowGen);
+  } else {
+    initShadowGen();
+  }
+</script>
+
+<style>
+  .tool-page { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .breadcrumb { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; gap: 0.5rem; }
+  .breadcrumb a { color: var(--primary); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(14, 165, 233, 0.12); color: #0ea5e9; border-radius: 999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
+  .tool-subtitle { color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; max-width: 700px; margin: 0 auto; }
+
+  .shadow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+  @media (max-width: 768px) { .shadow-grid { grid-template-columns: 1fr; } }
+
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; }
+  .controls-card h3, .preview-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--text); }
+
+  .preset-buttons { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .btn-preset { background: var(--bg); border: 1px solid var(--border); padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600; color: var(--text); cursor: pointer; transition: all 0.2s; }
+  .btn-preset.active, .btn-preset:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  .slider-group { margin-bottom: 1.2rem; }
+  .slider-header { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.35rem; }
+  .slider-header span { color: var(--primary); font-family: monospace; }
+  .range-slider { width: 100%; accent-color: var(--primary); cursor: pointer; }
+
+  .color-options-row { display: flex; gap: 1rem; align-items: center; margin-top: 1.5rem; flex-wrap: wrap; }
+  .form-group-color label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.25rem; }
+  .color-input { width: 45px; height: 35px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; background: transparent; padding: 0; }
+  .form-group-checkbox { margin-left: auto; }
+  .chk-label { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; color: var(--text); }
+
+  .preview-stage { height: 260px; background: var(--bg); border: 1px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; overflow: hidden; }
+  .shadow-target-box { width: 160px; height: 160px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 0.9rem; transition: background-color 0.2s; }
+
+  .code-output-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .code-header { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+  .btn-copy-sm { background: transparent; border: none; font-size: 0.8rem; font-weight: 700; color: var(--primary); cursor: pointer; }
+  .code-box { padding: 1rem; margin: 0; font-family: monospace; font-size: 0.85rem; color: var(--text); overflow-x: auto; line-height: 1.5; }
+
+  .info-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+  .info-section h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+  .info-section p { color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; }
+  .info-section ul { color: var(--text-muted); line-height: 1.8; padding-left: 1.5rem; }
+</style>

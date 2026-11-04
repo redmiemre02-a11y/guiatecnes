@@ -1,0 +1,259 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Tokens de Inteligencia Artificial', url: '/herramientas/calculadora-tokens-ia' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es un token en inteligencia artificial (GPT, Claude, DeepSeek)?',
+    answer: 'Un token es la unidad básica con la que los modelos de lenguaje procesan el texto. En español, 1 palabra suele equivaler aproximadamente a 1,3 o 1,5 tokens debido a tildes, conjugaciones y caracteres especiales.'
+  },
+  {
+    question: '¿Por qué calcular el coste de tokens?',
+    answer: 'Las APIs de OpenAI, Anthropic y DeepSeek cobran por millón de tokens procesados (input y output). Saber de antemano el volumen de tokens de un PDF, transcripción o base de datos te permite presupuestar costes con exactitud.'
+  },
+  {
+    question: '¿Qué modelo de IA es más barato en 2026?',
+    answer: 'Modelos como DeepSeek V3/R1 y GPT-4o-mini han revolucionado los precios, ofreciendo costes hasta un 80% inferiores a los modelos insignia tradicionales manteniendo una alta calidad.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Tokens y Coste de IA (GPT-4o, Claude 3.5, DeepSeek)"
+  description="Convierte palabras y caracteres a tokens de IA. Compara el coste de la API de OpenAI (GPT-4o), Anthropic (Claude 3.5 Sonnet) y DeepSeek V3 en tiempo real."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora Tokens IA</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🤖 Inteligencia Artificial & Desarrollo</div>
+      <h1>Calculadora de Tokens y Coste de IA</h1>
+      <p class="tool-subtitle">
+        Pega tu texto, prompt o código para calcular el número de tokens exactos y estimar el coste de procesarlo en las APIs de OpenAI, Anthropic y DeepSeek.
+      </p>
+    </header>
+
+    <div class="token-grid">
+      <!-- PANEL DE ENTRADA -->
+      <div class="card form-card">
+        <div class="card-header-flex">
+          <h3>Pega tu texto o prompt</h3>
+          <button type="button" id="btn-sample" class="btn-sample">Cargar ejemplo</button>
+        </div>
+
+        <div class="form-group">
+          <textarea id="ai-text" rows="10" placeholder="Pega aquí el contenido de tu documento, artículo o consulta para analizar sus tokens..."></textarea>
+        </div>
+
+        <div class="quick-stats-row">
+          <div class="q-stat">Caracteres: <strong id="stat-chars">0</strong></div>
+          <div class="q-stat">Palabras: <strong id="stat-words">0</strong></div>
+          <div class="q-stat">Líneas: <strong id="stat-lines">0</strong></div>
+        </div>
+      </div>
+
+      <!-- RESULTADOS -->
+      <div class="card result-card">
+        <h3>Tokens Estimados</h3>
+
+        <div class="tokens-display-box">
+          <span class="tok-label">Total Tokens (Español / Multilingüe)</span>
+          <div class="tok-number" id="res-tokens">0</div>
+          <span class="tok-sub" id="res-ratio">~1,35 tokens por palabra</span>
+        </div>
+
+        <h4>Coste Estimado por Modelo (Input API)</h4>
+        <div class="models-cost-list">
+          <div class="model-row">
+            <div class="m-info">
+              <strong>DeepSeek V3 / R1</strong>
+              <small>0,14 $ / 1M tokens</small>
+            </div>
+            <div class="m-price" id="cost-deepseek">0,0000 $</div>
+          </div>
+
+          <div class="model-row">
+            <div class="m-info">
+              <strong>GPT-4o Mini (OpenAI)</strong>
+              <small>0,15 $ / 1M tokens</small>
+            </div>
+            <div class="m-price" id="cost-gpt4omini">0,0000 $</div>
+          </div>
+
+          <div class="model-row">
+            <div class="m-info">
+              <strong>GPT-4o (OpenAI Flagship)</strong>
+              <small>2,50 $ / 1M tokens</small>
+            </div>
+            <div class="m-price highlight-price" id="cost-gpt4o">0,0000 $</div>
+          </div>
+
+          <div class="model-row">
+            <div class="m-info">
+              <strong>Claude 3.5 Sonnet (Anthropic)</strong>
+              <small>3,00 $ / 1M tokens</small>
+            </div>
+            <div class="m-price" id="cost-claude">0,0000 $</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN EDUCATIVA -->
+    <section class="info-section">
+      <h2>Cómo tokenizan el español los grandes modelos de lenguaje (LLMs)</h2>
+      <p>
+        A diferencia del inglés, donde la mayoría de palabras comunes corresponden a un único token (1 palabra = 1 token), en español y lenguas romances los tokenizadores dividen las palabras con tildes, sufijos y verbos irregulares en múltiples subpalabras:
+      </p>
+      <ul>
+        <li>Una palabra sencilla como <em>"árbol"</em> puede descomponerse en 2 tokens: <code>["ár", "bol"]</code>.</li>
+        <li>El código fuente (Python, JavaScript, JSON) consume más tokens debido a la indentación, espacios y signos de puntuación frecuentes.</li>
+        <li>Usar modelos con tokenizadores multilingües modernos (como Llama 3 o DeepSeek V3) reduce el consumo de tokens en español en comparación con modelos más antiguos.</li>
+      </ul>
+    </section>
+
+    <LegalDisclaimer />
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  function initTokenCalc() {
+    const textInp = document.getElementById('ai-text') as HTMLTextAreaElement | null;
+    const btnSample = document.getElementById('btn-sample');
+
+    const statChars = document.getElementById('stat-chars');
+    const statWords = document.getElementById('stat-words');
+    const statLines = document.getElementById('stat-lines');
+
+    const resTokens = document.getElementById('res-tokens');
+    const resRatio = document.getElementById('res-ratio');
+
+    const costDeepseek = document.getElementById('cost-deepseek');
+    const costGpt4omini = document.getElementById('cost-gpt4omini');
+    const costGpt4o = document.getElementById('cost-gpt4o');
+    const costClaude = document.getElementById('cost-claude');
+
+    function calculate() {
+      if (!textInp) return;
+      const text = textInp.value || '';
+      const chars = text.length;
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      const lines = text ? text.split('\n').length : 0;
+
+      if (statChars) statChars.textContent = chars.toLocaleString('es-ES');
+      if (statWords) statWords.textContent = words.toLocaleString('es-ES');
+      if (statLines) statLines.textContent = lines.toLocaleString('es-ES');
+
+      // En español el ratio medio estándar de BPE (tiktoken / cl100k_base) es ~1.33 tokens por palabra o ~4 caracteres por token
+      let tokens = 0;
+      if (text.trim().length > 0) {
+        // Estimación ponderada caracteres + palabras para precisión en español
+        tokens = Math.max(1, Math.round(words * 1.34 + (chars * 0.05)));
+      }
+
+      if (resTokens) resTokens.textContent = tokens.toLocaleString('es-ES');
+      if (resRatio) {
+        const ratio = words > 0 ? (tokens / words).toFixed(2) : '1,35';
+        resRatio.textContent = `~${ratio.replace('.', ',')} tokens por palabra en español`;
+      }
+
+      // Precios por 1M tokens input
+      const pDeepseek = (tokens / 1_000_000) * 0.14;
+      const pGptMini = (tokens / 1_000_000) * 0.15;
+      const pGpt4o = (tokens / 1_000_000) * 2.50;
+      const pClaude = (tokens / 1_000_000) * 3.00;
+
+      function fmtCost(val: number) {
+        if (val === 0) return '0,0000 $';
+        if (val < 0.0001) return '< 0,0001 $';
+        return val.toFixed(4).replace('.', ',') + ' $';
+      }
+
+      if (costDeepseek) costDeepseek.textContent = fmtCost(pDeepseek);
+      if (costGpt4omini) costGpt4omini.textContent = fmtCost(pGptMini);
+      if (costGpt4o) costGpt4o.textContent = fmtCost(pGpt4o);
+      if (costClaude) costClaude.textContent = fmtCost(pClaude);
+    }
+
+    btnSample?.addEventListener('click', () => {
+      if (textInp) {
+        textInp.value = `La inteligencia artificial generativa ha transformado radicalmente la creación de software y la gestión empresarial en España durante este año 2026. Modelos de lenguaje como GPT-4o, Claude 3.5 Sonnet y DeepSeek V3 son capaces de razonar a través de cadenas de pensamiento complejas, depurar código en tiempo real y redactar análisis financieros con precisión matemática impecable. Para los desarrolladores, entender la tokenización y la ventana de contexto es fundamental para reducir la latencia de las llamadas a la API y optimizar los costes operativos mensuales.`;
+        calculate();
+      }
+    });
+
+    textInp?.addEventListener('input', calculate);
+    calculate();
+  }
+
+  document.addEventListener('astro:page-load', initTokenCalc);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTokenCalc);
+  } else {
+    initTokenCalc();
+  }
+</script>
+
+<style>
+  .tool-page { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .breadcrumb { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; gap: 0.5rem; }
+  .breadcrumb a { color: var(--primary); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(99, 102, 241, 0.12); color: #6366f1; border-radius: 999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
+  .tool-subtitle { color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; max-width: 700px; margin: 0 auto; }
+
+  .token-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+  @media (max-width: 768px) { .token-grid { grid-template-columns: 1fr; } }
+
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; }
+  .card-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .card-header-flex h3 { font-size: 1.15rem; font-weight: 700; margin: 0; color: var(--text); }
+  .result-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--text); }
+  .result-card h4 { font-size: 0.92rem; font-weight: 700; color: var(--text-muted); margin: 1.5rem 0 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .btn-sample { background: var(--bg); border: 1px solid var(--border); padding: 0.35rem 0.8rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: var(--primary); cursor: pointer; transition: all 0.2s; }
+  .btn-sample:hover { border-color: var(--primary); }
+
+  #ai-text { width: 100%; padding: 1rem; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); font-family: monospace; font-size: 0.92rem; line-height: 1.6; resize: vertical; }
+
+  .quick-stats-row { display: flex; gap: 1.5rem; margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted); }
+  .quick-stats-row strong { color: var(--text); }
+
+  .tokens-display-box { text-align: center; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
+  .tok-label { display: block; font-size: 0.8rem; font-weight: 700; color: #6366f1; text-transform: uppercase; margin-bottom: 0.25rem; }
+  .tok-number { font-size: 2.8rem; font-weight: 800; color: #6366f1; }
+  .tok-sub { font-size: 0.85rem; color: var(--text-muted); }
+
+  .models-cost-list { display: flex; flex-direction: column; gap: 0.65rem; }
+  .model-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; }
+  .m-info strong { display: block; font-size: 0.9rem; color: var(--text); }
+  .m-info small { font-size: 0.75rem; color: var(--text-muted); }
+  .m-price { font-size: 1rem; font-weight: 700; color: var(--text); font-family: monospace; }
+  .highlight-price { color: #f59e0b; }
+
+  .info-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+  .info-section h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+  .info-section p { color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; }
+  .info-section ul { color: var(--text-muted); line-height: 1.8; padding-left: 1.5rem; }
+</style>

@@ -1,0 +1,283 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Relación de Aspecto (Aspect Ratio)', url: '/herramientas/calculadora-aspect-ratio' }
+];
+
+const faqs = [
+  {
+    question: '¿Cuáles son las relaciones de aspecto más comunes en vídeo y redes?',
+    answer: 'Las más utilizadas son: 16:9 (YouTube, televisores y monitores estándar), 9:16 (TikTok, Instagram Reels, YouTube Shorts y Stories de móvil), 1:1 (posts cuadrados de Instagram y Facebook), 4:5 (posts verticales de Instagram) y 21:9 (formato panorámico cinematográfico Ultrawide).'
+  },
+  {
+    question: '¿Para qué sirve redimensionar manteniendo el ratio?',
+    answer: 'Evita que las fotografías o vídeos se estiren o distorsionen al cambiar el ancho o el alto. Al calcular la dimensión faltante proporcional, la imagen conserva su composición original exacta sin perder nitidez.'
+  },
+  {
+    question: '¿Qué propiedad de CSS moderno permite fijar la relación de aspecto?',
+    answer: 'La propiedad CSS moderna aspect-ratio (por ejemplo: aspect-ratio: 16 / 9;) permite a cualquier contenedor o imagen responsive mantener su forma sin trucos antiguos de padding porcentual.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Relación de Aspecto (Aspect Ratio 16:9, 9:16, 4:3)"
+  description="Calcula dimensiones proporcionales de imágenes y vídeos en píxeles. Presets para TikTok, Instagram Reels, YouTube (16:9, 9:16, 1:1) y código CSS."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora Aspect Ratio</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">📐 Diseño, Fotografía & Vídeo</div>
+      <h1>Calculadora de Relación de Aspecto (Aspect Ratio)</h1>
+      <p class="tool-subtitle">
+        Calcula dimensiones proporcionales para fotos y vídeos sin deformaciones. Presets automáticos para YouTube, TikTok, Instagram y monitores.
+      </p>
+    </header>
+
+    <div class="ratio-grid">
+      <!-- FORMULARIO -->
+      <div class="card form-card">
+        <h3>Presets de Pantalla y Redes</h3>
+
+        <div class="presets-flow">
+          <button type="button" class="btn-preset active" data-w="16" data-h="9" data-pw="1920" data-ph="1080">16:9 (YouTube / Full HD)</button>
+          <button type="button" class="btn-preset" data-w="9" data-h="16" data-pw="1080" data-ph="1920">9:16 (TikTok / Reels / Shorts)</button>
+          <button type="button" class="btn-preset" data-w="1" data-h="1" data-pw="1080" data-ph="1080">1:1 (Post Cuadrado)</button>
+          <button type="button" class="btn-preset" data-w="4" data-h="5" data-pw="1080" data-ph="1350">4:5 (Instagram Retrato)</button>
+          <button type="button" class="btn-preset" data-w="4" data-h="3" data-pw="1024" data-ph="768">4:3 (Fotografía Clásica)</button>
+          <button type="button" class="btn-preset" data-w="21" data-h="9" data-pw="2560" data-ph="1080">21:9 (Cine Ultrawide)</button>
+        </div>
+
+        <div class="ratio-inputs-row">
+          <div class="form-group">
+            <label for="ratio-w">Ratio Ancho (W)</label>
+            <input type="number" id="ratio-w" value="16" min="1" step="any" class="num-input" />
+          </div>
+          <span class="ratio-colon">:</span>
+          <div class="form-group">
+            <label for="ratio-h">Ratio Alto (H)</label>
+            <input type="number" id="ratio-h" value="9" min="1" step="any" class="num-input" />
+          </div>
+        </div>
+
+        <h4>Dimensiones en Píxeles</h4>
+        <div class="pixels-inputs-row">
+          <div class="form-group">
+            <label for="px-w">Ancho (Width en px)</label>
+            <div class="input-with-symbol">
+              <input type="number" id="px-w" value="1920" min="1" step="1" />
+              <span class="symbol">px</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="px-h">Alto (Height en px)</label>
+            <div class="input-with-symbol">
+              <input type="number" id="px-h" value="1080" min="1" step="1" />
+              <span class="symbol">px</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PREVIEW & CÓDIGO -->
+      <div class="card preview-card">
+        <h3>Vista Previa Proporcional</h3>
+
+        <div class="stage-container">
+          <div class="ratio-box" id="ratio-box">
+            <span id="box-label">1920 × 1080 (16:9)</span>
+          </div>
+        </div>
+
+        <div class="code-wrap">
+          <div class="code-header">
+            <span>Propiedad CSS Nativa</span>
+            <button type="button" id="btn-copy-css" class="btn-copy-sm">📋 Copiar</button>
+          </div>
+          <pre class="code-block"><code id="css-output">aspect-ratio: 16 / 9;</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN EDUCATIVA -->
+    <section class="info-section">
+      <h2>Resoluciones más populares por relación de aspecto</h2>
+      <ul>
+        <li><strong>16:9 (Panorámico estándar):</strong> 1920x1080 (Full HD), 2560x1440 (2K QHD), 3840x2160 (4K UHD).</li>
+        <li><strong>9:16 (Vertical móvil):</strong> 1080x1920 (Resolución óptima para Stories de Instagram, TikTok y Shorts).</li>
+        <li><strong>4:5 (Retrato móvil):</strong> 1080x1350 (Ocupa el máximo espacio vertical visible en el feed de Instagram sin recortar).</li>
+      </ul>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  function initRatioCalc() {
+    const ratioW = document.getElementById('ratio-w') as HTMLInputElement | null;
+    const ratioH = document.getElementById('ratio-h') as HTMLInputElement | null;
+    const pxW = document.getElementById('px-w') as HTMLInputElement | null;
+    const pxH = document.getElementById('px-h') as HTMLInputElement | null;
+
+    const ratioBox = document.getElementById('ratio-box');
+    const boxLabel = document.getElementById('box-label');
+    const cssOut = document.getElementById('css-output');
+    const btnCopy = document.getElementById('btn-copy-css');
+    const presetBtns = document.querySelectorAll('.btn-preset');
+
+    function updateBox() {
+      if (!ratioW || !ratioH || !pxW || !pxH || !ratioBox || !boxLabel || !cssOut) return;
+      const rw = Math.max(0.1, parseFloat(ratioW.value) || 16);
+      const rh = Math.max(0.1, parseFloat(ratioH.value) || 9);
+      const w = Math.round(parseFloat(pxW.value) || 1920);
+      const h = Math.round(parseFloat(pxH.value) || 1080);
+
+      boxLabel.textContent = `${w} × ${h} (${rw}:${rh})`;
+      cssOut.textContent = `aspect-ratio: ${rw} / ${rh};`;
+
+      // Visual box scaling
+      const maxBoxSize = 220;
+      let boxW = maxBoxSize;
+      let boxH = maxBoxSize * (rh / rw);
+      if (boxH > maxBoxSize) {
+        boxH = maxBoxSize;
+        boxW = maxBoxSize * (rw / rh);
+      }
+      ratioBox.style.width = `${boxW}px`;
+      ratioBox.style.height = `${boxH}px`;
+    }
+
+    pxW?.addEventListener('input', () => {
+      if (!ratioW || !ratioH || !pxW || !pxH) return;
+      const rw = parseFloat(ratioW.value) || 16;
+      const rh = parseFloat(ratioH.value) || 9;
+      const w = parseFloat(pxW.value) || 0;
+      pxH.value = Math.round(w * (rh / rw)).toString();
+      updateBox();
+    });
+
+    pxH?.addEventListener('input', () => {
+      if (!ratioW || !ratioH || !pxW || !pxH) return;
+      const rw = parseFloat(ratioW.value) || 16;
+      const rh = parseFloat(ratioH.value) || 9;
+      const h = parseFloat(pxH.value) || 0;
+      pxW.value = Math.round(h * (rw / rh)).toString();
+      updateBox();
+    });
+
+    ratioW?.addEventListener('input', () => {
+      if (!ratioW || !ratioH || !pxW || !pxH) return;
+      const rw = parseFloat(ratioW.value) || 16;
+      const rh = parseFloat(ratioH.value) || 9;
+      const w = parseFloat(pxW.value) || 0;
+      pxH.value = Math.round(w * (rh / rw)).toString();
+      updateBox();
+    });
+
+    ratioH?.addEventListener('input', () => {
+      if (!ratioW || !ratioH || !pxW || !pxH) return;
+      const rw = parseFloat(ratioW.value) || 16;
+      const rh = parseFloat(ratioH.value) || 9;
+      const w = parseFloat(pxW.value) || 0;
+      pxH.value = Math.round(w * (rh / rw)).toString();
+      updateBox();
+    });
+
+    presetBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        presetBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const wVal = btn.getAttribute('data-w') || '16';
+        const hVal = btn.getAttribute('data-h') || '9';
+        const pwVal = btn.getAttribute('data-pw') || '1920';
+        const phVal = btn.getAttribute('data-ph') || '1080';
+        if (ratioW && ratioH && pxW && pxH) {
+          ratioW.value = wVal;
+          ratioH.value = hVal;
+          pxW.value = pwVal;
+          pxH.value = phVal;
+          updateBox();
+        }
+      });
+    });
+
+    btnCopy?.addEventListener('click', () => {
+      if (!cssOut || !btnCopy) return;
+      navigator.clipboard.writeText(cssOut.textContent || '').then(() => {
+        const orig = btnCopy.textContent;
+        btnCopy.textContent = '✅ Copiado';
+        setTimeout(() => { btnCopy.textContent = orig; }, 2000);
+      });
+    });
+
+    updateBox();
+  }
+
+  document.addEventListener('astro:page-load', initRatioCalc);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRatioCalc);
+  } else {
+    initRatioCalc();
+  }
+</script>
+
+<style>
+  .tool-page { max-width: 940px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .breadcrumb { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; gap: 0.5rem; }
+  .breadcrumb a { color: var(--primary); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(16, 185, 129, 0.12); color: #10b981; border-radius: 999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
+  .tool-subtitle { color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; max-width: 700px; margin: 0 auto; }
+
+  .ratio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+  @media (max-width: 768px) { .ratio-grid { grid-template-columns: 1fr; } }
+
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; }
+  .form-card h3, .preview-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--text); }
+  .form-card h4 { font-size: 0.95rem; font-weight: 700; margin: 1.5rem 0 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .presets-flow { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .btn-preset { background: var(--bg); border: 1px solid var(--border); padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: var(--text); cursor: pointer; transition: all 0.2s; }
+  .btn-preset.active, .btn-preset:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  .ratio-inputs-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+  .ratio-colon { font-size: 1.8rem; font-weight: 800; color: var(--text-muted); margin-top: 1rem; }
+  .num-input { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 1.1rem; font-weight: 700; text-align: center; }
+
+  .pixels-inputs-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .input-with-symbol { position: relative; display: flex; align-items: center; }
+  .input-with-symbol input { width: 100%; padding: 0.75rem 2.8rem 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 1.1rem; font-weight: 700; }
+  .input-with-symbol .symbol { position: absolute; right: 0.8rem; color: var(--text-muted); font-weight: 600; font-size: 0.85rem; }
+
+  .stage-container { height: 260px; background: var(--bg); border: 1px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; }
+  .ratio-box { background: rgba(99, 102, 241, 0.15); border: 2px solid #6366f1; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-align: center; transition: all 0.2s; max-width: 90%; max-height: 90%; }
+  .ratio-box span { font-size: 0.82rem; font-weight: 700; color: #6366f1; padding: 0.5rem; word-break: break-all; }
+
+  .code-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .code-header { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+  .btn-copy-sm { background: transparent; border: none; font-size: 0.8rem; font-weight: 700; color: var(--primary); cursor: pointer; }
+  .code-block { padding: 0.9rem 1rem; margin: 0; font-family: monospace; font-size: 0.9rem; color: var(--text); }
+
+  .info-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+  .info-section h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+  .info-section ul { color: var(--text-muted); line-height: 1.8; padding-left: 1.5rem; }
+</style>

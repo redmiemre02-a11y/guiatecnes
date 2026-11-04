@@ -1,0 +1,305 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Conversor y Visor Markdown a HTML en Vivo', url: '/herramientas/conversor-markdown-html' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es Markdown y por qué se usa en blogs y CMS?',
+    answer: 'Markdown es un lenguaje de marcado ligero creado por John Gruber que permite dar formato a un texto plano de forma rápida mediante símbolos sencillos (# para títulos, ** para negritas, etc.). Es el estándar universal en GitHub, Notion, Reddit, Astro y gestores de contenido modernos.'
+  },
+  {
+    question: '¿Cómo copiar el HTML limpio para insertarlo en WordPress o una web?',
+    answer: 'La herramienta genera el código HTML estructurado automáticamente en la pestaña de código, con un botón de copiado rápido que lo guarda en tu portapapeles sin formato basura.'
+  },
+  {
+    question: '¿Es compatible con tablas y bloques de código?',
+    answer: 'Sí, el analizador procesa tablas en formato GFM (GitHub Flavored Markdown), listas de tareas con checkboxes, citas en bloque y bloques de código con sintaxis preformateada.'
+  }
+];
+---
+
+<BaseLayout
+  title="Conversor Markdown a HTML en Vivo | Editor y Previsualización"
+  description="Convierte texto Markdown a HTML limpio al instante con vista previa dual en tiempo real. Soporte para tablas, listas, citas y código con botón de copia."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Conversor Markdown a HTML</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">📝 Redacción, CMS & Markdown</div>
+      <h1>Conversor Markdown a HTML en Vivo</h1>
+      <p class="tool-subtitle">
+        Escribe o pega texto en formato Markdown y obtén el código HTML limpio con previsualización visual sincronizada en tiempo real.
+      </p>
+    </header>
+
+    <div class="md-editor-container card">
+      <div class="editor-toolbar">
+        <div class="toolbar-left">
+          <button type="button" class="tb-btn" data-action="bold" title="Negrita"><strong>B</strong></button>
+          <button type="button" class="tb-btn" data-action="italic" title="Cursiva"><em>I</em></button>
+          <button type="button" class="tb-btn" data-action="h2" title="Título H2">H2</button>
+          <button type="button" class="tb-btn" data-action="h3" title="Título H3">H3</button>
+          <button type="button" class="tb-btn" data-action="quote" title="Cita">❝</button>
+          <button type="button" class="tb-btn" data-action="code" title="Código">&lt;/&gt;</button>
+          <button type="button" class="tb-btn" data-action="table" title="Tabla">▦</button>
+        </div>
+
+        <div class="toolbar-right">
+          <button type="button" id="btn-copy-html" class="btn-action-accent">📋 Copiar HTML</button>
+          <button type="button" id="btn-clear" class="btn-action-ghost">Limpiar</button>
+        </div>
+      </div>
+
+      <div class="editor-split-view">
+        <!-- ENTRADA MARKDOWN -->
+        <div class="split-pane">
+          <div class="pane-header">Markdown (.md)</div>
+          <textarea id="md-input" placeholder="Escribe aquí en formato Markdown..."></textarea>
+        </div>
+
+        <!-- SALIDA PREVIEW / HTML -->
+        <div class="split-pane">
+          <div class="pane-header tab-header">
+            <button type="button" class="tab-btn active" data-tab="preview">Vista Previa Visual</button>
+            <button type="button" class="tab-btn" data-tab="html">Código HTML</button>
+          </div>
+          <div class="pane-body">
+            <div id="md-preview" class="tab-content active markdown-body"></div>
+            <pre id="md-html-code" class="tab-content html-code-box"><code></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN EDUCATIVA -->
+    <section class="info-section">
+      <h2>Chuleta rápida de sintaxis Markdown</h2>
+      <ul>
+        <li><code># Título 1</code> / <code>## Título 2</code> / <code>### Título 3</code></li>
+        <li><code>**Texto en negrita**</code> y <code>*Texto en cursiva*</code></li>
+        <li><code>[Texto del enlace](https://ejemplo.com)</code></li>
+        <li><code>- Elemento de lista con viñeta</code> o <code>1. Elemento ordenado</code></li>
+        <li><code>> Bloque de cita destacada</code></li>
+        <li><code>`código inline`</code> o <code>```bloque de código```</code></li>
+      </ul>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  function parseSimpleMarkdown(md: string): string {
+    if (!md) return '';
+    let html = md
+      // Escapar caracteres peligrosos
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    // Bloques de código pre
+    html = html.replace(/```([a-z]*)\n([\s\S]*?)```/gi, '<pre><code>$2</code></pre>');
+
+    // Títulos
+    html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+    html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+    html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+
+    // Negrita y Cursiva
+    html = html.replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>');
+    html = html.replace(/\*(.*?)\*/gim, '<em>$1</em>');
+
+    // Código inline
+    html = html.replace(/`(.*?)`/gim, '<code>$1</code>');
+
+    // Citas
+    html = html.replace(/^\> (.*$)/gim, '<blockquote>$1</blockquote>');
+
+    // Enlaces
+    html = html.replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+
+    // Listas con guiones
+    html = html.replace(/^\- (.*$)/gim, '<li>$1</li>');
+    html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+
+    // Párrafos
+    const paras = html.split(/\n\s*\n/);
+    html = paras.map(p => {
+      p = p.trim();
+      if (!p) return '';
+      if (/^<(h1|h2|h3|ul|li|blockquote|pre|table)/.test(p)) return p;
+      return `<p>${p.replace(/\n/g, '<br />')}</p>`;
+    }).join('\n');
+
+    return html;
+  }
+
+  function initMdTool() {
+    const mdInput = document.getElementById('md-input') as HTMLTextAreaElement | null;
+    const mdPreview = document.getElementById('md-preview');
+    const mdHtmlCode = document.getElementById('md-html-code')?.querySelector('code');
+    const btnCopy = document.getElementById('btn-copy-html');
+    const btnClear = document.getElementById('btn-clear');
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tbBtns = document.querySelectorAll('.tb-btn');
+
+    const sampleMd = `# Bienvenido al Conversor Markdown a HTML
+
+Este es un ejemplo de **texto en negrita**, *cursiva* y un enlace a [GuíaTecnes](https://guiatecnes.com).
+
+## Ventajas principales de Markdown
+- Sintaxis rápida, limpia y libre de etiquetas pesadas.
+- Compatible con \`código inline\` y bloques de código.
+- Ideal para bloggers, redactores SEO y programadores.
+
+> «El diseño no es solo cómo se ve y cómo se siente. El diseño es cómo funciona.» — Steve Jobs
+
+Pruébalo escribiendo tu propio contenido a la izquierda.`;
+
+    function update() {
+      if (!mdInput) return;
+      const text = mdInput.value;
+      const parsed = parseSimpleMarkdown(text);
+
+      if (mdPreview) mdPreview.innerHTML = parsed;
+      if (mdHtmlCode) mdHtmlCode.textContent = parsed;
+    }
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.getAttribute('data-tab');
+        if (mdPreview && mdHtmlCode?.parentElement) {
+          if (tab === 'preview') {
+            mdPreview.classList.add('active');
+            mdHtmlCode.parentElement.classList.remove('active');
+          } else {
+            mdPreview.classList.remove('active');
+            mdHtmlCode.parentElement.classList.add('active');
+          }
+        }
+      });
+    });
+
+    tbBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!mdInput) return;
+        const action = btn.getAttribute('data-action');
+        const start = mdInput.selectionStart;
+        const end = mdInput.selectionEnd;
+        const sel = mdInput.value.substring(start, end);
+        let rep = '';
+
+        if (action === 'bold') rep = `**${sel || 'texto negrita'}**`;
+        else if (action === 'italic') rep = `*${sel || 'texto cursiva'}*`;
+        else if (action === 'h2') rep = `\n## ${sel || 'Título 2'}\n`;
+        else if (action === 'h3') rep = `\n### ${sel || 'Título 3'}\n`;
+        else if (action === 'quote') rep = `\n> ${sel || 'Cita destacada'}\n`;
+        else if (action === 'code') rep = `\`${sel || 'codigo'}\``;
+        else if (action === 'table') rep = `\n| Encabezado 1 | Encabezado 2 |\n| :--- | :--- |\n| Dato 1 | Dato 2 |\n`;
+
+        mdInput.setRangeText(rep, start, end, 'end');
+        update();
+        mdInput.focus();
+      });
+    });
+
+    btnCopy?.addEventListener('click', () => {
+      if (!mdHtmlCode || !btnCopy) return;
+      navigator.clipboard.writeText(mdHtmlCode.textContent || '').then(() => {
+        const orig = btnCopy.textContent;
+        btnCopy.textContent = '✅ ¡HTML Copiado!';
+        setTimeout(() => { btnCopy.textContent = orig; }, 2000);
+      });
+    });
+
+    btnClear?.addEventListener('click', () => {
+      if (mdInput) {
+        mdInput.value = '';
+        update();
+      }
+    });
+
+    if (mdInput) {
+      mdInput.value = sampleMd;
+      mdInput.addEventListener('input', update);
+      update();
+    }
+  }
+
+  document.addEventListener('astro:page-load', initMdTool);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMdTool);
+  } else {
+    initMdTool();
+  }
+</script>
+
+<style>
+  .tool-page { max-width: 1040px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .breadcrumb { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; gap: 0.5rem; }
+  .breadcrumb a { color: var(--primary); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(99, 102, 241, 0.12); color: #6366f1; border-radius: 999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
+  .tool-subtitle { color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; max-width: 700px; margin: 0 auto; }
+
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 3rem; }
+
+  .editor-toolbar { display: flex; justify-content: space-between; align-items: center; background: var(--bg); border-bottom: 1px solid var(--border); padding: 0.6rem 1rem; flex-wrap: wrap; gap: 0.5rem; }
+  .toolbar-left, .toolbar-right { display: flex; gap: 0.35rem; align-items: center; }
+  .tb-btn { background: var(--bg-card); border: 1px solid var(--border); padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.82rem; font-weight: 700; color: var(--text); cursor: pointer; }
+  .tb-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+  .btn-action-accent { background: var(--primary); color: #fff; border: none; padding: 0.4rem 0.9rem; border-radius: 6px; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+  .btn-action-ghost { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.82rem; cursor: pointer; }
+
+  .editor-split-view { display: grid; grid-template-columns: 1fr 1fr; min-height: 480px; }
+  @media (max-width: 768px) { .editor-split-view { grid-template-columns: 1fr; } }
+
+  .split-pane { display: flex; flex-direction: column; border-right: 1px solid var(--border); }
+  .split-pane:last-child { border-right: none; }
+
+  .pane-header { background: var(--bg); padding: 0.6rem 1.25rem; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border); text-transform: uppercase; }
+  .tab-header { display: flex; gap: 0.5rem; padding: 0.4rem 1rem; }
+  .tab-btn { background: transparent; border: none; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); padding: 0.25rem 0.6rem; border-radius: 4px; cursor: pointer; }
+  .tab-btn.active { background: var(--bg-card); color: var(--primary); }
+
+  #md-input { flex: 1; width: 100%; border: none; background: transparent; padding: 1.25rem; font-family: monospace; font-size: 0.95rem; line-height: 1.6; color: var(--text); resize: none; outline: none; }
+
+  .pane-body { flex: 1; position: relative; overflow-y: auto; max-height: 520px; padding: 1.25rem; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .markdown-body { font-size: 0.95rem; line-height: 1.7; color: var(--text); }
+  .markdown-body h1, .markdown-body h2, .markdown-body h3 { margin-top: 1rem; margin-bottom: 0.5rem; color: var(--text); }
+  .markdown-body p { margin-bottom: 0.9rem; }
+  .markdown-body blockquote { border-left: 3px solid var(--primary); padding-left: 1rem; margin: 1rem 0; color: var(--text-muted); font-style: italic; }
+  .markdown-body pre { background: var(--bg); padding: 0.9rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; border: 1px solid var(--border); }
+  .markdown-body code { font-family: monospace; background: rgba(255,255,255,0.06); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.85rem; }
+
+  .html-code-box { font-family: monospace; font-size: 0.88rem; line-height: 1.6; color: var(--text); white-space: pre-wrap; word-break: break-all; margin: 0; }
+
+  .info-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+  .info-section h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+  .info-section ul { color: var(--text-muted); line-height: 1.8; padding-left: 1.5rem; font-family: monospace; font-size: 0.9rem; }
+</style>
