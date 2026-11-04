@@ -1,0 +1,274 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Tiempo y Horas Trabajadas', url: '/herramientas/calculadora-horas-trabajadas' }
+];
+
+const faqs = [
+  {
+    question: '¿Cómo se calculan las horas trabajadas con pausa para comer?',
+    answer: 'La herramienta calcula la diferencia entre la hora de entrada y la de salida (por ejemplo, de 09:00 a 18:00 = 9 horas) y resta automáticamente el tiempo de descanso o comida (por ejemplo, 60 minutos de pausa), arrojando 8 horas netas efectivas.'
+  },
+  {
+    question: '¿Qué es el registro obligatorio de jornada en España?',
+    answer: 'Desde el Real Decreto-ley 8/2019, todas las empresas en España están obligadas a registrar diariamente la jornada laboral de sus empleados, incluyendo la hora de inicio y finalización, para evitar horas extras no pagadas y garantizar los descansos legales.'
+  },
+  {
+    question: '¿Cómo calcular el salario total según las horas trabajadas?',
+    answer: 'Introduce el precio que cobras por hora en la casilla de tarifa. La calculadora multiplicará las horas totales efectivas por tu precio horario para obtener el importe bruto devengado.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Horas Trabajadas y Registro de Jornada Online"
+  description="Calcula las horas y minutos trabajados entre turnos, descansos no retribuidos y estimación de sueldo según tu tarifa por hora. Rápida y gratuita."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de Horas</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">⏱️ Productividad, Empleo & Nómina</div>
+      <h1>Calculadora de Horas Trabajadas</h1>
+      <p class="tool-subtitle">
+        Calcula el tiempo real trabajado en tu jornada laboral, resta pausas de comida o descansos y calcula tus honorarios totales según tu tarifa por hora.
+      </p>
+    </header>
+
+    <div class="hours-grid">
+      <!-- FORMULARIO -->
+      <div class="card form-card">
+        <h3>Registro de Jornada</h3>
+
+        <div class="time-inputs-row">
+          <div class="form-group">
+            <label for="start-time">Hora de Entrada</label>
+            <input type="time" id="start-time" value="09:00" class="time-field" />
+          </div>
+
+          <div class="form-group">
+            <label for="end-time">Hora de Salida</label>
+            <input type="time" id="end-time" value="18:00" class="time-field" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="break-minutes">Descanso o Pausa de Comida (Minutos)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="break-minutes" value="60" min="0" max="360" step="5" />
+            <span class="symbol">min</span>
+          </div>
+          <div class="quick-break-tags">
+            <button type="button" class="btn-tag" data-val="0">Sin pausa</button>
+            <button type="button" class="btn-tag" data-val="15">15 min (café)</button>
+            <button type="button" class="btn-tag" data-val="30">30 min</button>
+            <button type="button" class="btn-tag active" data-val="60">1 hora (comida)</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="hourly-rate">Tarifa por Hora (€/hora) - Opcional</label>
+          <div class="input-with-symbol">
+            <input type="number" id="hourly-rate" value="15" min="0" step="0.5" />
+            <span class="symbol">€/h</span>
+          </div>
+          <p class="field-hint">Introduce cuánto cobras para calcular tus ingresos de la jornada.</p>
+        </div>
+      </div>
+
+      <!-- RESULTADO -->
+      <div class="card result-card">
+        <h3>Resumen del Turno</h3>
+
+        <div class="hours-display-box">
+          <span class="h-title">Tiempo Efectivo Trabajado</span>
+          <div class="h-number" id="res-total-hours">8h 00m</div>
+          <span class="h-decimal" id="res-decimal-hours">(8,00 horas decimales)</span>
+        </div>
+
+        <div class="pay-estimate-box" id="pay-box">
+          <span class="pay-title">Retribución Estimada del Día</span>
+          <div class="pay-val" id="res-pay-val">120,00 €</div>
+        </div>
+
+        <div class="breakdown-list">
+          <div class="b-item">
+            <span>Tiempo transcurrido total:</span>
+            <strong id="res-span-time">9h 00m</strong>
+          </div>
+          <div class="b-item">
+            <span>Tiempo de pausa restado:</span>
+            <strong id="res-break-time">1h 00m</strong>
+          </div>
+          <div class="b-item highlight-green">
+            <span>Estimación semanal (x5 días):</span>
+            <strong id="res-week-hours">40h 00m (600,00 €)</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN EDUCATIVA -->
+    <section class="info-section">
+      <h2>Cómo convertir horas y minutos a formato decimal para nóminas</h2>
+      <p>
+        Para liquidar nóminas o facturar horas a clientes, los minutos deben transformarse en formato decimal dividiéndolos entre 60:
+      </p>
+      <ul>
+        <li><strong>15 minutos</strong> = 15 / 60 = <strong>0,25 horas</strong> (ej: 8h 15m = 8,25h).</li>
+        <li><strong>30 minutos</strong> = 30 / 60 = <strong>0,50 horas</strong> (ej: 7h 30m = 7,50h).</li>
+        <li><strong>45 minutos</strong> = 45 / 60 = <strong>0,75 horas</strong> (ej: 8h 45m = 8,75h).</li>
+      </ul>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  function initHoursCalc() {
+    const startInp = document.getElementById('start-time') as HTMLInputElement | null;
+    const endInp = document.getElementById('end-time') as HTMLInputElement | null;
+    const breakInp = document.getElementById('break-minutes') as HTMLInputElement | null;
+    const rateInp = document.getElementById('hourly-rate') as HTMLInputElement | null;
+
+    const resHours = document.getElementById('res-total-hours');
+    const resDecimal = document.getElementById('res-decimal-hours');
+    const resPay = document.getElementById('res-pay-val');
+    const resSpan = document.getElementById('res-span-time');
+    const resBreak = document.getElementById('res-break-time');
+    const resWeek = document.getElementById('res-week-hours');
+
+    const breakBtns = document.querySelectorAll('.quick-break-tags .btn-tag');
+
+    function calculate() {
+      if (!startInp || !endInp || !breakInp) return;
+      const [startH, startM] = (startInp.value || '09:00').split(':').map(Number);
+      const [endH, endM] = (endInp.value || '18:00').split(':').map(Number);
+      const breakMin = Math.max(0, parseInt(breakInp.value) || 0);
+      const hourlyRate = Math.max(0, parseFloat(rateInp?.value || '0') || 0);
+
+      let startMinutes = startH * 60 + startM;
+      let endMinutes = endH * 60 + endM;
+
+      // Si el turno cruza la medianoche (ej: 22:00 a 06:00)
+      if (endMinutes < startMinutes) {
+        endMinutes += 24 * 60;
+      }
+
+      const totalSpanMinutes = endMinutes - startMinutes;
+      const effectiveMinutes = Math.max(0, totalSpanMinutes - breakMin);
+
+      const effH = Math.floor(effectiveMinutes / 60);
+      const effM = effectiveMinutes % 60;
+
+      const decimalHours = effectiveMinutes / 60;
+      const earnings = decimalHours * hourlyRate;
+
+      const spanH = Math.floor(totalSpanMinutes / 60);
+      const spanM = totalSpanMinutes % 60;
+
+      const brkH = Math.floor(breakMin / 60);
+      const brkM = breakMin % 60;
+
+      if (resHours) resHours.textContent = `${effH}h ${effM < 10 ? '0' : ''}${effM}m`;
+      if (resDecimal) resDecimal.textContent = `(${decimalHours.toFixed(2).replace('.', ',')} horas decimales)`;
+      if (resPay) resPay.textContent = `${earnings.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
+
+      if (resSpan) resSpan.textContent = `${spanH}h ${spanM < 10 ? '0' : ''}${spanM}m`;
+      if (resBreak) resBreak.textContent = brkH > 0 ? `${brkH}h ${brkM}m` : `${brkM} min`;
+
+      const weekHours = decimalHours * 5;
+      const weekEarnings = earnings * 5;
+      if (resWeek) resWeek.textContent = `${weekHours.toFixed(1).replace('.', ',')}h (${weekEarnings.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €)`;
+    }
+
+    breakBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        breakBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (breakInp) {
+          breakInp.value = btn.getAttribute('data-val') || '60';
+          calculate();
+        }
+      });
+    });
+
+    [startInp, endInp, breakInp, rateInp].forEach(inp => {
+      inp?.addEventListener('input', calculate);
+    });
+
+    calculate();
+  }
+
+  document.addEventListener('astro:page-load', initHoursCalc);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHoursCalc);
+  } else {
+    initHoursCalc();
+  }
+</script>
+
+<style>
+  .tool-page { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .breadcrumb { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; gap: 0.5rem; }
+  .breadcrumb a { color: var(--primary); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(59, 130, 246, 0.12); color: #3b82f6; border-radius: 999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
+  .tool-subtitle { color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; max-width: 700px; margin: 0 auto; }
+
+  .hours-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+  @media (max-width: 768px) { .hours-grid { grid-template-columns: 1fr; } }
+
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; }
+  .form-card h3, .result-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text); }
+
+  .time-inputs-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+  .time-field { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 1.15rem; font-weight: 700; text-align: center; }
+
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text); }
+  .input-with-symbol { position: relative; display: flex; align-items: center; }
+  .input-with-symbol input { width: 100%; padding: 0.75rem 3.5rem 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 1.05rem; font-weight: 600; }
+  .input-with-symbol .symbol { position: absolute; right: 1rem; color: var(--text-muted); font-weight: 700; font-size: 0.85rem; }
+  .field-hint { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; margin-top: 0.35rem; }
+
+  .quick-break-tags { display: flex; gap: 0.4rem; margin-top: 0.5rem; flex-wrap: wrap; }
+  .btn-tag { background: var(--bg); border: 1px solid var(--border); padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.78rem; cursor: pointer; color: var(--text); font-weight: 600; transition: all 0.2s; }
+  .btn-tag:hover, .btn-tag.active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+
+  .hours-display-box { text-align: center; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
+  .h-title { display: block; font-size: 0.82rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; margin-bottom: 0.25rem; }
+  .h-number { font-size: 2.7rem; font-weight: 800; color: #3b82f6; }
+  .h-decimal { font-size: 0.88rem; color: var(--text-muted); }
+
+  .pay-estimate-box { text-align: center; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 1rem; margin-bottom: 1.25rem; }
+  .pay-title { display: block; font-size: 0.8rem; font-weight: 700; color: #10b981; text-transform: uppercase; margin-bottom: 0.2rem; }
+  .pay-val { font-size: 1.8rem; font-weight: 800; color: #10b981; }
+
+  .breakdown-list { display: flex; flex-direction: column; gap: 0.65rem; }
+  .b-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.88rem; color: var(--text-muted); }
+  .b-item strong { color: var(--text); }
+  .highlight-green strong { color: #10b981; }
+
+  .info-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+  .info-section h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+  .info-section p { color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; }
+  .info-section ul { color: var(--text-muted); line-height: 1.8; padding-left: 1.5rem; }
+</style>

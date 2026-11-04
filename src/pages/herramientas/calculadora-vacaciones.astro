@@ -1,0 +1,243 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Días de Vacaciones Laborales', url: '/herramientas/calculadora-vacaciones' }
+];
+
+const faqs = [
+  {
+    question: '¿Cuántos días de vacaciones corresponden por ley en España?',
+    answer: 'Según el artículo 38 del Estatuto de los Trabajadores, el periodo de vacaciones anuales retribuidas no puede ser inferior a 30 días naturales (lo que equivale habitualmente a 22 días laborables) por cada año de servicio completo.'
+  },
+  {
+    question: '¿Cuántos días de vacaciones genero por cada mes trabajado?',
+    answer: 'Por cada mes completo trabajado generas exactamente 2,5 días naturales de vacaciones (o 1,83 días laborables). Por ejemplo, si has trabajado 6 meses, te corresponden 15 días naturales.'
+  },
+  {
+    question: '¿Se pueden pagar las vacaciones no disfrutadas?',
+    answer: 'Por regla general no se pueden compensar económicamente durante la vigencia del contrato de trabajo. La única excepción legal es la extinción del contrato (despido o baja voluntaria), donde los días no disfrutados deben liquidarse obligatoriamente en el finiquito.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Vacaciones por Meses Trabajados en España"
+  description="Calcula cuántos días de vacaciones naturales y laborables te corresponden por ley según los meses trabajados o fecha de inicio en tu empresa."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de Vacaciones</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🏖️ Descanso & Derechos Laborales</div>
+      <h1>Calculadora de Días de Vacaciones</h1>
+      <p class="tool-subtitle">
+        Averigua cuántos días de descanso retribuido tienes acumulados según el Estatuto de los Trabajadores en España, tanto en días naturales como en días laborables.
+      </p>
+    </header>
+
+    <div class="vacation-grid">
+      <!-- PANEL DE ENTRADA -->
+      <div class="card form-card">
+        <h3>Tu Tiempo en la Empresa</h3>
+
+        <div class="form-group">
+          <label for="vac-months">Meses Completos Trabajados este Año</label>
+          <div class="input-with-symbol">
+            <input type="number" id="vac-months" value="7" min="0" max="12" step="0.5" />
+            <span class="symbol">Meses</span>
+          </div>
+          <input type="range" id="vac-months-range" min="0" max="12" step="0.5" value="7" class="range-slider" />
+        </div>
+
+        <div class="form-group">
+          <label for="vac-enjoyed">Días de Vacaciones ya Disfrutados</label>
+          <div class="input-with-symbol">
+            <input type="number" id="vac-enjoyed" value="5" min="0" max="30" step="1" />
+            <span class="symbol">Días</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="vac-regime">Convenio Colectivo: Tipo de Cómputo</label>
+          <select id="vac-regime" class="select-field">
+            <option value="natural" selected>Días Naturales (30 días al año / 2,5 días por mes)</option>
+            <option value="laboral">Días Laborables de Lunes a Viernes (22 días al año / 1,83 por mes)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- RESULTADO -->
+      <div class="card result-card">
+        <h3>Tus Días Disponibles</h3>
+
+        <div class="vac-main-box">
+          <span class="vac-tag">Días Pendientes de Disfrutar</span>
+          <div class="vac-number" id="res-vac-remaining">12,5</div>
+          <span class="vac-type-label" id="res-vac-type">Días Naturales</span>
+        </div>
+
+        <div class="vac-stats-grid">
+          <div class="stat-box">
+            <span class="s-label">Días Generados Total</span>
+            <strong id="res-vac-generated">17,5 días</strong>
+          </div>
+          <div class="stat-box">
+            <span class="s-label">Días ya Gastados</span>
+            <strong id="res-vac-used">5 días</strong>
+          </div>
+          <div class="stat-box highlight-blue">
+            <span class="s-label">Equivalente Laborable</span>
+            <strong id="res-vac-laborable">~9 días laborables</strong>
+          </div>
+        </div>
+
+        <div class="vac-progress-wrap">
+          <div class="progress-bar-bg">
+            <div class="progress-fill" id="vac-progress-fill" style="width: 28%;"></div>
+          </div>
+          <span class="progress-text" id="vac-progress-text">Has disfrutado el 28% de tus vacaciones generadas</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN EDUCATIVA -->
+    <section class="info-section">
+      <h2>Preguntas frecuentes sobre las vacaciones laborales en España</h2>
+      <ul>
+        <li><strong>¿Se pueden acumular para el año siguiente?:</strong> El derecho a disfrutar las vacaciones caduca el 31 de diciembre del año en curso, salvo que el convenio colectivo permita disfrutarlas hasta el 15 o 31 de enero, o por baja médica / permiso de maternidad.</li>
+        <li><strong>¿Con cuánta antelación deben fijarse?:</strong> La empresa y el trabajador deben acordar el calendario de vacaciones con al menos <strong>2 meses de antelación</strong> a su inicio según el artículo 38.3 del ET.</li>
+        <li><strong>¿Qué pasa si caigo de baja estando de vacaciones?:</strong> Si sufres una incapacidad temporal antes o durante tus vacaciones, los días de baja médica se interrumpen y podrás disfrutarlos al recibir el alta médica.</li>
+      </ul>
+    </section>
+
+    <LegalDisclaimer type="legal" />
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  function initVacationCalc() {
+    const monthsInp = document.getElementById('vac-months') as HTMLInputElement | null;
+    const monthsRng = document.getElementById('vac-months-range') as HTMLInputElement | null;
+    const enjoyedInp = document.getElementById('vac-enjoyed') as HTMLInputElement | null;
+    const regimeSel = document.getElementById('vac-regime') as HTMLSelectElement | null;
+
+    const resRemaining = document.getElementById('res-vac-remaining');
+    const resType = document.getElementById('res-vac-type');
+    const resGen = document.getElementById('res-vac-generated');
+    const resUsed = document.getElementById('res-vac-used');
+    const resLab = document.getElementById('res-vac-laborable');
+    const progFill = document.getElementById('vac-progress-fill');
+    const progText = document.getElementById('vac-progress-text');
+
+    function calculate() {
+      if (!monthsInp || !enjoyedInp || !regimeSel) return;
+      const months = Math.min(12, Math.max(0, parseFloat(monthsInp.value) || 0));
+      const enjoyed = Math.max(0, parseFloat(enjoyedInp.value) || 0);
+      const isNatural = regimeSel.value === 'natural';
+
+      const ratePerMonth = isNatural ? 2.5 : (22 / 12);
+      const totalGenerated = months * ratePerMonth;
+      const remaining = Math.max(0, totalGenerated - enjoyed);
+
+      let eqLaborable = 0;
+      if (isNatural) {
+        eqLaborable = Math.round(remaining * (22 / 30));
+      } else {
+        eqLaborable = Math.round(remaining);
+      }
+
+      const pctUsed = totalGenerated > 0 ? Math.min(100, (enjoyed / totalGenerated) * 100) : 0;
+
+      if (resRemaining) resRemaining.textContent = remaining.toFixed(1).replace('.0', '');
+      if (resType) resType.textContent = isNatural ? 'Días Naturales Pendientes' : 'Días Laborables Pendientes';
+      if (resGen) resGen.textContent = `${totalGenerated.toFixed(1).replace('.0', '')} días`;
+      if (resUsed) resUsed.textContent = `${enjoyed} días`;
+      if (resLab) resLab.textContent = `~${eqLaborable} días de oficina (lun-vie)`;
+
+      if (progFill) progFill.style.width = pctUsed.toFixed(0) + '%';
+      if (progText) progText.textContent = `Has disfrutado el ${pctUsed.toFixed(0)}% de tus días generados`;
+    }
+
+    monthsInp?.addEventListener('input', () => {
+      if (monthsRng && monthsInp) monthsRng.value = monthsInp.value;
+      calculate();
+    });
+    monthsRng?.addEventListener('input', () => {
+      if (monthsInp && monthsRng) monthsInp.value = monthsRng.value;
+      calculate();
+    });
+    enjoyedInp?.addEventListener('input', calculate);
+    regimeSel?.addEventListener('change', calculate);
+
+    calculate();
+  }
+
+  document.addEventListener('astro:page-load', initVacationCalc);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVacationCalc);
+  } else {
+    initVacationCalc();
+  }
+</script>
+
+<style>
+  .tool-page { max-width: 920px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .breadcrumb { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; gap: 0.5rem; }
+  .breadcrumb a { color: var(--primary); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(14, 165, 233, 0.12); color: #0ea5e9; border-radius: 999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
+  .tool-subtitle { color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; max-width: 700px; margin: 0 auto; }
+
+  .vacation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+  @media (max-width: 768px) { .vacation-grid { grid-template-columns: 1fr; } }
+
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; }
+  .form-card h3, .result-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text); }
+
+  .form-group { margin-bottom: 1.4rem; }
+  .form-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text); }
+  .input-with-symbol { position: relative; display: flex; align-items: center; margin-bottom: 0.4rem; }
+  .input-with-symbol input { width: 100%; padding: 0.75rem 4.5rem 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 1.1rem; font-weight: 600; }
+  .input-with-symbol .symbol { position: absolute; right: 1rem; color: var(--text-muted); font-weight: 700; font-size: 0.85rem; }
+  .select-field { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 0.92rem; font-weight: 500; }
+  .range-slider { width: 100%; accent-color: #0ea5e9; cursor: pointer; }
+
+  .vac-main-box { text-align: center; background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(14, 165, 233, 0.25); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
+  .vac-tag { display: block; font-size: 0.82rem; font-weight: 700; color: #0ea5e9; text-transform: uppercase; margin-bottom: 0.25rem; }
+  .vac-number { font-size: 2.8rem; font-weight: 800; color: #0ea5e9; }
+  .vac-type-label { font-size: 0.88rem; color: var(--text-muted); }
+
+  .vac-stats-grid { display: grid; grid-template-columns: 1fr; gap: 0.65rem; margin-bottom: 1.25rem; }
+  .stat-box { display: flex; justify-content: space-between; align-items: center; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; }
+  .s-label { font-size: 0.85rem; color: var(--text-muted); }
+  .stat-box strong { font-size: 1.05rem; color: var(--text); }
+  .highlight-blue strong { color: #0ea5e9; }
+
+  .vac-progress-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem; text-align: center; }
+  .progress-bar-bg { height: 10px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; margin-bottom: 0.5rem; }
+  .progress-fill { height: 100%; background: #0ea5e9; border-radius: 999px; transition: width 0.3s; }
+  .progress-text { font-size: 0.78rem; color: var(--text-muted); }
+
+  .info-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+  .info-section h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+  .info-section ul { color: var(--text-muted); line-height: 1.8; padding-left: 1.5rem; }
+</style>

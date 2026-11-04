@@ -1,0 +1,308 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Generador de Texto Lorem Ipsum', url: '/herramientas/generador-lorem-ipsum' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es el texto Lorem Ipsum y para qué se usa?',
+    answer: 'Lorem Ipsum es un texto de relleno estándar utilizado en la industria del diseño gráfico, maquetación web y desarrollo editorial desde el siglo XVI. Permite a diseñadores y clientes concentrarse en la tipografía, distribución y estética visual sin distraerse con el significado de las palabras.'
+  },
+  {
+    question: '¿De dónde procede el texto original de Lorem Ipsum?',
+    answer: 'Tiene sus orígenes en una obra clásica de la literatura latina de Cicerón del año 45 a.C., titulada "De Finibus Bonorum et Malorum" (Sobre los límites del bien y del mal).'
+  },
+  {
+    question: '¿Cómo copiar el texto generado?',
+    answer: 'Basta con pulsar el botón verde "Copiar Texto" para que todo el texto de prueba se guarde en tu portapapeles al instante.'
+  }
+];
+---
+
+<BaseLayout
+  title="Generador de Lorem Ipsum Online | Párrafos, Frases y Palabras"
+  description="Genera texto de relleno Lorem Ipsum para diseño web, maquetación editorial y wireframes. Elige párrafos, palabras o frases y copia en un clic."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Generador Lorem Ipsum</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">📝 Diseño, Desarrollo Web & Textos</div>
+      <h1>Generador de Lorem Ipsum</h1>
+      <p class="tool-subtitle">
+        Crea texto de relleno ficticio y profesional para tus proyectos web, diseños en Figma, maquetaciones y documentos con copia rápida en un solo clic.
+      </p>
+    </header>
+
+    <div class="lorem-grid">
+      <!-- PANEL DE CONTROL -->
+      <div class="card control-card">
+        <h3>Configuración del Texto</h3>
+
+        <div class="form-group">
+          <label for="lorem-type">Tipo de Generación</label>
+          <div class="type-buttons">
+            <button type="button" class="btn-type active" data-type="paragraphs">Párrafos</button>
+            <button type="button" class="btn-type" data-type="words">Palabras</button>
+            <button type="button" class="btn-type" data-type="sentences">Frases</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="lorem-count">Cantidad</label>
+          <div class="input-inline-wrap">
+            <input type="number" id="lorem-count" value="4" min="1" max="50" step="1" />
+            <input type="range" id="lorem-range" min="1" max="25" step="1" value="4" class="range-slider" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="lorem-start" checked />
+            <span>Comenzar con el clásico «Lorem ipsum dolor sit amet...»</span>
+          </label>
+        </div>
+
+        <button type="button" id="btn-generate" class="btn-primary-action">🔄 Regenerar Texto</button>
+      </div>
+
+      <!-- ÁREA DE TEXTO RESULTANTE -->
+      <div class="card output-card">
+        <div class="output-top-bar">
+          <div class="word-stats" id="lorem-stats">4 párrafos | 275 palabras</div>
+          <button type="button" id="btn-copy" class="btn-copy-action">📋 Copiar Texto</button>
+        </div>
+
+        <div class="lorem-output-box" id="lorem-output" contenteditable="false"></div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN EDUCATIVA -->
+    <section class="info-section">
+      <h2>Por qué los diseñadores web siguen utilizando Lorem Ipsum</h2>
+      <p>
+        El cerebro humano intenta instintivamente leer cualquier texto comprensible que aparece en una pantalla. Si colocas contenido en español real antes de finalizar el diseño:
+      </p>
+      <ul>
+        <li>El cliente se concentrará en buscar erratas ortográficas en lugar de aprobar la paleta de colores y la jerarquía de botones.</li>
+        <li>Lorem Ipsum distribuye letras y longitudes de palabras con una frecuencia natural, simulando a la perfección un artículo de prensa o blog.</li>
+      </ul>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  const VOCABULARY = [
+    'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit', 'curabitur', 'vel',
+    'hendrerit', 'libero', 'eleifend', 'blandit', 'nunc', 'ornare', 'odio', 'ut', 'orci', 'gravida',
+    'imperdiet', 'nullam', 'purus', 'lacinia', 'a', 'pretium', 'quis', 'congue', 'praesent', 'sagittis',
+    'laoreet', 'auctor', 'mauris', 'non', 'velit', 'eros', 'dictum', 'proin', 'accumsan', 'sapien',
+    'nec', 'massa', 'volutpat', 'venenatis', 'sed', 'eu', 'molestie', 'lacus', 'quisque', 'porttitor',
+    'ligula', 'dui', 'mollis', 'tempus', 'at', 'magna', 'vestibulum', 'turpis', 'ac', 'diam',
+    'tincidunt', 'id', 'condimentum', 'enim', 'sodales', 'in', 'hac', 'habitasse', 'platea', 'dictumst',
+    'aenean', 'neque', 'fusce', 'augue', 'leo', 'eget', 'semper', 'mattis', 'tortor', 'scelerisque',
+    'nulla', 'facilisi', 'vivamus', 'aliquam', 'urna', 'faucibus', 'posuere', 'rutrum', 'sollicitudin',
+    'commodo', 'consequat', 'duis', 'aute', 'irure', 'in', 'reprehenderit', 'voluptate', 'velit', 'esse'
+  ];
+
+  function getRandomWord() {
+    return VOCABULARY[Math.floor(Math.random() * VOCABULARY.length)];
+  }
+
+  function generateSentence() {
+    const len = Math.floor(Math.random() * 8) + 8; // 8 - 15 palabras
+    const words = [];
+    for (let i = 0; i < len; i++) {
+      words.push(getRandomWord());
+    }
+    const raw = words.join(' ');
+    return raw.charAt(0).toUpperCase() + raw.slice(1) + '.';
+  }
+
+  function generateParagraph() {
+    const count = Math.floor(Math.random() * 3) + 4; // 4 - 6 frases
+    const sentences = [];
+    for (let i = 0; i < count; i++) {
+      sentences.push(generateSentence());
+    }
+    return sentences.join(' ');
+  }
+
+  function initLoremTool() {
+    const typeBtns = document.querySelectorAll('.btn-type');
+    const countInp = document.getElementById('lorem-count') as HTMLInputElement | null;
+    const countRng = document.getElementById('lorem-range') as HTMLInputElement | null;
+    const startChk = document.getElementById('lorem-start') as HTMLInputElement | null;
+    const btnGen = document.getElementById('btn-generate');
+    const btnCopy = document.getElementById('btn-copy');
+    const outputBox = document.getElementById('lorem-output');
+    const statsBox = document.getElementById('lorem-stats');
+
+    let currentType = 'paragraphs';
+
+    function buildText() {
+      if (!countInp || !outputBox) return;
+      const count = Math.min(100, Math.max(1, parseInt(countInp.value) || 3));
+      const startWithLorem = startChk?.checked || false;
+
+      let resultHtml = '';
+      let rawText = '';
+
+      if (currentType === 'paragraphs') {
+        const paras: string[] = [];
+        for (let i = 0; i < count; i++) {
+          let p = generateParagraph();
+          if (i === 0 && startWithLorem) {
+            p = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ' + p;
+          }
+          paras.push(p);
+        }
+        resultHtml = paras.map(p => `<p>${p}</p>`).join('');
+        rawText = paras.join('\n\n');
+      } else if (currentType === 'words') {
+        const words: string[] = [];
+        for (let i = 0; i < count; i++) {
+          words.push(getRandomWord());
+        }
+        if (startWithLorem && words.length >= 5) {
+          words[0] = 'Lorem'; words[1] = 'ipsum'; words[2] = 'dolor'; words[3] = 'sit'; words[4] = 'amet';
+        }
+        const str = words.join(' ');
+        resultHtml = `<p>${str.charAt(0).toUpperCase() + str.slice(1)}.</p>`;
+        rawText = str;
+      } else {
+        // sentences
+        const sents: string[] = [];
+        for (let i = 0; i < count; i++) {
+          let s = generateSentence();
+          if (i === 0 && startWithLorem) {
+            s = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+          }
+          sents.push(s);
+        }
+        resultHtml = `<p>${sents.join(' ')}</p>`;
+        rawText = sents.join(' ');
+      }
+
+      outputBox.innerHTML = resultHtml;
+
+      const wordsCount = rawText.trim().split(/\s+/).filter(Boolean).length;
+      if (statsBox) {
+        statsBox.textContent = `${count} ${currentType === 'paragraphs' ? 'párrafos' : currentType === 'words' ? 'palabras' : 'frases'} | ${wordsCount} palabras`;
+      }
+    }
+
+    typeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        typeBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentType = btn.getAttribute('data-type') || 'paragraphs';
+        if (currentType === 'words' && countInp) countInp.value = '50';
+        else if (currentType === 'sentences' && countInp) countInp.value = '5';
+        else if (countInp) countInp.value = '4';
+        if (countRng && countInp) countRng.value = countInp.value;
+        buildText();
+      });
+    });
+
+    countInp?.addEventListener('input', () => {
+      if (countRng && countInp) countRng.value = countInp.value;
+      buildText();
+    });
+    countRng?.addEventListener('input', () => {
+      if (countInp && countRng) countInp.value = countRng.value;
+      buildText();
+    });
+    startChk?.addEventListener('change', buildText);
+    btnGen?.addEventListener('click', buildText);
+
+    btnCopy?.addEventListener('click', () => {
+      if (!outputBox || !btnCopy) return;
+      const text = outputBox.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btnCopy.textContent;
+        btnCopy.textContent = '✅ ¡Copiado!';
+        btnCopy.style.background = '#10b981';
+        btnCopy.style.color = '#fff';
+        setTimeout(() => {
+          btnCopy.textContent = orig;
+          btnCopy.style.background = '';
+          btnCopy.style.color = '';
+        }, 2000);
+      });
+    });
+
+    buildText();
+  }
+
+  document.addEventListener('astro:page-load', initLoremTool);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLoremTool);
+  } else {
+    initLoremTool();
+  }
+</script>
+
+<style>
+  .tool-page { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .breadcrumb { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; gap: 0.5rem; }
+  .breadcrumb a { color: var(--primary); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(99, 102, 241, 0.12); color: #6366f1; border-radius: 999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
+  .tool-subtitle { color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; max-width: 700px; margin: 0 auto; }
+
+  .lorem-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 2rem; margin-bottom: 3rem; }
+  @media (max-width: 768px) { .lorem-grid { grid-template-columns: 1fr; } }
+
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; }
+  .control-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text); }
+
+  .form-group { margin-bottom: 1.4rem; }
+  .form-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text); }
+
+  .type-buttons { display: flex; gap: 0.4rem; background: var(--bg); padding: 0.35rem; border-radius: 10px; border: 1px solid var(--border); }
+  .btn-type { flex: 1; padding: 0.55rem; background: transparent; border: none; border-radius: 6px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s; }
+  .btn-type.active { background: #6366f1; color: #fff; }
+
+  .input-inline-wrap { display: flex; align-items: center; gap: 1rem; }
+  .input-inline-wrap input[type="number"] { width: 80px; padding: 0.6rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 1rem; font-weight: 700; text-align: center; }
+  .range-slider { flex: 1; accent-color: #6366f1; cursor: pointer; }
+
+  .checkbox-label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.88rem; color: var(--text); }
+
+  .btn-primary-action { width: 100%; padding: 0.85rem; background: #6366f1; color: #fff; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
+  .btn-primary-action:hover { opacity: 0.9; }
+
+  .output-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
+  .word-stats { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .btn-copy-action { background: var(--bg); border: 1px solid var(--border); padding: 0.45rem 1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: var(--text); cursor: pointer; transition: all 0.2s; }
+  .btn-copy-action:hover { border-color: #6366f1; color: #6366f1; }
+
+  .lorem-output-box { max-height: 460px; overflow-y: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; font-size: 0.95rem; line-height: 1.7; color: var(--text); }
+  .lorem-output-box p { margin-bottom: 1rem; }
+  .lorem-output-box p:last-child { margin-bottom: 0; }
+
+  .info-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+  .info-section h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+  .info-section p { color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; }
+  .info-section ul { color: var(--text-muted); line-height: 1.8; padding-left: 1.5rem; }
+</style>

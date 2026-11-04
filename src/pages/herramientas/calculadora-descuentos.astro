@@ -1,0 +1,274 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Descuentos y Rebajas', url: '/herramientas/calculadora-descuentos' }
+];
+
+const faqs = [
+  {
+    question: '¿Cómo se calcula el precio final con descuento?',
+    answer: 'Para calcular el precio con descuento, multiplica el precio original por el porcentaje de descuento y divide entre 100 para obtener el ahorro. Luego resta esa cifra al precio original. Fórmula: Precio Final = Precio Original - (Precio Original × % / 100).'
+  },
+  {
+    question: '¿Cómo calcular un descuento doble o adicional (ej: 20% + 10%)?',
+    answer: 'Los descuentos adicionales no se suman directamente (un 20% + 10% no equivale al 30%). Se aplica primero el 20% sobre el precio inicial y, sobre la cantidad resultante, se descuenta el 10% restante. En total equivale a un 28% de descuento real.'
+  },
+  {
+    question: '¿Qué es el Black Friday o las rebajas de verano en España?',
+    answer: 'Son periodos comerciales regulados donde los comercios reducen precios. Es fundamental comprobar si el precio original era real o si fue inflado previamente calculando el descuento efectivo.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Descuentos y Rebajas Online | Ahorro en Compras"
+  description="Calcula cuánto dinero ahorras y el precio final a pagar con rebajas y descuentos dobles. Ideal para Black Friday, rebajas y tiendas online."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de Descuentos</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🏷️ Compras & Ahorro Inteligente</div>
+      <h1>Calculadora de Descuentos y Rebajas</h1>
+      <p class="tool-subtitle">
+        Descubre el precio final exacto de cualquier producto rebajado, cuánto dinero te ahorras y comprueba si un segundo descuento adicional merece la pena.
+      </p>
+    </header>
+
+    <div class="discount-grid">
+      <!-- PANEL DE ENTRADA -->
+      <div class="card calc-card">
+        <h3>Datos de la Compra</h3>
+        
+        <div class="form-group">
+          <label for="orig-price">Precio Original (€)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="orig-price" value="89.99" min="0" step="0.01" />
+            <span class="symbol">€</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="discount-pct">Porcentaje de Descuento (%)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="discount-pct" value="30" min="0" max="100" step="1" />
+            <span class="symbol">%</span>
+          </div>
+          <!-- Quick buttons -->
+          <div class="quick-tags">
+            <button type="button" class="btn-tag" data-val="10">-10%</button>
+            <button type="button" class="btn-tag" data-val="20">-20%</button>
+            <button type="button" class="btn-tag active" data-val="30">-30%</button>
+            <button type="button" class="btn-tag" data-val="50">-50%</button>
+            <button type="button" class="btn-tag" data-val="70">-70%</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="enable-second-discount" />
+            <span>Aplicar segundo descuento adicional (ej: cupón o -10% extra)</span>
+          </label>
+          <div id="second-discount-wrap" class="second-discount-hidden">
+            <label for="second-discount-pct">Descuento Adicional Extra (%)</label>
+            <div class="input-with-symbol">
+              <input type="number" id="second-discount-pct" value="10" min="0" max="100" step="1" />
+              <span class="symbol">%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTADO DESTACADO -->
+      <div class="card result-card">
+        <h3>Resumen de tu Ahorro</h3>
+
+        <div class="final-price-box">
+          <span class="final-title">Precio Final con Rebaja</span>
+          <div class="final-number" id="res-final-price">62,99 €</div>
+          <span class="original-strike" id="res-strike-price">Antes: 89,99 €</span>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-item highlight-green">
+            <span class="metric-label">Dinero que Ahorras</span>
+            <strong id="res-saved-money">27,00 €</strong>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Descuento Real Total</span>
+            <strong id="res-effective-pct">30,0%</strong>
+          </div>
+        </div>
+
+        <div class="discount-visual-bar">
+          <div class="bar-fill-pay" id="bar-pay" style="width: 70%;">Pagas: 70%</div>
+          <div class="bar-fill-save" id="bar-save" style="width: 30%;">Ahorras: 30%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN EDUCATIVA -->
+    <section class="info-section">
+      <h2>Cómo calcular descuentos mentalmente al ir de compras</h2>
+      <p>
+        Cuando estás en una tienda física o navegando por ofertas de Black Friday, puedes usar trucos mentales rápidos sin sacar la calculadora:
+      </p>
+      <ul>
+        <li><strong>Calcular el 10%:</strong> Divide el precio entre 10 moviendo la coma un dígito a la izquierda (en 60 €, el 10% son 6 €).</li>
+        <li><strong>Calcular el 20%:</strong> Calcula el 10% y multiplícalo por 2 (10% de 60 € = 6 € → 20% = 12 € de ahorro).</li>
+        <li><strong>Calcular el 50%:</strong> Divide directamente el precio original a la mitad.</li>
+        <li><strong>Calcular el 25%:</strong> Divide entre dos y vuelve a dividir entre dos (la mitad de la mitad).</li>
+      </ul>
+    </section>
+
+    <LegalDisclaimer />
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  function initDiscountCalc() {
+    const origPriceInput = document.getElementById('orig-price') as HTMLInputElement | null;
+    const discountPctInput = document.getElementById('discount-pct') as HTMLInputElement | null;
+    const secondCheck = document.getElementById('enable-second-discount') as HTMLInputElement | null;
+    const secondWrap = document.getElementById('second-discount-wrap');
+    const secondPctInput = document.getElementById('second-discount-pct') as HTMLInputElement | null;
+
+    const resFinal = document.getElementById('res-final-price');
+    const resStrike = document.getElementById('res-strike-price');
+    const resSaved = document.getElementById('res-saved-money');
+    const resEffective = document.getElementById('res-effective-pct');
+    const barPay = document.getElementById('bar-pay');
+    const barSave = document.getElementById('bar-save');
+
+    const quickBtns = document.querySelectorAll('.btn-tag');
+
+    function calculate() {
+      if (!origPriceInput || !discountPctInput) return;
+      const original = Math.max(0, parseFloat(origPriceInput.value) || 0);
+      const pct1 = Math.min(100, Math.max(0, parseFloat(discountPctInput.value) || 0));
+      const hasSecond = secondCheck?.checked || false;
+      const pct2 = hasSecond && secondPctInput ? Math.min(100, Math.max(0, parseFloat(secondPctInput.value) || 0)) : 0;
+
+      const priceAfterFirst = original * (1 - pct1 / 100);
+      const finalPrice = priceAfterFirst * (1 - pct2 / 100);
+      const savedMoney = Math.max(0, original - finalPrice);
+      const effectivePct = original > 0 ? (savedMoney / original) * 100 : 0;
+
+      if (resFinal) resFinal.textContent = finalPrice.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      if (resStrike) resStrike.textContent = 'Antes: ' + original.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      if (resSaved) resSaved.textContent = savedMoney.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      if (resEffective) resEffective.textContent = effectivePct.toFixed(1) + '%';
+
+      const payPct = original > 0 ? (finalPrice / original) * 100 : 100;
+      const savePct = 100 - payPct;
+
+      if (barPay) {
+        barPay.style.width = payPct.toFixed(1) + '%';
+        barPay.textContent = payPct > 15 ? 'Pagas: ' + payPct.toFixed(0) + '%' : '';
+      }
+      if (barSave) {
+        barSave.style.width = savePct.toFixed(1) + '%';
+        barSave.textContent = savePct > 15 ? 'Ahorras: ' + savePct.toFixed(0) + '%' : '';
+      }
+    }
+
+    quickBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        quickBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (discountPctInput) {
+          discountPctInput.value = btn.getAttribute('data-val') || '30';
+          calculate();
+        }
+      });
+    });
+
+    secondCheck?.addEventListener('change', () => {
+      if (secondWrap) {
+        secondWrap.classList.toggle('second-discount-hidden', !secondCheck.checked);
+      }
+      calculate();
+    });
+
+    [origPriceInput, discountPctInput, secondPctInput].forEach(inp => {
+      inp?.addEventListener('input', calculate);
+    });
+
+    calculate();
+  }
+
+  document.addEventListener('astro:page-load', initDiscountCalc);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDiscountCalc);
+  } else {
+    initDiscountCalc();
+  }
+</script>
+
+<style>
+  .tool-page { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .breadcrumb { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; gap: 0.5rem; }
+  .breadcrumb a { color: var(--primary); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(16, 185, 129, 0.12); color: #10b981; border-radius: 999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
+  .tool-subtitle { color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; max-width: 700px; margin: 0 auto; }
+
+  .discount-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+  @media (max-width: 768px) { .discount-grid { grid-template-columns: 1fr; } }
+
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; }
+  .calc-card h3, .result-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text); }
+
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text); }
+  .input-with-symbol { position: relative; display: flex; align-items: center; }
+  .input-with-symbol input { width: 100%; padding: 0.75rem 2rem 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 1.1rem; font-weight: 600; }
+  .input-with-symbol .symbol { position: absolute; right: 1rem; color: var(--text-muted); font-weight: 700; }
+
+  .quick-tags { display: flex; gap: 0.5rem; margin-top: 0.6rem; flex-wrap: wrap; }
+  .btn-tag { background: var(--bg); border: 1px solid var(--border); padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.82rem; cursor: pointer; color: var(--text); font-weight: 600; transition: all 0.2s; }
+  .btn-tag:hover, .btn-tag.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  .checkbox-label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem; }
+  .second-discount-hidden { display: none; }
+  #second-discount-wrap { margin-top: 0.75rem; padding: 1rem; background: var(--bg); border-radius: 8px; border: 1px dashed var(--border); }
+
+  .final-price-box { text-align: center; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
+  .final-title { display: block; font-size: 0.85rem; font-weight: 600; color: #10b981; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.25rem; }
+  .final-number { font-size: 2.5rem; font-weight: 800; color: #10b981; }
+  .original-strike { display: block; font-size: 0.95rem; color: var(--text-muted); text-decoration: line-through; margin-top: 0.25rem; }
+
+  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+  .metric-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem; text-align: center; }
+  .metric-label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+  .metric-item strong { font-size: 1.25rem; color: var(--text); }
+  .highlight-green strong { color: #10b981; }
+
+  .discount-visual-bar { display: flex; height: 32px; border-radius: 8px; overflow: hidden; font-size: 0.75rem; font-weight: 700; color: #fff; text-align: center; line-height: 32px; }
+  .bar-fill-pay { background: #6366f1; transition: width 0.3s; }
+  .bar-fill-save { background: #10b981; transition: width 0.3s; }
+
+  .info-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+  .info-section h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+  .info-section p { color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; }
+  .info-section ul { color: var(--text-muted); line-height: 1.8; padding-left: 1.5rem; }
+</style>

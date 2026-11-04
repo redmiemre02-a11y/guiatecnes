@@ -1,0 +1,279 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Rentabilidad de Alquiler Inmobiliario', url: '/herramientas/calculadora-rentabilidad-alquiler' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué diferencia hay entre rentabilidad bruta y rentabilidad neta?',
+    answer: 'La rentabilidad bruta solo compara los ingresos anuales por alquiler respecto al precio de compra de la vivienda. La rentabilidad neta (la real) descuenta todos los gastos recurrentes: IBI, comunidad de vecinos, seguro de hogar, mantenimiento, impuestos (IRPF) e hipoteca.'
+  },
+  {
+    question: '¿Cuál es una buena rentabilidad de alquiler en España?',
+    answer: 'En el mercado español, una rentabilidad bruta superior al 5% o 6% se considera atractiva en grandes ciudades (Madrid, Barcelona, Valencia, Málaga), pudiendo superar el 7% u 8% en municipios medianos o con alquiler por habitaciones.'
+  },
+  {
+    question: '¿Qué gastos de compraventa hay que sumar al precio de la vivienda?',
+    answer: 'En España los gastos de compra representan entre un 10% y un 12% adicional: Impuesto de Transmisiones Patrimoniales (ITP entre 6% y 10% según CCAA) o IVA (10% en obra nueva), más gastos de notaría, registro de la propiedad y tasación.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Rentabilidad de Alquiler Inmobiliario | Bruta y Neta"
+  description="Calcula la rentabilidad bruta y neta de una inversión inmobiliaria en España. Desglose de IBI, comunidad, ITP, cash flow mensual y gastos de compraventa."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Rentabilidad Alquiler</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🏢 Inversión Inmobiliaria & Real Estate</div>
+      <h1>Calculadora de Rentabilidad de Alquiler</h1>
+      <p class="tool-subtitle">
+        Analiza si una vivienda en alquiler es rentable: rentabilidad bruta, rentabilidad neta tras gastos e ITP, y flujo de caja mensual (Cash Flow) limpio.
+      </p>
+    </header>
+
+    <div class="rental-grid">
+      <!-- FORMULARIO -->
+      <div class="card form-card">
+        <h3>Datos de la Inversión</h3>
+
+        <div class="form-group">
+          <label for="buy-price">Precio de Compra de la Vivienda (€)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="buy-price" value="150000" min="10000" step="5000" />
+            <span class="symbol">€</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="buy-expenses">Gastos de Compra y Reforma (ITP, Notaría, Muebles)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="buy-expenses" value="15000" min="0" step="1000" />
+            <span class="symbol">€</span>
+          </div>
+          <p class="field-hint">Aproximadamente el 10% del precio en impuestos (ITP) y trámites notariales.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="monthly-rent">Alquiler Mensual Estimado (€/mes)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="monthly-rent" value="850" min="100" step="25" />
+            <span class="symbol">€/mes</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="annual-costs">Gastos Anuales Fijos (IBI, Comunidad, Seguro)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="annual-costs" value="1400" min="0" step="100" />
+            <span class="symbol">€/año</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="monthly-mortgage">Cuota de Hipoteca Mensual (si procede)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="monthly-mortgage" value="380" min="0" step="20" />
+            <span class="symbol">€/mes</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTADOS -->
+      <div class="card result-card">
+        <h3>Rentabilidad de la Inversión</h3>
+
+        <div class="yield-boxes">
+          <div class="y-box gross-yield">
+            <span class="y-title">Rentabilidad Bruta</span>
+            <div class="y-val" id="res-gross-yield">6,8%</div>
+            <span class="y-sub">Sobre precio de compra</span>
+          </div>
+
+          <div class="y-box net-yield">
+            <span class="y-title">Rentabilidad Neta</span>
+            <div class="y-val" id="res-net-yield">5,3%</div>
+            <span class="y-sub">Sobre inversión total</span>
+          </div>
+        </div>
+
+        <div class="cashflow-box">
+          <span class="cf-title">Cash Flow Mensual Neto (Bolsillo)</span>
+          <div class="cf-val" id="res-cashflow">+ 353,33 €/mes</div>
+          <span class="cf-sub" id="res-annual-cashflow">+ 4.240,00 € limpios al año</span>
+        </div>
+
+        <div class="metrics-list">
+          <div class="m-item">
+            <span>Inversión Total Desembolsada:</span>
+            <strong id="res-total-invested">165.000,00 €</strong>
+          </div>
+          <div class="m-item">
+            <span>Ingresos Brutos Anuales:</span>
+            <strong id="res-annual-income">10.200,00 €</strong>
+          </div>
+          <div class="m-item">
+            <span>Gastos Anuales (Fijos + Hipoteca):</span>
+            <strong id="res-total-expenses">5.960,00 €</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN EDUCATIVA -->
+    <section class="info-section">
+      <h2>Cómo analizar una inversión inmobiliaria con éxito</h2>
+      <p>
+        Para no cometer errores en la compra de pisos para alquilar, ten en cuenta las siguientes variables financieras:
+      </p>
+      <ul>
+        <li><strong>Factor de vacancia:</strong> Cuenta siempre con que la vivienda pueda estar desocupada entre 2 y 4 semanas cada dos años por cambio de inquilinos.</li>
+        <li><strong>Fondo para imprevistos (Capex):</strong> Reserva al menos un 5% de los alquileres para pintar la vivienda, cambiar electrodomésticos o abonar derramas comunitarias.</li>
+        <li><strong>Ventaja fiscal del alquiler habitual:</strong> En el IRPF español, los rendimientos netos del alquiler para vivienda habitual cuentan con una reducción fiscal de hasta el 50% o 60% en la base imponible.</li>
+      </ul>
+    </section>
+
+    <LegalDisclaimer type="finance" />
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  function initRentalCalc() {
+    const buyInp = document.getElementById('buy-price') as HTMLInputElement | null;
+    const expInp = document.getElementById('buy-expenses') as HTMLInputElement | null;
+    const rentInp = document.getElementById('monthly-rent') as HTMLInputElement | null;
+    const annualCostsInp = document.getElementById('annual-costs') as HTMLInputElement | null;
+    const mortInp = document.getElementById('monthly-mortgage') as HTMLInputElement | null;
+
+    const resGross = document.getElementById('res-gross-yield');
+    const resNet = document.getElementById('res-net-yield');
+    const resCf = document.getElementById('res-cashflow');
+    const resAnnCf = document.getElementById('res-annual-cashflow');
+    const resTotalInv = document.getElementById('res-total-invested');
+    const resAnnInc = document.getElementById('res-annual-income');
+    const resTotExp = document.getElementById('res-total-expenses');
+
+    function calculate() {
+      if (!buyInp || !expInp || !rentInp || !annualCostsInp || !mortInp) return;
+      const buyPrice = Math.max(1000, parseFloat(buyInp.value) || 0);
+      const buyExpenses = Math.max(0, parseFloat(expInp.value) || 0);
+      const monthlyRent = Math.max(0, parseFloat(rentInp.value) || 0);
+      const annualCosts = Math.max(0, parseFloat(annualCostsInp.value) || 0);
+      const monthlyMort = Math.max(0, parseFloat(mortInp.value) || 0);
+
+      const totalInvestment = buyPrice + buyExpenses;
+      const annualIncome = monthlyRent * 12;
+
+      // Rentabilidad Bruta: Ingresos anuales / Precio de compra
+      const grossYield = buyPrice > 0 ? (annualIncome / buyPrice) * 100 : 0;
+
+      // Rentabilidad Neta (sin contar hipoteca): (Ingresos anuales - Gastos fijos) / Inversión total
+      const netOperatingIncome = annualIncome - annualCosts;
+      const netYield = totalInvestment > 0 ? (netOperatingIncome / totalInvestment) * 100 : 0;
+
+      // Cash flow (con hipoteca)
+      const annualMortgage = monthlyMort * 12;
+      const totalExpenses = annualCosts + annualMortgage;
+      const annualCashflow = annualIncome - totalExpenses;
+      const monthlyCashflow = annualCashflow / 12;
+
+      if (resGross) resGross.textContent = grossYield.toFixed(1) + '%';
+      if (resNet) resNet.textContent = netYield.toFixed(1) + '%';
+
+      if (resCf) {
+        const sign = monthlyCashflow >= 0 ? '+ ' : '- ';
+        resCf.textContent = `${sign}${Math.abs(monthlyCashflow).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €/mes`;
+        resCf.style.color = monthlyCashflow >= 0 ? '#10b981' : '#ef4444';
+      }
+      if (resAnnCf) {
+        const sign = annualCashflow >= 0 ? '+ ' : '- ';
+        resAnnCf.textContent = `${sign}${Math.abs(annualCashflow).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} € limpios al año`;
+      }
+
+      if (resTotalInv) resTotalInv.textContent = totalInvestment.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      if (resAnnInc) resAnnInc.textContent = annualIncome.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      if (resTotExp) resTotExp.textContent = totalExpenses.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    }
+
+    [buyInp, expInp, rentInp, annualCostsInp, mortInp].forEach(inp => {
+      inp?.addEventListener('input', calculate);
+    });
+
+    calculate();
+  }
+
+  document.addEventListener('astro:page-load', initRentalCalc);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRentalCalc);
+  } else {
+    initRentalCalc();
+  }
+</script>
+
+<style>
+  .tool-page { max-width: 920px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .breadcrumb { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; gap: 0.5rem; }
+  .breadcrumb a { color: var(--primary); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(139, 92, 246, 0.12); color: #8b5cf6; border-radius: 999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
+  .tool-subtitle { color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; max-width: 700px; margin: 0 auto; }
+
+  .rental-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+  @media (max-width: 768px) { .rental-grid { grid-template-columns: 1fr; } }
+
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; }
+  .form-card h3, .result-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text); }
+
+  .form-group { margin-bottom: 1.3rem; }
+  .form-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text); }
+  .input-with-symbol { position: relative; display: flex; align-items: center; }
+  .input-with-symbol input { width: 100%; padding: 0.75rem 4.5rem 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 1.05rem; font-weight: 600; }
+  .input-with-symbol .symbol { position: absolute; right: 1rem; color: var(--text-muted); font-weight: 700; font-size: 0.85rem; }
+  .field-hint { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; margin-top: 0.35rem; }
+
+  .yield-boxes { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+  .y-box { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; text-align: center; }
+  .gross-yield { border-top: 4px solid #6366f1; }
+  .net-yield { border-top: 4px solid #10b981; }
+  .y-title { display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.25rem; }
+  .y-val { font-size: 2rem; font-weight: 800; color: var(--text); }
+  .net-yield .y-val { color: #10b981; }
+  .gross-yield .y-val { color: #6366f1; }
+  .y-sub { font-size: 0.75rem; color: var(--text-muted); }
+
+  .cashflow-box { text-align: center; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem; }
+  .cf-title { display: block; font-size: 0.8rem; font-weight: 700; color: #10b981; text-transform: uppercase; margin-bottom: 0.25rem; }
+  .cf-val { font-size: 1.8rem; font-weight: 800; }
+  .cf-sub { font-size: 0.85rem; color: var(--text-muted); }
+
+  .metrics-list { display: flex; flex-direction: column; gap: 0.65rem; }
+  .m-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.88rem; color: var(--text-muted); }
+  .m-item strong { color: var(--text); }
+
+  .info-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+  .info-section h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+  .info-section p { color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; }
+  .info-section ul { color: var(--text-muted); line-height: 1.8; padding-left: 1.5rem; }
+</style>

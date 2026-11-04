@@ -1,0 +1,257 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Préstamos Personales', url: '/herramientas/calculadora-prestamos' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué diferencia hay entre el TIN y la TAE?',
+    answer: 'El TIN (Tipo de Interés Nominal) es el precio que cobra el banco exclusivamente por prestar el dinero. La TAE (Tasa Anual Equivalente) incluye el TIN más todas las comisiones de apertura, estudio, seguros obligatorios y gastos vinculados. Siempre debes comparar préstamos fijándote en la TAE.'
+  },
+  {
+    question: '¿Qué es el sistema de amortización francés?',
+    answer: 'Es el sistema utilizado por la inmensa mayoría de entidades financieras en España. En él, las cuotas mensuales son constantes: al principio pagas más intereses y poco capital, y hacia el final del préstamo amortizas mucho capital y casi nada de intereses.'
+  },
+  {
+    question: '¿Puedo amortizar o cancelar un préstamo anticipadamente?',
+    answer: 'Sí, la Ley 16/2011 de Contratos de Crédito al Consumo en España limita por ley las comisiones de amortización anticipada a un máximo del 0,5% si queda menos de un año de plazo, o el 1% si queda más de un año.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Préstamos Personales Online | Cuota y Amortización"
+  description="Calcula la cuota mensual de tu préstamo personal o crédito al consumo en España. Desglose de intereses totales, TIN y cuadro de amortización mensual."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de Préstamos</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">💶 Finanzas & Créditos</div>
+      <h1>Calculadora de Préstamos Personales</h1>
+      <p class="tool-subtitle">
+        Calcula tu cuota mensual exacta según el importe prestado, plazo en años o meses y tipo de interés. Descubre cuántos intereses pagarás en total antes de firmar.
+      </p>
+    </header>
+
+    <div class="loan-calc-grid">
+      <!-- FORMULARIO -->
+      <div class="card form-card">
+        <h3>Condiciones del Préstamo</h3>
+
+        <div class="form-group">
+          <label for="loan-amount">Importe Solicitado (€)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="loan-amount" value="12000" min="500" max="100000" step="500" />
+            <span class="symbol">€</span>
+          </div>
+          <input type="range" id="loan-amount-range" min="1000" max="60000" step="500" value="12000" class="range-slider" />
+        </div>
+
+        <div class="form-group">
+          <label for="loan-years">Plazo de Devolución (Años)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="loan-years" value="5" min="1" max="10" step="1" />
+            <span class="symbol">Años</span>
+          </div>
+          <input type="range" id="loan-years-range" min="1" max="10" step="1" value="5" class="range-slider" />
+        </div>
+
+        <div class="form-group">
+          <label for="loan-interest">Tipo de Interés Anual - TIN (%)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="loan-interest" value="6.5" min="0.1" max="25" step="0.1" />
+            <span class="symbol">%</span>
+          </div>
+          <p class="field-hint">En España el interés medio en préstamos personales suele oscilar entre el 5,5% y el 9% TIN.</p>
+        </div>
+      </div>
+
+      <!-- RESULTADOS -->
+      <div class="card result-card">
+        <h3>Tu Cuota Estimada</h3>
+
+        <div class="monthly-quota-box">
+          <span class="quota-label">Cuota Mensual a Pagar</span>
+          <div class="quota-number" id="res-monthly-quota">234,85 €</div>
+          <span class="quota-duration" id="res-total-months">durante 60 meses</span>
+        </div>
+
+        <div class="summary-metrics">
+          <div class="metric-box">
+            <span class="metric-title">Capital Prestado</span>
+            <strong id="res-capital">12.000,00 €</strong>
+          </div>
+          <div class="metric-box highlight-warn">
+            <span class="metric-title">Intereses Totales</span>
+            <strong id="res-total-interest">2.091,00 €</strong>
+          </div>
+          <div class="metric-box highlight-blue">
+            <span class="metric-title">Total a Devolver</span>
+            <strong id="res-total-payment">14.091,00 €</strong>
+          </div>
+        </div>
+
+        <div class="repartition-bar">
+          <div class="rep-capital" id="rep-cap-bar" style="width: 85%;">Capital (85%)</div>
+          <div class="rep-interest" id="rep-int-bar" style="width: 15%;">Intereses (15%)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN EDUCATIVA -->
+    <section class="info-section">
+      <h2>Consejos clave antes de solicitar un crédito personal</h2>
+      <p>
+        Un préstamo personal puede financiar imprevistos como la reforma de un hogar, una avería del coche o estudios, pero es vital comparar ofertas bancarias:
+      </p>
+      <ul>
+        <li><strong>Vigila las comisiones de apertura y estudio:</strong> Un TIN bajo puede esconder una comisión inicial del 2% o 3% que encarezca el coste total.</li>
+        <li><strong>Cuidado con los productos vinculados:</strong> Algunos bancos exigen domiciliar nómina, contratar seguro de vida o seguro de protección de pagos. Calcula si la rebaja en el interés compensa el coste anual de dichos seguros.</li>
+        <li><strong>Endeudamiento responsable:</strong> Los expertos recomiendan que la suma de todas tus cuotas mensuales (préstamos + hipoteca + tarjetas) nunca supere el <strong>35% - 40%</strong> de tus ingresos netos mensuales.</li>
+      </ul>
+    </section>
+
+    <LegalDisclaimer type="finance" />
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  function initLoanCalc() {
+    const amountInp = document.getElementById('loan-amount') as HTMLInputElement | null;
+    const amountRng = document.getElementById('loan-amount-range') as HTMLInputElement | null;
+    const yearsInp = document.getElementById('loan-years') as HTMLInputElement | null;
+    const yearsRng = document.getElementById('loan-years-range') as HTMLInputElement | null;
+    const rateInp = document.getElementById('loan-interest') as HTMLInputElement | null;
+
+    const resMonthly = document.getElementById('res-monthly-quota');
+    const resMonths = document.getElementById('res-total-months');
+    const resCap = document.getElementById('res-capital');
+    const resInterest = document.getElementById('res-total-interest');
+    const resTotal = document.getElementById('res-total-payment');
+
+    const repCapBar = document.getElementById('rep-cap-bar');
+    const repIntBar = document.getElementById('rep-int-bar');
+
+    function sync(from: HTMLInputElement | null, to: HTMLInputElement | null) {
+      if (from && to) to.value = from.value;
+    }
+
+    function calculate() {
+      if (!amountInp || !yearsInp || !rateInp) return;
+      const principal = Math.max(100, parseFloat(amountInp.value) || 0);
+      const years = Math.max(0.5, parseFloat(yearsInp.value) || 0);
+      const annualRate = Math.max(0, parseFloat(rateInp.value) || 0);
+
+      const totalMonths = Math.round(years * 12);
+      const monthlyRate = annualRate > 0 ? (annualRate / 100) / 12 : 0;
+
+      let monthlyPayment = 0;
+      if (monthlyRate > 0) {
+        monthlyPayment = principal * (monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / (Math.pow(1 + monthlyRate, totalMonths) - 1);
+      } else {
+        monthlyPayment = principal / totalMonths;
+      }
+
+      const totalPaid = monthlyPayment * totalMonths;
+      const totalInterest = Math.max(0, totalPaid - principal);
+
+      if (resMonthly) resMonthly.textContent = monthlyPayment.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      if (resMonths) resMonths.textContent = `durante ${totalMonths} meses (${years} años)`;
+      if (resCap) resCap.textContent = principal.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      if (resInterest) resInterest.textContent = totalInterest.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      if (resTotal) resTotal.textContent = totalPaid.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+
+      const capPct = totalPaid > 0 ? (principal / totalPaid) * 100 : 100;
+      const intPct = 100 - capPct;
+
+      if (repCapBar) {
+        repCapBar.style.width = capPct.toFixed(1) + '%';
+        repCapBar.textContent = `Capital (${capPct.toFixed(0)}%)`;
+      }
+      if (repIntBar) {
+        repIntBar.style.width = intPct.toFixed(1) + '%';
+        repIntBar.textContent = intPct > 10 ? `Interés (${intPct.toFixed(0)}%)` : '';
+      }
+    }
+
+    amountInp?.addEventListener('input', () => { sync(amountInp, amountRng); calculate(); });
+    amountRng?.addEventListener('input', () => { sync(amountRng, amountInp); calculate(); });
+    yearsInp?.addEventListener('input', () => { sync(yearsInp, yearsRng); calculate(); });
+    yearsRng?.addEventListener('input', () => { sync(yearsRng, yearsInp); calculate(); });
+    rateInp?.addEventListener('input', calculate);
+
+    calculate();
+  }
+
+  document.addEventListener('astro:page-load', initLoanCalc);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLoanCalc);
+  } else {
+    initLoanCalc();
+  }
+</script>
+
+<style>
+  .tool-page { max-width: 920px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .breadcrumb { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; gap: 0.5rem; }
+  .breadcrumb a { color: var(--primary); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(99, 102, 241, 0.12); color: #6366f1; border-radius: 999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
+  .tool-subtitle { color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; max-width: 700px; margin: 0 auto; }
+
+  .loan-calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+  @media (max-width: 768px) { .loan-calc-grid { grid-template-columns: 1fr; } }
+
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; }
+  .form-card h3, .result-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text); }
+
+  .form-group { margin-bottom: 1.4rem; }
+  .form-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text); }
+  .input-with-symbol { position: relative; display: flex; align-items: center; margin-bottom: 0.4rem; }
+  .input-with-symbol input { width: 100%; padding: 0.75rem 3.5rem 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 1.1rem; font-weight: 600; }
+  .input-with-symbol .symbol { position: absolute; right: 1rem; color: var(--text-muted); font-weight: 700; font-size: 0.9rem; }
+  .range-slider { width: 100%; accent-color: var(--primary); cursor: pointer; }
+  .field-hint { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; margin-top: 0.35rem; }
+
+  .monthly-quota-box { text-align: center; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .quota-label { display: block; font-size: 0.85rem; font-weight: 600; color: #6366f1; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.25rem; }
+  .quota-number { font-size: 2.6rem; font-weight: 800; color: #6366f1; }
+  .quota-duration { font-size: 0.88rem; color: var(--text-muted); }
+
+  .summary-metrics { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem; }
+  .metric-box { display: flex; justify-content: space-between; align-items: center; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; }
+  .metric-title { font-size: 0.88rem; color: var(--text-muted); }
+  .metric-box strong { font-size: 1.1rem; color: var(--text); }
+  .highlight-warn strong { color: #f59e0b; }
+  .highlight-blue strong { color: #0ea5e9; }
+
+  .repartition-bar { display: flex; height: 32px; border-radius: 8px; overflow: hidden; font-size: 0.78rem; font-weight: 700; color: #fff; text-align: center; line-height: 32px; }
+  .rep-capital { background: #3b82f6; transition: width 0.3s; }
+  .rep-interest { background: #f59e0b; transition: width 0.3s; }
+
+  .info-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+  .info-section h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+  .info-section p { color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; }
+  .info-section ul { color: var(--text-muted); line-height: 1.8; padding-left: 1.5rem; }
+</style>

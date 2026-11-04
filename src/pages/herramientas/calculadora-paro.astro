@@ -1,0 +1,264 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora de Paro y Prestación por Desempleo', url: '/herramientas/calculadora-paro' }
+];
+
+const faqs = [
+  {
+    question: '¿Cuánto se cobra de paro en España?',
+    answer: 'Durante los primeros 180 días (primeros 6 meses) se cobra el 70% de la base reguladora media de los últimos 180 días cotizados. A partir del día 181 y hasta agotar la prestación, se cobra el 60%.'
+  },
+  {
+    question: '¿Cuáles son los topes mínimos y máximos del paro en 2026?',
+    answer: 'La prestación está limitada por topes según los hijos a cargo. El importe mínimo oscila entre 560 € (sin hijos) y 749 € (con hijos), mientras que el tope máximo legal se sitúa entre 1.225 € (sin hijos), 1.400 € (un hijo) y 1.575 € (dos o más hijos).'
+  },
+  {
+    question: '¿Cuántos días de paro me corresponden según mi tiempo cotizado?',
+    answer: 'El periodo de derecho se calcula por tramos: por cada 360 días cotizados corresponden 120 días de paro (4 meses). Con 720 días cotizados corresponden 240 días (8 meses), hasta alcanzar el máximo de 720 días de prestación (2 años completos) con al menos 6 años (2.160 días) de cotización.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Paro en España | Prestación por Desempleo SEPE"
+  description="Calcula cuánto vas a cobrar de paro al mes y cuántos meses te corresponden según tu base de cotización y años trabajados. Topes con y sin hijos actualizados."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de Paro</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🛡️ Empleo, SEPE & Seguridad Social</div>
+      <h1>Calculadora de Paro y Prestación por Desempleo</h1>
+      <p class="tool-subtitle">
+        Calcula el importe mensual neto que te ingresará el SEPE durante los primeros 6 meses y meses posteriores, comprobando topes por hijos y meses de cobertura legal.
+      </p>
+    </header>
+
+    <div class="unemp-grid">
+      <!-- FORMULARIO -->
+      <div class="card form-card">
+        <h3>Tus Datos Laborales</h3>
+
+        <div class="form-group">
+          <label for="base-reg">Base Reguladora Media Mensual (€)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="base-reg" value="1800" min="500" max="8000" step="50" />
+            <span class="symbol">€/mes</span>
+          </div>
+          <p class="field-hint">Aparece en la parte inferior de tus nóminas como "Base de contingencias profesionales / desempleo".</p>
+        </div>
+
+        <div class="form-group">
+          <label for="work-days">Tiempo Total Cotizado (Últimos 6 años)</label>
+          <select id="work-days" class="select-field">
+            <option value="360">De 360 a 539 días (1 año cotizado) → 4 meses paro</option>
+            <option value="540">De 540 a 719 días (1,5 años cotizados) → 6 meses paro</option>
+            <option value="720" selected>De 720 a 899 días (2 años cotizados) → 8 meses paro</option>
+            <option value="900">De 900 a 1.079 días (2,5 años) → 10 meses paro</option>
+            <option value="1080">De 1.080 a 1.259 días (3 años) → 12 meses paro</option>
+            <option value="1440">De 1.440 a 1.619 días (4 años) → 16 meses paro</option>
+            <option value="1800">De 1.800 a 2.159 días (5 años) → 20 meses paro</option>
+            <option value="2160">Más de 2.160 días (6 o más años) → 24 meses (Máximo)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="children-count">Hijos Menores de 26 Años a Cargo</label>
+          <select id="children-count" class="select-field">
+            <option value="0" selected>Sin hijos a cargo (Tope máx ~1.225 €)</option>
+            <option value="1">1 hijo a cargo (Tope máx ~1.400 €)</option>
+            <option value="2">2 o más hijos a cargo (Tope máx ~1.575 €)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- RESULTADOS -->
+      <div class="card result-card">
+        <h3>Tu Prestación Estimada</h3>
+
+        <div class="benefit-phases">
+          <div class="phase-box">
+            <span class="phase-title">Meses 1 al 6 (70%)</span>
+            <div class="phase-amount" id="res-phase-1">1.225,00 €</div>
+            <span class="phase-sub">Importe bruto mensual</span>
+          </div>
+
+          <div class="phase-box">
+            <span class="phase-title">Mes 7 en adelante (60%)</span>
+            <div class="phase-amount" id="res-phase-2">1.080,00 €</div>
+            <span class="phase-sub">Importe bruto mensual</span>
+          </div>
+        </div>
+
+        <div class="metrics-row">
+          <div class="metric-cell">
+            <span class="m-label">Duración Total</span>
+            <strong id="res-duration">8 Meses (240 días)</strong>
+          </div>
+          <div class="metric-cell">
+            <span class="m-label">Total Acumulado</span>
+            <strong id="res-total-benefit">9.510,00 €</strong>
+          </div>
+        </div>
+
+        <p class="discount-note">
+          ℹ️ <strong>Retenciones en el cobro:</strong> El SEPE aplica una deducción del <strong>4,70%</strong> para cotización a la Seguridad Social (jubilación) más la retención de IRPF que corresponda según tu situación familiar.
+        </p>
+      </div>
+    </div>
+
+    <!-- SECCIÓN EDUCATIVA -->
+    <section class="info-section">
+      <h2>Requisitos para cobrar la prestación por desempleo</h2>
+      <p>
+        Para tener derecho al paro contributivo gestionado por el SEPE, debes acreditar los siguientes puntos:
+      </p>
+      <ul>
+        <li><strong>Estar en situación legal de desempleo:</strong> Despido objetivo o improcedente, finalización de contrato temporal o no superar el periodo de prueba por decisión empresarial. <em>(La baja voluntaria no da derecho a cobrar el paro).</em></li>
+        <li><strong>Haber cotizado al menos 360 días</strong> en los 6 años anteriores al cese de la actividad laboral.</li>
+        <li><strong>Inscribirse como demandante de empleo</strong> en tu oficina de empleo autonómica en un plazo máximo de <strong>15 días hábiles</strong> tras el despido.</li>
+      </ul>
+    </section>
+
+    <LegalDisclaimer type="legal" />
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  function initParoCalc() {
+    const baseRegInp = document.getElementById('base-reg') as HTMLInputElement | null;
+    const workDaysSel = document.getElementById('work-days') as HTMLSelectElement | null;
+    const childrenSel = document.getElementById('children-count') as HTMLSelectElement | null;
+
+    const resP1 = document.getElementById('res-phase-1');
+    const resP2 = document.getElementById('res-phase-2');
+    const resDur = document.getElementById('res-duration');
+    const resTotal = document.getElementById('res-total-benefit');
+
+    function calculate() {
+      if (!baseRegInp || !workDaysSel || !childrenSel) return;
+      const base = Math.max(100, parseFloat(baseRegInp.value) || 0);
+      const days = parseInt(workDaysSel.value) || 720;
+      const children = parseInt(childrenSel.value) || 0;
+
+      // Topes de prestación en España
+      let maxBenefit = 1225.00;
+      let minBenefit = 560.00;
+      if (children === 1) {
+        maxBenefit = 1400.00;
+        minBenefit = 749.00;
+      } else if (children >= 2) {
+        maxBenefit = 1575.00;
+        minBenefit = 749.00;
+      }
+
+      // Cálculo Fase 1: 70%
+      let phase1 = base * 0.70;
+      if (phase1 > maxBenefit) phase1 = maxBenefit;
+      if (phase1 < minBenefit) phase1 = minBenefit;
+
+      // Cálculo Fase 2: 60%
+      let phase2 = base * 0.60;
+      if (phase2 > maxBenefit) phase2 = maxBenefit;
+      if (phase2 < minBenefit) phase2 = minBenefit;
+
+      // Duración en meses según días cotizados
+      let months = 4;
+      if (days >= 2160) months = 24;
+      else if (days >= 1800) months = 20;
+      else if (days >= 1440) months = 16;
+      else if (days >= 1080) months = 12;
+      else if (days >= 900) months = 10;
+      else if (days >= 720) months = 8;
+      else if (days >= 540) months = 6;
+      else months = 4;
+
+      // Total acumulado
+      let totalAmount = 0;
+      if (months <= 6) {
+        totalAmount = phase1 * months;
+      } else {
+        totalAmount = (phase1 * 6) + (phase2 * (months - 6));
+      }
+
+      if (resP1) resP1.textContent = phase1.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      if (resP2) resP2.textContent = phase2.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      if (resDur) resDur.textContent = `${months} Meses (${months * 30} días)`;
+      if (resTotal) resTotal.textContent = totalAmount.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    }
+
+    baseRegInp?.addEventListener('input', calculate);
+    workDaysSel?.addEventListener('change', calculate);
+    childrenSel?.addEventListener('change', calculate);
+
+    calculate();
+  }
+
+  document.addEventListener('astro:page-load', initParoCalc);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initParoCalc);
+  } else {
+    initParoCalc();
+  }
+</script>
+
+<style>
+  .tool-page { max-width: 920px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .breadcrumb { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; gap: 0.5rem; }
+  .breadcrumb a { color: var(--primary); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(239, 68, 68, 0.12); color: #ef4444; border-radius: 999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
+  .tool-subtitle { color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; max-width: 700px; margin: 0 auto; }
+
+  .unemp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+  @media (max-width: 768px) { .unemp-grid { grid-template-columns: 1fr; } }
+
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; }
+  .form-card h3, .result-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text); }
+
+  .form-group { margin-bottom: 1.4rem; }
+  .form-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text); }
+  .input-with-symbol { position: relative; display: flex; align-items: center; }
+  .input-with-symbol input { width: 100%; padding: 0.75rem 4rem 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 1.1rem; font-weight: 600; }
+  .input-with-symbol .symbol { position: absolute; right: 1rem; color: var(--text-muted); font-weight: 700; font-size: 0.88rem; }
+  .select-field { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font-size: 0.92rem; font-weight: 500; }
+  .field-hint { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; margin-top: 0.35rem; }
+
+  .benefit-phases { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+  .phase-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px; padding: 1.25rem; text-align: center; }
+  .phase-title { display: block; font-size: 0.8rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; margin-bottom: 0.25rem; }
+  .phase-amount { font-size: 1.8rem; font-weight: 800; color: #3b82f6; }
+  .phase-sub { font-size: 0.75rem; color: var(--text-muted); }
+
+  .metrics-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+  .metric-cell { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem; text-align: center; }
+  .m-label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+  .metric-cell strong { font-size: 1.15rem; color: var(--text); }
+
+  .discount-note { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; background: var(--bg); padding: 0.85rem; border-radius: 8px; border-left: 3px solid #3b82f6; }
+
+  .info-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+  .info-section h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+  .info-section p { color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; }
+  .info-section ul { color: var(--text-muted); line-height: 1.8; padding-left: 1.5rem; }
+</style>
