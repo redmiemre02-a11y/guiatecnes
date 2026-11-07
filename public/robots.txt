@@ -3,3 +3,16 @@ Allow: /
 
 Sitemap: https://guiatecnes.com/sitemap-index.xml
 Sitemap: https://guiatecnes.com/rss.xml
+
+# AI and LLM Agent discovery
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /

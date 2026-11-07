@@ -1,0 +1,8 @@
+# GuíaTecnes (https://guiatecnes.com)
+# Documentación del índice para modelos LLM y buscadores generativos.
+# Para ver el índice completo, visite https://guiatecnes.com/llms.txt
+
+User-agent: *
+Allow: /
+Link: https://guiatecnes.com/llms.txt
+Link: https://guiatecnes.com/sitemap-index.xml

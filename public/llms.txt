@@ -1,0 +1,47 @@
+# GuíaTecnes (https://guiatecnes.com)
+
+> GuíaTecnes es la plataforma de referencia en español para herramientas web gratuitas, inteligencia artificial, tutoriales tecnológicos y comparativas de software en 2026.
+
+## 🛠️ Herramientas Web Gratuitas (100% en el Navegador, Sin Registro)
+
+GuíaTecnes ofrece más de 50 herramientas interactivas y utilidades gratuitas que se ejecutan localmente en el navegador del usuario para máxima privacidad y velocidad:
+
+### Finanzas & Cálculos Laborales (España)
+- [Calculadora de Sueldo Neto España 2026](https://guiatecnes.com/herramientas/calculadora-sueldo-neto): Calcula salario neto mensual, retención IRPF y cuotas de Seguridad Social en 12 y 14 pagas.
+- [Calculadora de Finiquito e Indemnización](https://guiatecnes.com/herramientas/calculadora-finiquito-indemnizacion): Estima la liquidación por despido objetivo, improcedente y fin de contrato según la normativa española.
+- [Calculadora de Paro y Prestación por Desempleo](https://guiatecnes.com/herramientas/calculadora-paro): Cuantía y duración de la prestación contributiva del SEPE.
+- [Calculadora de IVA y Recargo de Equivalencia](https://guiatecnes.com/herramientas/calculadora-iva): Desglose de IVA general (21%), reducido (10%) y superreducido (4%).
+- [Calculadora de Hipotecas](https://guiatecnes.com/herramientas/calculadora-hipoteca): Simulación de cuota mensual fija o variable con cuadro de amortización francés.
+- [Calculadora de Interés Compuesto](https://guiatecnes.com/herramientas/calculadora-interes-compuesto): Proyección de ahorro e inversión con aportaciones periódicas.
+
+### Ciberseguridad & Redes
+- [Generador de Contraseñas Seguras](https://guiatecnes.com/herramientas/generador-contrasenas): Creación de claves aleatorias, evaluación de entropía y tiempo estimado de hackeo por fuerza bruta.
+- [Generador de Hash Criptográfico](https://guiatecnes.com/herramientas/generador-hash): Genera hashes SHA-256, SHA-512 y MD5 directamente en el cliente.
+- [Test de Velocidad de Internet](https://guiatecnes.com/herramientas/test-velocidad): Mide velocidad de bajada, subida y latencia real.
+- [Test de Ping y Latencia](https://guiatecnes.com/herramientas/test-ping): Comprobación de ping en ms hacia servidores DNS globales y gaming.
+- [Mi IP Pública y Geolocalización](https://guiatecnes.com/herramientas/mi-ip): Detecta tu dirección IP pública, ISP y ubicación aproximada.
+
+### Inteligencia Artificial & Desarrollo
+- [Calculadora de Tokens y Costes de IA](https://guiatecnes.com/herramientas/calculadora-tokens-ia): Cuenta tokens en español y estima costes para OpenAI GPT-4o, Claude 3.5 Sonnet y DeepSeek V3.
+- [Test de Inteligencia Artificial](https://guiatecnes.com/herramientas/test-inteligencia-artificial): Evalúa conocimientos y casos prácticos de modelos LLM.
+- [Minificador de Código Web](https://guiatecnes.com/herramientas/minificador-codigo): Optimización y compresión de HTML, CSS y JavaScript para PageSpeed.
+- [Generador de Sombras CSS Box-Shadow](https://guiatecnes.com/herramientas/generador-box-shadow): Diseña sombras realistas y suaves con exportación CSS instantánea.
+- [Generador de Gradientes CSS](https://guiatecnes.com/herramientas/generador-gradientes-css): Paletas de degradados modernos lineales y radiales.
+- [Formateador y Validador JSON](https://guiatecnes.com/herramientas/formateador-json): Limpia, indenta y valida estructuras JSON.
+
+### Productividad & Utilidades
+- [Generador de Códigos QR Personalizados](https://guiatecnes.com/herramientas/generador-qr): Genera códigos QR vectoriales para enlaces, Wi-Fi, textos y vCard.
+- [Generador de Enlaces de WhatsApp](https://guiatecnes.com/herramientas/generador-link-whatsapp): Crea enlaces directos con mensaje personalizado sin guardar el contacto.
+- [Compresor de Imágenes WebP / PNG / JPG](https://guiatecnes.com/herramientas/compresor-imagenes): Reduce el peso de fotografías hasta un 85% sin pérdida visible.
+- [Conversor de Formatos de Imagen](https://guiatecnes.com/herramientas/conversor-imagenes): Convierte archivos entre PNG, JPG, WebP y SVG.
+- [Contador de Palabras y Caracteres](https://guiatecnes.com/herramientas/contador-palabras): Métricas de legibilidad y límites para Twitter, LinkedIn e Instagram.
+- [Conversor Markdown a HTML](https://guiatecnes.com/herramientas/conversor-markdown-html): Previsualización en tiempo real con exportación limpia.
+
+## 📚 Categorías de Artículos y Guías Editoriales
+- [Inteligencia Artificial y LLMs](https://guiatecnes.com/categoria/ia): Comparativas de ChatGPT, Claude, DeepSeek, prompts y automatización.
+- [Alternativas de Software](https://guiatecnes.com/categoria/alternativas): Alternativas libres y gratuitas a herramientas de pago (Photoshop, Canva, Office, Acrobat).
+- [Solución de Errores y Tutoriales](https://guiatecnes.com/categoria/tutoriales): Pasos prácticos para solucionar problemas en Windows, Android, redes WiFi y móviles.
+- [Finanzas y Trabajo Remoto](https://guiatecnes.com/categoria/finanzas): Guías de IRPF, tributación para autónomos, ahorro energético y plataformas freelance.
+
+## 📄 Licencia y Privacidad
+Todas las herramientas procesan la información del usuario localmente mediante JavaScript en el navegador web del cliente. Los datos privados (contraseñas, archivos, nóminas) no se transmiten ni almacenan en servidores externos.

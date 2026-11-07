@@ -21,7 +21,7 @@ interface Props {
   description: string;
   image?: string;
   canonicalURL?: string;
-  type?: 'website' | 'article';
+  type?: 'website' | 'article' | 'tool';
   pubDate?: Date;
   updatedDate?: Date;
   author?: string;
@@ -46,14 +46,41 @@ const siteName = 'GuíaTecnes';
 const siteURL = (Astro.site?.toString() || 'https://guiatecnes.com').replace(/\/$/, '');
 const fullImageURL = image.startsWith('http') ? image : new URL(image, siteURL).toString();
 
+const isToolPage = type === 'tool' || (Astro.url.pathname.startsWith('/herramientas/') && Astro.url.pathname !== '/herramientas' && Astro.url.pathname !== '/herramientas/');
+
 const schemaWebSite = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": siteName,
   "url": siteURL,
   "description": "Tu guía definitiva de herramientas de IA, alternativas de software, tutoriales y solución de errores en español.",
-  "inLanguage": "es"
+  "inLanguage": "es",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": `${siteURL}/?q={search_term_string}`
+    },
+    "query-input": "required name=search_term_string"
+  }
 };
+
+const schemaWebApplication = isToolPage ? {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": title,
+  "description": description,
+  "url": canonicalURL,
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "browserRequirements": "Requires JavaScript. Requires HTML5.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR"
+  },
+  "inLanguage": "es"
+} : null;
 
 const schemaArticle = type === 'article' ? {
   "@context": "https://schema.org",
@@ -181,6 +208,7 @@ const schemaFAQ = faqs.length > 0 ? {
   {schemaArticle && <script type="application/ld+json" set:html={JSON.stringify(schemaArticle)} />}
   {schemaBreadcrumb && <script type="application/ld+json" set:html={JSON.stringify(schemaBreadcrumb)} />}
   {schemaFAQ && <script type="application/ld+json" set:html={JSON.stringify(schemaFAQ)} />}
+  {schemaWebApplication && <script type="application/ld+json" set:html={JSON.stringify(schemaWebApplication)} />}
 
   <ClientRouter />
 
