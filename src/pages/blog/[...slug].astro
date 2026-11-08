@@ -382,10 +382,77 @@ function getRelevantTool(title: string, tags: string[]) {
     };
   }
 
+
+  if (text.includes('tiktok') || text.includes('reels') || text.includes('shorts') || text.includes('video vertical') || text.includes('zona segura') || text.includes('instagram')) {
+    return {
+      title: 'Calculadora de Zona Segura para Reels, TikTok y Shorts',
+      desc: 'Comprueba que tus subtitulos y textos no queden tapados por los botones e iconos de la interfaz 9:16 en redes sociales.',
+      btn: 'Probar Simulador de Zona Segura',
+      url: '/herramientas/calculadora-zona-segura-reels-tiktok',
+      icon: '📱',
+      badge: 'Redes & Video'
+    };
+  }
+
+  if (text.includes('factura') || text.includes('autonomo') || text.includes('iva') || text.includes('irpf') || text.includes('hacienda') || text.includes('freelance') || text.includes('wise') || text.includes('revolut')) {
+    return {
+      title: 'Calculadora de Factura Freelance con IVA e IRPF',
+      desc: 'Calcula tu base imponible, retenciones de IRPF (7% o 15%) e IVA del 21% para emitir facturas legales en Espana.',
+      btn: 'Calcular Factura Freelance',
+      url: '/herramientas/calculadora-factura-freelance',
+      icon: '💶',
+      badge: 'Facturacion & IRPF'
+    };
+  }
+
+  if (text.includes('distancia') || text.includes('pantalla') || text.includes('smart tv') || text.includes('pulgadas') || text.includes('oled') || text.includes('salon') || text.includes('cine')) {
+    return {
+      title: 'Calculadora de Distancia y Tamano de Pantalla TV',
+      desc: 'Descubre los metros optimos de visionado para 4K y FHD segun los estandares cinematograficos THX y SMPTE.',
+      btn: 'Calcular Distancia de TV',
+      url: '/herramientas/calculadora-distancia-pantalla-tv',
+      icon: '📺',
+      badge: 'Cine & TV'
+    };
+  }
+
+  if (text.includes('camelcase') || text.includes('snake_case') || text.includes('programador') || text.includes('codigo') || text.includes('variable') || text.includes('desarrollador')) {
+    return {
+      title: 'Conversor de Case para Programadores',
+      desc: 'Convierte texto al instante entre camelCase, snake_case, kebab-case, PascalCase, CONSTANT_CASE y dot.case.',
+      btn: 'Abrir Conversor de Case',
+      url: '/herramientas/conversor-case-programadores',
+      icon: '💻',
+      badge: 'Desarrollo Web'
+    };
+  }
+
+  if (text.includes('bateria') || text.includes('carga') || text.includes('mah') || text.includes('vatios') || text.includes('watt') || text.includes('cargador')) {
+    return {
+      title: 'Calculadora de Tiempo de Carga de Bateria (mAh vs W)',
+      desc: 'Calcula con precision matematica cuantos minutos tardara tu movil o bateria portatil en cargarse del 0 al 100%.',
+      btn: 'Calcular Tiempo de Carga',
+      url: '/herramientas/calculadora-tiempo-carga-bateria',
+      icon: '⚡',
+      badge: 'Baterias & Carga'
+    };
+  }
+
+  if (text.includes('descarga') || text.includes('juego') || text.includes('mbps') || text.includes('fibra') || text.includes('gb') || text.includes('steam')) {
+    return {
+      title: 'Calculadora de Tiempo de Descarga de Archivos y Juegos',
+      desc: 'Calcula cuantas horas o minutos tardara en descargarse un archivo de 50 GB o 100 GB segun los Mbps reales de tu conexion.',
+      btn: 'Calcular Tiempo de Descarga',
+      url: '/herramientas/calculadora-tiempo-descarga-archivos',
+      icon: '🚀',
+      badge: 'Velocidad & Descarga'
+    };
+  }
+
   return {
-    title: 'Descubre Nuestras 48 Herramientas Gratuitas',
+    title: 'Descubre Nuestras 54 Herramientas Gratuitas',
     desc: 'Accede a calculadoras financieras, compresores de imágenes, test de velocidad WiFi, sueldo neto, conversor WebP y más.',
-    btn: 'Ver las 48 Herramientas 🧲',
+    btn: 'Ver las 54 Herramientas 🧲',
     url: '/herramientas',
     icon: '🚀',
     badge: '100% Gratis'

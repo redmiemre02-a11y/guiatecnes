@@ -1,0 +1,363 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "Calculadora de Tiempo de Carga de Batería (mAh vs Vatios) | GuíaTecnológica";
+const description = "Calcula con precisión matemática cuántos minutos tardará tu teléfono móvil, tablet o powerbank en cargarse al 100% según los vatios (W) de tu cargador.";
+---
+
+<BaseLayout title={title} description={description}>
+  <main class="tool-container">
+    <div class="tool-header">
+      <nav class="breadcrumb">
+        <a href="/">Inicio</a> &gt; <a href="/herramientas">Herramientas</a> &gt; <span>Calculadora de Carga</span>
+      </nav>
+      <span class="badge">⚡ Baterías & Hardware</span>
+      <h1>Calculadora de Tiempo de Carga de Batería</h1>
+      <p class="tool-desc">
+        Estima el tiempo real de carga en horas y minutos considerando la curva de protección térmica (fase rápida 0-80% y fase lenta de mantenimiento 80-100%).
+      </p>
+    </div>
+
+    <div class="calculator-card">
+      <div class="form-grid">
+        <div class="input-group">
+          <label for="capacity">Capacidad de la batería (mAh):</label>
+          <div class="input-with-presets">
+            <input type="number" id="capacity" value="5000" min="500" max="50000" step="100" />
+            <div class="presets">
+              <button type="button" class="preset-btn" data-val="3279">iPhone 15 (3.279 mAh)</button>
+              <button type="button" class="preset-btn active" data-val="5000">Estándar Android (5.000 mAh)</button>
+              <button type="button" class="preset-btn" data-val="10000">Powerbank (10.000 mAh)</button>
+              <button type="button" class="preset-btn" data-val="20000">Powerbank XL (20.000 mAh)</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="power">Potencia del cargador (Vatios / W):</label>
+          <div class="input-with-presets">
+            <input type="number" id="power" value="33" min="1" max="240" step="1" />
+            <div class="presets">
+              <button type="button" class="preset-btn" data-power="5">5W (Básico USB)</button>
+              <button type="button" class="preset-btn" data-power="20">20W (Apple / Samsung)</button>
+              <button type="button" class="preset-btn active" data-power="33">33W (Turbo)</button>
+              <button type="button" class="preset-btn" data-power="67">67W (HyperCharge)</button>
+              <button type="button" class="preset-btn" data-power="120">120W (Ultra Rápida)</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="initialLevel">Nivel actual de batería (%):</label>
+          <input type="range" id="initialLevel" min="0" max="95" value="10" />
+          <div class="range-display">Empieza cargando desde: <strong id="initialLevelText">10%</strong></div>
+        </div>
+      </div>
+
+      <div class="results-box">
+        <h3>Tiempo Estimado de Carga</h3>
+        <div class="highlight-result">
+          <span class="total-time" id="totalTimeDisplay">--</span>
+          <span class="sub-label">para llegar al 100% de carga</span>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-title">Fase Rápida (hasta 80%)</span>
+            <strong id="fastTimeDisplay" class="metric-val">--</strong>
+            <small>Carga a máxima potencia</small>
+          </div>
+          <div class="metric-card">
+            <span class="metric-title">Fase Trickle (80% a 100%)</span>
+            <strong id="trickleTimeDisplay" class="metric-val">--</strong>
+            <small>Protección contra sobrecalentamiento</small>
+          </div>
+          <div class="metric-card">
+            <span class="metric-title">Energía Almacenada (Wh)</span>
+            <strong id="wattHoursDisplay" class="metric-val">--</strong>
+            <small>Capacidad en vatios-hora (a 3.85V)</small>
+          </div>
+          <div class="metric-card">
+            <span class="metric-title">Velocidad Promedio</span>
+            <strong id="speedDisplay" class="metric-val">--</strong>
+            <small>mAh recuperados por minuto</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="tool-explanation">
+      <h2>¿Cómo se calcula el tiempo de carga de una batería de litio?</h2>
+      <p>
+        El cálculo físico básico se fundamenta en la energía total requerida expresada en vatios-hora (Wh):
+      </p>
+      <div class="formula-box">
+        <code>Energía (Wh) = [Capacidad (mAh) × Tensión nominal (3.85V)] / 1000</code><br />
+        <code>Tiempo Teórico (Horas) = Energía (Wh) / Potencia del Cargador (W)</code>
+      </div>
+      <p>
+        Sin embargo, en el mundo real, <strong>la carga nunca es lineal al 100% de la potencia anunciada</strong> debido a dos factores cruciales de ingeniería de baterías:
+      </p>
+      <ul>
+        <li><strong>Pérdida por calor y resistencia (Eficiencia 80-85%):</strong> Aproximadamente un 15% de la energía se disipa en forma de calor en el circuito de control de carga.</li>
+        <li><strong>Curva de carga de dos etapas (CC/CV):</strong> La batería se carga a máxima potencia constante (CC) entre el 0% y el 80%. A partir del 80%, el teléfono entra en modo de voltaje constante (CV) y reduce la potencia drásticamente (hasta un 60-70% menos) para proteger la química interna del litio y evitar degradaciones prematuras.</li>
+      </ul>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  function calculateCharge() {
+    const capacity = parseFloat((document.getElementById('capacity') as HTMLInputElement).value) || 5000;
+    const power = parseFloat((document.getElementById('power') as HTMLInputElement).value) || 33;
+    const initialPercent = parseFloat((document.getElementById('initialLevel') as HTMLInputElement).value) || 0;
+
+    const voltage = 3.85; // Standard Lithium-Ion Nominal Voltage
+    const totalWattHours = (capacity * voltage) / 1000;
+    const remainingPercent = Math.max(0, 100 - initialPercent);
+    const neededWattHours = totalWattHours * (remainingPercent / 100);
+
+    // Efficiency loss factor (15% loss)
+    const effectivePower = power * 0.85;
+
+    // Fast charging up to 80%, trickle charge 80-100%
+    let fastMinutes = 0;
+    let trickleMinutes = 0;
+
+    if (initialPercent < 80) {
+      const fastPercent = 80 - initialPercent;
+      const fastWh = totalWattHours * (fastPercent / 100);
+      fastMinutes = (fastWh / effectivePower) * 60;
+
+      // Trickle charge takes roughly 2.2x longer for the last 20%
+      const trickleWh = totalWattHours * 0.20;
+      trickleMinutes = (trickleWh / (effectivePower * 0.40)) * 60;
+    } else {
+      const tricklePercent = 100 - initialPercent;
+      const trickleWh = totalWattHours * (tricklePercent / 100);
+      trickleMinutes = (trickleWh / (effectivePower * 0.40)) * 60;
+    }
+
+    const totalMinutes = Math.round(fastMinutes + trickleMinutes);
+    const hours = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
+
+    let totalStr = "";
+    if (hours > 0) {
+      totalStr = `${hours} h ${mins} min`;
+    } else {
+      totalStr = `${mins} minutos`;
+    }
+
+    document.getElementById('totalTimeDisplay')!.textContent = totalStr;
+    document.getElementById('fastTimeDisplay')!.textContent = initialPercent < 80 ? `${Math.round(fastMinutes)} min` : "Ya alcanzado";
+    document.getElementById('trickleTimeDisplay')!.textContent = `${Math.round(trickleMinutes)} min`;
+    document.getElementById('wattHoursDisplay')!.textContent = `${totalWattHours.toFixed(1)} Wh`;
+    
+    const mahPerMin = totalMinutes > 0 ? ((capacity * (remainingPercent / 100)) / totalMinutes).toFixed(0) : "0";
+    document.getElementById('speedDisplay')!.textContent = `${mahPerMin} mAh/min`;
+  }
+
+  // Presets listeners
+  document.querySelectorAll('[data-val]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('[data-val]').forEach(b => b.classList.remove('active'));
+      const target = e.currentTarget as HTMLElement;
+      target.classList.add('active');
+      (document.getElementById('capacity') as HTMLInputElement).value = target.dataset.val || '5000';
+      calculateCharge();
+    });
+  });
+
+  document.querySelectorAll('[data-power]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('[data-power]').forEach(b => b.classList.remove('active'));
+      const target = e.currentTarget as HTMLElement;
+      target.classList.add('active');
+      (document.getElementById('power') as HTMLInputElement).value = target.dataset.power || '33';
+      calculateCharge();
+    });
+  });
+
+  const initialRange = document.getElementById('initialLevel') as HTMLInputElement;
+  const initialText = document.getElementById('initialLevelText')!;
+  initialRange?.addEventListener('input', () => {
+    initialText.textContent = `${initialRange.value}%`;
+    calculateCharge();
+  });
+
+  document.getElementById('capacity')?.addEventListener('input', calculateCharge);
+  document.getElementById('power')?.addEventListener('input', calculateCharge);
+
+  calculateCharge();
+</script>
+
+<style>
+  .tool-container {
+    max-width: 860px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 0.75rem;
+  }
+  .breadcrumb a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  .badge {
+    background: #e0f2fe;
+    color: #0369a1;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+  }
+  .tool-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0.5rem 0;
+  }
+  .tool-desc {
+    color: #475569;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+  .calculator-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    margin: 2rem 0;
+  }
+  .form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .input-group label {
+    display: block;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+  }
+  .input-group input[type="number"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #0f172a;
+  }
+  .input-group input[type="range"] {
+    width: 100%;
+    accent-color: #2563eb;
+  }
+  .range-display {
+    font-size: 0.9rem;
+    color: #475569;
+    margin-top: 0.35rem;
+  }
+  .presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .preset-btn {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .preset-btn:hover {
+    background: #e2e8f0;
+  }
+  .preset-btn.active {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+  }
+  .results-box {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px dashed #e2e8f0;
+  }
+  .results-box h3 {
+    margin: 0 0 1rem;
+    font-size: 1.2rem;
+    color: #0f172a;
+  }
+  .highlight-result {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 1px solid #bfdbfe;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .total-time {
+    display: block;
+    font-size: 2.75rem;
+    font-weight: 900;
+    color: #1d4ed8;
+  }
+  .sub-label {
+    font-size: 0.95rem;
+    color: #1e40af;
+    font-weight: 500;
+  }
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+  .metric-card {
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .metric-title {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 600;
+  }
+  .metric-val {
+    font-size: 1.25rem;
+    color: #0f172a;
+    font-weight: 700;
+    margin: 0.25rem 0;
+  }
+  .metric-card small {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+  .tool-explanation {
+    margin-top: 3rem;
+    color: #334155;
+    line-height: 1.7;
+  }
+  .formula-box {
+    background: #0f172a;
+    color: #38bdf8;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    font-family: monospace;
+    font-size: 0.95rem;
+    margin: 1rem 0;
+  }
+</style>
