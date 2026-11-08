@@ -5,7 +5,22 @@ import AstroPWA from '@vite-pwa/astro';
 export default defineConfig({
   site: 'https://guiatecnes.com',
   integrations: [
-    sitemap(),
+    sitemap({
+      serialize(item) {
+        item.lastmod = new Date();
+        if (item.url === 'https://guiatecnes.com/' || item.url.includes('/herramientas/')) {
+          item.priority = 1.0;
+          item.changefreq = 'daily';
+        } else if (item.url.includes('/blog/')) {
+          item.priority = 0.8;
+          item.changefreq = 'weekly';
+        } else {
+          item.priority = 0.5;
+          item.changefreq = 'monthly';
+        }
+        return item;
+      }
+    }),
     AstroPWA({
       registerType: 'autoUpdate',
       manifest: {
