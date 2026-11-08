@@ -1,0 +1,417 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const faqs = [
+  {
+    question: "¿Qué diferencia hay entre camelCase y PascalCase?",
+    answer: "En camelCase la primera palabra empieza en minúscula y las siguientes con mayúscula (ej: 'miVariableWeb'), muy usado para variables y métodos en JavaScript y Java. En PascalCase todas las palabras empiezan con mayúscula (ej: 'MiClaseComponente'), estándar para nombres de clases y componentes React/Vue."
+  },
+  {
+    question: "¿Por qué se utiliza kebab-case en URLs y CSS?",
+    answer: "El formato kebab-case utiliza guiones medios ('mi-articulo-seo') y es el estándar absoluto recomendado por Google para URLs amigables de SEO, así como para nombres de propiedades y clases en CSS y archivos web."
+  },
+  {
+    question: "¿Cuándo usar snake_case o CONSTANT_CASE?",
+    answer: "snake_case ('mi_variable_db') es el formato por defecto en Python, Rust y nombres de columnas en bases de datos SQL. CONSTANT_CASE ('MI_VARIABLE_GLOBAL') se reserva para variables de entorno y constantes inmutables."
+  }
+];
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Conversor de Case para Programadores', url: '/herramientas/conversor-case-programadores' }
+];
+---
+
+<BaseLayout
+  title="Conversor de Case Online: camelCase, snake_case, kebab-case y PascalCase"
+  description="Convierte texto en tiempo real a camelCase, snake_case, kebab-case, PascalCase, CONSTANT_CASE y URL slug. Herramienta gratuita para programadores y SEOs."
+  type="tool"
+  faqs={faqs}
+  breadcrumbs={breadcrumbs}
+>
+  <Header slot="header" />
+
+  <main class="tool-wrapper">
+    <div class="tool-header">
+      <span class="badge">💻 Desarrollo & Programación</span>
+      <h1>Conversor de Case para Programadores</h1>
+      <p class="subtitle">Transforma cualquier texto o frase a convenciones de código (camelCase, snake_case, kebab-case, PascalCase) y slugs limpios para URLs y bases de datos al instante.</p>
+    </div>
+
+    <div class="converter-card">
+      <div class="input-area">
+        <label for="input-text">Introduce tu texto aquí:</label>
+        <textarea id="input-text" rows="3" placeholder="Escribe o pega aquí tu texto (ej: Guía definitiva para programar con inteligencia artificial en 2026)...">Guía definitiva para programar con inteligencia artificial en 2026</textarea>
+      </div>
+
+      <!-- RESULTADOS EN TIEMPO REAL -->
+      <div class="results-grid">
+        <!-- 1. camelCase -->
+        <div class="case-box">
+          <div class="case-header">
+            <span class="case-name">camelCase (JS / TS)</span>
+            <button type="button" class="copy-btn" data-target="res-camel">Copiar</button>
+          </div>
+          <input type="text" id="res-camel" readonly />
+        </div>
+
+        <!-- 2. snake_case -->
+        <div class="case-box">
+          <div class="case-header">
+            <span class="case-name">snake_case (Python / SQL)</span>
+            <button type="button" class="copy-btn" data-target="res-snake">Copiar</button>
+          </div>
+          <input type="text" id="res-snake" readonly />
+        </div>
+
+        <!-- 3. kebab-case / slug -->
+        <div class="case-box">
+          <div class="case-header">
+            <span class="case-name">kebab-case (URL Slug / CSS)</span>
+            <button type="button" class="copy-btn" data-target="res-kebab">Copiar</button>
+          </div>
+          <input type="text" id="res-kebab" readonly />
+        </div>
+
+        <!-- 4. PascalCase -->
+        <div class="case-box">
+          <div class="case-header">
+            <span class="case-name">PascalCase (Clases / React)</span>
+            <button type="button" class="copy-btn" data-target="res-pascal">Copiar</button>
+          </div>
+          <input type="text" id="res-pascal" readonly />
+        </div>
+
+        <!-- 5. CONSTANT_CASE -->
+        <div class="case-box">
+          <div class="case-header">
+            <span class="case-name">CONSTANT_CASE (ENV / Constantes)</span>
+            <button type="button" class="copy-btn" data-target="res-constant">Copiar</button>
+          </div>
+          <input type="text" id="res-constant" readonly />
+        </div>
+
+        <!-- 6. dot.case -->
+        <div class="case-box">
+          <div class="case-header">
+            <span class="case-name">dot.case (Claves i18n / Config)</span>
+            <button type="button" class="copy-btn" data-target="res-dot">Copiar</button>
+          </div>
+          <input type="text" id="res-dot" readonly />
+        </div>
+      </div>
+    </div>
+
+    <!-- GUÍA DE CONVENCIONES DE CÓDIGO -->
+    <section class="guide-section">
+      <h2>Guía rápida de nomenclaturas en desarrollo de software</h2>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <h4>Frontend (JavaScript & TypeScript)</h4>
+          <p>Usa <code>camelCase</code> para variables, propiedades de objetos y funciones (ej: <code>getUserData()</code>). Usa <code>PascalCase</code> para componentes React, clases y tipos (ej: <code>UserProfileCard</code>).</p>
+        </div>
+        <div class="tip-card">
+          <h4>Backend & Bases de Datos (Python & SQL)</h4>
+          <p>Python (PEP8) y los esquemas relacionales de bases de datos prefieren <code>snake_case</code> para funciones y columnas (ej: <code>created_at</code>, <code>total_amount</code>).</p>
+        </div>
+        <div class="tip-card">
+          <h4>SEO y Arquitectura Web</h4>
+          <p>Para rutas web amigables y nombres de clases en hojas de estilo CSS / SCSS, emplea siempre <code>kebab-case</code> sin tildes ni caracteres especiales para evitar errores 404.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQS -->
+    <section class="faqs-section">
+      <h2>Preguntas Frecuentes sobre Casings</h2>
+      <div class="faq-list">
+        {faqs.map(f => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const input = document.getElementById('input-text') as HTMLTextAreaElement;
+    const resCamel = document.getElementById('res-camel') as HTMLInputElement;
+    const resSnake = document.getElementById('res-snake') as HTMLInputElement;
+    const resKebab = document.getElementById('res-kebab') as HTMLInputElement;
+    const resPascal = document.getElementById('res-pascal') as HTMLInputElement;
+    const resConstant = document.getElementById('res-constant') as HTMLInputElement;
+    const resDot = document.getElementById('res-dot') as HTMLInputElement;
+
+    function cleanWords(str: string): string[] {
+      return str
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // eliminar tildes
+        .replace(/[^a-zA-Z0-9\s-_]/g, " ") // quitar símbolos raros
+        .replace(/[-_]+/g, " ")
+        .trim()
+        .split(/\s+/)
+        .filter(w => w.length > 0);
+    }
+
+    function convert() {
+      const text = input?.value || '';
+      const words = cleanWords(text);
+
+      if (words.length === 0) {
+        [resCamel, resSnake, resKebab, resPascal, resConstant, resDot].forEach(el => {
+          if (el) el.value = '';
+        });
+        return;
+      }
+
+      // camelCase
+      if (resCamel) {
+        resCamel.value = words[0].toLowerCase() + words.slice(1).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join('');
+      }
+
+      // PascalCase
+      if (resPascal) {
+        resPascal.value = words.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join('');
+      }
+
+      // snake_case
+      if (resSnake) {
+        resSnake.value = words.map(w => w.toLowerCase()).join('_');
+      }
+
+      // kebab-case
+      if (resKebab) {
+        resKebab.value = words.map(w => w.toLowerCase()).join('-');
+      }
+
+      // CONSTANT_CASE
+      if (resConstant) {
+        resConstant.value = words.map(w => w.toUpperCase()).join('_');
+      }
+
+      // dot.case
+      if (resDot) {
+        resDot.value = words.map(w => w.toLowerCase()).join('.');
+      }
+    }
+
+    input?.addEventListener('input', convert);
+    convert();
+
+    // Copiar al portapapeles
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        const targetInput = document.getElementById(targetId || '') as HTMLInputElement;
+        if (targetInput && targetInput.value) {
+          navigator.clipboard.writeText(targetInput.value);
+          const orig = btn.textContent;
+          btn.textContent = '¡Copiado! ✓';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = orig;
+            btn.classList.remove('copied');
+          }, 1500);
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .tool-wrapper {
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+  }
+  .tool-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .badge {
+    background: rgba(139, 92, 246, 0.15);
+    color: #a78bfa;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin: 1rem 0 0.5rem;
+    color: var(--heading);
+  }
+  .subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .converter-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+
+  .input-area label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--heading);
+  }
+  textarea {
+    width: 100%;
+    padding: 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.6;
+    resize: vertical;
+    outline: none;
+    font-family: inherit;
+  }
+  textarea:focus {
+    border-color: var(--primary);
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .case-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+  .case-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  .case-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .copy-btn {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary);
+    border: none;
+    border-radius: 6px;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover {
+    background: var(--primary);
+    color: white;
+  }
+  .copy-btn.copied {
+    background: #10b981;
+    color: white;
+  }
+
+  .case-box input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    font-family: monospace;
+    font-size: 1rem;
+    color: var(--heading);
+    font-weight: 600;
+    outline: none;
+  }
+
+  /* TIPS & FAQS */
+  .guide-section, .faqs-section {
+    margin-top: 4rem;
+  }
+  .guide-section h2, .faqs-section h2 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-bottom: 1.75rem;
+    color: var(--heading);
+  }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .tip-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.75rem;
+    border-radius: 14px;
+  }
+  .tip-card h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--heading);
+  }
+  .tip-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+  .tip-card code {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+  }
+
+  .faq-list {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+  .faq-item h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--heading);
+  }
+  .faq-item p {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  @media (max-width: 650px) {
+    .results-grid { grid-template-columns: 1fr; }
+    .converter-card { padding: 1.5rem; }
+  }
+</style>

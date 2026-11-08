@@ -1,0 +1,425 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const faqs = [
+  {
+    question: "¿Cuándo se aplica el IRPF del 7% en una factura de autónomo?",
+    answer: "Los nuevos autónomos dados de alta en el régimen de actividades profesionales pueden aplicar una retención reducida del 7% de IRPF durante el año fiscal de inicio de actividad y los dos siguientes, siempre que no hayan ejercido como autónomos en el año anterior."
+  },
+  {
+    question: "¿Cuándo es obligatorio aplicar retención de IRPF en una factura?",
+    answer: "Solo debes aplicar retención de IRPF si estás dado de alta en una actividad profesional (Sección 2ª del IAE) y tu cliente es otra empresa o autónomo con sede en España. Si tu cliente es un particular o una empresa extranjera (UE o extracomunitaria), no se incluye retención de IRPF."
+  },
+  {
+    question: "¿Cómo se calcula el total de una factura con IVA e IRPF?",
+    answer: "La fórmula oficial es: Total Factura = Base Imponible + IVA (normalmente +21%) - Retención IRPF (normalmente -15% o -7%). El IVA se suma porque lo recauda el autónomo para Hacienda, mientras que el IRPF se resta porque el cliente lo ingresa a tu nombre ante la Agencia Tributaria."
+  }
+];
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Calculadora Factura Freelance', url: '/herramientas/calculadora-factura-freelance' }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Factura Freelance y Autónomos: IVA e IRPF 7% o 15%"
+  description="Calcula el importe exacto de tus facturas como autónomo o freelance en España. Desglose automático de Base Imponible, IVA (21%) y retención de IRPF (7% o 15%)."
+  type="tool"
+  faqs={faqs}
+  breadcrumbs={breadcrumbs}
+>
+  <Header slot="header" />
+
+  <main class="tool-wrapper">
+    <div class="tool-header">
+      <span class="badge">💶 Facturación & Finanzas</span>
+      <h1>Simulador de Factura Freelance (IVA e IRPF)</h1>
+      <p class="subtitle">Calcula cuánto cobrarás de importe líquido en tu cuenta bancaria y cuánto debes reservar para Hacienda y la declaración trimestral de IVA (Modelo 303).</p>
+    </div>
+
+    <div class="calc-card">
+      <div class="calc-inputs">
+        <div class="form-group">
+          <label for="base-input">Base Imponible (Tus honorarios o precio del servicio):</label>
+          <div class="input-with-symbol">
+            <input type="number" id="base-input" value="1200" min="1" step="10" />
+            <span class="symbol">€</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="irpf-select">Retención de IRPF:</label>
+            <select id="irpf-select">
+              <option value="15">15% — Tipo General Profesional</option>
+              <option value="7">7% — Nuevo Autónomo (Primeros 3 años)</option>
+              <option value="1">1% — Módulos / Transporte</option>
+              <option value="0">0% — A particulares o clientes extranjeros</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="iva-select">Tipo de IVA aplicable:</label>
+            <select id="iva-select">
+              <option value="21">21% — IVA General (Servicios & Diseño)</option>
+              <option value="10">10% — IVA Reducido</option>
+              <option value="4">4% — IVA Superreducido</option>
+              <option value="0">0% — Exento de IVA (Formación / ROI)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="gastos-input">Gastos deducibles asociados a este trabajo (opcional):</label>
+          <div class="input-with-symbol">
+            <input type="number" id="gastos-input" value="0" min="0" step="10" />
+            <span class="symbol">€</span>
+          </div>
+          <small>Software, licencias o materiales que hayas comprado para realizar el proyecto.</small>
+        </div>
+      </div>
+
+      <!-- DESGLOSE DE RESULTADOS -->
+      <div class="results-box">
+        <h3>🧾 Desglose Oficial de la Factura</h3>
+        <div class="breakdown-table">
+          <div class="b-row">
+            <span>Base Imponible:</span>
+            <strong id="res-base">1.200,00 €</strong>
+          </div>
+          <div class="b-row plus">
+            <span>+ IVA (<span id="res-iva-pct">21</span>%):</span>
+            <strong id="res-iva">+ 252,00 €</strong>
+          </div>
+          <div class="b-row minus">
+            <span>− Retención IRPF (<span id="res-irpf-pct">15</span>%):</span>
+            <strong id="res-irpf">− 180,00 €</strong>
+          </div>
+          <div class="b-row total">
+            <span>Total a Ingresar (Líquido a cobrar):</span>
+            <strong id="res-total">1.272,00 €</strong>
+          </div>
+        </div>
+
+        <div class="hacienda-warning">
+          <h4>💡 ¿Cuánto dinero es realmente tuyo?</h4>
+          <p>De los <strong id="res-total-copy">1.272,00 €</strong> que ingresará tu cliente:</p>
+          <ul>
+            <li><strong>Tus honorarios netos:</strong> <span id="res-neto-real">1.020,00 €</span> (Base menos IRPF)</li>
+            <li><strong>Reservar para Hacienda (IVA):</strong> <span id="res-iva-reserva">252,00 €</span> (debes pagarlo en el Modelo 303 trimestral)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUÍA INFORMATIVA PARA AUTÓNOMOS -->
+    <section class="guide-section">
+      <h2>Consejos clave para emitir facturas legales en España en 2026</h2>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <h4>¿Facturas a particulares? No retengas IRPF</h4>
+          <p>Un cliente particular (consumidor final) no tiene CIF empresarial ni presenta modelos fiscales ante Hacienda. En sus facturas solo debes sumar el 21% de IVA, dejando el IRPF en 0%.</p>
+        </div>
+        <div class="tip-card">
+          <h4>Facturas intracomunitarias (Ventas a la UE)</h4>
+          <p>Si tu cliente es una empresa europea con NIF-IVA válido (inscrito en el Registro de Operadores Intracomunitarios VIES), tu factura va con 0% de IVA y 0% de IRPF mediante inversión del sujeto pasivo.</p>
+        </div>
+        <div class="tip-card">
+          <h4>Obligación de Facturación Electrónica (Ley Crea y Crece)</h4>
+          <p>Recuerda numerar tus facturas de forma correlativa (sin huecos ni saltos de fecha) y conservar una copia en formato digital durante un mínimo de 4 años para inspecciones de Hacienda.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQS SCHEMA VISUAL -->
+    <section class="faqs-section">
+      <h2>Preguntas Frecuentes sobre Facturas Freelance</h2>
+      <div class="faq-list">
+        {faqs.map(f => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const baseInput = document.getElementById('base-input') as HTMLInputElement;
+    const irpfSelect = document.getElementById('irpf-select') as HTMLSelectElement;
+    const ivaSelect = document.getElementById('iva-select') as HTMLSelectElement;
+    const gastosInput = document.getElementById('gastos-input') as HTMLInputElement;
+
+    const resBase = document.getElementById('res-base');
+    const resIva = document.getElementById('res-iva');
+    const resIvaPct = document.getElementById('res-iva-pct');
+    const resIrpf = document.getElementById('res-irpf');
+    const resIrpfPct = document.getElementById('res-irpf-pct');
+    const resTotal = document.getElementById('res-total');
+    const resTotalCopy = document.getElementById('res-total-copy');
+    const resNetoReal = document.getElementById('res-neto-real');
+    const resIvaReserva = document.getElementById('res-iva-reserva');
+
+    function calculate() {
+      const base = parseFloat(baseInput?.value || '0') || 0;
+      const irpfRate = parseFloat(irpfSelect?.value || '15') / 100;
+      const ivaRate = parseFloat(ivaSelect?.value || '21') / 100;
+      const gastos = parseFloat(gastosInput?.value || '0') || 0;
+
+      const ivaAmount = base * ivaRate;
+      const irpfAmount = base * irpfRate;
+      const totalFactura = base + ivaAmount - irpfAmount;
+      const netoReal = (base - irpfAmount) - gastos;
+
+      const fmt = (num: number) => num.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+
+      if (resBase) resBase.textContent = fmt(base);
+      if (resIva) resIva.textContent = '+ ' + fmt(ivaAmount);
+      if (resIvaPct) resIvaPct.textContent = (ivaRate * 100).toString();
+      if (resIrpf) resIrpf.textContent = '− ' + fmt(irpfAmount);
+      if (resIrpfPct) resIrpfPct.textContent = (irpfRate * 100).toString();
+      if (resTotal) resTotal.textContent = fmt(totalFactura);
+      if (resTotalCopy) resTotalCopy.textContent = fmt(totalFactura);
+      if (resNetoReal) resNetoReal.textContent = fmt(netoReal);
+      if (resIvaReserva) resIvaReserva.textContent = fmt(ivaAmount);
+    }
+
+    [baseInput, irpfSelect, ivaSelect, gastosInput].forEach(el => {
+      el?.addEventListener('input', calculate);
+      el?.addEventListener('change', calculate);
+    });
+
+    calculate();
+  });
+</script>
+
+<style>
+  .tool-wrapper {
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+  }
+  .tool-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .badge {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin: 1rem 0 0.5rem;
+    color: var(--heading);
+  }
+  .subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .calc-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  .form-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--heading);
+    font-size: 0.95rem;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .input-with-symbol {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .input-with-symbol input {
+    width: 100%;
+    padding: 0.85rem 2.5rem 0.85rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+  .input-with-symbol .symbol {
+    position: absolute;
+    right: 1rem;
+    color: var(--text-muted);
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+
+  select {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .form-group small {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+  }
+
+  /* BREAKDOWN RESULTS */
+  .results-box {
+    margin-top: 2.5rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 2rem;
+  }
+  .results-box h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: var(--heading);
+  }
+
+  .breakdown-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .b-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.05rem;
+    color: var(--text-muted);
+  }
+  .b-row.plus strong { color: #10b981; }
+  .b-row.minus strong { color: #ef4444; }
+  .b-row.total {
+    font-size: 1.35rem;
+    color: var(--heading);
+    padding-top: 0.75rem;
+    border-top: 2px solid var(--border);
+  }
+  .b-row.total strong { color: var(--primary); font-size: 1.5rem; font-weight: 900; }
+
+  .hacienda-warning {
+    background: rgba(99, 102, 241, 0.08);
+    border-left: 4px solid var(--primary);
+    padding: 1.25rem;
+    border-radius: 8px;
+  }
+  .hacienda-warning h4 {
+    margin: 0 0 0.5rem;
+    color: var(--heading);
+    font-size: 1rem;
+  }
+  .hacienda-warning p {
+    margin: 0 0 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+  .hacienda-warning ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+  .hacienda-warning li { margin-bottom: 0.25rem; }
+
+  /* TIPS & FAQS */
+  .guide-section, .faqs-section {
+    margin-top: 4rem;
+  }
+  .guide-section h2, .faqs-section h2 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-bottom: 1.75rem;
+    color: var(--heading);
+  }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .tip-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.75rem;
+    border-radius: 14px;
+  }
+  .tip-card h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--heading);
+  }
+  .tip-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .faq-list {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+  .faq-item h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--heading);
+  }
+  .faq-item p {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  @media (max-width: 650px) {
+    .form-row { grid-template-columns: 1fr; }
+    .calc-card { padding: 1.5rem; }
+  }
+</style>

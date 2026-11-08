@@ -1,0 +1,508 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const faqs = [
+  {
+    question: "¿Cuál es la distancia ideal para ver una Smart TV 4K de 55 pulgadas?",
+    answer: "Para una televisión 4K de 55 pulgadas, la distancia recomendada se sitúa entre 1,60 metros (experiencia cinematográfica inmersiva según estándares THX) y 2,30 metros (uso mixto y cómodo de televisión según la SMPTE)."
+  },
+  {
+    question: "¿Por qué en 4K podemos sentarnos más cerca de la pantalla que en Full HD?",
+    answer: "Las pantallas 4K cuentan con 8,3 millones de píxeles (cuatro veces más densidad que el 1080p). Al ser los píxeles mucho más pequeños, el ojo humano no percibe la cuadrícula a corta distancia, permitiendo una pantalla mucho más grande sin fatiga visual."
+  },
+  {
+    question: "¿Qué estándar es más fiable: THX o SMPTE?",
+    answer: "La SMPTE (Sociedad de Ingenieros de Cine y Televisión) recomienda un ángulo de visión de 30 grados para salones convencionales. THX recomienda 40 grados para recrear la sensación de una sala de cine. Nuestra calculadora te muestra ambos rangos para que elijas según tus preferencias."
+  }
+];
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Distancia de Pantalla TV', url: '/herramientas/calculadora-distancia-pantalla-tv' }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Distancia y Pulgadas de Smart TV / Monitor (4K y FHD)"
+  description="Calcula el tamaño de televisión ideal (pulgadas) según la distancia entre tu sofá y la pared. Recomendaciones según estándares oficiales THX y SMPTE."
+  type="tool"
+  faqs={faqs}
+  breadcrumbs={breadcrumbs}
+>
+  <Header slot="header" />
+
+  <main class="tool-wrapper">
+    <div class="tool-header">
+      <span class="badge">📺 Imagen & Hogar Inteligente</span>
+      <h1>Calculadora de Distancia y Tamaño de TV</h1>
+      <p class="subtitle">Descubre cuántas pulgadas comprar para tu salón o dormitorio según la distancia de visionado exacta, o averigua a qué distancia colocar tu sofá para la mejor experiencia 4K.</p>
+    </div>
+
+    <div class="calc-card">
+      <div class="mode-tabs">
+        <button type="button" class="tab-btn active" id="tab-dist">Tengo la distancia (¿Qué TV comprar?)</button>
+        <button type="button" class="tab-btn" id="tab-size">Tengo la TV (¿A qué distancia colocarla?)</button>
+      </div>
+
+      <!-- MODO 1: INTRODUCIR DISTANCIA -->
+      <div class="calc-body" id="mode-dist-box">
+        <div class="slider-group">
+          <div class="slider-header">
+            <label for="dist-range">Distancia de tus ojos a la pantalla:</label>
+            <span class="val-badge" id="dist-val">2.2 metros</span>
+          </div>
+          <input type="range" id="dist-range" min="1.0" max="5.0" step="0.1" value="2.2" />
+          <div class="range-marks">
+            <span>1 m</span>
+            <span>2 m</span>
+            <span>3 m</span>
+            <span>4 m</span>
+            <span>5 m</span>
+          </div>
+        </div>
+
+        <div class="resolution-selector">
+          <label>Resolución de la pantalla:</label>
+          <div class="res-buttons">
+            <button type="button" class="res-btn active" data-res="4k">🌟 4K Ultra HD (Recomendado)</button>
+            <button type="button" class="res-btn" data-res="fhd">📺 Full HD (1080p)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODO 2: INTRODUCIR PULGADAS -->
+      <div class="calc-body" id="mode-size-box" style="display: none;">
+        <div class="slider-group">
+          <div class="slider-header">
+            <label for="size-range">Tamaño de la pantalla (Diagonal en pulgadas):</label>
+            <span class="val-badge" id="size-val">55 pulgadas</span>
+          </div>
+          <input type="range" id="size-range" min="32" max="98" step="1" value="55" />
+          <div class="range-marks">
+            <span>32"</span>
+            <span>50"</span>
+            <span>65"</span>
+            <span>75"</span>
+            <span>98"</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTADOS -->
+      <div class="results-container">
+        <div class="res-highlight">
+          <span class="res-label">Tamaño Recomendado Ideal:</span>
+          <h2 class="res-size" id="recommended-size">55" — 65"</h2>
+          <p class="res-notes" id="recommended-desc">A 2.2 metros en 4K, una pantalla de 55" o 65" ofrece nitidez cinematográfica sin saturar la vista.</p>
+        </div>
+
+        <div class="standards-grid">
+          <div class="standard-box">
+            <span class="st-icon">🎬</span>
+            <h4>Experiencia Cine (THX 40°)</h4>
+            <p id="thx-rec">65 pulgadas (Inmersión máxima)</p>
+          </div>
+          <div class="standard-box">
+            <span class="st-icon">🛋️</span>
+            <h4>Uso Mixto / Diario (SMPTE 30°)</h4>
+            <p id="smpte-rec">55 pulgadas (Equilibrio perfecto)</p>
+          </div>
+          <div class="standard-box">
+            <span class="st-icon">📏</span>
+            <h4>Dimensiones Aproximadas</h4>
+            <p id="dims-rec">Ancho: ~145 cm | Alto: ~83 cm</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUÍA DE CONSEJOS SEO -->
+    <section class="guide-section">
+      <h2>Consejos de expertos antes de comprar tu televisor en 2026</h2>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <h4>¿Mueble de salón con hueco cerrado? Mide con margen</h4>
+          <p>Un televisor de 65 pulgadas mide aproximadamente 145 cm de ancho. Si lo vas a encajar en una estantería, deja al menos 5 cm a cada lado para ventilación y fácil acceso a los puertos HDMI traseros.</p>
+        </div>
+        <div class="tip-card">
+          <h4>Altura correcta: Los ojos al tercio superior</h4>
+          <p>El centro de la pantalla debe quedar a la altura de tus ojos cuando estés sentado en el sofá (aproximadamente a 100-110 cm del suelo). Colocar la TV demasiado alta provoca dolor cervical.</p>
+        </div>
+        <div class="tip-card">
+          <h4>OLED vs Mini-LED según la luz de tu salón</h4>
+          <p>Para salones muy luminosos con ventanales grandes, las pantallas Mini-LED ofrecen mayor brillo máximo. Para ver cine a oscuras, el negro puro del panel OLED sigue siendo insuperable.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQS -->
+    <section class="faqs-section">
+      <h2>Preguntas Frecuentes sobre Pantallas</h2>
+      <div class="faq-list">
+        {faqs.map(f => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const tabDist = document.getElementById('tab-dist');
+    const tabSize = document.getElementById('tab-size');
+    const boxDist = document.getElementById('mode-dist-box');
+    const boxSize = document.getElementById('mode-size-box');
+
+    const distRange = document.getElementById('dist-range') as HTMLInputElement;
+    const distVal = document.getElementById('dist-val');
+    const sizeRange = document.getElementById('size-range') as HTMLInputElement;
+    const sizeVal = document.getElementById('size-val');
+
+    const resBtns = document.querySelectorAll('.res-btn');
+    let currentRes = '4k';
+    let currentMode = 'dist';
+
+    const recSize = document.getElementById('recommended-size');
+    const recDesc = document.getElementById('recommended-desc');
+    const thxRec = document.getElementById('thx-rec');
+    const smpteRec = document.getElementById('smpte-rec');
+    const dimsRec = document.getElementById('dims-rec');
+
+    function update() {
+      if (currentMode === 'dist') {
+        const d = parseFloat(distRange.value);
+        if (distVal) distVal.textContent = d.toFixed(1) + ' metros';
+
+        // SMPTE: sizeInInches = distanceInMeters * 39.37 / 1.6
+        // THX: sizeInInches = distanceInMeters * 39.37 / 1.2
+        const multiplier = currentRes === '4k' ? 1.0 : 0.8;
+        const thxInches = Math.round((d * 39.37 / 1.2) * multiplier);
+        const smpteInches = Math.round((d * 39.37 / 1.6) * multiplier);
+
+        const lower = Math.min(smpteInches, thxInches);
+        const upper = Math.max(smpteInches, thxInches);
+
+        if (recSize) recSize.textContent = `${lower}" — ${upper}"`;
+        if (recDesc) recDesc.textContent = `A ${d.toFixed(1)} metros en ${currentRes.toUpperCase()}, una pantalla de ${lower}" o ${upper}" maximiza el detalle sin cansar la vista.`;
+        if (thxRec) thxRec.textContent = `${upper} pulgadas (Inmersión de cine)`;
+        if (smpteRec) smpteRec.textContent = `${lower} pulgadas (Uso cómodo diario)`;
+
+        // Estimación de ancho y alto para el tamaño medio
+        const avg = Math.round((lower + upper) / 2);
+        const wCm = Math.round(avg * 2.54 * 0.8715);
+        const hCm = Math.round(avg * 2.54 * 0.4903);
+        if (dimsRec) dimsRec.textContent = `Para ~${avg}": Ancho ~${wCm} cm | Alto ~${hCm} cm`;
+      } else {
+        const s = parseInt(sizeRange.value);
+        if (sizeVal) sizeVal.textContent = s + ' pulgadas';
+
+        // Distancia en metros
+        const dMin = ((s * 1.2) / 39.37).toFixed(1);
+        const dMax = ((s * 1.6) / 39.37).toFixed(1);
+
+        if (recSize) recSize.textContent = `${dMin} m — ${dMax} m`;
+        if (recDesc) recDesc.textContent = `Para una pantalla de ${s}", la distancia ideal de tu sofá debe oscilar entre ${dMin} y ${dMax} metros.`;
+        if (thxRec) thxRec.textContent = `Cine (THX): A ${dMin} metros`;
+        if (smpteRec) smpteRec.textContent = `Uso Diario: A ${dMax} metros`;
+
+        const wCm = Math.round(s * 2.54 * 0.8715);
+        const hCm = Math.round(s * 2.54 * 0.4903);
+        if (dimsRec) dimsRec.textContent = `Ancho: ~${wCm} cm | Alto: ~${hCm} cm`;
+      }
+    }
+
+    tabDist?.addEventListener('click', () => {
+      currentMode = 'dist';
+      tabDist.classList.add('active');
+      tabSize?.classList.remove('active');
+      if (boxDist) boxDist.style.display = 'block';
+      if (boxSize) boxSize.style.display = 'none';
+      update();
+    });
+
+    tabSize?.addEventListener('click', () => {
+      currentMode = 'size';
+      tabSize.classList.add('active');
+      tabDist?.classList.remove('active');
+      if (boxDist) boxDist.style.display = 'none';
+      if (boxSize) boxSize.style.display = 'block';
+      update();
+    });
+
+    distRange?.addEventListener('input', update);
+    sizeRange?.addEventListener('input', update);
+
+    resBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        resBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentRes = btn.getAttribute('data-res') || '4k';
+        update();
+      });
+    });
+
+    update();
+  });
+</script>
+
+<style>
+  .tool-wrapper {
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+  }
+  .tool-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .badge {
+    background: rgba(14, 165, 233, 0.15);
+    color: #0ea5e9;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin: 1rem 0 0.5rem;
+    color: var(--heading);
+  }
+  .subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .calc-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+
+  .mode-tabs {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 0.85rem;
+    border-radius: 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn.active, .tab-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .slider-group {
+    margin-bottom: 2rem;
+  }
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .slider-header label {
+    font-weight: 700;
+    color: var(--heading);
+    font-size: 1.05rem;
+  }
+  .val-badge {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--primary);
+    font-weight: 800;
+    font-size: 1.15rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: var(--border);
+    outline: none;
+    cursor: pointer;
+  }
+  .range-marks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+
+  .resolution-selector {
+    margin-bottom: 2rem;
+  }
+  .resolution-selector label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--heading);
+  }
+  .res-buttons {
+    display: flex;
+    gap: 0.75rem;
+  }
+  .res-btn {
+    flex: 1;
+    padding: 0.75rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .res-btn.active {
+    border-color: #0ea5e9;
+    background: rgba(14, 165, 233, 0.1);
+    color: #0ea5e9;
+  }
+
+  /* RESULTS */
+  .results-container {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 2rem;
+    margin-top: 1.5rem;
+  }
+  .res-highlight {
+    text-align: center;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .res-label {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--text-muted);
+  }
+  .res-size {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--primary);
+    margin: 0.5rem 0;
+  }
+  .res-notes {
+    color: var(--text);
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .standards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+  }
+  .standard-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .st-icon { font-size: 1.8rem; margin-bottom: 0.5rem; display: block; }
+  .standard-box h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+    color: var(--heading);
+  }
+  .standard-box p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin: 0;
+    font-weight: 600;
+  }
+
+  /* TIPS & FAQS */
+  .guide-section, .faqs-section {
+    margin-top: 4rem;
+  }
+  .guide-section h2, .faqs-section h2 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-bottom: 1.75rem;
+    color: var(--heading);
+  }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .tip-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.75rem;
+    border-radius: 14px;
+  }
+  .tip-card h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--heading);
+  }
+  .tip-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .faq-list {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+  .faq-item h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--heading);
+  }
+  .faq-item p {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  @media (max-width: 650px) {
+    .mode-tabs { flex-direction: column; }
+    .res-buttons { flex-direction: column; }
+    .calc-card { padding: 1.5rem; }
+    .res-size { font-size: 2.2rem; }
+  }
+</style>

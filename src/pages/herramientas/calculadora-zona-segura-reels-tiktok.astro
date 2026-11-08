@@ -1,0 +1,562 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const faqs = [
+  {
+    question: "¿Qué es la zona segura en TikTok e Instagram Reels?",
+    answer: "La zona segura es el área central del vídeo vertical (1080x1920 px) libre de los botones de interacción de la aplicación (icono de perfil, me gusta, comentarios, botón compartir, título inferior y selector de audio) donde los textos y elementos clave siempre permanecen visibles."
+  },
+  {
+    question: "¿Cuáles son las medidas exactas de la zona segura para vídeo 9:16?",
+    answer: "Para una resolución estándar de 1080 x 1920 píxeles, la zona segura recomendada deja 220 px libres en la parte superior, 420 px en la parte inferior y 120 px en el lateral derecho donde se ubica la columna de botones."
+  },
+  {
+    question: "¿Por qué mis subtítulos quedan tapados al subir un Reel o Short?",
+    answer: "Si colocas subtítulos demasiado abajo, la descripción del vídeo y el título de la canción los taparán por completo. Usando esta herramienta puedes verificar visualmente la altura ideal antes de exportar en Premiere, CapCut o DaVinci Resolve."
+  }
+];
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas' },
+  { name: 'Zona Segura Reels & TikTok', url: '/herramientas/calculadora-zona-segura-reels-tiktok' }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Zona Segura para TikTok, Reels y YouTube Shorts (1080x1920)"
+  description="Previsualiza la zona segura de tus vídeos verticales 9:16. Evita que los botones de Instagram, TikTok y Shorts tapen tus textos, subtítulos y logotipos."
+  type="tool"
+  faqs={faqs}
+  breadcrumbs={breadcrumbs}
+>
+  <Header slot="header" />
+
+  <main class="tool-wrapper">
+    <div class="tool-header">
+      <span class="badge">🎬 Vídeo & Redes Sociales</span>
+      <h1>Zona Segura para Reels, TikTok y Shorts</h1>
+      <p class="subtitle">Comprueba en tiempo real si tus subtítulos, textos y llamadas a la acción quedan tapados por los botones de la interfaz móvil en formato vertical 9:16 (1080 x 1920 px).</p>
+    </div>
+
+    <div class="tool-grid">
+      <!-- PANEL DE CONTROL -->
+      <div class="control-panel">
+        <div class="control-card">
+          <h3>📱 1. Selecciona la Plataforma</h3>
+          <div class="platform-selector">
+            <button type="button" class="plat-btn active" data-platform="tiktok">🎵 TikTok</button>
+            <button type="button" class="plat-btn" data-platform="reels">📸 Reels</button>
+            <button type="button" class="plat-btn" data-platform="shorts">▶️ Shorts</button>
+          </div>
+
+          <div class="control-group">
+            <label for="img-upload" class="upload-label">
+              <span>🖼️ Cargar captura de tu vídeo</span>
+              <input type="file" id="img-upload" accept="image/*" />
+            </label>
+            <small>Carga un fotograma (JPG o PNG) de tu edición para probarlo en vivo.</small>
+          </div>
+
+          <div class="specs-box">
+            <h4>📐 Medidas Técnicas Recomendadas</h4>
+            <ul>
+              <li><strong>Margen Superior:</strong> <span id="spec-top">220 px</span> (barra de navegación)</li>
+              <li><strong>Margen Inferior:</strong> <span id="spec-bottom">420 px</span> (texto & música)</li>
+              <li><strong>Margen Derecho:</strong> <span id="spec-right">130 px</span> (botones de interacción)</li>
+              <li><strong>Margen Izquierdo:</strong> <span id="spec-left">60 px</span> (margen de respiro)</li>
+              <li><strong>Área Segura Real:</strong> 890 x 1280 px</li>
+            </ul>
+          </div>
+
+          <button type="button" id="toggle-overlay" class="btn-toggle">👁️ Ocultar / Mostrar Interfaz</button>
+        </div>
+      </div>
+
+      <!-- SIMULADOR VISUAL MÓVIL -->
+      <div class="preview-panel">
+        <div class="phone-frame">
+          <div class="phone-screen" id="preview-screen">
+            <!-- Capa de fondo con imagen o color -->
+            <div class="screen-bg" id="screen-bg">
+              <div class="demo-placeholder">
+                <span class="demo-icon">🎥</span>
+                <p>Haz clic en "Cargar captura" para ver tu diseño aquí</p>
+                <div class="sample-caption-test">Subtítulo de prueba centrado</div>
+              </div>
+            </div>
+
+            <!-- Capa de Zona Segura (Overlay) -->
+            <div class="safe-zone-box" id="safe-zone-box">
+              <span class="safe-zone-label">Área 100% Segura para Textos</span>
+            </div>
+
+            <!-- Interfaz simulada de TikTok / Reels -->
+            <div class="mock-ui" id="mock-ui">
+              <div class="mock-header">
+                <span>Siguiendo</span> | <strong class="mock-active-tab">Para ti</strong>
+              </div>
+              <div class="mock-sidebar">
+                <div class="mock-btn avatar-mock">👤</div>
+                <div class="mock-btn">❤️ <span>142K</span></div>
+                <div class="mock-btn">💬 <span>1.2K</span></div>
+                <div class="mock-btn">🔖 <span>4.5K</span></div>
+                <div class="mock-btn">↗️ <span>Share</span></div>
+                <div class="mock-btn disc-mock">🎵</div>
+              </div>
+              <div class="mock-footer">
+                <p class="mock-username">@creador_tech</p>
+                <p class="mock-desc">Aprende a posicionar subtítulos en zona segura sin que los botones los tapen... #tips #video</p>
+                <p class="mock-audio">🎵 Sonido original - Audio viral 2026</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GUÍA DE CONSEJOS SEO / EEAT -->
+    <section class="guide-section">
+      <h2>Cómo optimizar tus vídeos verticales para retener audiencia</h2>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <span class="tip-num">01</span>
+          <h4>Subtítulos dinámicos en el tercio central</h4>
+          <p>Coloca siempre tus subtítulos automáticos entre el 40% y el 60% de la altura total del vídeo para que no choquen con la descripción ni con la barra de progreso.</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-num">02</span>
+          <h4>Cuidado con el lateral derecho</h4>
+          <p>La columna de botones ocupa unos 130 píxeles. Evita incluir caras, gráficos o cifras importantes pegadas al borde derecho de tu fotograma.</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-num">03</span>
+          <h4>Previsualiza en formato 1:1 en feed</h4>
+          <p>Instagram recorta los Reels al formato cuadrado (1:1) o 4:5 en el feed de inicio y cuadrícula de perfil. Mantén el gancho principal en el centro geométrico.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQS SCHEMA VISUAL -->
+    <section class="faqs-section">
+      <h2>Preguntas Frecuentes sobre Zonas Seguras en Vídeo</h2>
+      <div class="faq-list">
+        {faqs.map(f => (
+          <div class="faq-item">
+            <h4>{f.question}</h4>
+            <p>{f.answer}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const uploadInput = document.getElementById('img-upload') as HTMLInputElement;
+    const screenBg = document.getElementById('screen-bg');
+    const toggleBtn = document.getElementById('toggle-overlay');
+    const mockUi = document.getElementById('mock-ui');
+    const platBtns = document.querySelectorAll('.plat-btn');
+    const safeZone = document.getElementById('safe-zone-box');
+
+    // Cargar imagen de usuario
+    if (uploadInput && screenBg) {
+      uploadInput.addEventListener('change', (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            screenBg.style.backgroundImage = `url(${event.target?.result})`;
+            screenBg.style.backgroundSize = 'cover';
+            screenBg.style.backgroundPosition = 'center';
+            const demoPlaceholder = screenBg.querySelector('.demo-placeholder');
+            if (demoPlaceholder) (demoPlaceholder as HTMLElement).style.display = 'none';
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    // Toggle interfaz simulada
+    if (toggleBtn && mockUi) {
+      toggleBtn.addEventListener('click', () => {
+        const isHidden = mockUi.style.opacity === '0';
+        mockUi.style.opacity = isHidden ? '1' : '0';
+        if (safeZone) safeZone.style.opacity = isHidden ? '1' : '0.3';
+      });
+    }
+
+    // Selector de plataformas
+    platBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        platBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const p = btn.getAttribute('data-platform');
+        const specBottom = document.getElementById('spec-bottom');
+        const specTop = document.getElementById('spec-top');
+        if (specBottom && specTop) {
+          if (p === 'tiktok') {
+            specBottom.textContent = '420 px';
+            specTop.textContent = '220 px';
+          } else if (p === 'reels') {
+            specBottom.textContent = '380 px';
+            specTop.textContent = '190 px';
+          } else if (p === 'shorts') {
+            specBottom.textContent = '350 px';
+            specTop.textContent = '200 px';
+          }
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .tool-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+  }
+  .tool-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .badge {
+    background: rgba(99, 102, 241, 0.15);
+    color: #818cf8;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin: 1rem 0 0.5rem;
+    color: var(--heading);
+  }
+  .subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 750px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .tool-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+    margin-bottom: 4rem;
+  }
+
+  .control-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+  }
+  .control-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+    color: var(--heading);
+  }
+
+  .platform-selector {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.75rem;
+  }
+  .plat-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .plat-btn.active, .plat-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .upload-label {
+    display: block;
+    background: rgba(99, 102, 241, 0.1);
+    border: 2px dashed rgba(99, 102, 241, 0.4);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--primary);
+    transition: all 0.2s;
+  }
+  .upload-label:hover {
+    background: rgba(99, 102, 241, 0.18);
+    border-color: var(--primary);
+  }
+  .upload-label input { display: none; }
+  .control-group small {
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  .specs-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+  }
+  .specs-box h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    color: var(--heading);
+  }
+  .specs-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+  .specs-box li {
+    margin-bottom: 0.35rem;
+  }
+  .specs-box strong { color: var(--text); }
+
+  .btn-toggle {
+    width: 100%;
+    padding: 0.85rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-toggle:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  /* PHONE FRAME PREVIEW */
+  .preview-panel {
+    display: flex;
+    justify-content: center;
+  }
+  .phone-frame {
+    width: 310px;
+    height: 580px;
+    background: #090d16;
+    border: 8px solid #1e293b;
+    border-radius: 40px;
+    position: relative;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    overflow: hidden;
+  }
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .screen-bg {
+    position: absolute;
+    inset: 0;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .demo-placeholder {
+    text-align: center;
+    padding: 1rem;
+    color: #64748b;
+  }
+  .demo-icon { font-size: 3rem; margin-bottom: 0.5rem; display: block; }
+  .sample-caption-test {
+    margin-top: 1.5rem;
+    background: rgba(0,0,0,0.7);
+    color: #facc15;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    display: inline-block;
+  }
+
+  .safe-zone-box {
+    position: absolute;
+    top: 15%;
+    bottom: 25%;
+    left: 8%;
+    right: 18%;
+    border: 2px dashed #10b981;
+    background: rgba(16, 185, 129, 0.08);
+    pointer-events: none;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: opacity 0.2s;
+  }
+  .safe-zone-label {
+    background: rgba(16, 185, 129, 0.85);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .mock-ui {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+    color: white;
+    transition: opacity 0.2s;
+  }
+  .mock-header {
+    text-align: center;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.7);
+    margin-top: 0.5rem;
+  }
+  .mock-active-tab { color: white; border-bottom: 2px solid white; padding-bottom: 2px; }
+
+  .mock-sidebar {
+    position: absolute;
+    right: 0.75rem;
+    bottom: 4.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    align-items: center;
+  }
+  .mock-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.1rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  }
+  .mock-btn span { font-size: 0.65rem; font-weight: 700; margin-top: 2px; }
+  .avatar-mock {
+    width: 32px;
+    height: 32px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+  }
+  .disc-mock {
+    width: 26px;
+    height: 26px;
+    background: #334155;
+    border-radius: 50%;
+    border: 3px solid #1e293b;
+  }
+
+  .mock-footer {
+    max-width: 70%;
+    font-size: 0.75rem;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    margin-bottom: 0.5rem;
+  }
+  .mock-username { font-weight: 800; margin-bottom: 0.2rem; }
+  .mock-desc { font-size: 0.7rem; color: #e2e8f0; margin-bottom: 0.35rem; line-height: 1.3; }
+  .mock-audio { font-size: 0.65rem; color: #cbd5e1; }
+
+  /* TIPS & FAQS */
+  .guide-section, .faqs-section {
+    margin-top: 4rem;
+  }
+  .guide-section h2, .faqs-section h2 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-bottom: 1.75rem;
+    color: var(--heading);
+  }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .tip-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.75rem;
+    border-radius: 14px;
+    position: relative;
+  }
+  .tip-num {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: rgba(99, 102, 241, 0.25);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  .tip-card h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--heading);
+  }
+  .tip-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .faq-list {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+  .faq-item h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--heading);
+  }
+  .faq-item p {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  @media (max-width: 850px) {
+    .tool-grid { grid-template-columns: 1fr; }
+  }
+</style>
