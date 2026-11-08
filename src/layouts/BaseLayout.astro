@@ -173,6 +173,8 @@ const schemaFAQ = faqs.length > 0 ? {
   <title>{title} | {siteName}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalURL} />
+  <link rel="alternate" hreflang="es" href={canonicalURL} />
+  <link rel="alternate" hreflang="x-default" href={canonicalURL} />
   <link rel="alternate" type="application/rss+xml" title="GuíaTecnes RSS Feed" href="/rss.xml" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 
@@ -182,6 +184,9 @@ const schemaFAQ = faqs.length > 0 ? {
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={fullImageURL} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={title} />
   <meta property="og:site_name" content={siteName} />
   <meta property="og:locale" content="es_ES" />
 
@@ -190,6 +195,7 @@ const schemaFAQ = faqs.length > 0 ? {
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={fullImageURL} />
+  <meta name="twitter:image:alt" content={title} />
 
   <!-- Favicons for Google Search & All Browsers -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
