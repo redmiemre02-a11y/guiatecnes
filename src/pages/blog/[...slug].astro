@@ -449,10 +449,55 @@ function getRelevantTool(title: string, tags: string[]) {
     };
   }
 
+
+  if (text.includes('consumo') || text.includes('vatios') || text.includes('electricidad') || text.includes('fuente de alimentacion') || text.includes('factura de luz')) {
+    return {
+      title: 'Calculadora de Consumo Electrico de PC y Factura de Luz',
+      desc: 'Calcula cuantos vatios consume tu torre gamer o portatil y cuanto dinero gastas al mes en electricidad.',
+      btn: 'Calcular Consumo de PC',
+      url: '/herramientas/calculadora-consumo-electrico-pc',
+      icon: '💡',
+      badge: 'Hardware & Energia'
+    };
+  }
+
+  if (text.includes('ppi') || text.includes('retina') || text.includes('densidad') || text.includes('nitidez') || text.includes('resolucion')) {
+    return {
+      title: 'Calculadora de PPI y Nitidez Retina para Pantallas',
+      desc: 'Averigua los pixeles por pulgada de tu monitor o movil y la distancia exacta a la que se vuelve Retina.',
+      btn: 'Calcular PPI y Nitidez',
+      url: '/herramientas/calculadora-ppi-nitidez-pantalla',
+      icon: '🖥️',
+      badge: 'Pantallas & Diseno'
+    };
+  }
+
+  if (text.includes('calendario') || text.includes('reunion') || text.includes('evento') || text.includes('google calendar') || text.includes('outlook')) {
+    return {
+      title: 'Generador de Enlaces para Google Calendar y Outlook',
+      desc: 'Crea enlaces universales para anadir reuniones a Google Calendar o iPhone con un solo clic.',
+      btn: 'Generar Enlace de Calendario',
+      url: '/herramientas/generador-enlaces-calendario',
+      icon: '📅',
+      badge: 'Productividad'
+    };
+  }
+
+  if (text.includes('locucion') || text.includes('guion') || text.includes('podcast') || text.includes('wpm') || text.includes('leer')) {
+    return {
+      title: 'Calculadora de Tiempo de Lectura y Locucion (WPM)',
+      desc: 'Calcula la duracion exacta en minutos y segundos de tu guion para YouTube, podcasts o discursos.',
+      btn: 'Calcular Tiempo de Locucion',
+      url: '/herramientas/calculadora-tiempo-lectura-wpm',
+      icon: '🎙️',
+      badge: 'Contenido & Locucion'
+    };
+  }
+
   return {
-    title: 'Descubre Nuestras 54 Herramientas Gratuitas',
+    title: 'Descubre Nuestras 58 Herramientas Gratuitas',
     desc: 'Accede a calculadoras financieras, compresores de imágenes, test de velocidad WiFi, sueldo neto, conversor WebP y más.',
-    btn: 'Ver las 54 Herramientas 🧲',
+    btn: 'Ver las 58 Herramientas 🧲',
     url: '/herramientas',
     icon: '🚀',
     badge: '100% Gratis'

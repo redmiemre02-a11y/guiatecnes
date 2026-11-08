@@ -1,0 +1,325 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "Calculadora de Consumo Eléctrico de PC y Coste en Factura | GuíaTecnológica";
+const description = "Calcula cuántos vatios consume tu ordenador de sobremesa o portátil y cuánto dinero cuesta mantenerlo encendido al mes en tu factura de la luz.";
+---
+
+<BaseLayout title={title} description={description}>
+  <main class="tool-container">
+    <div class="tool-header">
+      <nav class="breadcrumb">
+        <a href="/">Inicio</a> &gt; <a href="/herramientas">Herramientas</a> &gt; <span>Consumo de PC</span>
+      </nav>
+      <span class="badge">💡 Energía & Hardware</span>
+      <h1>Calculadora de Consumo Eléctrico de PC</h1>
+      <p class="tool-desc">
+        Estima el consumo en vatios (W), kilovatios-hora (kWh) y el coste real en euros en tu factura eléctrica según tus horas de uso diarias y el precio de la luz.
+      </p>
+    </div>
+
+    <div class="calculator-card">
+      <div class="form-grid">
+        <div class="input-group">
+          <label for="profile">Tipo de ordenador o perfil de uso:</label>
+          <select id="profile">
+            <option value="custom">Personalizado (ajustar vatios manualmente)</option>
+            <option value="office">Portátil o PC de Oficina básica (~60 W)</option>
+            <option value="gaming_mid" selected>PC Gaming Gama Media (i5/Ryzen 5 + RTX 4060) (~280 W)</option>
+            <option value="gaming_high">PC Gaming Gama Alta (i7/Ryzen 7 + RTX 4080) (~450 W)</option>
+            <option value="workstation">Estación de Trabajo / Render 3D / IA (~600 W)</option>
+            <option value="server">Servidor casero / NAS encendido 24/7 (~40 W)</option>
+          </select>
+        </div>
+
+        <div class="grid-2col">
+          <div class="input-group">
+            <label for="watts">Consumo medio en uso (Vatios / W):</label>
+            <input type="number" id="watts" value="280" min="10" max="2000" step="10" />
+            <small class="help-text">Incluye consumo de la torre y el monitor.</small>
+          </div>
+
+          <div class="input-group">
+            <label for="hours">Horas de uso al día:</label>
+            <input type="number" id="hours" value="6" min="0.5" max="24" step="0.5" />
+            <small class="help-text">Promedio de horas encendido al día.</small>
+          </div>
+        </div>
+
+        <div class="grid-2col">
+          <div class="input-group">
+            <label for="price">Precio de la electricidad (€ por kWh):</label>
+            <input type="number" id="price" value="0.16" min="0.01" max="1.50" step="0.01" />
+            <small class="help-text">Precio medio en España: ~0.14 - 0.18 €/kWh.</small>
+          </div>
+
+          <div class="input-group">
+            <label for="days">Días de uso al mes:</label>
+            <input type="number" id="days" value="30" min="1" max="31" step="1" />
+            <small class="help-text">Días activos en un mes habitual.</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-box">
+        <h3>Coste Estimado en la Factura</h3>
+        <div class="highlight-result">
+          <span class="total-cost" id="monthCostDisplay">-- €</span>
+          <span class="sub-label">gasto eléctrico mensual estimado</span>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-title">Gasto Diario</span>
+            <strong id="dayCostDisplay" class="metric-val">-- €</strong>
+            <small id="dayKwhDisplay">-- kWh al día</small>
+          </div>
+          <div class="metric-card">
+            <span class="metric-title">Consumo Mensual</span>
+            <strong id="monthKwhDisplay" class="metric-val">-- kWh</strong>
+            <small>Energía total facturada</small>
+          </div>
+          <div class="metric-card">
+            <span class="metric-title">Coste Anual (12 meses)</span>
+            <strong id="yearCostDisplay" class="metric-val">-- €</strong>
+            <small id="yearKwhDisplay">-- kWh al año</small>
+          </div>
+          <div class="metric-card">
+            <span class="metric-title">Huella de Carbono CO2</span>
+            <strong id="co2Display" class="metric-val">-- kg</strong>
+            <small>Emisiones estimadas al año</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="tool-explanation">
+      <h2>¿Cómo calcular el consumo eléctrico de un ordenador?</h2>
+      <p>
+        El cálculo se rige por la fórmula física estándar de potencia y energía:
+      </p>
+      <div class="formula-box">
+        <code>Consumo Diario (kWh) = [Potencia (W) × Horas de uso] / 1.000</code><br />
+        <code>Coste Mensual (€) = Consumo Diario (kWh) × Días del mes × Precio del kWh (€)</code>
+      </div>
+      <p>
+        <strong>Consejo de ahorro:</strong> La fuente de alimentación no consume siempre su potencia máxima (por ejemplo, una fuente de 750W no gasta 750W continuos). En reposo (escritorio o navegación web), un PC gaming moderno suele consumir entre **50W y 70W**; solo alcanza los **280W - 400W** cuando la tarjeta gráfica y la CPU trabajan al 100% en videojuegos o renders 3D.
+      </p>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  const profileSelect = document.getElementById('profile') as HTMLSelectElement;
+  const wattsInput = document.getElementById('watts') as HTMLInputElement;
+  const hoursInput = document.getElementById('hours') as HTMLInputElement;
+  const priceInput = document.getElementById('price') as HTMLInputElement;
+  const daysInput = document.getElementById('days') as HTMLInputElement;
+
+  const profileWatts: Record<string, number> = {
+    office: 60,
+    gaming_mid: 280,
+    gaming_high: 450,
+    workstation: 600,
+    server: 40
+  };
+
+  profileSelect?.addEventListener('change', () => {
+    if (profileSelect.value !== 'custom' && profileWatts[profileSelect.value]) {
+      wattsInput.value = profileWatts[profileSelect.value].toString();
+      calculatePC();
+    }
+  });
+
+  wattsInput?.addEventListener('input', () => {
+    profileSelect.value = 'custom';
+    calculatePC();
+  });
+
+  hoursInput?.addEventListener('input', calculatePC);
+  priceInput?.addEventListener('input', calculatePC);
+  daysInput?.addEventListener('input', calculatePC);
+
+  function calculatePC() {
+    const watts = parseFloat(wattsInput.value) || 0;
+    const hours = parseFloat(hoursInput.value) || 0;
+    const price = parseFloat(priceInput.value) || 0;
+    const days = parseFloat(daysInput.value) || 30;
+
+    const kwhPerDay = (watts * hours) / 1000;
+    const costPerDay = kwhPerDay * price;
+
+    const kwhPerMonth = kwhPerDay * days;
+    const costPerMonth = kwhPerMonth * price;
+
+    const kwhPerYear = kwhPerDay * 365;
+    const costPerYear = kwhPerYear * price;
+
+    // Spanish electricity mix produces approx 0.25 kg CO2 per kWh
+    const co2KgYear = kwhPerYear * 0.25;
+
+    document.getElementById('monthCostDisplay')!.textContent = `${costPerMonth.toFixed(2)} €`;
+    document.getElementById('dayCostDisplay')!.textContent = `${costPerDay.toFixed(2)} €`;
+    document.getElementById('dayKwhDisplay')!.textContent = `${kwhPerDay.toFixed(2)} kWh al día`;
+
+    document.getElementById('monthKwhDisplay')!.textContent = `${kwhPerMonth.toFixed(1)} kWh`;
+    document.getElementById('yearCostDisplay')!.textContent = `${costPerYear.toFixed(2)} €`;
+    document.getElementById('yearKwhDisplay')!.textContent = `${kwhPerYear.toFixed(0)} kWh al año`;
+    document.getElementById('co2Display')!.textContent = `${co2KgYear.toFixed(0)} kg CO2`;
+  }
+
+  calculatePC();
+</script>
+
+<style>
+  .tool-container {
+    max-width: 860px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 0.75rem;
+  }
+  .breadcrumb a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  .badge {
+    background: #fef3c7;
+    color: #d97706;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+  }
+  .tool-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0.5rem 0;
+  }
+  .tool-desc {
+    color: #475569;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+  .calculator-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    margin: 2rem 0;
+  }
+  .form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 600px) {
+    .grid-2col {
+      grid-template-columns: 1fr;
+    }
+  }
+  .input-group label {
+    display: block;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.4rem;
+  }
+  .input-group input, .input-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #0f172a;
+  }
+  .help-text {
+    display: block;
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+  }
+  .results-box {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px dashed #e2e8f0;
+  }
+  .results-box h3 {
+    margin: 0 0 1rem;
+    font-size: 1.2rem;
+    color: #0f172a;
+  }
+  .highlight-result {
+    background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%);
+    border: 1px solid #fde047;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .total-cost {
+    display: block;
+    font-size: 3rem;
+    font-weight: 900;
+    color: #854d0e;
+  }
+  .sub-label {
+    font-size: 0.95rem;
+    color: #a16207;
+    font-weight: 600;
+  }
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+  }
+  .metric-card {
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .metric-title {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 600;
+  }
+  .metric-val {
+    font-size: 1.25rem;
+    color: #0f172a;
+    font-weight: 700;
+    margin: 0.25rem 0;
+  }
+  .metric-card small {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+  .tool-explanation {
+    margin-top: 3rem;
+    color: #334155;
+    line-height: 1.7;
+  }
+  .formula-box {
+    background: #0f172a;
+    color: #fde047;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    font-family: monospace;
+    font-size: 0.95rem;
+    margin: 1rem 0;
+  }
+</style>

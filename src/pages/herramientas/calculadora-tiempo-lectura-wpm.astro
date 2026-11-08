@@ -1,0 +1,253 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "Calculadora de Tiempo de Lectura y Locución (WPM) | GuíaTecnológica";
+const description = "Calcula el tiempo exacto que llevará leer un texto en silencio o locutarlo para un podcast, vídeo de YouTube o presentación según palabras por minuto (WPM).";
+---
+
+<BaseLayout title={title} description={description}>
+  <main class="tool-container">
+    <div class="tool-header">
+      <nav class="breadcrumb">
+        <a href="/">Inicio</a> &gt; <a href="/herramientas">Herramientas</a> &gt; <span>Tiempo de Lectura</span>
+      </nav>
+      <span class="badge">🎙️ Contenido & Locución</span>
+      <h1>Calculadora de Tiempo de Lectura y Locución</h1>
+      <p class="tool-desc">
+        Pega cualquier texto o guion para calcular al instante su duración en minutos y segundos para lectura rápida, lectura cómoda o locución para podcasts y YouTube.
+      </p>
+    </div>
+
+    <div class="calculator-card">
+      <div class="form-grid">
+        <div class="input-group">
+          <label for="textInput">Pega tu texto o guion aquí:</label>
+          <textarea id="textInput" rows="8" placeholder="Escribe o pega el artículo, guion de vídeo o discurso aquí..."></textarea>
+        </div>
+      </div>
+
+      <div class="results-box">
+        <h3>Duración Estimada</h3>
+        <div class="highlight-result">
+          <span class="total-time" id="speakingTimeDisplay">0 min 00 s</span>
+          <span class="sub-label">tiempo estimado de locución (YouTube / Podcast a 130 WPM)</span>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-title">Lectura Silenciosa</span>
+            <strong id="silentTimeDisplay" class="metric-val">0 min 00 s</strong>
+            <small>Lectura web estándar (230 WPM)</small>
+          </div>
+          <div class="metric-card">
+            <span class="metric-title">Lectura de Estudio</span>
+            <strong id="studyTimeDisplay" class="metric-val">0 min 00 s</strong>
+            <small>Comprensión pausada (150 WPM)</small>
+          </div>
+          <div class="metric-card">
+            <span class="metric-title">Palabras Totales</span>
+            <strong id="wordsDisplay" class="metric-val">0</strong>
+            <small id="charsDisplay">0 caracteres</small>
+          </div>
+          <div class="metric-card">
+            <span class="metric-title">Párrafos y Frases</span>
+            <strong id="paragraphsDisplay" class="metric-val">0 p / 0 f</strong>
+            <small>Estructura del texto</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="tool-explanation">
+      <h2>¿A cuántas palabras por minuto habla una persona?</h2>
+      <p>
+        Para calcular la duración de un guion de vídeo o presentación oral con precisión profesional:
+      </p>
+      <ul>
+        <li><strong>Locución natural (130 - 140 WPM):</strong> Es la velocidad estándar utilizada en podcasts, vídeos de YouTube, audiolibros y conferencias públicas para permitir que el oyente asimile la información sin perderse.</li>
+        <li><strong>Lectura silenciosa de adultos (200 - 250 WPM):</strong> La velocidad media con la que un usuario lee un artículo en un blog o un periódico digital desde la pantalla de su móvil o PC.</li>
+        <li><strong>Locución rápida publicitaria (160 - 180 WPM):</strong> Utilizada en anuncios de radio o spots televisivos breves con alta densidad de palabras.</li>
+      </ul>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  const textInput = document.getElementById('textInput') as HTMLTextAreaElement;
+
+  function formatDuration(seconds: number): string {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.round(seconds % 60);
+    const pad = (n: number) => n < 10 ? '0' + n : n;
+    if (mins > 0) {
+      return `${mins} min ${pad(secs)} s`;
+    }
+    return `${secs} segundos`;
+  }
+
+  function calculateWPM() {
+    const text = textInput.value.trim();
+    if (!text) {
+      document.getElementById('speakingTimeDisplay')!.textContent = "0 min 00 s";
+      document.getElementById('silentTimeDisplay')!.textContent = "0 min 00 s";
+      document.getElementById('studyTimeDisplay')!.textContent = "0 min 00 s";
+      document.getElementById('wordsDisplay')!.textContent = "0";
+      document.getElementById('charsDisplay')!.textContent = "0 caracteres";
+      document.getElementById('paragraphsDisplay')!.textContent = "0 p / 0 f";
+      return;
+    }
+
+    const words = text.match(/\b\S+\b/g) || [];
+    const wordCount = words.length;
+    const charCount = text.length;
+
+    const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0).length;
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+
+    // Speaking: 130 WPM
+    const speakingSecs = (wordCount / 130) * 60;
+    // Silent reading: 230 WPM
+    const silentSecs = (wordCount / 230) * 60;
+    // Study reading: 150 WPM
+    const studySecs = (wordCount / 150) * 60;
+
+    document.getElementById('speakingTimeDisplay')!.textContent = formatDuration(speakingSecs);
+    document.getElementById('silentTimeDisplay')!.textContent = formatDuration(silentSecs);
+    document.getElementById('studyTimeDisplay')!.textContent = formatDuration(studySecs);
+
+    document.getElementById('wordsDisplay')!.textContent = wordCount.toLocaleString('es-ES');
+    document.getElementById('charsDisplay')!.textContent = `${charCount.toLocaleString('es-ES')} caracteres`;
+    document.getElementById('paragraphsDisplay')!.textContent = `${paragraphs} p / ${sentences} f`;
+  }
+
+  textInput?.addEventListener('input', calculateWPM);
+</script>
+
+<style>
+  .tool-container {
+    max-width: 860px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 0.75rem;
+  }
+  .breadcrumb a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  .badge {
+    background: #fdf2f8;
+    color: #be185d;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+  }
+  .tool-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0.5rem 0;
+  }
+  .tool-desc {
+    color: #475569;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+  .calculator-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    margin: 2rem 0;
+  }
+  .form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .input-group label {
+    display: block;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.4rem;
+  }
+  .input-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    color: #0f172a;
+    line-height: 1.6;
+    font-family: inherit;
+  }
+  .results-box {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px dashed #e2e8f0;
+  }
+  .results-box h3 {
+    margin: 0 0 1rem;
+    font-size: 1.2rem;
+    color: #0f172a;
+  }
+  .highlight-result {
+    background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+    border: 1px solid #fbcfe8;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .total-time {
+    display: block;
+    font-size: 3rem;
+    font-weight: 900;
+    color: #9d174d;
+  }
+  .sub-label {
+    font-size: 0.95rem;
+    color: #be185d;
+    font-weight: 600;
+  }
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+  }
+  .metric-card {
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .metric-title {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 600;
+  }
+  .metric-val {
+    font-size: 1.25rem;
+    color: #0f172a;
+    font-weight: 700;
+    margin: 0.25rem 0;
+  }
+  .metric-card small {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+  .tool-explanation {
+    margin-top: 3rem;
+    color: #334155;
+    line-height: 1.7;
+  }
+</style>

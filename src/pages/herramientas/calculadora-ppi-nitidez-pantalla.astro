@@ -1,0 +1,335 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "Calculadora de PPI y Nitidez Retina de Pantallas | GuíaTecnológica";
+const description = "Calcula los píxeles por pulgada (PPI), tamaño de píxel y la distancia óptima para nitidez Retina en móviles, tablets y monitores de PC.";
+---
+
+<BaseLayout title={title} description={description}>
+  <main class="tool-container">
+    <div class="tool-header">
+      <nav class="breadcrumb">
+        <a href="/">Inicio</a> &gt; <a href="/herramientas">Herramientas</a> &gt; <span>Calculadora de PPI</span>
+      </nav>
+      <span class="badge">🖥️ Pantallas & Diseño</span>
+      <h1>Calculadora de PPI y Nitidez de Pantalla</h1>
+      <p class="tool-desc">
+        Averigua la densidad de píxeles por pulgada (PPI) de cualquier pantalla, la distancia a la que se vuelve "Retina" y el tamaño exacto de cada píxel en milímetros.
+      </p>
+    </div>
+
+    <div class="calculator-card">
+      <div class="form-grid">
+        <div class="input-group">
+          <label for="devicePreset">Dispositivos y pantallas habituales:</label>
+          <select id="devicePreset">
+            <option value="custom">Personalizado (introducir valores)</option>
+            <option value="mon_24_fhd">Monitor 24" Full HD (1920x1080)</option>
+            <option value="mon_27_2k" selected>Monitor 27" 2K QHD (2560x1440)</option>
+            <option value="mon_27_4k">Monitor 27" 4K UHD (3840x2160)</option>
+            <option value="mon_32_4k">Monitor 32" 4K UHD (3840x2160)</option>
+            <option value="macbook_14">MacBook Pro 14" (3024x1964)</option>
+            <option value="iphone_15">Smartphone 6.1" OLED (2556x1179)</option>
+            <option value="tablet_11">Tablet 11" (2388x1668)</option>
+          </select>
+        </div>
+
+        <div class="grid-3col">
+          <div class="input-group">
+            <label for="resW">Píxeles horizontales:</label>
+            <input type="number" id="resW" value="2560" min="100" max="16000" step="10" />
+          </div>
+
+          <div class="input-group">
+            <label for="resH">Píxeles verticales:</label>
+            <input type="number" id="resH" value="1440" min="100" max="16000" step="10" />
+          </div>
+
+          <div class="input-group">
+            <label for="diagInches">Diagonal (pulgadas "):</label>
+            <input type="number" id="diagInches" value="27" min="1" max="150" step="0.1" />
+          </div>
+        </div>
+      </div>
+
+      <div class="results-box">
+        <h3>Resultado de Densidad y Nitidez</h3>
+        <div class="highlight-result">
+          <span class="total-ppi" id="ppiDisplay">-- PPI</span>
+          <span class="sub-label" id="sharpnessBadge">Densidad óptima para escritorio</span>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-title">Distancia Retina</span>
+            <strong id="retinaDistDisplay" class="metric-val">-- cm</strong>
+            <small>Los píxeles se vuelven invisibles</small>
+          </div>
+          <div class="metric-card">
+            <span class="metric-title">Tamaño de Píxel (Pitch)</span>
+            <strong id="dotPitchDisplay" class="metric-val">-- mm</strong>
+            <small>Espaciado entre subpíxeles</small>
+          </div>
+          <div class="metric-card">
+            <span class="metric-title">Total de Megapíxeles</span>
+            <strong id="mpDisplay" class="metric-val">-- MP</strong>
+            <small>Píxeles totales renderizados</small>
+          </div>
+          <div class="metric-card">
+            <span class="metric-title">Relación de Aspecto</span>
+            <strong id="aspectDisplay" class="metric-val">16:9</strong>
+            <small>Formato de la pantalla</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="tool-explanation">
+      <h2>¿Qué es el PPI y qué significa tener una pantalla "Retina"?</h2>
+      <p>
+        El término **PPI (Pixels Per Inch / Píxeles por Pulgada)** mide cuántos puntos microscópicos de luz emite la pantalla en cada pulgada lineal (2,54 cm):
+      </p>
+      <div class="formula-box">
+        <code>Diagonal en Píxeles (dp) = √(Ancho² + Alto²)</code><br />
+        <code>PPI = Diagonal en Píxeles / Diagonal en Pulgadas</code>
+      </div>
+      <p>
+        El concepto **Retina** (acuñado originalmente por Apple) no describe un número fijo de PPI, sino una relación entre la **densidad de píxeles y la distancia a los ojos del usuario**:
+      </p>
+      <ul>
+        <li><strong>En un teléfono móvil (~30 cm de distancia):</strong> Se requieren **más de 300 - 400 PPI** para que el ojo humano con visión 20/20 no distinga los puntos individuales.</li>
+        <li><strong>En un monitor de escritorio (~60-70 cm de distancia):</strong> Basta con **110 - 163 PPI** (como un monitor 27" 2K o 4K) para percibir un texto ultra nítido.</li>
+        <li><strong>En un televisor de salón (~2,5 metros de distancia):</strong> Entre **50 y 80 PPI** es más que suficiente gracias a la lejanía.</li>
+      </ul>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  const presetSelect = document.getElementById('devicePreset') as HTMLSelectElement;
+  const wInput = document.getElementById('resW') as HTMLInputElement;
+  const hInput = document.getElementById('resH') as HTMLInputElement;
+  const diagInput = document.getElementById('diagInches') as HTMLInputElement;
+
+  const presetsData: Record<string, { w: number, h: number, d: number }> = {
+    mon_24_fhd: { w: 1920, h: 1080, d: 24 },
+    mon_27_2k: { w: 2560, h: 1440, d: 27 },
+    mon_27_4k: { w: 3840, h: 2160, d: 27 },
+    mon_32_4k: { w: 3840, h: 2160, d: 32 },
+    macbook_14: { w: 3024, h: 1964, d: 14.2 },
+    iphone_15: { w: 2556, h: 1179, d: 6.1 },
+    tablet_11: { w: 2388, h: 1668, d: 11 }
+  };
+
+  presetSelect?.addEventListener('change', () => {
+    if (presetSelect.value !== 'custom' && presetsData[presetSelect.value]) {
+      const p = presetsData[presetSelect.value];
+      wInput.value = p.w.toString();
+      hInput.value = p.h.toString();
+      diagInput.value = p.d.toString();
+      calculatePPI();
+    }
+  });
+
+  wInput?.addEventListener('input', () => { presetSelect.value = 'custom'; calculatePPI(); });
+  hInput?.addEventListener('input', () => { presetSelect.value = 'custom'; calculatePPI(); });
+  diagInput?.addEventListener('input', () => { presetSelect.value = 'custom'; calculatePPI(); });
+
+  function gcd(a: number, b: number): number {
+    return b === 0 ? a : gcd(b, a % b);
+  }
+
+  function calculatePPI() {
+    const w = parseFloat(wInput.value) || 0;
+    const h = parseFloat(hInput.value) || 0;
+    const d = parseFloat(diagInput.value) || 0;
+
+    if (w <= 0 || h <= 0 || d <= 0) return;
+
+    const diagPixels = Math.sqrt(w * w + h * h);
+    const ppi = diagPixels / d;
+
+    // Dot pitch in mm
+    const dotPitch = (25.4 / ppi).toFixed(4);
+
+    // Retina viewing distance in cm: standard eye resolves 1 arcminute (1/60 deg)
+    // Distance (inches) = 3438 / PPI -> Distance (cm) = (3438 / PPI) * 2.54
+    const retinaDistCm = Math.round((3438 / ppi) * 2.54);
+
+    // Total megapixels
+    const mp = ((w * h) / 1000000).toFixed(2);
+
+    // Aspect ratio
+    const divisor = gcd(Math.round(w), Math.round(h));
+    const aspect = `${Math.round(w / divisor)}:${Math.round(h / divisor)}`;
+
+    document.getElementById('ppiDisplay')!.textContent = `${Math.round(ppi)} PPI`;
+    document.getElementById('retinaDistDisplay')!.textContent = `${retinaDistCm} cm`;
+    document.getElementById('dotPitchDisplay')!.textContent = `${dotPitch} mm`;
+    document.getElementById('mpDisplay')!.textContent = `${mp} MP`;
+    document.getElementById('aspectDisplay')!.textContent = aspect.length < 8 ? aspect : `${(w / h).toFixed(2)}:1`;
+
+    const badge = document.getElementById('sharpnessBadge')!;
+    if (ppi >= 300) {
+      badge.textContent = "Excelente nitidez (Móvil / Pantalla Retina)";
+      badge.style.color = "#15803d";
+    } else if (ppi >= 140) {
+      badge.textContent = "Muy alta nitidez (Ideal para diseño gráfico 4K)";
+      badge.style.color = "#0369a1";
+    } else if (ppi >= 100) {
+      badge.textContent = "Nitidez estándar recomendada para oficina (2K/QHD)";
+      badge.style.color = "#b45309";
+    } else {
+      badge.textContent = "Densidad baja: los píxeles pueden ser visibles de cerca";
+      badge.style.color = "#b91c1c";
+    }
+  }
+
+  calculatePPI();
+</script>
+
+<style>
+  .tool-container {
+    max-width: 860px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 0.75rem;
+  }
+  .breadcrumb a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  .badge {
+    background: #e0e7ff;
+    color: #4338ca;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+  }
+  .tool-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0.5rem 0;
+  }
+  .tool-desc {
+    color: #475569;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+  .calculator-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    margin: 2rem 0;
+  }
+  .form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .grid-3col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 600px) {
+    .grid-3col {
+      grid-template-columns: 1fr;
+    }
+  }
+  .input-group label {
+    display: block;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.4rem;
+  }
+  .input-group input, .input-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #0f172a;
+  }
+  .results-box {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px dashed #e2e8f0;
+  }
+  .results-box h3 {
+    margin: 0 0 1rem;
+    font-size: 1.2rem;
+    color: #0f172a;
+  }
+  .highlight-result {
+    background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+    border: 1px solid #c7d2fe;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .total-ppi {
+    display: block;
+    font-size: 3rem;
+    font-weight: 900;
+    color: #3730a3;
+  }
+  .sub-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+  }
+  .metric-card {
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .metric-title {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 600;
+  }
+  .metric-val {
+    font-size: 1.25rem;
+    color: #0f172a;
+    font-weight: 700;
+    margin: 0.25rem 0;
+  }
+  .metric-card small {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+  .tool-explanation {
+    margin-top: 3rem;
+    color: #334155;
+    line-height: 1.7;
+  }
+  .formula-box {
+    background: #0f172a;
+    color: #818cf8;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    font-family: monospace;
+    font-size: 0.95rem;
+    margin: 1rem 0;
+  }
+</style>
