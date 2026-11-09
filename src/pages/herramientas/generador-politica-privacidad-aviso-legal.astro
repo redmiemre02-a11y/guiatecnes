@@ -1,0 +1,379 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "Generador de Textos Legales RGPD (Aviso Legal y Privacidad) | GuíaTecnológica";
+const description = "Genera gratis textos legales obligatorios para tu web o blog: Aviso Legal, Política de Privacidad y Cookies adaptados al RGPD y LSSI-CE en 1 minuto.";
+---
+
+<BaseLayout title={title} description={description}>
+  <main class="tool-container">
+    <div class="tool-header">
+      <nav class="breadcrumb">
+        <a href="/">Inicio</a> &gt; <a href="/herramientas">Herramientas</a> &gt; <span>Generador Legal RGPD</span>
+      </nav>
+      <span class="badge">⚖️ Legal & Webmaster</span>
+      <h1>Generador de Aviso Legal y Política de Privacidad</h1>
+      <p class="tool-desc">
+        Crea los textos legales obligatorios para tu página web, tienda online o blog personal adaptados al Reglamento Europeo de Protección de Datos (RGPD) y la LSSI-CE española.
+      </p>
+    </div>
+
+    <div class="calculator-card">
+      <div class="form-grid">
+        <div class="grid-2col">
+          <div class="input-group">
+            <label for="webName">Nombre del sitio web:</label>
+            <input type="text" id="webName" value="Mi Blog Tecnológico" placeholder="Ej. Mi Tienda Digital" />
+          </div>
+
+          <div class="input-group">
+            <label for="webUrl">Dirección web completa (URL):</label>
+            <input type="url" id="webUrl" value="https://midominio.com" placeholder="https://tudominio.com" />
+          </div>
+        </div>
+
+        <div class="grid-2col">
+          <div class="input-group">
+            <label for="ownerName">Nombre del titular o empresa responsable:</label>
+            <input type="text" id="ownerName" value="Juan Pérez García" placeholder="Nombre completo o Razón Social" />
+          </div>
+
+          <div class="input-group">
+            <label for="ownerId">NIF / CIF / DNI (Opcional):</label>
+            <input type="text" id="ownerId" value="B-12345678" placeholder="Ej. 12345678Z o NIF comercial" />
+          </div>
+        </div>
+
+        <div class="grid-2col">
+          <div class="input-group">
+            <label for="contactEmail">Correo electrónico de contacto y privacidad:</label>
+            <input type="email" id="contactEmail" value="contacto@midominio.com" />
+          </div>
+
+          <div class="input-group">
+            <label for="country">País / Legislación principal:</label>
+            <select id="country">
+              <option value="es" selected>España (RGPD + LSSI-CE + LOPDGDD)</option>
+              <option value="eu">Unión Europea (RGPD / GDPR Estándar)</option>
+              <option value="latam">Latinoamérica (Estándar Internacional de Protección de Datos)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="checkbox-group">
+          <label class="check-item">
+            <input type="checkbox" id="hasAnalytics" checked />
+            <span>Utilizo herramientas de analítica web (como Google Analytics 4)</span>
+          </label>
+          <label class="check-item">
+            <input type="checkbox" id="hasAds" checked />
+            <span>Muestro publicidad de terceros (como Google AdSense o redes de afiliados)</span>
+          </label>
+          <label class="check-item">
+            <input type="checkbox" id="hasForms" checked />
+            <span>Tengo formularios de contacto o registro de usuarios</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="results-box">
+        <div class="tabs-header">
+          <button type="button" class="tab-btn active" data-tab="aviso">Aviso Legal</button>
+          <button type="button" class="tab-btn" data-tab="privacidad">Política de Privacidad</button>
+          <button type="button" class="tab-btn" data-tab="cookies">Política de Cookies</button>
+        </div>
+
+        <div class="text-output-wrapper">
+          <textarea id="legalTextOutput" rows="12" readonly></textarea>
+        </div>
+
+        <div class="actions-row">
+          <button type="button" id="btnCopyText" class="copy-btn">📋 Copiar Texto Completo</button>
+          <span id="copyMsg" class="copy-msg">¡Copiado con éxito al portapapeles!</span>
+        </div>
+      </div>
+    </div>
+
+    <section class="tool-explanation">
+      <h2>¿Por qué son obligatorios estos textos en tu web?</h2>
+      <p>
+        Cualquier sitio web que opere en la Unión Europea o reciba visitas de ciudadanos europeos está sujeto al **RGPD (Reglamento General de Protección de Datos)** y a la directiva de comercio electrónico LSSI-CE:
+      </p>
+      <ul>
+        <li><strong>Aviso Legal:</strong> Identifica al propietario de la web para evitar el anonimato comercial y cumplir con el artículo 10 de la LSSI.</li>
+        <li><strong>Política de Privacidad:</strong> Explica legalmente qué datos recopilas (direcciones IP, nombres en formularios), con qué finalidad y cómo el usuario puede ejercer sus derechos ARCO (Acceso, Rectificación, Cancelación y Oposición).</li>
+        <li><strong>Política de Cookies:</strong> Obligatoria si usas analítica de Google o anuncios, informando al visitante antes de instalar cookies de rastreo en su navegador.</li>
+      </ul>
+      <p>
+        <em>Aviso: Esta plantilla genera un borrador legal informativo estándar. Para comercios electrónicos complejos o plataformas financieras se recomienda la supervisión de un asesor legal colegiado.</em>
+      </p>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  let activeTab = "aviso";
+
+  function generateTexts() {
+    const webName = (document.getElementById('webName') as HTMLInputElement).value || "Mi Sitio Web";
+    const webUrl = (document.getElementById('webUrl') as HTMLInputElement).value || "https://ejemplo.com";
+    const owner = (document.getElementById('ownerName') as HTMLInputElement).value || "El Responsable";
+    const nif = (document.getElementById('ownerId') as HTMLInputElement).value || "[NIF/CIF]";
+    const email = (document.getElementById('contactEmail') as HTMLInputElement).value || "info@ejemplo.com";
+    const hasAnalytics = (document.getElementById('hasAnalytics') as HTMLInputElement).checked;
+    const hasAds = (document.getElementById('hasAds') as HTMLInputElement).checked;
+    const hasForms = (document.getElementById('hasForms') as HTMLInputElement).checked;
+
+    let text = "";
+
+    if (activeTab === "aviso") {
+      text = `# AVISO LEGAL Y CONDICIONES DE USO
+
+En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se informa a los usuarios de los datos identificativos del responsable del sitio web:
+
+- **Denominación del sitio:** ${webName}
+- **Dirección web:** ${webUrl}
+- **Titular responsable:** ${owner}
+- **Identificación fiscal:** ${nif}
+- **Correo de contacto:** ${email}
+
+### 1. Objeto y ámbito de aplicación
+El presente Aviso Legal regula el acceso, navegación y uso del sitio web ${webUrl}. El acceso y la navegación por el sitio web implican la aceptación de todas las condiciones aquí expuestas.
+
+### 2. Propiedad intelectual e industrial
+Todos los contenidos de este sitio web (textos, gráficos, marcas, código fuente, logotipos) están protegidos por las leyes de propiedad intelectual e industrial vigentes. Queda expresamente prohibida su reproducción o distribución sin el consentimiento expreso de su titular.
+
+### 3. Exclusión de responsabilidades
+${owner} no se hace responsable de los daños o perjuicios que pudieran derivarse de interferencias, omisiones, interrupciones o virus informáticos motivados por causas ajenas a su control.`;
+    } else if (activeTab === "privacidad") {
+      text = `# POLÍTICA DE PRIVACIDAD (RGPD)
+
+Última actualización: Noviembre de 2026
+
+En ${webName}, la privacidad de los visitantes es de vital importancia. Esta política detalla cómo se tratan los datos personales conforme al Reglamento (UE) 2016/679 (RGPD) y la LOPDGDD 3/2018.
+
+### 1. Responsable del tratamiento de datos
+- **Responsable:** ${owner}
+- **NIF/CIF:** ${nif}
+- **Sitio web:** ${webUrl}
+- **Contacto de privacidad:** ${email}
+
+### 2. Finalidad del tratamiento de datos personales
+Los datos recabados en este sitio web se utilizan con las siguientes finalidades:
+${hasForms ? '- **Formularios de contacto:** Para responder a consultas y peticiones planteadas por los usuarios.\n' : ''}${hasAnalytics ? '- **Análisis de navegación:** Para mejorar el rendimiento y usabilidad mediante métricas estadísticas anónimas (Google Analytics).\n' : ''}${hasAds ? '- **Publicidad personalizada:** Redes publicitarias de terceros (como Google AdSense) pueden recopilar identificadores de dispositivo.\n' : ''}
+### 3. Base jurídica del tratamiento
+La base legal para el tratamiento de sus datos es el consentimiento explícito otorgado por el usuario al enviar formularios o aceptar las cookies del sitio web.
+
+### 4. Derechos de los usuarios
+Cualquier usuario tiene derecho a ejercer sus derechos de Acceso, Rectificación, Supresión (Derecho al Olvido), Limitación del Tratamiento y Portabilidad de sus datos enviando un correo a: ${email}.`;
+    } else {
+      text = `# POLÍTICA DE COOKIES
+
+Este sitio web (${webUrl}) utiliza cookies propias y de terceros para mejorar la experiencia de navegación del usuario y ofrecer contenidos de interés.
+
+### ¿Qué son las cookies?
+Una cookie es un pequeño archivo de texto que un sitio web almacena en su navegador cuando lo visita. Permite recordar sus preferencias de navegación y recopilar estadísticas de uso.
+
+### Tipos de cookies utilizadas en este sitio:
+- **Cookies técnicas y necesarias:** Imprescindibles para el correcto funcionamiento de la página web.
+${hasAnalytics ? '- **Cookies analíticas:** Analizan de forma agregada y anónima el comportamiento de los visitantes para optimizar la estructura de la web (proveedor: Google Analytics 4).\n' : ''}${hasAds ? '- **Cookies publicitarias:** Utilizadas por redes de anuncios (Google AdSense) para mostrar anuncios relevantes según sus hábitos de navegación previos.\n' : ''}
+### Cómo gestionar o bloquear las cookies:
+Usted puede permitir, bloquear o eliminar las cookies instaladas en su dispositivo mediante la configuración de las opciones de su navegador web (Chrome, Safari, Firefox o Edge).`;
+    }
+
+    (document.getElementById('legalTextOutput') as HTMLTextAreaElement).value = text;
+  }
+
+  // Tabs handling
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      const target = e.currentTarget as HTMLElement;
+      target.classList.add('active');
+      activeTab = target.dataset.tab || "aviso";
+      generateTexts();
+    });
+  });
+
+  document.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('input', generateTexts);
+  });
+
+  const btnCopy = document.getElementById('btnCopyText');
+  const copyMsg = document.getElementById('copyMsg');
+  btnCopy?.addEventListener('click', () => {
+    const textOutput = document.getElementById('legalTextOutput') as HTMLTextAreaElement;
+    navigator.clipboard.writeText(textOutput.value);
+    if (copyMsg) {
+      copyMsg.style.display = "inline";
+      setTimeout(() => { copyMsg.style.display = "none"; }, 3000);
+    }
+  });
+
+  generateTexts();
+</script>
+
+<style>
+  .tool-container {
+    max-width: 860px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 0.75rem;
+  }
+  .breadcrumb a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  .badge {
+    background: #ede9fe;
+    color: #6d28d9;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+  }
+  .tool-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0.5rem 0;
+  }
+  .tool-desc {
+    color: #475569;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+  .calculator-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    margin: 2rem 0;
+  }
+  .form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 600px) {
+    .grid-2col {
+      grid-template-columns: 1fr;
+    }
+  }
+  .input-group label {
+    display: block;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.4rem;
+  }
+  .input-group input, .input-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    color: #0f172a;
+  }
+  .checkbox-group {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    color: #334155;
+    cursor: pointer;
+  }
+  .check-item input {
+    accent-color: #6d28d9;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+  .results-box {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px dashed #e2e8f0;
+  }
+  .tabs-header {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    background: #6d28d9;
+    color: #ffffff;
+    border-color: #6d28d9;
+  }
+  .text-output-wrapper textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-family: monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #0f172a;
+    background: #fdfdfd;
+  }
+  .actions-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .copy-btn {
+    background: #0f172a;
+    color: #ffffff;
+    padding: 0.6rem 1.25rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .copy-btn:hover {
+    background: #334155;
+  }
+  .copy-msg {
+    display: none;
+    color: #16a34a;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .tool-explanation {
+    margin-top: 3rem;
+    color: #334155;
+    line-height: 1.7;
+  }
+</style>

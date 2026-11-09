@@ -9,6 +9,7 @@ import Disqus from '../../components/Disqus.astro';
 import StarRating from '../../components/StarRating.astro';
 import ArticleReactions from '../../components/ArticleReactions.astro';
 import HelpfulFeedback from '../../components/HelpfulFeedback.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -494,10 +495,33 @@ function getRelevantTool(title: string, tags: string[]) {
     };
   }
 
+
+  if (text.includes('backup') || text.includes('copia de seguridad') || text.includes('nas') || text.includes('raid') || text.includes('disco externo') || text.includes('nube')) {
+    return {
+      title: 'Calculadora de Almacenamiento para Copias de Seguridad (3-2-1)',
+      desc: 'Calcula con precision cuantos TB necesitas en discos duros locales y nube para proteger tus fotos y datos.',
+      btn: 'Calcular Espacio de Backup',
+      url: '/herramientas/calculadora-tamano-copia-seguridad',
+      icon: '💾',
+      badge: 'Backups & Seguridad'
+    };
+  }
+
+  if (text.includes('legal') || text.includes('aviso legal') || text.includes('privacidad') || text.includes('cookies') || text.includes('rgpd') || text.includes('gdpr') || text.includes('webmaster')) {
+    return {
+      title: 'Generador de Aviso Legal y Politica de Privacidad RGPD',
+      desc: 'Genera textos legales obligatorios y conformes a la normativa europea para tu pagina web o blog personal.',
+      btn: 'Generar Textos Legales',
+      url: '/herramientas/generador-politica-privacidad-aviso-legal',
+      icon: '⚖️',
+      badge: 'Legal & RGPD'
+    };
+  }
+
   return {
-    title: 'Descubre Nuestras 58 Herramientas Gratuitas',
+    title: 'Descubre Nuestras 60 Herramientas Gratuitas',
     desc: 'Accede a calculadoras financieras, compresores de imágenes, test de velocidad WiFi, sueldo neto, conversor WebP y más.',
-    btn: 'Ver las 58 Herramientas 🧲',
+    btn: 'Ver las 60 Herramientas 🧲',
     url: '/herramientas',
     icon: '🚀',
     badge: '100% Gratis'
@@ -506,6 +530,18 @@ function getRelevantTool(title: string, tags: string[]) {
 const relevantTool = getRelevantTool(post.data.title, post.data.tags);
 
 const currentSlug = post.id.replace(/\.[^/.]+$/, "");
+
+// Determine Legal Disclaimer type
+function getDisclaimerType(tags: string[], title: string): 'finance' | 'legal' | 'tax' | 'technical' | 'general' {
+  const t = (tags.join(' ') + ' ' + title).toLowerCase();
+  if (t.includes('irpf') || t.includes('iva') || t.includes('hacienda') || t.includes('tributar')) return 'tax';
+  if (t.includes('finiquito') || t.includes('despido') || t.includes('contrato') || t.includes('laboral') || t.includes('baja') || t.includes('aduanas')) return 'legal';
+  if (t.includes('sueldo') || t.includes('nómina') || t.includes('nomina') || t.includes('banco') || t.includes('dinero') || t.includes('invertir') || t.includes('cripto') || t.includes('wise') || t.includes('revolut')) return 'finance';
+  if (t.includes('windows') || t.includes('android') || t.includes('router') || t.includes('bios') || t.includes('driver') || t.includes('usb') || t.includes('hardware') || t.includes('batería')) return 'technical';
+  return 'general';
+}
+const postDisclaimerType = getDisclaimerType(post.data.tags, post.data.title);
+
 const breadcrumbs = [
   { name: 'Inicio', url: '/' },
   { name: primaryTag, url: `/categoria/${primaryTag.toLowerCase()}` },
@@ -682,6 +718,8 @@ const breadcrumbs = [
 
         <div class="prose">
           <Content />
+
+          <LegalDisclaimer type={postDisclaimerType} />
         </div>
 
         <!-- WAS THIS HELPFUL? FEEDBACK COMPONENT -->

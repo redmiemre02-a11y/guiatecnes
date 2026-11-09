@@ -2,36 +2,173 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+
+const title = "Sobre Nosotros y Nuestra Misión Editorial | GuíaTecnes";
+const description = "Conoce al equipo detrás de GuíaTecnes: nuestra metodología de pruebas, estándares editoriales E-E-A-T y compromiso con la tecnología práctica en español.";
 ---
 
-<BaseLayout
-  title="Sobre Nosotros - GuíaTecnes"
-  description="Conoce al equipo detrás de GuíaTecnes, tu guía de confianza sobre herramientas de IA, alternativas de software y tecnología en español."
->
-  <Header slot="header" />
+<BaseLayout title={title} description={description}>
+  <Header />
+  <main class="about-page-container">
+    <div class="about-card">
+      <span class="badge">👥 Transparencia Editorial & E-E-A-T</span>
+      <h1>Sobre GuíaTecnes</h1>
+      <p class="subtitle">
+        Nuestra misión es democratizar el conocimiento tecnológico en español, ofreciendo guías prácticas verificadas, herramientas interactivas gratuitas y soluciones reales sin tecnicismos innecesarios.
+      </p>
 
-  <div class="container-sm" style="padding: 3rem 1.5rem;">
-    <h1>Sobre Nosotros</h1>
-    <p class="lead">Somos un equipo de apasionados por la tecnología con el objetivo de hacer el mundo digital más accesible para todos los hispanohablantes.</p>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="icon">🔬</div>
+          <h3>Pruebas Reales y Metodología</h3>
+          <p>No copiamos comunicados de prensa comerciales. Probamos personalmente cada comando, software libre, calculadora y configuración en dispositivos físicos (Windows, Android, iOS y Linux) antes de publicar cualquier recomendación.</p>
+        </div>
 
-    <h2>¿Qué es GuíaTecnes?</h2>
-    <p>GuíaTecnes nació de una necesidad real: la mayoría del contenido de calidad sobre herramientas de IA, software y tecnología está escrito en inglés. Nosotros queremos cambiar eso.</p>
-    <p>Analizamos, probamos y comparamos herramientas digitales para que tú no tengas que hacerlo. Nuestras reseñas son honestas, nuestras guías son prácticas y siempre buscamos las mejores alternativas gratuitas.</p>
+        <div class="value-card">
+          <div class="icon">🛡️</div>
+          <h3>Independencia Editorial</h3>
+          <p>Nuestros análisis y comparativas son 100% objetivos. Jamás aceptamos pagos de marcas a cambio de reseñas positivas ni recomendamos programas maliciosos o de dudosa reputación para nuestros lectores.</p>
+        </div>
 
-    <h2>Nuestra Misión</h2>
-    <p>Democratizar el acceso a la información tecnológica en español. Creemos que no deberías necesitar hablar inglés para aprovechar las mejores herramientas del mundo digital.</p>
+        <div class="value-card">
+          <div class="icon">⚡</div>
+          <h3>Utilidades 100% Gratuitas</h3>
+          <p>Creemos en una web útil y abierta. Desarrollamos calculadoras y herramientas interactivas que procesan los datos en tu navegador local, sin requerir registros obligatorios ni recopilar tus datos privados.</p>
+        </div>
 
-    <h2>¿Por Qué Confiar en Nosotros?</h2>
-    <ul>
-      <li>✅ Probamos personalmente todas las herramientas que recomendamos</li>
-      <li>✅ No aceptamos reseñas pagadas que no estén claramente marcadas</li>
-      <li>✅ Actualizamos nuestro contenido regularmente</li>
-      <li>✅ Somos transparentes sobre nuestros afiliados y patrocinadores</li>
-    </ul>
+        <div class="value-card">
+          <div class="icon">⚖️</div>
+          <h3>Rigor y Transparencia Legal</h3>
+          <p>Cumplimos estrictamente con la normativa europea de protección de datos (RGPD) y las directrices para editores de Google, garantizando un entorno de navegación seguro y respetuoso con la privacidad.</p>
+        </div>
+      </div>
 
-    <h2>Contacto</h2>
-    <p>¿Tienes alguna pregunta, sugerencia o quieres que analicemos una herramienta en concreto? Escríbenos directamente a <a href="mailto:emretknis0@gmail.com"><strong>emretknis0@gmail.com</strong></a> o a través de nuestro formulario en la página de <a href="/contacto">Contacto</a>.</p>
-  </div>
+      <section class="editorial-team">
+        <h2>Nuestro Equipo Editorial</h2>
+        <p>
+          GuíaTecnes está impulsado por un equipo multidisciplinar de desarrolladores web, redactores técnicos y entusiastas del hardware con más de una década de experiencia combinada en el sector de la informática y las telecomunicaciones.
+        </p>
+        <p>
+          Contamos con autores especializados como <strong>Experto Tech</strong> y el <strong>Equipo Editorial GuíaTecnes</strong>, dedicados a actualizar de forma continuada los artículos para adaptarlos a las últimas versiones de software y cambios normativos.
+        </p>
+      </section>
 
-  <Footer slot="footer" />
+      <section class="disclaimer-about">
+        <h3>Descargo de Responsabilidad y Transparencia</h3>
+        <p>
+          GuíaTecnes es un portal de carácter exclusivamente informativo y educativo. Los contenidos y herramientas no constituyen asesoramiento profesional colegiado. Para cualquier duda editorial, sugerencia o requerimiento formal, puede dirigirse a nuestro equipo a través del correo oficial:
+        </p>
+        <p class="email-box">
+          ✉️ <a href="mailto:emretknis0@gmail.com">emretknis0@gmail.com</a>
+        </p>
+      </section>
+    </div>
+  </main>
+  <Footer />
 </BaseLayout>
+
+<style>
+  .about-page-container {
+    max-width: 900px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  .about-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 2.5rem;
+    box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05);
+  }
+  .badge {
+    background: #f0fdf4;
+    color: #15803d;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.3rem 0.75rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0.75rem 0 0.5rem;
+  }
+  .subtitle {
+    color: #475569;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+  }
+  .values-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  @media (max-width: 600px) {
+    .values-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .value-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+  .value-card .icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .value-card h3 {
+    font-size: 1.15rem;
+    color: #0f172a;
+    margin: 0 0 0.4rem;
+  }
+  .value-card p {
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+  .editorial-team {
+    border-top: 2px solid #f1f5f9;
+    padding-top: 2rem;
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+    color: #334155;
+  }
+  .editorial-team h2 {
+    font-size: 1.4rem;
+    color: #0f172a;
+    margin-bottom: 0.75rem;
+  }
+  .disclaimer-about {
+    background: #fffbeb;
+    border: 1.5px solid #fde68a;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+  .disclaimer-about h3 {
+    margin: 0 0 0.5rem;
+    color: #b45309;
+    font-size: 1.1rem;
+  }
+  .disclaimer-about p {
+    color: #78350f;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+  .email-box {
+    margin-top: 0.75rem !important;
+    font-weight: 700;
+  }
+  .email-box a {
+    color: #b45309;
+    text-decoration: underline;
+  }
+</style>

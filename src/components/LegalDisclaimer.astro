@@ -1,15 +1,16 @@
 ---
 interface Props {
-  type?: 'finance' | 'legal' | 'tax' | 'general';
+  type?: 'finance' | 'legal' | 'tax' | 'technical' | 'general';
 }
 
 const { type = 'general' } = Astro.props;
 
 const textMap = {
-  finance: 'Aviso Legal & Financiero: Esta calculadora y sus simulaciones tienen carácter meramente orientativo, divulgativo y educativo. No constituyen asesoramiento financiero, crediticio, bancario ni una oferta vinculante. Los tipos de interés, cuotas y condiciones reales dependen exclusivamente de cada entidad bancaria u organismo oficial. Consulte siempre con un asesor financiero acreditado antes de tomar decisiones de inversión o contratación.',
-  legal: 'Descargo de Responsabilidad Laboral & Legal: Esta herramienta realiza una estimación basada en la normativa laboral general española (Estatuto de los Trabajadores). No sustituye el asesoramiento legal, jurídico ni sindical personalizado. Los convenios colectivos específicos de sector o empresa pueden estipular condiciones particulares. Para despidos, reclamaciones de cantidad o finiquitos, consulte con un abogado laboralista o graduado social colegiado.',
-  tax: 'Aviso Fiscal y Tributario: Las estimaciones de impuestos (IRPF, IVA u otras retenciones) son meramente informativas y aproximadas según los tramos generales estatales. Las comunidades autónomas pueden aplicar deducciones o escalas autonómicas distintas. Para la presentación formal de declaraciones, consulte con la Agencia Tributaria (AEAT) o un gestor fiscal colegiado.',
-  general: 'Descargo de Responsabilidad: Los cálculos, datos y resultados proporcionados por esta herramienta son estimaciones orientativas y no vinculantes. GuíaTecnes no asume responsabilidad sobre decisiones personales, económicas o comerciales adoptadas a partir del uso de esta aplicación.'
+  finance: 'Exención de Responsabilidad Financiera: Los cálculos, simulaciones y análisis de este sitio web tienen fines exclusivamente educativos y divulgativos. No constituyen asesoramiento financiero, bancario, crediticio ni de inversión vinculante. GuíaTecnes y sus titulares quedan expresamente exonerados de cualquier responsabilidad por pérdidas o decisiones adoptadas a partir de estos datos.',
+  legal: 'Exención de Responsabilidad Legal y Laboral: Esta información y sus estimaciones tienen carácter puramente orientativo. No sustituyen el asesoramiento jurídico profesional colegiado. GuíaTecnes no garantiza la exactitud de los resultados frente a convenios colectivos o cambios legislativos y declina toda responsabilidad legal.',
+  tax: 'Aviso Fiscal y Tributario: Las estimaciones tributarias (IVA, IRPF) son orientativas según tipos generales estatales. No constituyen asesoría fiscal oficial. Consulte con la Agencia Tributaria (AEAT) o un gestor colegiado. GuíaTecnes no asume responsabilidad alguna ante sanciones o declaraciones fiscales.',
+  technical: 'Descargo de Responsabilidad Técnica: Los tutoriales, códigos, comandos de consola y modificaciones de software o hardware se ofrecen "tal cual", con fines didácticos. El usuario asume íntegramente el riesgo de cualquier modificación en sus dispositivos. GuíaTecnes no se responsabiliza por pérdida de datos, fallos del sistema o anulación de garantías.',
+  general: 'Descargo de Responsabilidad General: Los contenidos, guías y herramientas de este sitio web se proporcionan únicamente con carácter informativo y divulgativo. GuíaTecnes, sus autores y administradores no garantizan la infalibilidad de la información y quedan exentos de toda responsabilidad civil, mercantil o penal por daños directos, indirectos o consecuentes derivados del uso del sitio.'
 };
 
 const disclaimerText = textMap[type] || textMap.general;
@@ -18,7 +19,7 @@ const disclaimerText = textMap[type] || textMap.general;
 <div class="legal-disclaimer-card" role="note" aria-label="Descargo de responsabilidad">
   <div class="ld-icon">⚖️</div>
   <div class="ld-content">
-    <strong class="ld-title">Descargo de Responsabilidad y Advertencia Legal</strong>
+    <strong class="ld-title">Aviso Importante & Exención Total de Responsabilidad</strong>
     <p class="ld-text">{disclaimerText}</p>
   </div>
 </div>
@@ -28,8 +29,8 @@ const disclaimerText = textMap[type] || textMap.general;
     display: flex;
     gap: 0.85rem;
     align-items: flex-start;
-    background: rgba(245, 158, 11, 0.05);
-    border: 1px solid rgba(245, 158, 11, 0.25);
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.35);
     border-radius: 0.75rem;
     padding: 1rem 1.25rem;
     margin: 2rem 0 1.5rem;
@@ -44,13 +45,13 @@ const disclaimerText = textMap[type] || textMap.general;
     display: block;
     font-size: 0.85rem;
     font-weight: 700;
-    color: #fbbf24;
+    color: #d97706;
     margin-bottom: 0.3rem;
   }
   .ld-text {
     margin: 0;
     font-size: 0.8rem;
-    color: var(--text-muted, #94a3b8);
+    color: var(--text-muted, #475569);
     line-height: 1.55;
   }
   @media print {

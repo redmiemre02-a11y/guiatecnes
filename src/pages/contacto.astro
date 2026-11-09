@@ -2,120 +2,164 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+
+const title = "Contacto y Soporte Editorial | GuíaTecnes";
+const description = "¿Tienes una consulta técnica, sugerencia editorial o propuesta de colaboración? Contacta con el equipo de GuíaTecnes a través de emretknis0@gmail.com.";
 ---
 
-<BaseLayout
-  title="Contacto - GuíaTecnes"
-  description="¿Tienes alguna pregunta, sugerencia o propuesta de colaboración? Escríbenos. Respondemos en menos de 48 horas."
->
-  <Header slot="header" />
+<BaseLayout title={title} description={description}>
+  <Header />
+  <main class="contact-page-container">
+    <div class="contact-card">
+      <span class="badge">📬 Atención al Lector & Soporte</span>
+      <h1>Contacta con el Equipo de GuíaTecnes</h1>
+      <p class="subtitle">
+        Estamos a tu disposición para dudas técnicas, corrección de erratas, propuestas de colaboración o cuestiones relativas a privacidad y derechos legales.
+      </p>
 
-  <div class="container-sm contact-page">
-    <h1>Contáctanos</h1>
-    <p class="lead">¿Tienes una pregunta, quieres que analicemos una herramienta o tienes una propuesta? Escríbenos directamente a nuestro correo electrónico oficial o rellena el formulario y te responderemos en menos de 48 horas.</p>
+      <div class="direct-email-banner">
+        <div class="icon">✉️</div>
+        <div class="info">
+          <strong>Dirección de Contacto Oficial y Directa:</strong>
+          <a href="mailto:emretknis0@gmail.com" class="email-link">emretknis0@gmail.com</a>
+          <small>Respondemos habitualmente en un plazo de 24 a 48 horas laborales.</small>
+        </div>
+      </div>
 
-    <div class="direct-contact-box">
-      <span class="direct-icon">✉️</span>
-      <div>
-        <strong>Correo electrónico directo:</strong>
-        <p><a href="mailto:emretknis0@gmail.com" class="email-link">emretknis0@gmail.com</a></p>
+      <div class="topics-grid">
+        <div class="topic-item">
+          <h3>💡 Sugerencias y Nuevas Herramientas</h3>
+          <p>¿Echas en falta alguna calculadora o tutorial técnico específico? Cuéntanos qué necesitas y nuestro equipo valorará programarlo gratuitamente.</p>
+        </div>
+        <div class="topic-item">
+          <h3>⚖️ Asuntos Legales y Derechos RGPD</h3>
+          <p>Para notificaciones formales de propiedad intelectual, retirada de enlaces o ejercicio de derechos ARCO, escríbenos directamente con el asunto "Legal / RGPD".</p>
+        </div>
+        <div class="topic-item">
+          <h3>📢 Publicidad y Patrocinios</h3>
+          <p>Si representas a una empresa de tecnología o software y deseas colaborar en análisis editoriales o espacios de patrocinio, contáctanos para recibir nuestro media kit.</p>
+        </div>
+        <div class="topic-item">
+          <h3>🐛 Reporte de Errores Técnicos</h3>
+          <p>Si alguna herramienta interactiva o cálculo matemático no responde correctamente en tu dispositivo, infórmanos indicando tu navegador y sistema operativo.</p>
+        </div>
+      </div>
+
+      <div class="legal-notice-contact">
+        <p>
+          <strong>Aviso de Privacidad y Responsabilidad:</strong> Al enviarnos un mensaje por correo electrónico a <code>emretknis0@gmail.com</code>, su dirección será utilizada exclusivamente para gestionar su respuesta conforme a nuestra <a href="/politica-de-privacidad">Política de Privacidad</a>. GuíaTecnes es un portal de carácter meramente informativo y divulgativo; las respuestas por correo no constituyen en ningún caso asesoramiento profesional, legal, médico ni financiero vinculante.
+        </p>
       </div>
     </div>
-
-    <form class="contact-form" action="https://formspree.io/f/xppzwgrq" method="POST">
-      <div class="form-group">
-        <label for="name">Nombre *</label>
-        <input type="text" id="name" name="name" placeholder="Tu nombre" required />
-      </div>
-
-      <div class="form-group">
-        <label for="email">Email *</label>
-        <input type="email" id="email" name="email" placeholder="tu@email.com" required />
-      </div>
-
-      <div class="form-group">
-        <label for="subject">Asunto *</label>
-        <select id="subject" name="subject" required>
-          <option value="">Selecciona un asunto...</option>
-          <option value="sugerencia">Sugerencia de artículo</option>
-          <option value="error">Reportar un error</option>
-          <option value="colaboracion">Propuesta de colaboración</option>
-          <option value="otro">Otro</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="message">Mensaje *</label>
-        <textarea id="message" name="message" rows="6" placeholder="Cuéntanos..." required></textarea>
-      </div>
-
-      <button type="submit" class="btn-primary">Enviar mensaje →</button>
-    </form>
-  </div>
-
-  <Footer slot="footer" />
+  </main>
+  <Footer />
 </BaseLayout>
 
 <style>
-  .contact-page { padding: 3rem 1.5rem; }
-  h1 { font-size: 2rem; font-weight: 800; margin-bottom: 1rem; }
-  .lead { color: var(--text-muted); line-height: 1.7; margin-bottom: 2rem; font-size: 1.05rem; }
-
-  .direct-contact-box {
+  .contact-page-container {
+    max-width: 860px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  .contact-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 2.5rem;
+    box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05);
+  }
+  .badge {
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.3rem 0.75rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0.75rem 0 0.5rem;
+  }
+  .subtitle {
+    color: #475569;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+  .direct-email-banner {
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 2rem;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 1.5px solid #bfdbfe;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    margin-bottom: 2.5rem;
   }
-  .direct-icon { font-size: 2rem; }
-  .direct-contact-box strong { font-size: 0.95rem; color: var(--text); display: block; margin-bottom: 0.25rem; }
-  .direct-contact-box p { margin: 0; }
-  .email-link { color: var(--primary); font-size: 1.15rem; font-weight: 700; text-decoration: underline; }
-
-  .contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
-
-  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-  .form-group label { font-size: 0.88rem; font-weight: 600; color: var(--text); }
-
-  .form-group input,
-  .form-group select,
-  .form-group textarea {
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--bg-card);
-    color: var(--text);
-    font-family: var(--font);
-    font-size: 0.92rem;
-    transition: border-color 0.2s;
+  .direct-email-banner .icon {
+    font-size: 2.2rem;
   }
-
-  .form-group input:focus,
-  .form-group select:focus,
-  .form-group textarea:focus {
-    outline: none;
-    border-color: var(--primary);
+  .direct-email-banner .info {
+    display: flex;
+    flex-direction: column;
   }
-
-  .form-group textarea { resize: vertical; }
-
-  .btn-primary {
-    background: var(--primary);
-    color: white;
-    padding: 0.8rem 1.75rem;
-    border: none;
-    border-radius: 10px;
-    font-weight: 600;
+  .direct-email-banner strong {
+    color: #1e40af;
     font-size: 0.95rem;
-    cursor: pointer;
-    font-family: var(--font);
-    transition: background 0.2s;
-    align-self: flex-start;
   }
-
-  .btn-primary:hover { background: var(--primary-dark); }
+  .email-link {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #1d4ed8;
+    text-decoration: none;
+    margin: 0.2rem 0;
+  }
+  .email-link:hover {
+    text-decoration: underline;
+  }
+  .direct-email-banner small {
+    color: #475569;
+    font-size: 0.85rem;
+  }
+  .topics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+  @media (max-width: 600px) {
+    .topics-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .topic-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+  }
+  .topic-item h3 {
+    font-size: 1.05rem;
+    color: #0f172a;
+    margin: 0 0 0.4rem;
+  }
+  .topic-item p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.5;
+  }
+  .legal-notice-contact {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    color: #78350f;
+    line-height: 1.6;
+  }
 </style>

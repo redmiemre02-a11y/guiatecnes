@@ -5,6 +5,24 @@ import Footer from '../../components/Footer.astro';
 
 const tools = [
   {
+    title: 'Calculadora de Almacenamiento para Backups (3-2-1)',
+    desc: 'Calcula cuántos TB de disco duro y nube necesitas para proteger tus fotos, vídeos 4K y documentos según la regla 3-2-1.',
+    url: '/herramientas/calculadora-tamano-copia-seguridad',
+    icon: '💾',
+    badge: 'Seguridad & Backups',
+    color: '#047857',
+    category: 'utilidades'
+  },
+  {
+    title: 'Generador de Aviso Legal y Privacidad RGPD',
+    desc: 'Genera textos legales obligatorios para tu web o blog: Aviso Legal, Política de Privacidad y Cookies conformes al RGPD.',
+    url: '/herramientas/generador-politica-privacidad-aviso-legal',
+    icon: '⚖️',
+    badge: 'Webmaster & Legal',
+    color: '#6d28d9',
+    category: 'desarrollo'
+  },
+  {
     title: 'Calculadora de Consumo Eléctrico de PC',
     desc: 'Calcula cuántos vatios consume tu ordenador y cuánto dinero pagarás en la factura de la luz según tus horas de uso.',
     url: '/herramientas/calculadora-consumo-electrico-pc',
@@ -653,6 +671,13 @@ const tools = [
         );
       })}
     </div>
+  
+    <!-- Aviso Legal & Exención de Responsabilidad sobre Herramientas -->
+    <div style="background: rgba(245, 158, 11, 0.08); border: 1.5px solid rgba(245, 158, 11, 0.35); border-radius: 0.75rem; padding: 1.25rem 1.5rem; margin: 3rem 0 1rem; color: #475569; font-size: 0.85rem; line-height: 1.6;">
+      <strong style="color: #d97706; display: block; font-size: 0.95rem; margin-bottom: 0.35rem;">⚖️ Advertencia Legal y Exención de Responsabilidad sobre las Herramientas:</strong>
+      Todas las calculadoras, conversores, simuladores financieros y utilidades técnicas disponibles en este directorio se proporcionan con fines meramente orientativos, divulgativos y de entretenimiento. Los cálculos se procesan íntegramente en el navegador del usuario y no constituyen asesoramiento financiero, fiscal, tributario ni legal vinculante. GuíaTecnes y sus titulares quedan expresamente exonerados de cualquier responsabilidad por decisiones o pérdidas derivadas de su uso.
+    </div>
+
   </main>
 
   <Footer slot="footer" />

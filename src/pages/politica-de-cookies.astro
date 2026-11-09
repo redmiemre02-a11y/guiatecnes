@@ -2,68 +2,181 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+
+const title = "Política de Cookies y Tecnologías de Rastreo | GuíaTecnes";
+const description = "Información detallada sobre el uso de cookies propias y de terceros (Google AdSense, Analytics) en GuíaTecnes y cómo desactivarlas en tu navegador.";
 ---
 
-<BaseLayout
-  title="Política de Cookies - GuíaTecnes"
-  description="Información detallada sobre las cookies utilizadas en GuíaTecnes: cookies técnicas, analíticas de Google Analytics y publicitarias de Google AdSense."
->
-  <Header slot="header" />
+<BaseLayout title={title} description={description}>
+  <Header />
+  <main class="legal-page-container">
+    <div class="legal-card">
+      <span class="badge">🍪 Privacidad Digital</span>
+      <h1>Política de Cookies de GuíaTecnes</h1>
+      <p class="last-update">Última actualización: Noviembre de 2026 | En cumplimiento de la Directiva ePrivacy y el RGPD</p>
 
-  <div class="container-sm" style="padding: 3rem 1.5rem; max-width: 800px; margin: 0 auto;">
-    <h1>Política de Cookies</h1>
-    <p><em>Última actualización: {new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</em></p>
+      <section class="legal-section">
+        <h2>1. ¿Qué es una Cookie?</h2>
+        <p>
+          Una cookie es un pequeño archivo de texto que los sitios web descargan en su ordenador, teléfono inteligente o tableta cuando accede a determinadas páginas. Las cookies permiten a un sitio web almacenar y recuperar información sobre los hábitos de navegación de un usuario o de su equipo para mejorar su experiencia de uso y ofrecer servicios adaptados a sus preferencias.
+        </p>
+      </section>
 
-    <h2>1. ¿Qué son las Cookies?</h2>
-    <p>
-      Una cookie es un pequeño archivo de texto que los sitios web descargan en tu navegador cuando visitas sus páginas. Sirven para recordar tus preferencias de navegación (como el tema oscuro/claro o tus herramientas favoritas), analizar cómo interactúas con los contenidos y mostrar publicidad adaptada a tus intereses.
-    </p>
+      <section class="legal-section">
+        <h2>2. Tipos de Cookies que Utiliza Este Sitio Web</h2>
+        <p>GuíaTecnes clasifica las cookies empleadas según su finalidad técnica:</p>
 
-    <h2>2. Tipos de Cookies que Utilizamos</h2>
-    <p>En <strong>GuíaTecnes</strong> empleamos las siguientes categorías de cookies:</p>
+        <div class="cookies-table-wrapper">
+          <table class="cookies-table">
+            <thead>
+              <tr>
+                <th>Categoría</th>
+                <th>Finalidad</th>
+                <th>Titular</th>
+                <th>Duración</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Técnicas y Necesarias</strong></td>
+                <td>Permiten la navegación web, guardar la preferencia del banner de cookies y recordar el modo oscuro/claro del sitio.</td>
+                <td>Propias (GuíaTecnes)</td>
+                <td>Sesión / 1 año</td>
+              </tr>
+              <tr>
+                <td><strong>Analíticas</strong></td>
+                <td>Recopilan información estadística anónima y agregada sobre el número de visitantes y páginas más leídas para mejorar el contenido.</td>
+                <td>Google Analytics 4</td>
+                <td>Hasta 2 años</td>
+              </tr>
+              <tr>
+                <td><strong>Publicitarias (Google AdSense)</strong></td>
+                <td>Gestionan los espacios publicitarios mostrados en la web, evitando repetir anuncios y adecuando la publicidad al perfil del usuario.</td>
+                <td>Google LLC / Socios de AdSense</td>
+                <td>Hasta 13 meses</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-    <ul>
-      <li>
-        <strong>Cookies Técnicas y Estrictamente Necesarias:</strong> Permiten la navegación fluida, el cambio entre tema claro/oscuro y el almacenamiento de tus preferencias de consentimiento de cookies. No pueden desactivarse.
-      </li>
-      <li>
-        <strong>Cookies de Análisis (Google Analytics 4):</strong> Nos ayudan a entender cuántas visitas recibimos, qué artículos o herramientas son más leídos y cómo mejorar la velocidad del sitio. Toda la información se recopila de forma agregada y 100% anónima (IP anonimizada).
-      </li>
-      <li>
-        <strong>Cookies de Publicidad y Afiliación (Google AdSense):</strong> Google y sus socios publicitarios utilizan cookies para personalizar y servir anuncios basados en las visitas previas del usuario a este u otros portales web.
-      </li>
-    </ul>
+      <section class="legal-section alert-box">
+        <h2>3. Cookies de Publicidad de Google y Cookie DART</h2>
+        <p>
+          Como editor de la red de <strong>Google AdSense</strong>, le informamos de que Google utiliza cookies para publicar anuncios en nuestro sitio web:
+        </p>
+        <ul>
+          <li>Google utiliza la cookie <strong>DART</strong> que le permite a él y a sus socios mostrar anuncios basados en sus visitas a este y otros sitios web de internet.</li>
+          <li>Usted puede inhabilitar el uso de la cookie DART para la publicidad personalizada visitando la <a href="https://myadcenter.google.com/" target="_blank" rel="noopener">Configuración de Anuncios de Google</a>.</li>
+          <li>Para más información sobre cómo Google gestiona los datos de los usuarios en sitios asociados, consulte la <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Política de Privacidad y Términos de Google</a>.</li>
+        </ul>
+      </section>
 
-    <h2>3. Cookies de Google AdSense y DoubleClick</h2>
-    <p>
-      Google utiliza cookies (como la cookie de DoubleClick) para mostrar anuncios pertinentes a los usuarios en función de sus búsquedas y navegación anterior. Puedes revocar o gestionar tus preferencias de anuncios personalizados en cualquier momento a través de la <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Configuración de Anuncios de Google</a>.
-    </p>
+      <section class="legal-section">
+        <h2>4. Cómo Desactivar o Eliminar las Cookies en su Navegador</h2>
+        <p>
+          Usted puede restringir, bloquear o borrar las cookies de GuíaTecnes o de cualquier otra página web utilizando la configuración de su navegador de internet:
+        </p>
+        <ul>
+          <li><strong>Google Chrome:</strong> Configuración &gt; Privacidad y seguridad &gt; Cookies y otros datos de sitios.</li>
+          <li><strong>Mozilla Firefox:</strong> Ajustes &gt; Privacidad y Seguridad &gt; Cookies y datos del sitio.</li>
+          <li><strong>Apple Safari (Mac e iOS):</strong> Preferencias &gt; Privacidad &gt; Bloquear todas las cookies.</li>
+          <li><strong>Microsoft Edge:</strong> Configuración &gt; Permisos del sitio &gt; Cookies y datos almacenados.</li>
+        </ul>
+        <p>
+          <em>Tenga en cuenta que si desactiva las cookies técnicas necesarias, es posible que algunas funciones interactivas o la apariencia visual de la web no funcionen con total fluidez.</em>
+        </p>
+      </section>
 
-    <h2>4. ¿Cómo desactivar o eliminar las cookies en tu navegador?</h2>
-    <p>
-      Puedes permitir, bloquear o eliminar las cookies instaladas en tu equipo mediante la configuración de las opciones del navegador que utilices:
-    </p>
-    <ul>
-      <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener noreferrer">Google Chrome</a></li>
-      <li><a href="https://support.mozilla.org/es/kb/habilitar-y-deshabilitar-cookies-sitios-web-rastrear-preferencias" target="_blank" rel="noopener noreferrer">Mozilla Firefox</a></li>
-      <li><a href="https://support.apple.com/es-es/guide/safari/sfri11471/mac" target="_blank" rel="noopener noreferrer">Apple Safari</a></li>
-      <li><a href="https://support.microsoft.com/es-es/windows/eliminar-y-administrar-cookies-168dab11-0753-043d-7c16-ede5947fc64d" target="_blank" rel="noopener noreferrer">Microsoft Edge</a></li>
-    </ul>
-
-    <h2>5. Contacto</h2>
-    <p>Si tienes cualquier duda acerca de nuestra Política de Cookies, puedes escribirnos a través de nuestro formulario de <a href="/contacto">Contacto</a>.</p>
-  </div>
-
-  <Footer slot="footer" />
+      <section class="legal-section">
+        <h2>5. Dudas y Contacto</h2>
+        <p>
+          Para cualquier aclaración adicional sobre nuestra política de cookies y privacidad digital, puede escribirnos directamente a:
+          <br /><br />
+          <strong>✉️ Correo de Privacidad:</strong> <a href="mailto:emretknis0@gmail.com">emretknis0@gmail.com</a>
+        </p>
+      </section>
+    </div>
+  </main>
+  <Footer />
 </BaseLayout>
 
 <style>
-  h1 { font-size: 2.2rem; font-weight: 800; color: var(--text-heading, #f8fafc); margin-bottom: 0.5rem; }
-  h2 { font-size: 1.35rem; font-weight: 700; color: var(--text-heading, #f8fafc); margin: 2rem 0 0.75rem; }
-  p { color: var(--text-muted, #94a3b8); line-height: 1.75; margin-bottom: 1rem; }
-  em { color: var(--text-muted, #94a3b8); font-size: 0.9rem; }
-  ul { color: var(--text-muted, #94a3b8); line-height: 1.8; padding-left: 1.5rem; margin-bottom: 1.25rem; }
-  li { margin-bottom: 0.5rem; }
-  a { color: var(--primary, #6366f1); text-decoration: underline; }
-  strong { color: var(--text-heading, #f8fafc); }
+  .legal-page-container {
+    max-width: 900px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  .legal-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 2.5rem;
+    box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05);
+  }
+  .badge {
+    background: #fef3c7;
+    color: #b45309;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.3rem 0.75rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0.75rem 0 0.25rem;
+  }
+  .last-update {
+    color: #64748b;
+    font-size: 0.85rem;
+    margin-bottom: 2rem;
+  }
+  .legal-section {
+    margin-bottom: 2rem;
+    line-height: 1.7;
+    color: #334155;
+  }
+  .legal-section h2 {
+    font-size: 1.3rem;
+    color: #0f172a;
+    margin-bottom: 0.75rem;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 0.4rem;
+  }
+  .alert-box {
+    background: #eff6ff;
+    border: 1.5px solid #bfdbfe;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+  .alert-box h2 {
+    color: #1d4ed8;
+    border-bottom-color: #dbeafe;
+  }
+  .cookies-table-wrapper {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+  .cookies-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    text-align: left;
+  }
+  .cookies-table th {
+    background: #f1f5f9;
+    padding: 0.75rem 1rem;
+    color: #0f172a;
+    font-weight: 700;
+    border-bottom: 2px solid #cbd5e1;
+  }
+  .cookies-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+  }
 </style>

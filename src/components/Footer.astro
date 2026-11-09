@@ -1,10 +1,10 @@
-﻿---
+---
 ---
 <footer class="site-footer">
   <div class="container footer-inner">
     <div class="footer-brand">
       <a href="/" class="footer-logo">⚡ <span>GuíaTecnes</span></a>
-      <p>Tu guía de herramientas de IA, alternativas de software y tecnología en español.</p>
+      <p>Tu portal independiente de guías tecnológicas, herramientas interactivas, alternativas de software y productividad en español.</p>
       <div class="social-links">
         <a href="#" aria-label="Twitter/X" title="Twitter/X">𝕏</a>
         <a href="#" aria-label="YouTube" title="YouTube">▶</a>
@@ -19,35 +19,41 @@
         <a href="/categoria/alternativas">🔄 Alternativas</a>
         <a href="/categoria/tecnologia">💻 Tecnología</a>
         <a href="/categoria/guias">📖 Guías</a>
+        <a href="/herramientas">🛠️ 60 Herramientas Gratis</a>
       </div>
       <div class="footer-col">
         <h4>Sitio & Legal</h4>
         <a href="/sobre-nosotros">Sobre Nosotros</a>
-        <a href="/contacto">Contacto</a>
-        <a href="mailto:emretknis0@gmail.com" class="footer-email-link" style="color: var(--primary); font-weight: 500;">✉️ emretknis0@gmail.com</a>
-        <a href="/aviso-legal">Aviso Legal</a>
-        <a href="/politica-de-privacidad">Privacidad</a>
-        <a href="/politica-de-cookies">Cookies</a>
-        <a href="/sitemap-index.xml">Sitemap</a>
+        <a href="/contacto">Contacto & Soporte</a>
+        <a href="mailto:emretknis0@gmail.com" class="footer-email-link" style="color: var(--primary, #2563eb); font-weight: 600;">✉️ emretknis0@gmail.com</a>
+        <a href="/aviso-legal">Aviso Legal & Exención</a>
+        <a href="/politica-de-privacidad">Política de Privacidad</a>
+        <a href="/politica-de-cookies">Política de Cookies</a>
+        <a href="/sitemap.xml">Mapa del Sitio (Sitemap)</a>
       </div>
     </div>
   </div>
 
   <div class="footer-bottom">
-    <p class="footer-trademark-notice">
-      Aviso Legal & Marcas: GuíaTecnes es un portal divulgativo e independiente. Todas las marcas registradas, nombres de productos y logotipos citados pertenecen a sus respectivos propietarios legales y se mencionan exclusivamente con fines didácticos, de análisis técnico y comparativos amparados por el derecho de cita (Art. 32 LPI).
-    </p>
+    <div class="footer-disclaimer-box">
+      <p class="footer-disclaimer-text">
+        <strong>⚖️ Exención Total de Responsabilidad Legal:</strong> Los contenidos, tutoriales técnicos, comandos informáticos, análisis y calculadoras interactivas publicados en GuíaTecnes tienen un propósito exclusivamente divulgativo, educativo y orientativo. No constituyen asesoramiento legal, financiero, tributario ni técnico vinculante. El uso de la información y la ejecución de instrucciones se realiza bajo la exclusiva responsabilidad del usuario. GuíaTecnes y sus titulares quedan expresamente exonerados de cualquier responsabilidad por pérdidas económicas, daños en dispositivos, averías o reclamaciones derivadas del uso de esta web.
+      </p>
+      <p class="footer-trademark-notice">
+        <strong>Marcas Registradas:</strong> Todas las marcas comerciales, nombres de productos, logos y sistemas operativos citados pertenecen a sus respectivos propietarios y se utilizan únicamente con fines didácticos y de identificación al amparo del Derecho de Cita (Art. 32 LPI).
+      </p>
+    </div>
     <div class="footer-bottom-copy">
       <p>© {new Date().getFullYear()} GuíaTecnes. Todos los derechos reservados.</p>
-      <p>Hecho con ❤️ para hispanohablantes de todo el mundo.</p>
+      <p>Contacto oficial: <a href="mailto:emretknis0@gmail.com">emretknis0@gmail.com</a></p>
     </div>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    background: var(--bg-card);
-    border-top: 1px solid var(--border);
+    background: var(--bg-card, #ffffff);
+    border-top: 1px solid var(--border, #e2e8f0);
     margin-top: 4rem;
   }
 
@@ -56,23 +62,31 @@
     grid-template-columns: 1.5fr 1fr;
     gap: 3rem;
     padding: 3rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  @media (max-width: 768px) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
   }
 
   .footer-logo {
     font-size: 1.3rem;
     font-weight: 800;
-    color: var(--text);
+    color: var(--text, #0f172a);
     text-decoration: none;
     display: inline-block;
     margin-bottom: 0.75rem;
   }
 
-  .footer-logo span { color: var(--primary); }
+  .footer-logo span { color: var(--primary, #2563eb); }
 
   .footer-brand p {
-    color: var(--text-muted);
+    color: var(--text-muted, #64748b);
     font-size: 0.9rem;
-    max-width: 280px;
+    max-width: 320px;
     line-height: 1.6;
     margin-bottom: 1rem;
   }
@@ -86,79 +100,88 @@
     width: 36px;
     height: 36px;
     border-radius: 8px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text-muted);
+    background: var(--bg, #f8fafc);
+    border: 1px solid var(--border, #e2e8f0);
+    color: var(--text-muted, #64748b);
     text-decoration: none;
     font-size: 0.95rem;
     transition: all 0.2s;
   }
 
   .social-links a:hover {
-    color: var(--primary);
-    border-color: var(--primary);
-    text-decoration: none;
+    color: var(--primary, #2563eb);
+    border-color: var(--primary, #2563eb);
   }
 
-  .footer-links { display: flex; gap: 2rem; justify-content: flex-end; }
+  .footer-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
 
   .footer-col h4 {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     font-weight: 700;
+    color: var(--text, #0f172a);
+    margin: 0 0 1rem;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-    margin-bottom: 0.75rem;
-  }
-
-  .footer-col {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
+    letter-spacing: 0.5px;
   }
 
   .footer-col a {
-    color: var(--text-muted);
-    font-size: 0.9rem;
+    display: block;
+    color: var(--text-muted, #64748b);
     text-decoration: none;
+    font-size: 0.88rem;
+    margin-bottom: 0.6rem;
     transition: color 0.2s;
   }
 
-  .footer-col a:hover { color: var(--primary); }
+  .footer-col a:hover {
+    color: var(--primary, #2563eb);
+  }
 
   .footer-bottom {
-    border-top: 1px solid var(--border);
-    padding: 1.25rem 1.5rem;
+    border-top: 1px solid var(--border, #e2e8f0);
+    padding: 2rem 1.5rem;
     max-width: 1200px;
     margin: 0 auto;
   }
 
+  .footer-disclaimer-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-disclaimer-text {
+    font-size: 0.78rem;
+    color: #475569;
+    line-height: 1.6;
+    margin: 0 0 0.5rem;
+  }
+
   .footer-trademark-notice {
-    font-size: 0.72rem !important;
-    color: var(--text-muted) !important;
-    opacity: 0.75;
+    font-size: 0.75rem;
+    color: #94a3b8;
     line-height: 1.5;
-    margin: 0 0 0.85rem !important;
-    text-align: center;
+    margin: 0;
   }
 
   .footer-bottom-copy {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .footer-bottom-copy p {
     font-size: 0.82rem;
-    color: var(--text-muted);
-    margin: 0;
+    color: var(--text-muted, #64748b);
+    flex-wrap: wrap;
+    gap: 0.75rem;
   }
-
-  @media (max-width: 768px) {
-    .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
-    .footer-links { justify-content: flex-start; }
-    .footer-bottom { flex-direction: column; text-align: center; }
+  .footer-bottom-copy a {
+    color: var(--primary, #2563eb);
+    text-decoration: none;
+    font-weight: 600;
   }
 </style>

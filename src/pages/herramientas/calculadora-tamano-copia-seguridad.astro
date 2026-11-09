@@ -1,0 +1,328 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "Calculadora de Almacenamiento para Copias de Seguridad (3-2-1 y NAS) | GuíaTecnológica";
+const description = "Calcula cuántos GB o TB de disco duro necesitas para tus copias de seguridad de fotos, vídeos 4K y documentos bajo la regla 3-2-1 y sistemas RAID.";
+---
+
+<BaseLayout title={title} description={description}>
+  <main class="tool-container">
+    <div class="tool-header">
+      <nav class="breadcrumb">
+        <a href="/">Inicio</a> &gt; <a href="/herramientas">Herramientas</a> &gt; <span>Calculadora de Backups</span>
+      </nav>
+      <span class="badge">💾 Almacenamiento & Seguridad</span>
+      <h1>Calculadora de Almacenamiento para Copias de Seguridad</h1>
+      <p class="tool-desc">
+        Estima el tamaño total necesario en discos duros externos, servidores NAS y almacenamiento en la nube aplicando la regla de oro profesional 3-2-1.
+      </p>
+    </div>
+
+    <div class="calculator-card">
+      <div class="form-grid">
+        <div class="grid-2col">
+          <div class="input-group">
+            <label for="photos">Fotos familiares o RAW (Cantidad aproximada):</label>
+            <input type="number" id="photos" value="15000" min="0" max="1000000" step="1000" />
+            <small class="help-text">Promedio: ~6 MB por foto JPG / ~25 MB por RAW.</small>
+          </div>
+
+          <div class="input-group">
+            <label for="photoType">Formato habitual de fotos:</label>
+            <select id="photoType">
+              <option value="6">Fotos de Smartphone (JPEG/HEIC ~6 MB)</option>
+              <option value="25" selected>Cámara Réflex / Mirrorless (RAW + JPG ~25 MB)</option>
+              <option value="45">Fotografía Profesional Alta Resolución (~45 MB)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2col">
+          <div class="input-group">
+            <label for="videoHours">Horas de vídeo doméstico o proyectos:</label>
+            <input type="number" id="videoHours" value="15" min="0" max="2000" step="1" />
+            <small class="help-text">Vídeos grabados con móvil, cámara o drones.</small>
+          </div>
+
+          <div class="input-group">
+            <label for="videoQuality">Resolución de los vídeos:</label>
+            <select id="videoQuality">
+              <option value="9">Full HD 1080p (~9 GB por hora)</option>
+              <option value="35" selected>4K Estándar 60 fps (~35 GB por hora)</option>
+              <option value="80">4K ProRes / Alta tasa de bits (~80 GB por hora)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2col">
+          <div class="input-group">
+            <label for="documentsGb">Documentos, PDFs y proyectos de trabajo (GB):</label>
+            <input type="number" id="documentsGb" value="60" min="0" max="20000" step="5" />
+          </div>
+
+          <div class="input-group">
+            <label for="systemImages">Imágenes completas del sistema PC / Mac (GB):</label>
+            <input type="number" id="systemImages" value="120" min="0" max="10000" step="10" />
+            <small class="help-text">Clonación del disco C: para restaurar en caso de fallo.</small>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="growth">Crecimiento estimado anual de tus datos (%):</label>
+          <input type="range" id="growth" min="5" max="50" value="20" />
+          <div class="range-display">Esperas generar un <strong id="growthText">20%</strong> más de datos cada año.</div>
+        </div>
+      </div>
+
+      <div class="results-box">
+        <h3>Almacenamiento Recomendado</h3>
+        <div class="highlight-result">
+          <span class="total-storage" id="primaryStorageDisplay">-- GB</span>
+          <span class="sub-label">volumen de datos originales actuales</span>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-title">Disco Local de Backup</span>
+            <strong id="localDriveDisplay" class="metric-val">-- TB</strong>
+            <small>Capacidad recomendada para 3 años</small>
+          </div>
+          <div class="metric-card">
+            <span class="metric-title">Copia en la Nube (Regla 3-2-1)</span>
+            <strong id="cloudStorageDisplay" class="metric-val">-- TB</strong>
+            <small>Copia remota ante incendios o robos</small>
+          </div>
+          <div class="metric-card">
+            <span class="metric-title">Servidor NAS en RAID 1 / 5</span>
+            <strong id="nasStorageDisplay" class="metric-val">-- TB</strong>
+            <small>Considerando tolerancia a fallo de 1 disco</small>
+          </div>
+          <div class="metric-card">
+            <span class="metric-title">Proyección a 3 años</span>
+            <strong id="futureStorageDisplay" class="metric-val">-- GB</strong>
+            <small>Volumen estimado a futuro</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="tool-explanation">
+      <h2>¿Qué es la Regla 3-2-1 de Copias de Seguridad?</h2>
+      <p>
+        Respaldada por las principales agencias de ciberseguridad del mundo, es la única estrategia que garantiza una probabilidad del 99,99% de nunca perder tus recuerdos ni documentos empresariales:
+      </p>
+      <ul>
+        <li><strong>3 Copias de tus datos:</strong> El archivo original de trabajo más dos copias de respaldo independientes.</li>
+        <li><strong>2 Medios de soporte distintos:</strong> Por ejemplo, el disco SSD interno de tu PC y un disco duro externo USB o servidor NAS en tu red local.</li>
+        <li><strong>1 Copia fuera de tu casa u oficina (Offsite):</strong> Una copia remota en la nube cifrada (Google Drive, Backblaze B2, Proton Drive). Si sufres una inundación, incendio o robo físico en tu vivienda, tus datos permanecen a salvo en otro lugar geográfico.</li>
+      </ul>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  function calculateBackup() {
+    const photos = parseFloat((document.getElementById('photos') as HTMLInputElement).value) || 0;
+    const photoMb = parseFloat((document.getElementById('photoType') as HTMLSelectElement).value) || 6;
+    const videoHours = parseFloat((document.getElementById('videoHours') as HTMLInputElement).value) || 0;
+    const videoGbPerHour = parseFloat((document.getElementById('videoQuality') as HTMLSelectElement).value) || 9;
+    const docsGb = parseFloat((document.getElementById('documentsGb') as HTMLInputElement).value) || 0;
+    const sysGb = parseFloat((document.getElementById('systemImages') as HTMLInputElement).value) || 0;
+    const growthRate = (parseFloat((document.getElementById('growth') as HTMLInputElement).value) || 20) / 100;
+
+    const photosGb = (photos * photoMb) / 1024;
+    const videosGb = videoHours * videoGbPerHour;
+    const totalCurrentGb = photosGb + videosGb + docsGb + sysGb;
+
+    // Projected after 3 years: current * (1 + rate)^3
+    const futureGb = totalCurrentGb * Math.pow(1 + growthRate, 3);
+
+    // Recommend drive sizes (commercial steps: 1TB, 2TB, 4TB, 6TB, 8TB, 12TB, 16TB)
+    const neededTb = futureGb / 1000;
+    let driveSizeTb = 1;
+    if (neededTb > 12) driveSizeTb = 16;
+    else if (neededTb > 8) driveSizeTb = 12;
+    else if (neededTb > 6) driveSizeTb = 8;
+    else if (neededTb > 4) driveSizeTb = 6;
+    else if (neededTb > 2) driveSizeTb = 4;
+    else if (neededTb > 1) driveSizeTb = 2;
+
+    // NAS RAID 1 doubles the disks, RAID 5 requires at least 3 disks
+    const nasTb = driveSizeTb * 2;
+
+    const formatGbTb = (gb: number) => {
+      if (gb >= 1000) {
+        return `${(gb / 1024).toFixed(2)} TB`;
+      }
+      return `${Math.round(gb)} GB`;
+    };
+
+    document.getElementById('primaryStorageDisplay')!.textContent = formatGbTb(totalCurrentGb);
+    document.getElementById('localDriveDisplay')!.textContent = `${driveSizeTb} TB`;
+    document.getElementById('cloudStorageDisplay')!.textContent = driveSizeTb >= 2 ? `${driveSizeTb} TB` : "2 TB (Plan estándar)";
+    document.getElementById('nasStorageDisplay')!.textContent = `${nasTb} TB (${driveSizeTb}TB útiles)`;
+    document.getElementById('futureStorageDisplay')!.textContent = formatGbTb(futureGb);
+  }
+
+  const growthRange = document.getElementById('growth') as HTMLInputElement;
+  const growthText = document.getElementById('growthText')!;
+  growthRange?.addEventListener('input', () => {
+    growthText.textContent = `${growthRange.value}%`;
+    calculateBackup();
+  });
+
+  document.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('input', calculateBackup);
+  });
+
+  calculateBackup();
+</script>
+
+<style>
+  .tool-container {
+    max-width: 860px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 0.75rem;
+  }
+  .breadcrumb a {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  .badge {
+    background: #ecfdf5;
+    color: #047857;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+  }
+  .tool-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0.5rem 0;
+  }
+  .tool-desc {
+    color: #475569;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+  .calculator-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    margin: 2rem 0;
+  }
+  .form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 600px) {
+    .grid-2col {
+      grid-template-columns: 1fr;
+    }
+  }
+  .input-group label {
+    display: block;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.4rem;
+  }
+  .input-group input, .input-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #0f172a;
+  }
+  .help-text {
+    display: block;
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+  }
+  .range-display {
+    font-size: 0.85rem;
+    color: #475569;
+    margin-top: 0.35rem;
+  }
+  .results-box {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px dashed #e2e8f0;
+  }
+  .results-box h3 {
+    margin: 0 0 1rem;
+    font-size: 1.2rem;
+    color: #0f172a;
+  }
+  .highlight-result {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1px solid #bbf7d0;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .total-storage {
+    display: block;
+    font-size: 3rem;
+    font-weight: 900;
+    color: #15803d;
+  }
+  .sub-label {
+    font-size: 0.95rem;
+    color: #166534;
+    font-weight: 600;
+  }
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+  }
+  .metric-card {
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .metric-title {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 600;
+  }
+  .metric-val {
+    font-size: 1.25rem;
+    color: #0f172a;
+    font-weight: 700;
+    margin: 0.25rem 0;
+  }
+  .metric-card small {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+  .tool-explanation {
+    margin-top: 3rem;
+    color: #334155;
+    line-height: 1.7;
+  }
+</style>
