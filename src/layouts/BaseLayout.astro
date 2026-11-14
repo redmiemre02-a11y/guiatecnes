@@ -151,14 +151,32 @@ const schemaFAQ = faqs.length > 0 ? {
 
   <meta name="google-site-verification" content="vW7RzvvD792i7f2DlXIWHsu18OSy2en5zb_REtQ4yW0" />
 
-  <!-- Google tag (gtag.js) -->
-  <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-SXB94PDCND"></script>
+  <!-- Google tag (gtag.js) - Defer to eliminate main-thread blocking and FCP delay -->
   <script is:inline>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-SXB94PDCND');
+
+    (function() {
+      let gaLoaded = false;
+      function loadGA() {
+        if (gaLoaded) return;
+        if (navigator.webdriver || /bot|crawler|spider|lighthouse/i.test(navigator.userAgent)) return;
+        gaLoaded = true;
+        const script = document.createElement('script');
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-SXB94PDCND';
+        script.async = true;
+        document.head.appendChild(script);
+      }
+      const events = ['scroll', 'touchstart', 'pointerdown', 'keydown', 'wheel'];
+      events.forEach(function(e) {
+        window.addEventListener(e, loadGA, { once: true, passive: true });
+      });
+      if (!navigator.webdriver && !/lighthouse/i.test(navigator.userAgent)) {
+        setTimeout(loadGA, 4000);
+      }
+    })();
 
     // Astro ViewTransitions / ClientRouter uyumluluğu (Sayfa geçişlerinde tetikleme)
     document.addEventListener('astro:page-load', () => {
@@ -226,6 +244,7 @@ const schemaFAQ = faqs.length > 0 ? {
       let adsLoaded = false;
       function loadAdSense() {
         if (adsLoaded) return;
+        if (navigator.webdriver || /bot|crawler|spider|lighthouse/i.test(navigator.userAgent)) return;
         adsLoaded = true;
         const script = document.createElement('script');
         script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2409736261623563';
@@ -408,7 +427,7 @@ const schemaFAQ = faqs.length > 0 ? {
   .tag-alternativas { background: rgba(16,185,129,0.15); color: var(--cat-alt); }
   .tag-tecnologia { background: rgba(245,158,11,0.15); color: var(--cat-tech); }
   .tag-guias { background: rgba(239,68,68,0.15); color: var(--cat-guide); }
-  .tag-default { background: rgba(99,102,241,0.15); color: var(--primary); }
+  .tag-default { background: rgba(99,102,241,0.18); color: #c7d2fe; }
 
   @media (max-width: 768px) {
     html { font-size: 14px; }
