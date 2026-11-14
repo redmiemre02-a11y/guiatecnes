@@ -207,7 +207,8 @@ const schemaFAQ = faqs.length > 0 ? {
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" /></noscript>
 
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json" set:html={JSON.stringify(schemaWebSite)} />
@@ -270,33 +271,47 @@ const schemaFAQ = faqs.length > 0 ? {
 
 <style is:global>
   :root {
-    --primary: #6366f1;
-    --primary-dark: #4f46e5;
-    --accent: #06b6d4;
-    --cat-ia: #6366f1;
-    --cat-alt: #10b981;
-    --cat-tech: #f59e0b;
-    --cat-guide: #ef4444;
+    --primary: #818cf8;
+    --primary-dark: #6366f1;
+    --accent: #38bdf8;
+    --cat-ia: #a5b4fc;
+    --cat-alt: #34d399;
+    --cat-tech: #fbbf24;
+    --cat-guide: #f87171;
     --radius: 12px;
-    --font: 'Inter', system-ui, sans-serif;
+    --font: 'Inter', system-ui, -apple-system, sans-serif;
   }
 
   [data-theme="dark"] {
+    --primary: #818cf8;
+    --primary-dark: #6366f1;
+    --accent: #38bdf8;
+    --cat-ia: #a5b4fc;
+    --cat-alt: #34d399;
+    --cat-tech: #fbbf24;
+    --cat-guide: #f87171;
     --bg: #0f172a;
     --bg-card: #1e293b;
     --bg-card-hover: #263347;
-    --text: #f1f5f9;
+    --text: #f8fafc;
     --text-muted: #94a3b8;
     --border: #334155;
     --header-bg: rgba(15, 23, 42, 0.92);
   }
 
   [data-theme="light"] {
+    --primary: #4338ca;
+    --primary-dark: #3730a3;
+    --accent: #0284c7;
+    --cat-ia: #4338ca;
+    --cat-alt: #047857;
+    --cat-tech: #b45309;
+    --cat-guide: #b91c1c;
     --bg: #f8fafc;
     --bg-card: #ffffff;
     --bg-card-hover: #f1f5f9;
     --text: #0f172a;
-    --text-muted: #64748b;
+    --text-muted: #475569;
     --border: #e2e8f0;
     --header-bg: rgba(248, 250, 252, 0.92);
   }

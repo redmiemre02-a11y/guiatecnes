@@ -368,7 +368,7 @@ const currentPath = Astro.url.pathname;
     border-radius: 8px;
     font-size: 0.85rem;
     font-weight: 500;
-    color: var(--text-muted);
+    color: var(--text);
     text-decoration: none;
     transition: all 0.2s;
     white-space: nowrap;
@@ -379,7 +379,8 @@ const currentPath = Astro.url.pathname;
   }
   .nav-link:hover, .nav-link.active {
     color: var(--primary);
-    background: rgba(99,102,241,0.1);
+    background: rgba(129, 140, 248, 0.15);
+    font-weight: 600;
     text-decoration: none;
   }
 
@@ -452,11 +453,11 @@ const currentPath = Astro.url.pathname;
   .search-kbd {
     font-size: 0.68rem;
     font-family: inherit;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.15);
     border: 1px solid var(--border);
     border-radius: 4px;
     padding: 0.1rem 0.35rem;
-    color: var(--text-muted);
+    color: var(--text);
   }
   @media (max-width: 768px) {
     .search-kbd {

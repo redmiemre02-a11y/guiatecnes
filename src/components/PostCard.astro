@@ -46,29 +46,29 @@ const dateStr = pubDate.toLocaleDateString('es-ES', { year: 'numeric', month: 'l
 
 <article class="post-card">
   {heroImage && (
-    <a href={`/blog/${slug}`} class="card-image-wrap">
+    <a href={`/blog/${slug}/`} class="card-image-wrap">
       <img src={heroImage} alt={title} class="card-image" loading="lazy" width="400" height="210" />
     </a>
   )}
 
   <div class="card-body">
     <div class="card-header">
-      <a href={`/categoria/${tagSlug}`} class={`tag ${tagColor}`}>{primaryTag}</a>
+      <a href={`/categoria/${tagSlug}/`} class={`tag ${tagColor}`}>{primaryTag}</a>
       <span class="reading-time">⏱ {readingTime} min</span>
     </div>
 
     <h2 class="card-title">
-      <a href={`/blog/${slug}`}>{title}</a>
+      <a href={`/blog/${slug}/`}>{title}</a>
     </h2>
 
     <p class="card-desc">{description}</p>
 
     <div class="card-footer">
       <span class="card-meta">
-        <a href={`/autor/${author.toLowerCase().replace(/\s+/g, '-')}`} class="card-author">✍️ {author}</a>
+        <a href={`/autor/${author.toLowerCase().replace(/\s+/g, '-')}/`} class="card-author">✍️ {author}</a>
         <span class="card-date">{dateStr}</span>
       </span>
-      <a href={`/blog/${slug}`} class="read-more">Leer más →</a>
+      <a href={`/blog/${slug}/`} class="read-more">Leer más →</a>
     </div>
   </div>
 </article>

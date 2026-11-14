@@ -105,7 +105,7 @@
       // Global Ctrl+K / Cmd+K shortcut
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        const firstTrigger = document.querySelector('.search-trigger') as HTMLElement;
+        const firstTrigger = document.querySelector('.search-trigger');
         if (modal.classList.contains('active')) {
           closeModal();
         } else if (firstTrigger) {
