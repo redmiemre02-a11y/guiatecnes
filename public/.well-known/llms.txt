@@ -5,4 +5,4 @@
 User-agent: *
 Allow: /
 Link: https://guiatecnes.com/llms.txt
-Link: https://guiatecnes.com/sitemap-index.xml
+Link: https://guiatecnes.com/sitemap.xml

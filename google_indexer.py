@@ -7,7 +7,7 @@ from googleapiclient.discovery import build
 
 SCOPES = ["https://www.googleapis.com/auth/indexing"]
 SERVICE_ACCOUNT_FILE = os.path.join(os.path.dirname(__file__), "service_account.json")
-SITEMAP_URL = "https://guiatecnes.com/sitemap-0.xml"
+SITEMAP_URL = "https://guiatecnes.com/sitemap.xml"
 
 def get_urls_from_sitemap(sitemap_url):
     print(f"Fetching sitemap from: {sitemap_url}")

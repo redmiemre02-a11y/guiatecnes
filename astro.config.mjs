@@ -7,7 +7,6 @@ export default defineConfig({
   integrations: [
     sitemap({
       serialize(item) {
-        item.lastmod = new Date();
         if (item.url === 'https://guiatecnes.com/' || item.url.includes('/herramientas/')) {
           item.priority = 1.0;
           item.changefreq = 'daily';

@@ -8,7 +8,7 @@ const pathname = Astro.url.pathname;
     <span class="nav-text">Inicio</span>
   </a>
 
-  <a href="/herramientas" class={`bottom-nav-item ${pathname.startsWith('/herramientas') ? 'active' : ''}`}>
+  <a href="/herramientas/" class={`bottom-nav-item ${pathname.startsWith('/herramientas') ? 'active' : ''}`}>
     <span class="nav-icon">🧲</span>
     <span class="nav-text">Herramientas</span>
   </a>
@@ -18,7 +18,7 @@ const pathname = Astro.url.pathname;
     <span class="nav-text">Buscar</span>
   </button>
 
-  <a href="/categoria/ia" class={`bottom-nav-item ${pathname.includes('/categoria/ia') ? 'active' : ''}`}>
+  <a href="/categoria/ia/" class={`bottom-nav-item ${pathname.includes('/categoria/ia') ? 'active' : ''}`}>
     <span class="nav-icon">🤖</span>
     <span class="nav-text">IA Tech</span>
   </a>
