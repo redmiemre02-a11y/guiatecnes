@@ -220,7 +220,25 @@ const schemaFAQ = faqs.length > 0 ? {
   <ClientRouter />
 
   <!-- Google AdSense (Alan adını aldıktan sonra buraya kodunu ekle) -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2409736261623563" crossorigin="anonymous"></script>
+<!-- High-Performance Lazy Loaded Google AdSense (Zero Blocking Time) -->
+  <script is:inline>
+    (function() {
+      let adsLoaded = false;
+      function loadAdSense() {
+        if (adsLoaded) return;
+        adsLoaded = true;
+        const script = document.createElement('script');
+        script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2409736261623563';
+        script.async = true;
+        script.crossOrigin = 'anonymous';
+        document.head.appendChild(script);
+      }
+      const events = ['scroll', 'touchstart', 'pointerdown', 'keydown', 'wheel'];
+      events.forEach(function(e) {
+        window.addEventListener(e, loadAdSense, { once: true, passive: true });
+      });
+    })();
+  </script>
 </head>
 <body>
   <ProgressBar />
