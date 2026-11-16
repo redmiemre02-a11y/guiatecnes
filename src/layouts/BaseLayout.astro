@@ -1,5 +1,4 @@
 ---
-import { ClientRouter } from 'astro:transitions';
 import CookieBanner from '../components/CookieBanner.astro';
 import ProgressBar from '../components/ProgressBar.astro';
 import BackToTop from '../components/BackToTop.astro';
@@ -177,14 +176,6 @@ const schemaFAQ = faqs.length > 0 ? {
         setTimeout(loadGA, 4000);
       }
     })();
-
-    // Astro ViewTransitions / ClientRouter uyumluluğu (Sayfa geçişlerinde tetikleme)
-    document.addEventListener('astro:page-load', () => {
-      gtag('config', 'G-SXB94PDCND', {
-        page_path: window.location.pathname,
-        page_title: document.title,
-      });
-    });
   </script>
 
   <!-- SEO Primary -->
@@ -235,8 +226,6 @@ const schemaFAQ = faqs.length > 0 ? {
   {schemaBreadcrumb && <script type="application/ld+json" set:html={JSON.stringify(schemaBreadcrumb)} />}
   {schemaFAQ && <script type="application/ld+json" set:html={JSON.stringify(schemaFAQ)} />}
   {schemaWebApplication && <script type="application/ld+json" set:html={JSON.stringify(schemaWebApplication)} />}
-
-  <ClientRouter />
 
   <!-- Google AdSense (Alan adını aldıktan sonra buraya kodunu ekle) -->
 <!-- High-Performance Lazy Loaded Google AdSense (Zero Blocking Time) -->
