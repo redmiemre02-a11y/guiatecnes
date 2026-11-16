@@ -42,8 +42,8 @@
   }
 </style>
 
-<script>
-  document.addEventListener('astro:page-load', () => {
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
     const btt = document.getElementById('back-to-top');
     if(btt) {
       window.addEventListener('scroll', () => {

@@ -25,26 +25,15 @@
   }
 </style>
 
-<script>
-  function initProgressBar() {
+<script is:inline>
+  window.addEventListener('scroll', function() {
     const bar = document.getElementById('progress-bar');
     if (!bar) return;
-
-    function update() {
-      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      if (height > 0) {
-        const scrolled = (winScroll / height) * 100;
-        bar.style.width = scrolled + '%';
-      } else {
-        bar.style.width = '0%';
-      }
-    }
-
-    window.removeEventListener('scroll', update);
-    window.addEventListener('scroll', update, { passive: true });
-    update();
-  }
-
-  document.addEventListener('astro:page-load', initProgressBar);
+    const h = document.documentElement;
+    const b = document.body;
+    const st = 'scrollTop';
+    const sh = 'scrollHeight';
+    const scrolled = ((h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight)) * 100;
+    bar.style.width = (scrolled || 0) + '%';
+  }, { passive: true });
 </script>
