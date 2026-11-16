@@ -1,0 +1,314 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas/' },
+  { name: 'Generador de Acuerdo de Confidencialidad (NDA)', url: '/herramientas/generador-contrato-nda/' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es un acuerdo de confidencialidad o NDA?',
+    answer: 'Un NDA (Non-Disclosure Agreement) es un contrato legal vinculante entre dos o más partes que define la información reservada (secretos comerciales, código fuente, planes de negocio, listas de clientes) y prohíbe su divulgación o uso no autorizado en beneficio propio o de terceros.'
+  },
+  {
+    question: '¿Cuándo es imprescindible firmar un NDA?',
+    answer: 'Antes de compartir información estratégica sensible: al presentar una idea a inversores o socios potenciales, al externalizar el desarrollo de software a un programador freelance o al negociar la venta o fusión de un proyecto digital.'
+  },
+  {
+    question: '¿Qué validez legal tiene este contrato generado?',
+    answer: 'El documento generado cumple con los requisitos del Código Civil y Mercantil español (consentimiento, objeto y causa). Una vez firmado por ambas partes (de forma manuscrita o mediante firma electrónica válida), adquiere plena fuerza vinculante entre los firmantes.'
+  },
+  {
+    question: '¿Qué duración suele tener un acuerdo NDA?',
+    answer: 'En el sector tecnológico y empresarial, lo habitual es fijar una vigencia de entre 2 y 5 años a contar desde la fecha de firma o desde la finalización de las conversaciones profesionales.'
+  }
+];
+---
+
+<BaseLayout
+  title="Generador de Acuerdo de Confidencialidad (NDA) Gratis | Contrato Legal"
+  description="Genera y descarga gratis tu Acuerdo de Confidencialidad (NDA) para freelancers, empresas y startups. Personaliza cláusulas, penalizaciones y firma en PDF."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas/">Herramientas</a>
+      <span>›</span>
+      <span>Generador de Contrato NDA</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">⚖️ Plantilla Legal Conforme al Código Civil</div>
+      <h1>Generador de Acuerdo de Confidencialidad (NDA)</h1>
+      <p class="tool-subtitle">
+        Protege tus ideas de negocio, algoritmos y datos confidenciales. Rellena los campos y obtén un contrato listo para firmar o exportar en PDF.
+      </p>
+    </header>
+
+    <div class="calc-layout-grid">
+      <!-- FORMULARIO -->
+      <div class="card form-card">
+        <h2>Datos del Acuerdo</h2>
+
+        <div class="form-group">
+          <label for="party-a">Parte Reveladora (Tu nombre o empresa)</label>
+          <input type="text" id="party-a" value="Tech Solutions S.L." placeholder="Ej: Juan Pérez / Empresa S.L." />
+        </div>
+
+        <div class="form-group">
+          <label for="party-b">Parte Receptora (Cliente, socio o desarrollador)</label>
+          <input type="text" id="party-b" value="Dev Freelance Studio" placeholder="Ej: Nombre del freelance o socio" />
+        </div>
+
+        <div class="form-group">
+          <label for="nda-purpose">Finalidad de la Información Revelada</label>
+          <input type="text" id="nda-purpose" value="Evaluación técnica para el desarrollo de una plataforma web y software móvil" placeholder="Ej: Negociación de inversión o desarrollo" />
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="nda-duration">Duración del Deber Secreto</label>
+            <select id="nda-duration">
+              <option value="2 años" selected>2 años</option>
+              <option value="3 años">3 años</option>
+              <option value="5 años">5 años</option>
+              <option value="indefinida">Indefinida (Secretos Industriales)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="nda-city">Ciudad / Jurisdicción</label>
+            <input type="text" id="nda-city" value="Madrid" placeholder="Ej: Madrid, Barcelona" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="nda-penalty">Penalización Económica Opcional (€)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="nda-penalty" value="10000" min="0" step="1000" />
+            <span class="symbol">€</span>
+          </div>
+          <small class="field-hint">Indemnización pactada en caso de incumplimiento manifiesto.</small>
+        </div>
+
+        <button type="button" id="btn-update-doc" class="btn-calculate">⚡ Actualizar Vista Previa</button>
+      </div>
+
+      <!-- VISTA PREVIA DEL CONTRATO -->
+      <div class="card preview-card">
+        <div class="preview-header">
+          <h2>Documento Generado</h2>
+          <div class="preview-actions">
+            <button type="button" id="btn-copy-doc" class="btn-action">📋 Copiar Texto</button>
+            <button type="button" onclick="window.print()" class="btn-action btn-print">🖨️ Imprimir / PDF</button>
+          </div>
+        </div>
+
+        <div class="legal-doc-box" id="doc-output">
+          <!-- Live generated contract -->
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <section class="tool-faqs">
+      <h2>Preguntas Frecuentes sobre Acuerdos NDA</h2>
+      <div class="faq-accordion">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{faq.question}</span>
+              <span class="faq-arrow">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>{faq.answer}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <LegalDisclaimer />
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  function renderNDA() {
+    const partyA = document.getElementById('party-a').value.trim() || 'PARTE REVELADORA';
+    const partyB = document.getElementById('party-b').value.trim() || 'PARTE RECEPTORA';
+    const purpose = document.getElementById('nda-purpose').value.trim() || 'el análisis y desarrollo de proyectos';
+    const duration = document.getElementById('nda-duration').value;
+    const city = document.getElementById('nda-city').value.trim() || 'Madrid';
+    const penaltyVal = parseFloat(document.getElementById('nda-penalty').value) || 0;
+
+    const penaltyClause = penaltyVal > 0 
+      ? `<p><strong>CUARTA. PENALIZACIÓN:</strong> Sin perjuicio de la reclamación por daños y perjuicios reales causados, el incumplimiento deliberado de las obligaciones de confidencialidad estipuladas facultará a la Parte Reveladora a exigir una indemnización pactada mínima de <strong>${penaltyVal.toLocaleString('es-ES')} euros</strong>.</p>`
+      : '';
+
+    const today = new Date();
+    const dateFormatted = today.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    const html = `
+      <div class="legal-contract">
+        <h3 class="contract-title">ACUERDO DE CONFIDENCIALIDAD Y NO DIVULGACIÓN (NDA)</h3>
+        <p class="contract-meta">En <strong>${city}</strong>, a ${dateFormatted}.</p>
+        
+        <p><strong>REUNIDOS:</strong></p>
+        <p>De una parte, <strong>${partyA}</strong> (en adelante, la «Parte Reveladora»).</p>
+        <p>Y de otra parte, <strong>${partyB}</strong> (en adelante, la «Parte Receptora»).</p>
+        
+        <p>Ambas partes se reconocen mutuamente capacidad jurídica y de obrar suficiente para formalizar el presente acuerdo y, a tal fin,</p>
+        
+        <p><strong>EXPONEN:</strong></p>
+        <p>Que en el marco de <em>${purpose}</em>, es necesario el intercambio de datos, documentos y metodologías protegidas de carácter técnico y comercial.</p>
+        
+        <p><strong>CLÁUSULAS:</strong></p>
+        
+        <p><strong>PRIMERA. INFORMACIÓN CONFIDENCIAL:</strong> Tendrá la consideración de confidencial toda información verbal, escrita, gráfica o digital revelada entre las partes, incluyendo código fuente, diagramas, listas comerciales y estrategias no públicas.</p>
+        
+        <p><strong>SEGUNDA. OBLIGACIONES:</strong> La Parte Receptora se compromete a no divulgar, comunicar ni ceder a terceros la Información Confidencial recibida, utilizándola exclusivamente para el fin acordado.</p>
+        
+        <p><strong>TERCERA. DURACIÓN:</strong> La obligación de guardar reserva y secreto profesional se mantendrá en vigor durante un plazo de <strong>${duration}</strong> a partir de la firma del presente documento.</p>
+        
+        ${penaltyClause}
+        
+        <p><strong>QUINTA. JURISDICCIÓN:</strong> Las partes se someten expresamente a la jurisdicción de los Juzgados y Tribunales de <strong>${city}</strong> con renuncia a cualquier otro fuero que pudiera corresponderles.</p>
+        
+        <div class="contract-signatures">
+          <div class="sig-col">
+            <p><strong>Por la Parte Reveladora:</strong></p>
+            <div class="sig-space"></div>
+            <p>${partyA}</p>
+          </div>
+          <div class="sig-col">
+            <p><strong>Por la Parte Receptora:</strong></p>
+            <div class="sig-space"></div>
+            <p>${partyB}</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('doc-output').innerHTML = html;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderNDA();
+    const btn = document.getElementById('btn-update-doc');
+    if (btn) btn.addEventListener('click', renderNDA);
+
+    ['party-a', 'party-b', 'nda-purpose', 'nda-duration', 'nda-city', 'nda-penalty'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', renderNDA);
+    });
+
+    const copyBtn = document.getElementById('btn-copy-doc');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        const text = document.getElementById('doc-output').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+          copyBtn.textContent = '✅ ¡Copiado!';
+          setTimeout(() => { copyBtn.textContent = '📋 Copiar Texto'; }, 2000);
+        });
+      });
+    }
+  });
+</script>
+
+<style>
+  .tool-page { padding-bottom: 4rem; }
+  .breadcrumb { display: flex; gap: 0.5rem; color: var(--text-muted); font-size: 0.85rem; margin: 1.5rem 0; flex-wrap: wrap; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary); }
+
+  .tool-header { text-align: center; max-width: 800px; margin: 0 auto 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(99, 102, 241, 0.12); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 50px; font-size: 0.82rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; color: var(--text); margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+  .tool-subtitle { font-size: 1.05rem; color: var(--text-muted); line-height: 1.6; }
+
+  .calc-layout-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 2rem; margin-bottom: 3.5rem; }
+  .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; }
+  .card h2 { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; }
+
+  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+  .field-hint { display: block; font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; }
+  .input-with-symbol { position: relative; display: flex; align-items: center; }
+  .form-group input, select, .form-row-2 input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, select:focus, .form-row-2 input:focus { border-color: var(--primary); }
+  .input-with-symbol .symbol { position: absolute; right: 1rem; color: var(--text-muted); font-size: 0.9rem; pointer-events: none; }
+
+  .btn-calculate {
+    width: 100%;
+    padding: 0.85rem;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+
+  .preview-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+  .preview-header h2 { margin: 0; padding: 0; border: none; }
+  .preview-actions { display: flex; gap: 0.5rem; }
+  .btn-action { padding: 0.45rem 0.9rem; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .btn-action:hover { border-color: var(--primary); color: var(--primary); }
+  .btn-print { background: rgba(99, 102, 241, 0.1); border-color: var(--primary); color: var(--primary); }
+
+  .legal-doc-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--text);
+    line-height: 1.7;
+    max-height: 550px;
+    overflow-y: auto;
+    font-family: 'Georgia', serif;
+  }
+  .contract-title { text-align: center; font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem; text-decoration: underline; }
+  .contract-meta { text-align: right; font-style: italic; margin-bottom: 1.25rem; }
+  .legal-contract p { margin-bottom: 0.9rem; }
+  .contract-signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .sig-space { height: 60px; }
+
+  .tool-faqs { margin-top: 3.5rem; margin-bottom: 3rem; }
+  .tool-faqs h2 { font-size: 1.6rem; font-weight: 800; color: var(--text); margin-bottom: 1.5rem; text-align: center; }
+  .faq-accordion { max-width: 850px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .faq-question { padding: 1rem 1.25rem; font-weight: 600; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; }
+  .faq-question::-webkit-details-marker { display: none; }
+  .faq-arrow { font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s; }
+  .faq-item[open] .faq-arrow { transform: rotate(180deg); color: var(--primary); }
+  .faq-answer { padding: 0 1.25rem 1.25rem; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+
+  @media (max-width: 850px) {
+    .calc-layout-grid { grid-template-columns: 1fr; }
+  }
+</style>

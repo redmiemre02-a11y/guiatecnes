@@ -1,0 +1,348 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas/' },
+  { name: 'Calculadora de Plusvalía Municipal 2026', url: '/herramientas/calculadora-plusvalia-municipal/' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es el Impuesto de Plusvalía Municipal (IIVTNU)?',
+    answer: 'Es el Impuesto sobre el Incremento de Valor de los Terrenos de Naturaleza Urbana. Grava el aumento de valor experimentado por el terreno sobre el que se asienta un inmueble (vivienda, local, garaje) durante el tiempo que ha pertenecido al vendedor o causahabiente.'
+  },
+  {
+    question: '¿Se debe pagar plusvalía si he vendido la casa con pérdidas?',
+    answer: 'No. Tras la Sentencia del Tribunal Constitucional y el Real Decreto-ley 26/2021, si el precio de transmisión es igual o inferior al precio de adquisición (demostrable mediante escrituras públicas), la operación está totalmente no sujeta y no se paga ni un solo euro.'
+  },
+  {
+    question: '¿Cuál es la diferencia entre el método real y el método objetivo?',
+    answer: 'La ley permite al contribuyente elegir entre dos fórmulas: el método objetivo multiplica el valor catastral del suelo por unos coeficientes estatales según los años de tenencia; el método real calcula la ganancia neta patrimonial efectiva atribuible al suelo. Puedes tributar legalmente por el método que resulte más bajo.'
+  },
+  {
+    question: '¿Quién está obligado a pagar la plusvalía municipal?',
+    answer: 'En una compraventa onerosa habitual, el sujeto pasivo obligado al pago por ley es siempre la parte vendedora. En caso de herencias o donaciones gratuitas, el obligado al pago es la persona que recibe el inmueble (heredero o donatario).'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Plusvalía Municipal 2026 | Método Real vs Objetivo"
+  description="Calcula el Impuesto de Plusvalía Municipal (IIVTNU) al vender una vivienda en España. Compara automáticamente el método real y el objetivo para pagar lo mínimo."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas/">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de Plusvalía Municipal</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🏠 Tributación Inmobiliaria España 2026</div>
+      <h1>Calculadora de Plusvalía Municipal (IIVTNU)</h1>
+      <p class="tool-subtitle">
+        Compara al instante el método real y el método objetivo tras la reforma tributaria. Descubre cuál te conviene aplicar o si estás exento por venta a pérdidas.
+      </p>
+    </header>
+
+    <div class="calc-layout-grid">
+      <!-- FORMULARIO -->
+      <div class="card form-card">
+        <h2>Datos de la Transmisión</h2>
+
+        <div class="form-group">
+          <label for="buy-price">Precio de Compra Original del Inmueble (€)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="buy-price" value="180000" min="1000" step="5000" />
+            <span class="symbol">€</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="sell-price">Precio de Venta Actual (€)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="sell-price" value="230000" min="1000" step="5000" />
+            <span class="symbol">€</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="land-val">Valor Catastral del Suelo (€)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="land-val" value="65000" min="100" step="1000" />
+            <span class="symbol">€</span>
+          </div>
+          <small class="field-hint">Aparece desglosado en el último recibo del IBI de tu ayuntamiento.</small>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="holding-years">Años de Propiedad</label>
+            <input type="number" id="holding-years" value="8" min="1" max="20" step="1" />
+          </div>
+          <div class="form-group">
+            <label for="tax-rate">Tipo Impositivo Municipal (%)</label>
+            <div class="input-with-symbol">
+              <input type="number" id="tax-rate" value="30" min="1" max="30" step="1" />
+              <span class="symbol">%</span>
+            </div>
+            <small class="field-hint">Máximo legal: 30%</small>
+          </div>
+        </div>
+
+        <button type="button" id="btn-calc" class="btn-calculate">⚡ Comparar Métodos</button>
+      </div>
+
+      <!-- RESULTADOS -->
+      <div class="card results-card">
+        <h2>Resultado y Método Más Ventajoso</h2>
+
+        <div class="stat-highlight" id="stat-box">
+          <div class="stat-main">
+            <span class="stat-label">Impuesto a Pagar (Opción Más Barata)</span>
+            <span class="stat-val" id="res-optimal-tax">1.950,00 €</span>
+          </div>
+          <div class="stat-sub">
+            <span>Método Recomendado: <strong id="res-method-name">Método Objetivo</strong></span>
+            <span>Ahorro Estimado: <strong id="res-savings" class="text-success">550,00 €</strong></span>
+          </div>
+        </div>
+
+        <div class="comparative-table-wrap">
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Método Objetivo</th>
+                <th>Método Real</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Base Imponible Estimada</td>
+                <td id="base-obj">6.500,00 €</td>
+                <td id="base-real">8.333,33 €</td>
+              </tr>
+              <tr>
+                <td>Tipo Impositivo Aplicado</td>
+                <td id="rate-obj">30%</td>
+                <td id="rate-real">30%</td>
+              </tr>
+              <tr class="highlight-row">
+                <td><strong>Cuota Tributaria a Ingresar</strong></td>
+                <td><strong id="tax-obj" class="text-primary">1.950,00 €</strong></td>
+                <td><strong id="tax-real">2.500,00 €</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="loss-alert-box" id="loss-box" style="display:none;">
+          <h4>🎉 ¡Exención Total por Venta con Pérdidas!</h4>
+          <p>
+            Has vendido el inmueble por un precio inferior o igual al de compra. Según la ley vigente, <strong>no tienes obligación de pagar nada (0 €)</strong> por plusvalía municipal.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <section class="tool-faqs">
+      <h2>Preguntas Frecuentes sobre la Plusvalía Municipal</h2>
+      <div class="faq-accordion">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{faq.question}</span>
+              <span class="faq-arrow">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>{faq.answer}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <LegalDisclaimer />
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  // Coeficientes oficiales máximos RD-ley 26/2021
+  const coefs = {
+    1: 0.14, 2: 0.13, 3: 0.15, 4: 0.17, 5: 0.17,
+    6: 0.16, 7: 0.12, 8: 0.10, 9: 0.09, 10: 0.08,
+    11: 0.08, 12: 0.08, 13: 0.08, 14: 0.09, 15: 0.09,
+    16: 0.10, 17: 0.13, 18: 0.17, 19: 0.23, 20: 0.45
+  };
+
+  function computePlusvalia() {
+    const buy = Math.max(0, parseFloat(document.getElementById('buy-price').value) || 0);
+    const sell = Math.max(0, parseFloat(document.getElementById('sell-price').value) || 0);
+    const land = Math.max(0, parseFloat(document.getElementById('land-val').value) || 0);
+    let years = parseInt(document.getElementById('holding-years').value, 10) || 1;
+    years = Math.min(20, Math.max(1, years));
+    const taxRate = Math.min(30, Math.max(1, parseFloat(document.getElementById('tax-rate').value) || 30)) / 100;
+
+    const lossBox = document.getElementById('loss-box');
+
+    // 1. Comprobar si hay pérdida patrimonial
+    if (sell <= buy) {
+      if (lossBox) lossBox.style.display = 'block';
+      document.getElementById('res-optimal-tax').textContent = '0,00 € (Exento)';
+      document.getElementById('res-method-name').textContent = 'Exención Total por Pérdidas';
+      document.getElementById('res-savings').textContent = '100% de ahorro';
+      document.getElementById('base-obj').textContent = '0,00 €';
+      document.getElementById('base-real').textContent = '0,00 €';
+      document.getElementById('tax-obj').textContent = '0,00 €';
+      document.getElementById('tax-real').textContent = '0,00 €';
+      return;
+    } else {
+      if (lossBox) lossBox.style.display = 'none';
+    }
+
+    // 2. Método Objetivo
+    const coef = coefs[years] || 0.10;
+    const baseObj = land * coef;
+    const taxObj = baseObj * taxRate;
+
+    // 3. Método Real
+    const totalGain = sell - buy;
+    // Estimación de proporción de suelo vs construcción (típicamente 50% aprox del valor catastral)
+    const landRatio = 0.50;
+    const baseReal = totalGain * landRatio;
+    const taxReal = baseReal * taxRate;
+
+    const optimalTax = Math.min(taxObj, taxReal);
+    const isObjBetter = taxObj <= taxReal;
+    const savings = Math.abs(taxObj - taxReal);
+
+    document.getElementById('res-optimal-tax').textContent = optimalTax.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    document.getElementById('res-method-name').textContent = isObjBetter ? 'Método Objetivo' : 'Método Real';
+    document.getElementById('res-savings').textContent = savings.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+
+    document.getElementById('base-obj').textContent = baseObj.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    document.getElementById('base-real').textContent = baseReal.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+
+    document.getElementById('tax-obj').textContent = taxObj.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    document.getElementById('tax-real').textContent = taxReal.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    computePlusvalia();
+    const btn = document.getElementById('btn-calc');
+    if (btn) btn.addEventListener('click', computePlusvalia);
+
+    ['buy-price', 'sell-price', 'land-val', 'holding-years', 'tax-rate'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', computePlusvalia);
+    });
+  });
+</script>
+
+<style>
+  .tool-page { padding-bottom: 4rem; }
+  .breadcrumb { display: flex; gap: 0.5rem; color: var(--text-muted); font-size: 0.85rem; margin: 1.5rem 0; flex-wrap: wrap; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary); }
+
+  .tool-header { text-align: center; max-width: 800px; margin: 0 auto 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(99, 102, 241, 0.12); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 50px; font-size: 0.82rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; color: var(--text); margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+  .tool-subtitle { font-size: 1.05rem; color: var(--text-muted); line-height: 1.6; }
+
+  .calc-layout-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; margin-bottom: 3.5rem; }
+  .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; }
+  .card h2 { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; }
+
+  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+  .field-hint { display: block; font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; }
+  .input-with-symbol { position: relative; display: flex; align-items: center; }
+  .input-with-symbol input, select, .form-row-2 input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-with-symbol input:focus, select:focus, .form-row-2 input:focus { border-color: var(--primary); }
+  .input-with-symbol .symbol { position: absolute; right: 1rem; color: var(--text-muted); font-size: 0.9rem; pointer-events: none; }
+
+  .btn-calculate {
+    width: 100%;
+    padding: 0.85rem;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+
+  .stat-highlight {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .stat-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.25rem; }
+  .stat-val { font-size: 2.3rem; font-weight: 800; color: var(--primary); display: block; line-height: 1.1; margin-bottom: 0.75rem; }
+  .stat-sub { display: flex; justify-content: space-around; font-size: 0.88rem; color: var(--text-muted); border-top: 1px dashed rgba(99, 102, 241, 0.25); padding-top: 0.75rem; }
+  .stat-sub strong { color: var(--text); }
+
+  .comparative-table-wrap { margin-bottom: 1.5rem; overflow-x: auto; }
+  .comp-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+  .comp-table th, .comp-table td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border); }
+  .comp-table th { background: rgba(255, 255, 255, 0.03); font-weight: 700; color: var(--text); }
+  .highlight-row { background: rgba(99, 102, 241, 0.06); }
+  .text-success { color: #34d399 !important; }
+  .text-primary { color: var(--primary) !important; font-size: 1.1rem; }
+
+  .loss-alert-box {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-size: 0.9rem;
+    color: var(--text);
+  }
+  .loss-alert-box h4 { color: #34d399; margin-bottom: 0.4rem; font-size: 0.95rem; }
+
+  .tool-faqs { margin-top: 3.5rem; margin-bottom: 3rem; }
+  .tool-faqs h2 { font-size: 1.6rem; font-weight: 800; color: var(--text); margin-bottom: 1.5rem; text-align: center; }
+  .faq-accordion { max-width: 850px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .faq-question { padding: 1rem 1.25rem; font-weight: 600; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; }
+  .faq-question::-webkit-details-marker { display: none; }
+  .faq-arrow { font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s; }
+  .faq-item[open] .faq-arrow { transform: rotate(180deg); color: var(--primary); }
+  .faq-answer { padding: 0 1.25rem 1.25rem; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+
+  @media (max-width: 850px) {
+    .calc-layout-grid { grid-template-columns: 1fr; }
+    .stat-sub { flex-direction: column; gap: 0.5rem; align-items: center; }
+  }
+</style>

@@ -75,6 +75,28 @@ if (post.body) {
 function getRelevantTool(title: string, tags: string[]) {
   const text = (title + ' ' + tags.join(' ')).toLowerCase();
 
+  if (text.includes('plusvalia') || text.includes('plusvalía') || text.includes('iivtnu') || text.includes('catastral') || text.includes('inmueble') || text.includes('vivienda') || text.includes('herencia')) {
+    return {
+      title: 'Calculadora de Plusvalía Municipal (IIVTNU)',
+      desc: 'Compara el método real vs método objetivo tras la reforma legal del Tribunal Constitucional y descubre cuánto pagarás al Ayuntamiento.',
+      btn: 'Calcular Plusvalía Municipal Gratis',
+      url: '/herramientas/calculadora-plusvalia-municipal/',
+      icon: '🏛️',
+      badge: 'Fiscal & Inmobiliario'
+    };
+  }
+
+  if (text.includes('nda') || text.includes('confidencialidad') || text.includes('secreto') || text.includes('acuerdo')) {
+    return {
+      title: 'Generador de Acuerdo de Confidencialidad (NDA)',
+      desc: 'Redacta un contrato NDA personalizado y legal en minutos, con cláusulas de penalización y adaptado al RGPD español.',
+      btn: 'Crear Contrato NDA Gratis',
+      url: '/herramientas/generador-contrato-nda/',
+      icon: '📜',
+      badge: 'Legal & Contratos'
+    };
+  }
+
   if (text.includes('contraseña') || text.includes('password') || text.includes('clave') || text.includes('seguridad') || text.includes('virus') || text.includes('intervenido') || text.includes('hacker') || text.includes('privacidad')) {
     return {
       title: 'Comprobador de Seguridad y Entropía de Contraseñas',
