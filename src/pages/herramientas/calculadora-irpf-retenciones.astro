@@ -1,0 +1,384 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas/' },
+  { name: 'Calculadora de IRPF y Tramos 2026', url: '/herramientas/calculadora-irpf-retenciones/' }
+];
+
+const faqs = [
+  {
+    question: '¿Cuáles son los tramos del IRPF en España en 2026?',
+    answer: 'La escala estatal y autonómica general progresiva del IRPF se estructura en seis tramos: hasta 12.450 € (19%), de 12.450 € a 20.200 € (24%), de 20.200 € a 35.200 € (30%), de 35.200 € a 60.000 € (37%), de 60.000 € a 300.000 € (45%) y rentas superiores a 300.000 € (47%).'
+  },
+  {
+    question: '¿El porcentaje más alto se aplica a todo mi sueldo?',
+    answer: 'No. El IRPF es un impuesto progresivo. Si ganas 36.000 €, no pagas el 37% de todo tu sueldo; pagas el 19% por tus primeros 12.450 €, el 24% por la cantidad entre 12.450 € y 20.200 €, el 30% por el siguiente tramo y solo el 37% por los 800 € que superan los 35.200 €.'
+  },
+  {
+    question: '¿Qué es el mínimo personal y familiar exento?',
+    answer: 'Es la parte de tu renta que la Agencia Tributaria no grava por considerarla destinada a cubrir necesidades básicas. El mínimo personal general es de 5.550 € anuales, incrementándose si se tienen hijos menores de 25 años a cargo, ascendientes o personas con discapacidad.'
+  },
+  {
+    question: '¿Por qué me conviene ajustar mi retención mensual en la nómina?',
+    answer: 'Si tu empresa te retiene menos porcentaje del que te corresponde por ley, recibirás más dinero neto cada mes, pero al hacer la Declaración de la Renta en primavera tendrás que pagar la diferencia a Hacienda de golpe.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de IRPF 2026 España | Tramos, Retenciones y Tablas"
+  description="Calcula tu retención de IRPF y los tramos fiscales aplicables a tu salario bruto anual en España en 2026. Desglose progresivo por tramos con simulador gratuito."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas/">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de IRPF 2026</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">⚖️ Tramos Fiscales Oficiales España 2026</div>
+      <h1>Calculadora de Tramos y Retención de IRPF</h1>
+      <p class="tool-subtitle">
+        Descubre qué porcentaje exacto de tu salario bruto se destina a Hacienda y visualiza cómo tributa cada euro según los tramos progresivos del IRPF.
+      </p>
+    </header>
+
+    <div class="calc-layout-grid">
+      <!-- FORMULARIO -->
+      <div class="card form-card">
+        <h2>Datos para el Cálculo</h2>
+
+        <div class="form-group">
+          <label for="gross-salary">Salario Bruto Anual (€)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="gross-salary" value="28000" min="1000" step="500" />
+            <span class="symbol">€/año</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="pagas">Número de Pagas</label>
+          <select id="pagas">
+            <option value="12" selected>12 pagas (pagas extras prorrateadas)</option>
+            <option value="14">14 pagas (con extra en junio y diciembre)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="family-status">Situación Familiar</label>
+          <select id="family-status">
+            <option value="single" selected>Soltero / Sin cónyuge a cargo</option>
+            <option value="married">Casado con cónyuge sin ingresos (&lt;1.500 €/año)</option>
+            <option value="single_parent">Familia monoparental (hijos a cargo exclusivo)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="children-count">Número de Hijos menores de 25 años</label>
+          <select id="children-count">
+            <option value="0" selected>Sin hijos</option>
+            <option value="1">1 hijo</option>
+            <option value="2">2 hijos</option>
+            <option value="3">3 hijos (Familia numerosa)</option>
+            <option value="4">4 o más hijos</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="disability">Grado de Discapacidad</label>
+          <select id="disability">
+            <option value="none" selected>Ninguna / Menor al 33%</option>
+            <option value="d33">Entre 33% y 64%</option>
+            <option value="d65">65% o superior</option>
+          </select>
+        </div>
+
+        <button type="button" id="btn-calc" class="btn-calculate">⚡ Recalcular Retención</button>
+      </div>
+
+      <!-- RESULTADOS -->
+      <div class="card results-card">
+        <h2>Desglose de Retención IRPF</h2>
+
+        <div class="stat-highlight">
+          <div class="stat-main">
+            <span class="stat-label">Tipo de Retención Medio Estimado</span>
+            <span class="stat-val" id="res-rate">15,8%</span>
+          </div>
+          <div class="stat-sub">
+            <span>Retención Anual: <strong id="res-total-year">4.424 €</strong></span>
+            <span>Retención Mensual: <strong id="res-total-month">368,67 €</strong></span>
+          </div>
+        </div>
+
+        <div class="breakdown-list">
+          <div class="breakdown-item">
+            <span>Sueldo Bruto Anual</span>
+            <strong id="res-gross">28.000 €</strong>
+          </div>
+          <div class="breakdown-item">
+            <span>Seguridad Social Trabajador (6,47%)</span>
+            <strong id="res-ss" class="text-danger">-1.811,60 €</strong>
+          </div>
+          <div class="breakdown-item">
+            <span>Retención IRPF Hacienda</span>
+            <strong id="res-irpf" class="text-danger">-4.424,00 €</strong>
+          </div>
+          <div class="breakdown-item net-total">
+            <span>Salario Neto Anual Estimado</span>
+            <strong id="res-net-year" class="text-success">21.764,40 €</strong>
+          </div>
+        </div>
+
+        <div class="tramos-section">
+          <h3>Distribución Progresiva por Tramos (2026)</h3>
+          <p class="tramos-intro">Comprueba cómo se reparte tu salario en cada escalón impositivo:</p>
+          <div class="tramos-bars" id="tramos-container">
+            <!-- Dynamic progress bars -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <section class="tool-faqs">
+      <h2>Preguntas Frecuentes sobre el IRPF en España</h2>
+      <div class="faq-accordion">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{faq.question}</span>
+              <span class="faq-arrow">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>{faq.answer}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <LegalDisclaimer />
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  function calculateIRPF() {
+    const gross = Math.max(0, parseFloat(document.getElementById('gross-salary').value) || 0);
+    const pagas = parseInt(document.getElementById('pagas').value, 10) || 12;
+    const family = document.getElementById('family-status').value;
+    const children = parseInt(document.getElementById('children-count').value, 10) || 0;
+    const disability = document.getElementById('disability').value;
+
+    // Seguridad social 6.47% (base máxima 56.646 aprox)
+    const ssBase = Math.min(gross, 56646);
+    const ssTotal = ssBase * 0.0647;
+
+    // Mínimo personal y familiar
+    let minExento = 5550; // base personal
+    if (family === 'married') minExento += 1000;
+    if (family === 'single_parent') minExento += 2150;
+
+    // Hijos
+    if (children === 1) minExento += 2400;
+    else if (children === 2) minExento += 2400 + 2700;
+    else if (children === 3) minExento += 2400 + 2700 + 4000;
+    else if (children >= 4) minExento += 2400 + 2700 + 4000 + (children - 3) * 4500;
+
+    // Discapacidad
+    if (disability === 'd33') minExento += 3000;
+    else if (disability === 'd65') minExento += 9000;
+
+    // Escala general IRPF 2026
+    const brackets = [
+      { limit: 12450, rate: 0.19, label: 'Hasta 12.450 € (19%)' },
+      { limit: 20200, rate: 0.24, label: '12.450 € a 20.200 € (24%)' },
+      { limit: 35200, rate: 0.30, label: '20.200 € a 35.200 € (30%)' },
+      { limit: 60000, rate: 0.37, label: '35.200 € a 60.000 € (37%)' },
+      { limit: 300000, rate: 0.45, label: '60.000 € a 300.000 € (45%)' },
+      { limit: Infinity, rate: 0.47, label: 'Más de 300.000 € (47%)' }
+    ];
+
+    function computeTax(base) {
+      if (base <= 0) return 0;
+      let tax = 0;
+      let prevLimit = 0;
+      for (const b of brackets) {
+        if (base > prevLimit) {
+          const taxable = Math.min(base, b.limit) - prevLimit;
+          tax += taxable * b.rate;
+          prevLimit = b.limit;
+        } else {
+          break;
+        }
+      }
+      return tax;
+    }
+
+    // Base liquidable aproximada
+    const baseLiquidable = Math.max(0, gross - ssTotal - 2000); // 2000 gastos deducibles generales
+    const taxGross = computeTax(baseLiquidable);
+    const taxMin = computeTax(minExento);
+    let totalTax = Math.max(0, taxGross - taxMin);
+
+    if (gross <= 15000) {
+      totalTax = 0; // Exención general de IRPF para rentas bajas
+    }
+
+    const effectiveRate = gross > 0 ? (totalTax / gross) * 100 : 0;
+    const monthlyTax = pagas > 0 ? totalTax / pagas : 0;
+    const netYear = gross - ssTotal - totalTax;
+
+    // Render stats
+    document.getElementById('res-rate').textContent = effectiveRate.toFixed(1).replace('.', ',') + '%';
+    document.getElementById('res-total-year').textContent = Math.round(totalTax).toLocaleString('es-ES') + ' €';
+    document.getElementById('res-total-month').textContent = monthlyTax.toFixed(2).replace('.', ',') + ' €/mes';
+    document.getElementById('res-gross').textContent = Math.round(gross).toLocaleString('es-ES') + ' €';
+    document.getElementById('res-ss').textContent = '-' + ssTotal.toFixed(2).replace('.', ',') + ' €';
+    document.getElementById('res-irpf').textContent = '-' + totalTax.toFixed(2).replace('.', ',') + ' €';
+    document.getElementById('res-net-year').textContent = Math.round(netYear).toLocaleString('es-ES') + ' €';
+
+    // Render visual tramos
+    const tramosContainer = document.getElementById('tramos-container');
+    tramosContainer.innerHTML = '';
+    let prev = 0;
+    brackets.forEach((b) => {
+      if (gross > prev) {
+        const inBracket = Math.min(gross, b.limit) - prev;
+        const taxInBracket = inBracket * b.rate;
+        const percent = Math.min(100, Math.round((inBracket / gross) * 100));
+
+        const row = document.createElement('div');
+        row.className = 'tramo-row';
+        row.innerHTML = `
+          <div class="tramo-header">
+            <span class="tramo-name">${b.label}</span>
+            <span class="tramo-values"><strong>${Math.round(inBracket).toLocaleString('es-ES')} €</strong> gravados → <em>${Math.round(taxInBracket).toLocaleString('es-ES')} €</em></span>
+          </div>
+          <div class="tramo-bar-track">
+            <div class="tramo-bar-fill" style="width: ${percent}%;"></div>
+          </div>
+        `;
+        tramosContainer.appendChild(row);
+        prev = b.limit;
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    calculateIRPF();
+    const btn = document.getElementById('btn-calc');
+    if (btn) btn.addEventListener('click', calculateIRPF);
+
+    const inputs = ['gross-salary', 'pagas', 'family-status', 'children-count', 'disability'];
+    inputs.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', calculateIRPF);
+    });
+  });
+</script>
+
+<style>
+  .tool-page { padding-bottom: 4rem; }
+  .breadcrumb { display: flex; gap: 0.5rem; color: var(--text-muted); font-size: 0.85rem; margin: 1.5rem 0; flex-wrap: wrap; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary); }
+
+  .tool-header { text-align: center; max-width: 800px; margin: 0 auto 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(99, 102, 241, 0.12); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 50px; font-size: 0.82rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; color: var(--text); margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+  .tool-subtitle { font-size: 1.05rem; color: var(--text-muted); line-height: 1.6; }
+
+  .calc-layout-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; margin-bottom: 3.5rem; }
+  .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; }
+  .card h2 { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; }
+
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+  .input-with-symbol { position: relative; display: flex; align-items: center; }
+  .input-with-symbol input, select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-with-symbol input:focus, select:focus { border-color: var(--primary); }
+  .input-with-symbol .symbol { position: absolute; right: 1rem; color: var(--text-muted); font-size: 0.9rem; pointer-events: none; }
+
+  .btn-calculate {
+    width: 100%;
+    padding: 0.85rem;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  .btn-calculate:hover { opacity: 0.92; }
+
+  .stat-highlight {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .stat-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.25rem; }
+  .stat-val { font-size: 2.5rem; font-weight: 800; color: var(--primary); display: block; line-height: 1.1; margin-bottom: 0.75rem; }
+  .stat-sub { display: flex; justify-content: space-around; font-size: 0.9rem; color: var(--text-muted); border-top: 1px dashed rgba(99, 102, 241, 0.25); padding-top: 0.75rem; }
+  .stat-sub strong { color: var(--text); }
+
+  .breakdown-list { margin-bottom: 2rem; }
+  .breakdown-item { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border); font-size: 0.95rem; color: var(--text-muted); }
+  .breakdown-item strong { color: var(--text); }
+  .text-danger { color: #f87171 !important; }
+  .text-success { color: #34d399 !important; font-size: 1.15rem !important; }
+  .net-total { border-top: 2px solid var(--border); padding-top: 1rem; font-weight: 700; }
+
+  .tramos-section h3 { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
+  .tramos-intro { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; }
+  .tramo-row { margin-bottom: 0.75rem; }
+  .tramo-header { display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.25rem; color: var(--text-muted); }
+  .tramo-header strong { color: var(--text); }
+  .tramo-bar-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .tramo-bar-fill { height: 100%; background: var(--primary); border-radius: 4px; }
+
+  .tool-faqs { margin-top: 3.5rem; margin-bottom: 3rem; }
+  .tool-faqs h2 { font-size: 1.6rem; font-weight: 800; color: var(--text); margin-bottom: 1.5rem; text-align: center; }
+  .faq-accordion { max-width: 850px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .faq-question { padding: 1rem 1.25rem; font-weight: 600; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; }
+  .faq-question::-webkit-details-marker { display: none; }
+  .faq-arrow { font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s; }
+  .faq-item[open] .faq-arrow { transform: rotate(180deg); color: var(--primary); }
+  .faq-answer { padding: 0 1.25rem 1.25rem; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+
+  @media (max-width: 850px) {
+    .calc-layout-grid { grid-template-columns: 1fr; }
+    .stat-sub { flex-direction: column; gap: 0.5rem; align-items: center; }
+  }
+</style>

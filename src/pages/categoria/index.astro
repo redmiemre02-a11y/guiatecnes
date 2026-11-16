@@ -1,0 +1,249 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import AdSenseBanner from '../../components/AdSenseBanner.astro';
+
+const allPosts = await getCollection('blog');
+
+const categories = [
+  { slug: 'ia',             name: 'IA Herramientas',            icon: '🤖', desc: 'Análisis y comparativas de herramientas de inteligencia artificial generativa, LLMs y automatización.', color: '#818cf8', bg: 'rgba(99,102,241,0.1)' },
+  { slug: 'errores',        name: 'Solución de Errores',        icon: '🛠️', desc: 'Guías prácticas para solucionar fallos en móviles, Windows, redes WiFi, Smart TV y apps.', color: '#f87171', bg: 'rgba(239,68,68,0.1)' },
+  { slug: 'comparativas',   name: 'Comparativas 2026',          icon: '⚖️', desc: 'Comparativas cara a cara de móviles, software, portátiles y servicios para elegir con criterio.', color: '#38bdf8', bg: 'rgba(56,189,248,0.1)' },
+  { slug: 'alternativas',   name: 'Alternativas Gratis',        icon: '🔄', desc: 'Las mejores alternativas gratuitas y de código abierto a programas y suscripciones de pago.', color: '#34d399', bg: 'rgba(16,185,129,0.1)' },
+  { slug: 'ciberseguridad', name: 'Ciberseguridad & Privacidad',icon: '🔒', desc: 'VPNs, gestores de contraseñas, antivirus y cómo proteger tus datos frente a estafas online.', color: '#dc2626', bg: 'rgba(220,38,38,0.1)' },
+  { slug: 'finanzas',       name: 'Finanzas Digitales',         icon: '💰', desc: 'Herramientas de ahorro, IRPF, nóminas, inversión pasiva y gestión económica inteligente.', color: '#fbbf24', bg: 'rgba(251,191,36,0.1)' },
+  { slug: 'streaming',      name: 'Streaming y Smart TV',       icon: '📺', desc: 'Trucos y ajustes para Fire TV, Chromecast, Android TV, plataformas de streaming y audio.', color: '#e11d48', bg: 'rgba(225,29,72,0.1)' },
+  { slug: 'windows-linux',  name: 'Windows, Mac y Linux',       icon: '🖥️', desc: 'Comandos esenciales, trucos de rendimiento, limpieza y optimización para tu ordenador.', color: '#60a5fa', bg: 'rgba(96,165,250,0.1)' },
+  { slug: 'freelance',      name: 'Trabajo Remoto & Freelance', icon: '💼', desc: 'Facturación, plataformas de teletrabajo, productividad y fiscalidad para trabajadores remotos.', color: '#c084fc', bg: 'rgba(192,132,252,0.1)' },
+  { slug: 'tecnologia',     name: 'Tecnología Cotidiana',       icon: '💻', desc: 'Consejos tecnológicos del día a día, hardware, periféricos y trucos digitales fáciles.', color: '#94a3b8', bg: 'rgba(148,163,184,0.1)' },
+  { slug: 'guias',          name: 'Guías y Tutoriales',         icon: '📖', desc: 'Tutoriales paso a paso explicados con capturas y lenguaje claro sin rodeos técnicos.', color: '#a855f7', bg: 'rgba(168,85,247,0.1)' },
+  { slug: 'movil',          name: 'Apps y Trucos Móvil',        icon: '📱', desc: 'Ajustes secretos para Android e iOS, ahorro de batería y las mejores aplicaciones útiles.', color: '#06b6d4', bg: 'rgba(6,182,212,0.1)' },
+  { slug: 'productividad',  name: 'Productividad Personal',     icon: '⚡', desc: 'Métodos de organización, extensiones de navegador y herramientas para ahorrar tiempo.', color: '#2dd4bf', bg: 'rgba(45,212,191,0.1)' },
+  { slug: 'salud',          name: 'Salud Digital & Wearables',  icon: '🏥', desc: 'Smartwatches, aplicaciones de bienestar, ergonomía frente a la pantalla y hábitos sanos.', color: '#14b8a6', bg: 'rgba(20,184,166,0.1)' },
+  { slug: 'hogar',          name: 'Hogar Inteligente',          icon: '🏠', desc: 'Domótica accesible, bombillas WiFi, enchufes programables y asistentes de voz para tu casa.', color: '#f43f5e', bg: 'rgba(244,63,94,0.1)' },
+  { slug: 'gaming',         name: 'Gaming y Rendimiento PC',    icon: '🎮', desc: 'Subir FPS, optimización de juegos, periféricos gaming y guías de configuración.', color: '#ec4899', bg: 'rgba(236,72,153,0.1)' },
+  { slug: 'emprendimiento', name: 'Ganar Dinero Online',        icon: '🚀', desc: 'Modelos reales y legales de ingresos digitales: webs de nicho, servicios y automatización.', color: '#f97316', bg: 'rgba(249,115,22,0.1)' },
+  { slug: 'educacion',      name: 'Educación y Aprendizaje',    icon: '🎓', desc: 'Cursos gratuitos con certificado, recursos para autodidactas y técnicas de estudio con IA.', color: '#3b82f6', bg: 'rgba(59,130,246,0.1)' },
+  { slug: 'familia',        name: 'Familia y Control Parental', icon: '👶', desc: 'Guías de seguridad infantil en internet, filtros de contenido y navegación segura para menores.', color: '#facc15', bg: 'rgba(250,204,21,0.1)' },
+];
+
+// Calculate counts per category
+const categoriesWithCount = categories.map(cat => {
+  const count = allPosts.filter(p => {
+    const tags = p.data.tags || [];
+    return tags.some((t: string) => t.toLowerCase() === cat.slug);
+  }).length;
+  return { ...cat, count };
+});
+
+const title = "Todas las Categorías Temáticas | GuíaTecnes";
+const description = "Explora nuestras 19 categorías especializadas: inteligencia artificial, solución de errores, comparativas, ciberseguridad, finanzas y guías prácticas en español.";
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Categorías', url: '/categoria/' }
+];
+---
+
+<BaseLayout 
+  title={title} 
+  description={description}
+  breadcrumbs={breadcrumbs}
+>
+  <Header slot="header" />
+
+  <div class="categories-hub-page">
+    <header class="hub-hero">
+      <div class="container">
+        <div class="hero-badge">📂 Directorio Temático</div>
+        <h1>Explora por Categoría</h1>
+        <p class="hero-subtitle">
+          Navega a través de nuestros 19 silos de conocimiento tecnológico especializado y encuentra exactamente lo que necesitas.
+        </p>
+      </div>
+    </header>
+
+    <main class="container hub-main">
+      <div class="categories-grid">
+        {categoriesWithCount.map(cat => (
+          <a href={`/categoria/${cat.slug}/`} class="category-card" style={`--cat-color: ${cat.color}; --cat-bg: ${cat.bg};`}>
+            <div class="cat-card-header">
+              <span class="cat-icon">{cat.icon}</span>
+              <span class="cat-badge">{cat.count} artículos</span>
+            </div>
+            <h2 class="cat-title">{cat.name}</h2>
+            <p class="cat-desc">{cat.desc}</p>
+            <div class="cat-footer">
+              <span class="cat-explore">Ver artículos →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div class="ad-wrap-hub">
+        <AdSenseBanner />
+      </div>
+    </main>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .categories-hub-page {
+    padding-bottom: 4rem;
+  }
+
+  .hub-hero {
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.08) 0%, transparent 100%);
+    padding: 3rem 0 2rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--primary);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .hub-hero h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .category-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--cat-color);
+    opacity: 0.7;
+    transition: opacity 0.2s ease, height 0.2s ease;
+  }
+
+  .category-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--cat-color);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .category-card:hover::before {
+    opacity: 1;
+    height: 4px;
+  }
+
+  .cat-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .cat-icon {
+    font-size: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--cat-bg);
+  }
+
+  .cat-badge {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--cat-color);
+    background: var(--cat-bg);
+    padding: 0.25rem 0.65rem;
+    border-radius: 50px;
+    border: 1px solid currentColor;
+  }
+
+  .cat-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .cat-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    flex: 1;
+    margin-bottom: 1.25rem;
+  }
+
+  .cat-footer {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+  }
+
+  .cat-explore {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary);
+    transition: transform 0.2s ease;
+  }
+
+  .category-card:hover .cat-explore {
+    transform: translateX(4px);
+  }
+
+  .ad-wrap-hub {
+    margin-top: 3.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .hub-hero h1 { font-size: 1.75rem; }
+    .categories-grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,479 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas/' },
+  { name: 'Comprobador de Seguridad de Contraseñas', url: '/herramientas/comprobador-seguridad-contrasenas/' }
+];
+
+const faqs = [
+  {
+    question: '¿Es seguro escribir mi contraseña en esta herramienta?',
+    answer: 'Totalmente seguro. Esta utilidad se ejecuta al 100% en tu navegador mediante JavaScript local. Ningún dato, pulsación de tecla ni contraseña se envía a servidores externos ni queda almacenada en ningún registro.'
+  },
+  {
+    question: '¿Qué es la entropía de una contraseña?',
+    answer: 'La entropía mide la cantidad de aleatoriedad e impredecibilidad de una clave en bits. Una entropía superior a 75-80 bits se considera prácticamente inmune a ataques de fuerza bruta modernos ejecutados por supercomputadoras.'
+  },
+  {
+    question: '¿Por qué la longitud importa más que los caracteres extraños?',
+    answer: 'El espacio de combinaciones posibles crece de forma exponencial con cada nuevo carácter. Una frase de paso larga de 16 caracteres compuesta por palabras aleatorias suele ser infinitamente más resistente y fácil de recordar que una clave corta de 8 caracteres repleta de símbolos.'
+  },
+  {
+    question: '¿Cómo proteger mis cuentas frente a filtraciones masivas de datos?',
+    answer: 'Utiliza una contraseña única para cada servicio apoyándote en un gestor de contraseñas seguro (como Bitwarden, 1Password o KeePass) y activa siempre la autenticación en dos pasos (2FA) mediante aplicaciones de códigos temporales (TOTP) o llaves FIDO2.'
+  }
+];
+---
+
+<BaseLayout
+  title="Comprobador de Seguridad de Contraseñas | Entropía y Fuerza Bruta"
+  description="Comprueba la seguridad, robustez y entropía de tu contraseña en tiempo real. Descubre cuánto tardaría un ciberdelincuente en descifrarla. 100% seguro y privado."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas/">Herramientas</a>
+      <span>›</span>
+      <span>Comprobador de Contraseñas</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🔒 Auditoría Criptográfica 100% Local</div>
+      <h1>Comprobador de Seguridad de Contraseñas</h1>
+      <p class="tool-subtitle">
+        Analiza la robustez de tus claves, calcula su entropía matemática y descubre cuánto tardaría un ordenador en descifrarla por fuerza bruta.
+      </p>
+    </header>
+
+    <div class="privacy-notice">
+      <span class="privacy-icon">🛡️</span>
+      <span><strong>Garantía de Privacidad Absoluta:</strong> El análisis se procesa íntegramente en la memoria de tu dispositivo. Tu contraseña jamás viaja por la red ni se envía a ningún servidor.</span>
+    </div>
+
+    <div class="calc-layout-grid">
+      <!-- INPUT CARD -->
+      <div class="card input-card">
+        <h2>Prueba tu Contraseña</h2>
+
+        <div class="form-group">
+          <label for="pwd-input">Introduce una contraseña para auditar</label>
+          <div class="password-box">
+            <input type="password" id="pwd-input" placeholder="Escribe aquí tu clave..." autocomplete="off" spellcheck="false" />
+            <button type="button" id="btn-toggle-vis" class="btn-vis" aria-label="Mostrar u ocultar contraseña">👁️</button>
+          </div>
+        </div>
+
+        <div class="meter-wrap">
+          <div class="meter-bar-track">
+            <div id="meter-fill" class="meter-fill" style="width: 0%;"></div>
+          </div>
+          <div class="meter-status">
+            <span class="meter-label">Nivel de Seguridad:</span>
+            <strong id="meter-text" class="status-empty">Escribe una clave</strong>
+          </div>
+        </div>
+
+        <div class="quick-gen-wrap">
+          <button type="button" id="btn-gen-pwd" class="btn-gen">🎲 Generar Contraseña Blindada</button>
+        </div>
+
+        <!-- CHECKLIST DE FORTALEZA -->
+        <div class="checklist-wrap">
+          <h3>Requisitos de Robustez</h3>
+          <ul class="checklist-items">
+            <li id="chk-len"><span class="chk-icon">⚪</span> Al menos 12 caracteres (recomendado 16+)</li>
+            <li id="chk-upper"><span class="chk-icon">⚪</span> Contiene letras mayúsculas (A-Z)</li>
+            <li id="chk-lower"><span class="chk-icon">⚪</span> Contiene letras minúsculas (a-z)</li>
+            <li id="chk-num"><span class="chk-icon">⚪</span> Contiene números (0-9)</li>
+            <li id="chk-sym"><span class="chk-icon">⚪</span> Contiene símbolos especiales (!@#$%^&*)</li>
+            <li id="chk-patterns"><span class="chk-icon">⚪</span> Sin secuencias predecibles ni palabras comunes</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- RESULTS CARD -->
+      <div class="card results-card">
+        <h2>Métricas Criptográficas</h2>
+
+        <div class="stat-highlight">
+          <div class="stat-main">
+            <span class="stat-label">Tiempo Estimado de Fuerza Bruta</span>
+            <span class="stat-val" id="crack-time">0 segundos</span>
+          </div>
+          <div class="stat-sub">
+            <span>Escenario: Clúster de GPUs de última generación (100.000 millones de intentos/seg)</span>
+          </div>
+        </div>
+
+        <div class="breakdown-list">
+          <div class="breakdown-item">
+            <span>Longitud Total</span>
+            <strong id="stat-len">0 caracteres</strong>
+          </div>
+          <div class="breakdown-item">
+            <span>Variedad del Conjunto de Caracteres</span>
+            <strong id="stat-pool">0 posibles</strong>
+          </div>
+          <div class="breakdown-item">
+            <span>Entropía de la Información</span>
+            <strong id="stat-entropy" class="text-primary">0 bits</strong>
+          </div>
+          <div class="breakdown-item net-total">
+            <span>Veredicto de Seguridad</span>
+            <strong id="stat-verdict">Sin analizar</strong>
+          </div>
+        </div>
+
+        <div class="tips-box">
+          <h4>💡 Consejo de los Expertos:</h4>
+          <p id="dynamic-tip">
+            La mejor contraseña es una frase de paso (passphrase) formada por 4 o 5 palabras no relacionadas entre sí unidas por guiones o símbolos. Son fáciles de recordar para humanos pero imposibles de adivinar para máquinas.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <section class="tool-faqs">
+      <h2>Preguntas Frecuentes sobre Seguridad de Contraseñas</h2>
+      <div class="faq-accordion">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{faq.question}</span>
+              <span class="faq-arrow">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>{faq.answer}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <LegalDisclaimer />
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const pwdInput = document.getElementById('pwd-input');
+    const toggleVis = document.getElementById('btn-toggle-vis');
+    const genBtn = document.getElementById('btn-gen-pwd');
+    const meterFill = document.getElementById('meter-fill');
+    const meterText = document.getElementById('meter-text');
+
+    const chkLen = document.getElementById('chk-len');
+    const chkUpper = document.getElementById('chk-upper');
+    const chkLower = document.getElementById('chk-lower');
+    const chkNum = document.getElementById('chk-num');
+    const chkSym = document.getElementById('chk-sym');
+    const chkPatterns = document.getElementById('chk-patterns');
+
+    const crackTime = document.getElementById('crack-time');
+    const statLen = document.getElementById('stat-len');
+    const statPool = document.getElementById('stat-pool');
+    const statEntropy = document.getElementById('stat-entropy');
+    const statVerdict = document.getElementById('stat-verdict');
+    const dynamicTip = document.getElementById('dynamic-tip');
+
+    const commonPass = ['123456', 'password', '123456789', 'qwerty', '12345678', '111111', '12345', 'admin', 'welcome', 'login', 'contraseña', 'futbol', 'tequiero', 'barcelona', 'madrid'];
+
+    function updateCheck(el, passed) {
+      if (!el) return;
+      const icon = el.querySelector('.chk-icon');
+      if (passed) {
+        el.className = 'chk-passed';
+        if (icon) icon.textContent = '✅';
+      } else {
+        el.className = 'chk-failed';
+        if (icon) icon.textContent = '⚪';
+      }
+    }
+
+    function formatTime(seconds) {
+      if (seconds <= 0.001) return 'Instantáneo (< 1 milisegundo)';
+      if (seconds < 1) return 'Menos de 1 segundo';
+      if (seconds < 60) return Math.round(seconds) + ' segundos';
+      if (seconds < 3600) return Math.round(seconds / 60) + ' minutos';
+      if (seconds < 86400) return Math.round(seconds / 3600) + ' horas';
+      if (seconds < 2592000) return Math.round(seconds / 86400) + ' días';
+      if (seconds < 31536000) return Math.round(seconds / 2592000) + ' meses';
+      const years = seconds / 31536000;
+      if (years < 100) return Math.round(years) + ' años';
+      if (years < 1000000) return Math.round(years).toLocaleString('es-ES') + ' años';
+      if (years < 1000000000) return Math.round(years / 1000000) + ' millones de años';
+      return 'Trillones de siglos (Inquebrantable)';
+    }
+
+    function evaluatePassword() {
+      const p = pwdInput.value || '';
+      statLen.textContent = p.length + ' caracteres';
+
+      if (!p) {
+        meterFill.style.width = '0%';
+        meterFill.style.background = '#64748b';
+        meterText.textContent = 'Escribe una clave';
+        meterText.className = 'status-empty';
+        crackTime.textContent = '0 segundos';
+        statPool.textContent = '0 posibles';
+        statEntropy.textContent = '0 bits';
+        statVerdict.textContent = 'Sin analizar';
+        [chkLen, chkUpper, chkLower, chkNum, chkSym, chkPatterns].forEach(el => updateCheck(el, false));
+        return;
+      }
+
+      // Check charset pool
+      let pool = 0;
+      const hasLower = /[a-z]/.test(p);
+      const hasUpper = /[A-Z]/.test(p);
+      const hasNum = /[0-9]/.test(p);
+      const hasSym = /[^a-zA-Z0-9]/.test(p);
+
+      if (hasLower) pool += 26;
+      if (hasUpper) pool += 26;
+      if (hasNum) pool += 10;
+      if (hasSym) pool += 33;
+
+      statPool.textContent = pool + ' caracteres';
+
+      // Checklist tests
+      updateCheck(chkLen, p.length >= 12);
+      updateCheck(chkUpper, hasUpper);
+      updateCheck(chkLower, hasLower);
+      updateCheck(chkNum, hasNum);
+      updateCheck(chkSym, hasSym);
+
+      const isCommon = commonPass.includes(p.toLowerCase());
+      const hasSequence = /(.)\1{2,}/.test(p) || /123|abc|qwerty|qaz|password/i.test(p);
+      updateCheck(chkPatterns, !isCommon && !hasSequence);
+
+      // Entropy = L * log2(pool)
+      let entropy = pool > 0 ? p.length * (Math.log(pool) / Math.log(2)) : 0;
+      if (isCommon) entropy = Math.min(entropy, 15);
+      if (hasSequence) entropy = Math.max(0, entropy - 10);
+
+      statEntropy.textContent = Math.round(entropy) + ' bits';
+
+      // 100 billion guesses/sec
+      const speed = 100000000000;
+      const combinations = Math.pow(pool, p.length);
+      const seconds = combinations / speed;
+      crackTime.textContent = formatTime(seconds);
+
+      // Determine level
+      let score = 0;
+      if (entropy > 25) score = 25;
+      if (entropy > 45) score = 50;
+      if (entropy > 65) score = 75;
+      if (entropy > 85) score = 100;
+
+      meterFill.style.width = score + '%';
+
+      if (score <= 25) {
+        meterFill.style.background = '#f87171';
+        meterText.textContent = 'Muy Débil ⚠️';
+        meterText.className = 'status-danger';
+        statVerdict.textContent = 'Extremadamente vulnerable';
+        statVerdict.className = 'text-danger';
+        dynamicTip.textContent = 'Esta clave puede romperse en cuestión de segundos. Aumenta urgentemente la longitud a un mínimo de 14 caracteres combinando palabras variadas.';
+      } else if (score <= 50) {
+        meterFill.style.background = '#fbbf24';
+        meterText.textContent = 'Moderada ⚠️';
+        meterText.className = 'status-warning';
+        statVerdict.textContent = 'Seguridad básica';
+        statVerdict.className = 'text-warning';
+        dynamicTip.textContent = 'Es aceptable para servicios menores, pero no para banca online ni correo principal. Añade un par de palabras o números no correlativos.';
+      } else if (score <= 75) {
+        meterFill.style.background = '#60a5fa';
+        meterText.textContent = 'Segura 🛡️';
+        meterText.className = 'status-good';
+        statVerdict.textContent = 'Alta resistencia';
+        statVerdict.className = 'text-good';
+        dynamicTip.textContent = '¡Muy buena clave! Es resistente a ataques de diccionario y de fuerza bruta convencionales. Asegúrate de no reutilizarla en otros sitios web.';
+      } else {
+        meterFill.style.background = '#34d399';
+        meterText.textContent = 'Blindada / Militar 🔒';
+        meterText.className = 'status-strong';
+        statVerdict.textContent = 'Inmune a la fuerza bruta';
+        statVerdict.className = 'text-strong';
+        dynamicTip.textContent = 'Excelente nivel criptográfico. Ni siquiera una supercomputadora con miles de tarjetas gráficas podría romperla en miles de años.';
+      }
+    }
+
+    function generateBlindada() {
+      const words = ['roca', 'viento', 'faro', 'pixel', 'trueno', 'cable', 'lince', 'delta', 'nube', 'aurora', 'halcon', 'cuarzo'];
+      const syms = ['#', '!', '$', '%', '&', '@', '-'];
+      const w1 = words[Math.floor(Math.random() * words.length)];
+      const w2 = words[Math.floor(Math.random() * words.length)];
+      const w3 = words[Math.floor(Math.random() * words.length)];
+      const sym = syms[Math.floor(Math.random() * syms.length)];
+      const num = Math.floor(Math.random() * 90) + 10;
+      const pwd = w1.charAt(0).toUpperCase() + w1.slice(1) + sym + w2 + num + sym + w3.toUpperCase();
+      pwdInput.value = pwd;
+      pwdInput.type = 'text';
+      toggleVis.textContent = '🙈';
+      evaluatePassword();
+    }
+
+    pwdInput.addEventListener('input', evaluatePassword);
+
+    toggleVis.addEventListener('click', () => {
+      if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        toggleVis.textContent = '🙈';
+      } else {
+        pwdInput.type = 'password';
+        toggleVis.textContent = '👁️';
+      }
+    });
+
+    genBtn.addEventListener('click', generateBlindada);
+  });
+</script>
+
+<style>
+  .tool-page { padding-bottom: 4rem; }
+  .breadcrumb { display: flex; gap: 0.5rem; color: var(--text-muted); font-size: 0.85rem; margin: 1.5rem 0; flex-wrap: wrap; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary); }
+
+  .tool-header { text-align: center; max-width: 800px; margin: 0 auto 1.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(99, 102, 241, 0.12); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 50px; font-size: 0.82rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; color: var(--text); margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+  .tool-subtitle { font-size: 1.05rem; color: var(--text-muted); line-height: 1.6; }
+
+  .privacy-notice {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: var(--radius);
+    padding: 0.9rem 1.25rem;
+    font-size: 0.9rem;
+    color: var(--text);
+    margin: 0 auto 2.5rem;
+    max-width: 900px;
+  }
+  .privacy-icon { font-size: 1.3rem; flex-shrink: 0; }
+
+  .calc-layout-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; margin-bottom: 3.5rem; }
+  .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; }
+  .card h2 { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; }
+
+  .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+  .password-box { position: relative; display: flex; align-items: center; margin-bottom: 1rem; }
+  .password-box input {
+    width: 100%;
+    padding: 0.85rem 3rem 0.85rem 1rem;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 1.1rem;
+    outline: none;
+    letter-spacing: 0.05em;
+    font-family: monospace;
+    transition: border-color 0.2s;
+  }
+  .password-box input:focus { border-color: var(--primary); }
+  .btn-vis {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.25rem;
+  }
+
+  .meter-wrap { margin-bottom: 1.5rem; }
+  .meter-bar-track { height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; margin-bottom: 0.5rem; }
+  .meter-fill { height: 100%; transition: width 0.3s ease, background 0.3s ease; }
+  .meter-status { display: flex; justify-content: space-between; font-size: 0.9rem; }
+  .status-empty { color: var(--text-muted); }
+  .status-danger { color: #f87171; }
+  .status-warning { color: #fbbf24; }
+  .status-good { color: #60a5fa; }
+  .status-strong { color: #34d399; }
+
+  .btn-gen {
+    width: 100%;
+    padding: 0.75rem;
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1.75rem;
+  }
+  .btn-gen:hover { background: var(--primary); color: #fff; }
+
+  .checklist-wrap h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.75rem; }
+  .checklist-items { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.88rem; color: var(--text-muted); }
+  .checklist-items li { display: flex; align-items: center; gap: 0.5rem; }
+  .chk-passed { color: var(--text); }
+  .chk-passed .chk-icon { color: #34d399; }
+
+  .stat-highlight {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .stat-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.25rem; }
+  .stat-val { font-size: 1.8rem; font-weight: 800; color: var(--primary); display: block; line-height: 1.2; margin-bottom: 0.5rem; }
+  .stat-sub { font-size: 0.82rem; color: var(--text-muted); }
+
+  .breakdown-list { margin-bottom: 1.5rem; }
+  .breakdown-item { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border); font-size: 0.95rem; color: var(--text-muted); }
+  .breakdown-item strong { color: var(--text); }
+  .text-danger { color: #f87171 !important; }
+  .text-warning { color: #fbbf24 !important; }
+  .text-good { color: #60a5fa !important; }
+  .text-strong { color: #34d399 !important; font-size: 1.1rem !important; }
+  .net-total { border-top: 2px solid var(--border); padding-top: 1rem; font-weight: 700; }
+
+  .tips-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .tips-box h4 { color: var(--text); margin-bottom: 0.35rem; font-size: 0.95rem; }
+
+  .tool-faqs { margin-top: 3.5rem; margin-bottom: 3rem; }
+  .tool-faqs h2 { font-size: 1.6rem; font-weight: 800; color: var(--text); margin-bottom: 1.5rem; text-align: center; }
+  .faq-accordion { max-width: 850px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .faq-question { padding: 1rem 1.25rem; font-weight: 600; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; }
+  .faq-question::-webkit-details-marker { display: none; }
+  .faq-arrow { font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s; }
+  .faq-item[open] .faq-arrow { transform: rotate(180deg); color: var(--primary); }
+  .faq-answer { padding: 0 1.25rem 1.25rem; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+
+  @media (max-width: 850px) {
+    .calc-layout-grid { grid-template-columns: 1fr; }
+    .stat-val { font-size: 1.4rem; }
+  }
+</style>

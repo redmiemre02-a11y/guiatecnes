@@ -1,0 +1,456 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PostCard from '../../components/PostCard.astro';
+import AdSenseBanner from '../../components/AdSenseBanner.astro';
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const title = "Archivo del Blog - Todas las Guías y Artículos | GuíaTecnes";
+const description = `Explora nuestra colección completa de más de ${allPosts.length} artículos técnicos, tutoriales paso a paso, comparativas de software y guías de inteligencia artificial en español.`;
+
+const categories = [
+  { slug: 'all', name: 'Todos', icon: '📚' },
+  { slug: 'ia', name: 'IA Herramientas', icon: '🤖' },
+  { slug: 'errores', name: 'Solución Errores', icon: '🛠️' },
+  { slug: 'comparativas', name: 'Comparativas', icon: '⚖️' },
+  { slug: 'alternativas', name: 'Alternativas', icon: '🔄' },
+  { slug: 'ciberseguridad', name: 'Seguridad', icon: '🔒' },
+  { slug: 'finanzas', name: 'Finanzas', icon: '💰' },
+  { slug: 'streaming', name: 'Streaming', icon: '📺' },
+  { slug: 'windows-linux', name: 'PC & OS', icon: '🖥️' },
+  { slug: 'freelance', name: 'Teletrabajo', icon: '💼' },
+  { slug: 'movil', name: 'Móvil', icon: '📱' },
+  { slug: 'productividad', name: 'Productividad', icon: '⚡' },
+];
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Blog', url: '/blog/' }
+];
+---
+
+<BaseLayout 
+  title={title} 
+  description={description}
+  breadcrumbs={breadcrumbs}
+>
+  <Header slot="header" />
+
+  <div class="blog-archive-page">
+    <header class="archive-hero">
+      <div class="container">
+        <div class="hero-badge">📖 Biblioteca Editorial</div>
+        <h1>Todas Nuestras Guías y Artículos</h1>
+        <p class="hero-subtitle">
+          {allPosts.length} tutoriales independientes, comparativas imparciales y soluciones técnicas probadas en dispositivos reales.
+        </p>
+
+        <!-- Search Bar -->
+        <div class="search-box-wrap">
+          <span class="search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="article-search" 
+            placeholder="Buscar entre 220+ guías (ej: WiFi, batería, ChatGPT, IRPF, Excel)..." 
+            aria-label="Buscar artículos"
+          />
+          <button id="clear-search" class="clear-btn" aria-label="Limpiar búsqueda" style="display:none;">✕</button>
+        </div>
+
+        <!-- Filter Tags -->
+        <div class="category-pills" id="category-filter" role="tablist">
+          {categories.map((cat, idx) => (
+            <button 
+              type="button" 
+              class={`pill-btn ${idx === 0 ? 'active' : ''}`}
+              data-cat={cat.slug}
+              role="tab"
+              aria-selected={idx === 0 ? "true" : "false"}
+            >
+              <span>{cat.icon}</span> {cat.name}
+            </button>
+          ))}
+        </div>
+      </div>
+    </header>
+
+    <main class="container archive-main">
+      <div class="archive-info-bar">
+        <span id="results-count">Mostrando <strong>{sortedPosts.length}</strong> artículos</span>
+        <div class="archive-sort">
+          <span class="sort-label">Ordenar:</span>
+          <select id="sort-select" aria-label="Ordenar artículos">
+            <option value="recent">Más recientes primero</option>
+            <option value="oldest">Más antiguos primero</option>
+            <option value="title">Por título (A-Z)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="posts-grid" id="posts-container">
+        {sortedPosts.map(post => {
+          const tagsLower = (post.data.tags || []).map(t => t.toLowerCase()).join(' ');
+          const titleLower = post.data.title.toLowerCase();
+          const descLower = (post.data.description || '').toLowerCase();
+          return (
+            <div 
+              class="post-item" 
+              data-tags={tagsLower} 
+              data-title={titleLower} 
+              data-desc={descLower}
+              data-date={post.data.pubDate.valueOf()}
+            >
+              <PostCard
+                title={post.data.title}
+                description={post.data.description}
+                slug={post.id.replace(/\.[^/.]+$/, "")}
+                pubDate={post.data.pubDate}
+                tags={post.data.tags}
+                author={post.data.author}
+                readingTime={post.data.readingTime || 5}
+                heroImage={post.data.heroImage}
+              />
+            </div>
+          );
+        })}
+      </div>
+
+      <div id="no-results" class="no-results-state" style="display: none;">
+        <span class="no-results-icon">🔎</span>
+        <h3>No encontramos artículos con esa búsqueda</h3>
+        <p>Prueba con otros términos o selecciona una categoría diferente.</p>
+        <button id="reset-filters" class="btn-reset">Restablecer filtros</button>
+      </div>
+
+      <div class="ad-wrap-archive">
+        <AdSenseBanner />
+      </div>
+    </main>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('article-search');
+    const clearBtn = document.getElementById('clear-search');
+    const pillButtons = document.querySelectorAll('.pill-btn');
+    const postItems = Array.from(document.querySelectorAll('.post-item'));
+    const resultsCount = document.getElementById('results-count');
+    const noResults = document.getElementById('no-results');
+    const sortSelect = document.getElementById('sort-select');
+    const resetBtn = document.getElementById('reset-filters');
+    const postsContainer = document.getElementById('posts-container');
+
+    let activeCategory = 'all';
+    let searchQuery = '';
+
+    function filterPosts() {
+      let visibleCount = 0;
+      const q = searchQuery.toLowerCase().trim();
+
+      postItems.forEach(item => {
+        const itemTags = item.getAttribute('data-tags') || '';
+        const itemTitle = item.getAttribute('data-title') || '';
+        const itemDesc = item.getAttribute('data-desc') || '';
+
+        const matchesCat = (activeCategory === 'all') || itemTags.includes(activeCategory);
+        const matchesSearch = !q || itemTitle.includes(q) || itemDesc.includes(q) || itemTags.includes(q);
+
+        if (matchesCat && matchesSearch) {
+          item.style.display = '';
+          visibleCount++;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      if (resultsCount) {
+        resultsCount.innerHTML = `Mostrando <strong>${visibleCount}</strong> de ${postItems.length} artículos`;
+      }
+
+      if (noResults) {
+        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+      }
+    }
+
+    function sortPosts(sortBy) {
+      const sorted = [...postItems];
+      if (sortBy === 'recent') {
+        sorted.sort((a, b) => Number(b.getAttribute('data-date')) - Number(a.getAttribute('data-date')));
+      } else if (sortBy === 'oldest') {
+        sorted.sort((a, b) => Number(a.getAttribute('data-date')) - Number(b.getAttribute('data-date')));
+      } else if (sortBy === 'title') {
+        sorted.sort((a, b) => (a.getAttribute('data-title') || '').localeCompare(b.getAttribute('data-title') || ''));
+      }
+      sorted.forEach(item => postsContainer.appendChild(item));
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        if (clearBtn) clearBtn.style.display = searchQuery ? 'block' : 'none';
+        filterPosts();
+      });
+    }
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        searchQuery = '';
+        clearBtn.style.display = 'none';
+        searchInput.focus();
+        filterPosts();
+      });
+    }
+
+    pillButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        pillButtons.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        activeCategory = btn.getAttribute('data-cat') || 'all';
+        filterPosts();
+      });
+    });
+
+    if (sortSelect) {
+      sortSelect.addEventListener('change', (e) => {
+        sortPosts(e.target.value);
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        activeCategory = 'all';
+        searchQuery = '';
+        if (searchInput) searchInput.value = '';
+        if (clearBtn) clearBtn.style.display = 'none';
+        pillButtons.forEach(b => {
+          b.classList.remove('active');
+          if (b.getAttribute('data-cat') === 'all') b.classList.add('active');
+        });
+        filterPosts();
+      });
+    }
+  });
+</script>
+
+<style>
+  .blog-archive-page {
+    padding-bottom: 4rem;
+  }
+
+  .archive-hero {
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.08) 0%, transparent 100%);
+    padding: 3rem 0 2rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--primary);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .archive-hero h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 650px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+  }
+
+  .search-box-wrap {
+    max-width: 620px;
+    margin: 0 auto 1.5rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    font-size: 1.1rem;
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  .search-box-wrap input {
+    width: 100%;
+    padding: 0.85rem 2.8rem 0.85rem 2.8rem;
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    border-radius: 50px;
+    color: var(--text);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .search-box-wrap input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  }
+
+  .clear-btn {
+    position: absolute;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+    border-radius: 50%;
+  }
+
+  .category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.9rem;
+    background: var(--card-bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .pill-btn:hover {
+    color: var(--text);
+    border-color: var(--primary);
+    transform: translateY(-1px);
+  }
+
+  .pill-btn.active {
+    background: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+  }
+
+  .archive-info-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .archive-sort {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .archive-sort select {
+    background: var(--card-bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .archive-sort select:focus {
+    border-color: var(--primary);
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.75rem;
+  }
+
+  .no-results-state {
+    text-align: center;
+    padding: 4rem 1rem;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    border: 1px dashed var(--border);
+    margin: 2rem 0;
+  }
+
+  .no-results-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .no-results-state h3 {
+    font-size: 1.3rem;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .no-results-state p {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-reset {
+    padding: 0.6rem 1.4rem;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .ad-wrap-archive {
+    margin-top: 3rem;
+  }
+
+  @media (max-width: 768px) {
+    .archive-hero h1 { font-size: 1.75rem; }
+    .hero-subtitle { font-size: 0.95rem; }
+    .archive-info-bar { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+    .posts-grid { grid-template-columns: 1fr; }
+  }
+</style>

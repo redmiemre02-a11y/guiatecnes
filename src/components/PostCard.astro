@@ -41,7 +41,8 @@ function getTagColor(tag: string) {
 }
 
 const tagColor = getTagColor(primaryTag);
-const dateStr = pubDate.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+const safeDate = pubDate instanceof Date ? pubDate : (pubDate ? new Date(pubDate) : new Date());
+const dateStr = safeDate.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
 <article class="post-card">

@@ -1,0 +1,369 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas/' },
+  { name: 'Simulador de Préstamos Personales', url: '/herramientas/simulador-prestamos-personales/' }
+];
+
+const faqs = [
+  {
+    question: '¿Cómo se calcula la cuota mensual de un préstamo?',
+    answer: 'La mayoría de entidades bancarias utilizan el sistema de amortización francés. Con este método, pagas una cuota mensual constante durante todo el plazo, donde al principio se paga mayor proporción de intereses y, a medida que avanza el préstamo, se amortiza más capital.'
+  },
+  {
+    question: '¿Cuál es la diferencia entre el TIN y la TAE?',
+    answer: 'El TIN (Tipo de Interés Nominal) es el porcentaje que el banco cobra únicamente por prestarte el dinero. La TAE (Tasa Anual Equivalente) incluye el TIN más las comisiones de apertura, mantenimiento y gastos asociados, por lo que es la métrica real más fiable para comparar ofertas entre bancos.'
+  },
+  {
+    question: '¿Conviene amortizar anticipadamente un préstamo personal?',
+    answer: 'Generalmente sí, ya que reduces el capital pendiente y ahorras en los intereses futuros que no llegarán a devengarse. No obstante, revisa si tu contrato incluye comisiones por cancelación total o parcial (reguladas por ley a un máximo del 0,5% o 1%).'
+  },
+  {
+    question: '¿Qué plazo de devolución es el más recomendable?',
+    answer: 'Cuanto más largo sea el plazo, menor será tu cuota mensual pero mayor será el total de intereses pagados al final del préstamo. Lo ideal es elegir el plazo más corto posible cuya cuota mensual no supere el 30%-35% de tus ingresos netos mensuales.'
+  }
+];
+---
+
+<BaseLayout
+  title="Simulador de Préstamos Personales | Cuota Mensual y Tabla de Amortización"
+  description="Calcula tu cuota mensual fija, el total de intereses y el coste real de tu préstamo personal con nuestro simulador gratuito según el sistema de amortización francés."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas/">Herramientas</a>
+      <span>›</span>
+      <span>Simulador de Préstamos</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">💶 Simulador Financiero Francés</div>
+      <h1>Simulador de Préstamos Personales</h1>
+      <p class="tool-subtitle">
+        Calcula la cuota mensual exacta, los intereses totales y el cuadro de amortización completo de cualquier crédito o préstamo bancario.
+      </p>
+    </header>
+
+    <div class="calc-layout-grid">
+      <!-- FORMULARIO -->
+      <div class="card form-card">
+        <h2>Condiciones del Préstamo</h2>
+
+        <div class="form-group">
+          <label for="loan-amount">Importe Solicitado (€)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="loan-amount" value="10000" min="500" max="200000" step="500" />
+            <span class="symbol">€</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="interest-rate">Tipo de Interés Anual (TIN %)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="interest-rate" value="7.5" min="0.1" max="50" step="0.1" />
+            <span class="symbol">%</span>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="loan-term">Plazo</label>
+            <input type="number" id="loan-term" value="5" min="1" max="30" step="1" />
+          </div>
+          <div class="form-group">
+            <label for="term-unit">Unidad de Tiempo</label>
+            <select id="term-unit">
+              <option value="years" selected>Años</option>
+              <option value="months">Meses</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="opening-fee">Comisión de Apertura (%)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="opening-fee" value="1.0" min="0" max="10" step="0.25" />
+            <span class="symbol">%</span>
+          </div>
+        </div>
+
+        <button type="button" id="btn-calc" class="btn-calculate">⚡ Simular Préstamo</button>
+      </div>
+
+      <!-- RESULTADOS -->
+      <div class="card results-card">
+        <h2>Resumen del Préstamo</h2>
+
+        <div class="stat-highlight">
+          <div class="stat-main">
+            <span class="stat-label">Cuota Mensual Fija</span>
+            <span class="stat-val" id="res-monthly-fee">200,38 €</span>
+          </div>
+          <div class="stat-sub">
+            <span>Total Intereses: <strong id="res-total-interest">2.022,76 €</strong></span>
+            <span>Total a Devolver: <strong id="res-total-cost">12.122,76 €</strong></span>
+          </div>
+        </div>
+
+        <div class="breakdown-list">
+          <div class="breakdown-item">
+            <span>Capital Prestado</span>
+            <strong id="res-capital">10.000 €</strong>
+          </div>
+          <div class="breakdown-item">
+            <span>Comisión de Apertura</span>
+            <strong id="res-fee-amount">100,00 €</strong>
+          </div>
+          <div class="breakdown-item">
+            <span>Intereses Totales Acumulados</span>
+            <strong id="res-interest-amount" class="text-warning">2.022,76 €</strong>
+          </div>
+          <div class="breakdown-item net-total">
+            <span>Coste Total del Crédito</span>
+            <strong id="res-grand-total" class="text-primary">12.122,76 €</strong>
+          </div>
+        </div>
+
+        <div class="ratio-bar-wrap">
+          <div class="ratio-labels">
+            <span>Capital: <strong id="ratio-cap-pct">83%</strong></span>
+            <span>Intereses: <strong id="ratio-int-pct">17%</strong></span>
+          </div>
+          <div class="ratio-track">
+            <div class="ratio-fill-cap" id="bar-cap" style="width: 83%;"></div>
+            <div class="ratio-fill-int" id="bar-int" style="width: 17%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLA DE AMORTIZACIÓN -->
+    <section class="card table-card">
+      <div class="table-header-wrap">
+        <h2>Cuadro de Amortización (Primeras Cuotas)</h2>
+        <span class="table-badge">Sistema Francés</span>
+      </div>
+      <div class="table-responsive">
+        <table class="amort-table">
+          <thead>
+            <tr>
+              <th>Mes</th>
+              <th>Cuota Mensual</th>
+              <th>Interés Pagado</th>
+              <th>Capital Amortizado</th>
+              <th>Capital Pendiente</th>
+            </tr>
+          </thead>
+          <tbody id="amort-tbody">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="tool-faqs">
+      <h2>Preguntas Frecuentes sobre Préstamos</h2>
+      <div class="faq-accordion">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{faq.question}</span>
+              <span class="faq-arrow">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>{faq.answer}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <LegalDisclaimer />
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  function simulateLoan() {
+    const amount = Math.max(100, parseFloat(document.getElementById('loan-amount').value) || 0);
+    const tin = Math.max(0, parseFloat(document.getElementById('interest-rate').value) || 0) / 100;
+    const termVal = Math.max(1, parseInt(document.getElementById('loan-term').value, 10) || 1);
+    const termUnit = document.getElementById('term-unit').value;
+    const feeRate = Math.max(0, parseFloat(document.getElementById('opening-fee').value) || 0) / 100;
+
+    const totalMonths = termUnit === 'years' ? termVal * 12 : termVal;
+    const monthlyRate = tin / 12;
+
+    let monthlyFee = 0;
+    if (monthlyRate === 0) {
+      monthlyFee = amount / totalMonths;
+    } else {
+      monthlyFee = amount * (monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / (Math.pow(1 + monthlyRate, totalMonths) - 1);
+    }
+
+    const totalPayback = monthlyFee * totalMonths;
+    const totalInterest = Math.max(0, totalPayback - amount);
+    const openingFee = amount * feeRate;
+    const grandTotal = totalPayback + openingFee;
+
+    const capPct = grandTotal > 0 ? Math.round((amount / grandTotal) * 100) : 100;
+    const intPct = 100 - capPct;
+
+    document.getElementById('res-monthly-fee').textContent = monthlyFee.toFixed(2).replace('.', ',') + ' €';
+    document.getElementById('res-total-interest').textContent = Math.round(totalInterest).toLocaleString('es-ES') + ' €';
+    document.getElementById('res-total-cost').textContent = Math.round(grandTotal).toLocaleString('es-ES') + ' €';
+    document.getElementById('res-capital').textContent = Math.round(amount).toLocaleString('es-ES') + ' €';
+    document.getElementById('res-fee-amount').textContent = openingFee.toFixed(2).replace('.', ',') + ' €';
+    document.getElementById('res-interest-amount').textContent = totalInterest.toFixed(2).replace('.', ',') + ' €';
+    document.getElementById('res-grand-total').textContent = Math.round(grandTotal).toLocaleString('es-ES') + ' €';
+
+    document.getElementById('ratio-cap-pct').textContent = capPct + '%';
+    document.getElementById('ratio-int-pct').textContent = intPct + '%';
+    document.getElementById('bar-cap').style.width = capPct + '%';
+    document.getElementById('bar-int').style.width = intPct + '%';
+
+    // Generate amortization table (first 12 months)
+    const tbody = document.getElementById('amort-tbody');
+    tbody.innerHTML = '';
+    let remaining = amount;
+    const previewMonths = Math.min(totalMonths, 12);
+
+    for (let m = 1; m <= previewMonths; m++) {
+      const interestMonth = remaining * monthlyRate;
+      const capitalMonth = monthlyFee - interestMonth;
+      remaining = Math.max(0, remaining - capitalMonth);
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>Mes ${m}</strong></td>
+        <td>${monthlyFee.toFixed(2).replace('.', ',')} €</td>
+        <td class="text-warning">${interestMonth.toFixed(2).replace('.', ',')} €</td>
+        <td class="text-success">${capitalMonth.toFixed(2).replace('.', ',')} €</td>
+        <td>${Math.round(remaining).toLocaleString('es-ES')} €</td>
+      `;
+      tbody.appendChild(tr);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    simulateLoan();
+    const btn = document.getElementById('btn-calc');
+    if (btn) btn.addEventListener('click', simulateLoan);
+
+    const inputs = ['loan-amount', 'interest-rate', 'loan-term', 'term-unit', 'opening-fee'];
+    inputs.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', simulateLoan);
+    });
+  });
+</script>
+
+<style>
+  .tool-page { padding-bottom: 4rem; }
+  .breadcrumb { display: flex; gap: 0.5rem; color: var(--text-muted); font-size: 0.85rem; margin: 1.5rem 0; flex-wrap: wrap; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary); }
+
+  .tool-header { text-align: center; max-width: 800px; margin: 0 auto 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(99, 102, 241, 0.12); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 50px; font-size: 0.82rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; color: var(--text); margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+  .tool-subtitle { font-size: 1.05rem; color: var(--text-muted); line-height: 1.6; }
+
+  .calc-layout-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; margin-bottom: 2.5rem; }
+  .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; }
+  .card h2 { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; }
+
+  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+  .input-with-symbol { position: relative; display: flex; align-items: center; }
+  .input-with-symbol input, select, .form-row-2 input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-with-symbol input:focus, select:focus, .form-row-2 input:focus { border-color: var(--primary); }
+  .input-with-symbol .symbol { position: absolute; right: 1rem; color: var(--text-muted); font-size: 0.9rem; pointer-events: none; }
+
+  .btn-calculate {
+    width: 100%;
+    padding: 0.85rem;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+
+  .stat-highlight {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .stat-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.25rem; }
+  .stat-val { font-size: 2.5rem; font-weight: 800; color: var(--primary); display: block; line-height: 1.1; margin-bottom: 0.75rem; }
+  .stat-sub { display: flex; justify-content: space-around; font-size: 0.9rem; color: var(--text-muted); border-top: 1px dashed rgba(99, 102, 241, 0.25); padding-top: 0.75rem; }
+  .stat-sub strong { color: var(--text); }
+
+  .breakdown-list { margin-bottom: 1.5rem; }
+  .breakdown-item { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border); font-size: 0.95rem; color: var(--text-muted); }
+  .breakdown-item strong { color: var(--text); }
+  .text-warning { color: #fbbf24 !important; }
+  .text-success { color: #34d399 !important; }
+  .text-primary { color: var(--primary) !important; font-size: 1.15rem !important; }
+  .net-total { border-top: 2px solid var(--border); padding-top: 1rem; font-weight: 700; }
+
+  .ratio-bar-wrap { margin-top: 1.5rem; }
+  .ratio-labels { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.35rem; }
+  .ratio-labels strong { color: var(--text); }
+  .ratio-track { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--border); }
+  .ratio-fill-cap { background: var(--primary); }
+  .ratio-fill-int { background: #fbbf24; }
+
+  .table-card { margin-bottom: 3.5rem; }
+  .table-header-wrap { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+  .table-badge { font-size: 0.8rem; font-weight: 700; color: var(--primary); background: rgba(99, 102, 241, 0.12); padding: 0.25rem 0.75rem; border-radius: 50px; }
+  .table-responsive { overflow-x: auto; }
+  .amort-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+  .amort-table th, .amort-table td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border); }
+  .amort-table th { background: rgba(255, 255, 255, 0.02); font-weight: 700; color: var(--text); }
+
+  .tool-faqs { margin-top: 3.5rem; margin-bottom: 3rem; }
+  .tool-faqs h2 { font-size: 1.6rem; font-weight: 800; color: var(--text); margin-bottom: 1.5rem; text-align: center; }
+  .faq-accordion { max-width: 850px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .faq-question { padding: 1rem 1.25rem; font-weight: 600; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; }
+  .faq-question::-webkit-details-marker { display: none; }
+  .faq-arrow { font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s; }
+  .faq-item[open] .faq-arrow { transform: rotate(180deg); color: var(--primary); }
+  .faq-answer { padding: 0 1.25rem 1.25rem; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+
+  @media (max-width: 850px) {
+    .calc-layout-grid { grid-template-columns: 1fr; }
+  }
+</style>

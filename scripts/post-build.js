@@ -64,7 +64,7 @@ if (sourceXml && sourceXml.includes('<urlset')) {
           return match.replace('</loc>', `</loc><lastmod>${realDate}</lastmod>`);
         }
       }
-    } else if (url === 'https://guiatecnes.com/' || url.includes('/herramientas/')) {
+    } else if (url === 'https://guiatecnes.com/' || url.includes('/herramientas/') || url.endsWith('/blog/') || url.endsWith('/categoria/')) {
       const recentDate = new Date().toISOString();
       if (inner.includes('<lastmod>')) {
         return match.replace(/<lastmod>.*?<\/lastmod>/, `<lastmod>${recentDate}</lastmod>`);
