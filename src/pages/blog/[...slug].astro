@@ -75,6 +75,39 @@ if (post.body) {
 function getRelevantTool(title: string, tags: string[]) {
   const text = (title + ' ' + tags.join(' ')).toLowerCase();
 
+  if (text.includes('contraseña') || text.includes('password') || text.includes('clave') || text.includes('seguridad') || text.includes('virus') || text.includes('intervenido') || text.includes('hacker') || text.includes('privacidad')) {
+    return {
+      title: 'Comprobador de Seguridad y Entropía de Contraseñas',
+      desc: 'Comprueba la robustez de tus claves, calcula su entropía matemática y descubre cuánto tardaría un ordenador en descifrarla. 100% privado.',
+      btn: 'Auditar Mi Contraseña Gratis',
+      url: '/herramientas/comprobador-seguridad-contrasenas/',
+      icon: '🔒',
+      badge: 'Ciberseguridad 100% Local'
+    };
+  }
+
+  if (text.includes('prestamo') || text.includes('préstamo') || text.includes('credito') || text.includes('crédito') || text.includes('banco') || text.includes('interes') || text.includes('amortizacion') || text.includes('deuda')) {
+    return {
+      title: 'Simulador de Préstamos Personales y Créditos',
+      desc: 'Calcula tu cuota mensual fija, intereses acumulados y el cuadro de amortización completo con el sistema bancario francés.',
+      btn: 'Simular Cuota Mensual',
+      url: '/herramientas/simulador-prestamos-personales/',
+      icon: '💶',
+      badge: 'Finanzas & Banca'
+    };
+  }
+
+  if (text.includes('irpf') || text.includes('tramos') || text.includes('retención') || text.includes('retencion') || text.includes('hacienda') || text.includes('tributar')) {
+    return {
+      title: 'Calculadora de IRPF y Tramos Oficiales 2026',
+      desc: 'Calcula tu tipo de retención exacto, cuánto pagarás a Hacienda y visualiza el desglose en cada tramo progresivo del IRPF.',
+      btn: 'Calcular Retención de IRPF',
+      url: '/herramientas/calculadora-irpf-retenciones/',
+      icon: '⚖️',
+      badge: 'Fiscal España 2026'
+    };
+  }
+
   if (text.includes('divisa') || text.includes('dolar') || text.includes('euro') || text.includes('peso') || text.includes('cripto') || text.includes('bitcoin') || text.includes('moneda')) {
     return {
       title: 'Conversor de Divisas y Criptomonedas en Vivo',

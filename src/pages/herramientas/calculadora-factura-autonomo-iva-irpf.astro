@@ -1,0 +1,291 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas/' },
+  { name: 'Calculadora de Factura Autónomo IVA e IRPF', url: '/herramientas/calculadora-factura-autonomo-iva-irpf/' }
+];
+
+const faqs = [
+  {
+    question: '¿Cuándo se debe aplicar retención de IRPF en una factura?',
+    answer: 'Solo debes incluir retención de IRPF cuando tu cliente es otra empresa o un profesional autónomo con sede en España. Si tu cliente es un particular o una empresa extranjera (intracomunitaria o extracomunitaria), la factura se emite con 0% de retención de IRPF.'
+  },
+  {
+    question: '¿Qué porcentaje de IRPF corresponde a nuevos autónomos?',
+    answer: 'Los autónomos durante el año de alta y los dos años naturales siguientes pueden aplicar un tipo reducido de IRPF del 7%, siempre que no hayan ejercido actividad económica en los 12 meses anteriores. El tipo general es del 15%.'
+  },
+  {
+    question: '¿El IVA cobrado en las facturas es dinero del autónomo?',
+    answer: 'No. El IVA que cobras al cliente es un impuesto indirecto que recaudas en nombre de la Agencia Tributaria. Al final de cada trimestre natural, deberás liquidar la diferencia entre el IVA repercutido y el IVA soportado mediante el Modelo 303.'
+  },
+  {
+    question: '¿Cómo se calcula el total a pagar de una factura?',
+    answer: 'La fórmula legal en España es: Total Factura = Base Imponible + Cuota de IVA (según el tipo) - Retención de IRPF (si procede). El IRPF se resta porque el cliente se lo ingresará directamente a Hacienda en tu nombre mediante el Modelo 111.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Factura Autónomo 2026 | IVA e IRPF España"
+  description="Calcula el desglose exacto de tus facturas de autónomo en España: base imponible, 21% de IVA y 15% o 7% de IRPF. Simulador fiscal con previsión para Modelos 303 y 130."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas/">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de Factura Autónomo</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">💼 Fiscalidad Autónomos España 2026</div>
+      <h1>Calculadora de Facturas de Autónomo (IVA e IRPF)</h1>
+      <p class="tool-subtitle">
+        Calcula el total a cobrar en tus facturas profesionales, la cuota de IVA a reservar para Hacienda y la retención exacta de IRPF.
+      </p>
+    </header>
+
+    <div class="calc-layout-grid">
+      <!-- FORMULARIO -->
+      <div class="card form-card">
+        <h2>Parámetros de la Factura</h2>
+
+        <div class="form-group">
+          <label for="base-amount">Base Imponible (Precio antes de impuestos)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="base-amount" value="1500" min="1" step="50" />
+            <span class="symbol">€</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="iva-rate">Tipo de IVA Aplicable</label>
+          <select id="iva-rate">
+            <option value="21" selected>21% - Tipo General (servicios, tecnología, consultoría)</option>
+            <option value="10">10% - Tipo Reducido (hostelería, transportes)</option>
+            <option value="4">4% - Tipo Superreducido (libros, alimentos básicos)</option>
+            <option value="0">0% - Exento (enseñanza, clientes UE/Exportación)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="irpf-rate">Retención de IRPF</label>
+          <select id="irpf-rate">
+            <option value="15" selected>15% - Tipo General (a empresas o profesionales)</option>
+            <option value="7">7% - Nuevos Autónomos (año de alta + 2 siguientes)</option>
+            <option value="0">0% - Sin retención (factura a particulares o clientes extranjeros)</option>
+          </select>
+        </div>
+
+        <button type="button" id="btn-calc" class="btn-calculate">⚡ Recalcular Factura</button>
+      </div>
+
+      <!-- RESULTADOS -->
+      <div class="card results-card">
+        <h2>Desglose Oficial de la Factura</h2>
+
+        <div class="stat-highlight">
+          <div class="stat-main">
+            <span class="stat-label">Total a Cobrar al Cliente</span>
+            <span class="stat-val" id="res-invoice-total">1.590,00 €</span>
+          </div>
+          <div class="stat-sub">
+            <span>Dinero Real en Bolsillo: <strong id="res-real-income">1.275,00 €</strong></span>
+            <span>Reserva para Hacienda: <strong id="res-reserve-tax">315,00 €</strong></span>
+          </div>
+        </div>
+
+        <div class="breakdown-list">
+          <div class="breakdown-item">
+            <span>Base Imponible</span>
+            <strong id="res-base">1.500,00 €</strong>
+          </div>
+          <div class="breakdown-item">
+            <span>(+) Cuota de IVA (<span id="lbl-iva-rate">21</span>%)</span>
+            <strong id="res-iva-amount" class="text-warning">+315,00 €</strong>
+          </div>
+          <div class="breakdown-item">
+            <span>(-) Retención IRPF (<span id="lbl-irpf-rate">15</span>%)</span>
+            <strong id="res-irpf-amount" class="text-danger">-225,00 €</strong>
+          </div>
+          <div class="breakdown-item net-total">
+            <span>Total Factura (Total Líquido)</span>
+            <strong id="res-grand-total" class="text-primary">1.590,00 €</strong>
+          </div>
+        </div>
+
+        <div class="fiscal-alert-box">
+          <h4>📌 ¿Qué hacer con este dinero en el trimestre?</h4>
+          <ul>
+            <li><strong>Modelo 303 (IVA):</strong> Deberás ingresar a Hacienda los <strong id="res-tax-iva">315,00 €</strong> de IVA (restando el IVA que hayas pagado en tus compras deducibles).</li>
+            <li><strong>Modelo 130 / Renta (IRPF):</strong> Tu cliente pagará por ti a Hacienda los <strong id="res-tax-irpf">225,00 €</strong> retenidos, figurando como pago a cuenta en tu Declaración de la Renta.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <section class="tool-faqs">
+      <h2>Preguntas Frecuentes sobre Facturación de Autónomos</h2>
+      <div class="faq-accordion">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{faq.question}</span>
+              <span class="faq-arrow">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>{faq.answer}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <LegalDisclaimer />
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  function computeInvoice() {
+    const base = Math.max(0, parseFloat(document.getElementById('base-amount').value) || 0);
+    const ivaRate = parseFloat(document.getElementById('iva-rate').value) || 0;
+    const irpfRate = parseFloat(document.getElementById('irpf-rate').value) || 0;
+
+    const ivaAmount = base * (ivaRate / 100);
+    const irpfAmount = base * (irpfRate / 100);
+    const totalInvoice = base + ivaAmount - irpfAmount;
+    const realPocket = base - irpfAmount; // Real income after IRPF prepayment
+
+    document.getElementById('res-invoice-total').textContent = totalInvoice.toFixed(2).replace('.', ',') + ' €';
+    document.getElementById('res-real-income').textContent = realPocket.toFixed(2).replace('.', ',') + ' €';
+    document.getElementById('res-reserve-tax').textContent = ivaAmount.toFixed(2).replace('.', ',') + ' €';
+
+    document.getElementById('res-base').textContent = base.toFixed(2).replace('.', ',') + ' €';
+    document.getElementById('lbl-iva-rate').textContent = ivaRate;
+    document.getElementById('res-iva-amount').textContent = '+' + ivaAmount.toFixed(2).replace('.', ',') + ' €';
+    document.getElementById('lbl-irpf-rate').textContent = irpfRate;
+    document.getElementById('res-irpf-amount').textContent = '-' + irpfAmount.toFixed(2).replace('.', ',') + ' €';
+    document.getElementById('res-grand-total').textContent = totalInvoice.toFixed(2).replace('.', ',') + ' €';
+
+    document.getElementById('res-tax-iva').textContent = ivaAmount.toFixed(2).replace('.', ',') + ' €';
+    document.getElementById('res-tax-irpf').textContent = irpfAmount.toFixed(2).replace('.', ',') + ' €';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    computeInvoice();
+    const btn = document.getElementById('btn-calc');
+    if (btn) btn.addEventListener('click', computeInvoice);
+
+    ['base-amount', 'iva-rate', 'irpf-rate'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', computeInvoice);
+    });
+  });
+</script>
+
+<style>
+  .tool-page { padding-bottom: 4rem; }
+  .breadcrumb { display: flex; gap: 0.5rem; color: var(--text-muted); font-size: 0.85rem; margin: 1.5rem 0; flex-wrap: wrap; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary); }
+
+  .tool-header { text-align: center; max-width: 800px; margin: 0 auto 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(99, 102, 241, 0.12); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 50px; font-size: 0.82rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; color: var(--text); margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+  .tool-subtitle { font-size: 1.05rem; color: var(--text-muted); line-height: 1.6; }
+
+  .calc-layout-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; margin-bottom: 3.5rem; }
+  .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; }
+  .card h2 { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; }
+
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+  .input-with-symbol { position: relative; display: flex; align-items: center; }
+  .input-with-symbol input, select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-with-symbol input:focus, select:focus { border-color: var(--primary); }
+  .input-with-symbol .symbol { position: absolute; right: 1rem; color: var(--text-muted); font-size: 0.9rem; pointer-events: none; }
+
+  .btn-calculate {
+    width: 100%;
+    padding: 0.85rem;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+
+  .stat-highlight {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .stat-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.25rem; }
+  .stat-val { font-size: 2.3rem; font-weight: 800; color: var(--primary); display: block; line-height: 1.1; margin-bottom: 0.75rem; }
+  .stat-sub { display: flex; justify-content: space-around; font-size: 0.88rem; color: var(--text-muted); border-top: 1px dashed rgba(99, 102, 241, 0.25); padding-top: 0.75rem; }
+  .stat-sub strong { color: var(--text); }
+
+  .breakdown-list { margin-bottom: 1.5rem; }
+  .breakdown-item { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border); font-size: 0.95rem; color: var(--text-muted); }
+  .breakdown-item strong { color: var(--text); }
+  .text-warning { color: #fbbf24 !important; }
+  .text-danger { color: #f87171 !important; }
+  .text-primary { color: var(--primary) !important; font-size: 1.15rem !important; }
+  .net-total { border-top: 2px solid var(--border); padding-top: 1rem; font-weight: 700; }
+
+  .fiscal-alert-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.1rem 1.25rem;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .fiscal-alert-box h4 { color: var(--text); margin-bottom: 0.5rem; font-size: 0.95rem; }
+  .fiscal-alert-box ul { padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .tool-faqs { margin-top: 3.5rem; margin-bottom: 3rem; }
+  .tool-faqs h2 { font-size: 1.6rem; font-weight: 800; color: var(--text); margin-bottom: 1.5rem; text-align: center; }
+  .faq-accordion { max-width: 850px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .faq-question { padding: 1rem 1.25rem; font-weight: 600; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; }
+  .faq-question::-webkit-details-marker { display: none; }
+  .faq-arrow { font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s; }
+  .faq-item[open] .faq-arrow { transform: rotate(180deg); color: var(--primary); }
+  .faq-answer { padding: 0 1.25rem 1.25rem; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+
+  @media (max-width: 850px) {
+    .calc-layout-grid { grid-template-columns: 1fr; }
+    .stat-sub { flex-direction: column; gap: 0.5rem; align-items: center; }
+  }
+</style>

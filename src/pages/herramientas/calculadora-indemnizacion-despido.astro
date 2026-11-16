@@ -1,0 +1,327 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas/' },
+  { name: 'Calculadora de Indemnización por Despido', url: '/herramientas/calculadora-indemnizacion-despido/' }
+];
+
+const faqs = [
+  {
+    question: '¿Cuántos días de indemnización corresponden por despido improcedente?',
+    answer: 'Desde la reforma laboral del 12 de febrero de 2012, el despido improcedente se indemniza con 33 días de salario por año trabajado, prorrateándose por meses los períodos inferiores a un año, hasta un límite máximo de 24 mensualidades (720 días).'
+  },
+  {
+    question: '¿Qué ocurre con la antigüedad anterior a febrero de 2012?',
+    answer: 'Si tu contrato se inició antes del 12/02/2012, se aplica un cálculo mixto: 45 días por año trabajado por el período anterior (con tope de 42 mensualidades) y 33 días por año por el tiempo posterior a esa fecha.'
+  },
+  {
+    question: '¿Cuántos días corresponden por despido objetivo o causas económicas?',
+    answer: 'El despido por causas objetivas (económicas, organizativas o de producción) da derecho a una indemnización obligatoria de 20 días de salario por año trabajado, con un tope máximo de 12 mensualidades (360 días).'
+  },
+  {
+    question: '¿La indemnización por despido tributa en el IRPF?',
+    answer: 'No. La indemnización por despido legalmente reconocida en el Estatuto de los Trabajadores o acordada en conciliación judicial está 100% exenta de tributación en el IRPF hasta un límite de 180.000 euros.'
+  }
+];
+---
+
+<BaseLayout
+  title="Calculadora de Indemnización por Despido 2026 | Improcedente y Objetivo"
+  description="Calcula tu indemnización exacta por despido improcedente (33 días) u objetivo (20 días) en España. Simula el salario diario, antigüedad y límites máximos legales."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas/">Herramientas</a>
+      <span>›</span>
+      <span>Calculadora de Indemnización por Despido</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">⚖️ Legislación Laboral España 2026</div>
+      <h1>Calculadora de Indemnización por Despido</h1>
+      <p class="tool-subtitle">
+        Descubre la cuantía legal exacta que te corresponde cobrar según tu salario, fecha de contratación y tipo de despido laboral.
+      </p>
+    </header>
+
+    <div class="calc-layout-grid">
+      <!-- FORMULARIO -->
+      <div class="card form-card">
+        <h2>Tus Datos Laborales</h2>
+
+        <div class="form-group">
+          <label for="annual-salary">Salario Bruto Anual (€/año con pagas extras)</label>
+          <div class="input-with-symbol">
+            <input type="number" id="annual-salary" value="26000" min="1000" step="500" />
+            <span class="symbol">€</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="dismissal-type">Tipo de Despido</label>
+          <select id="dismissal-type">
+            <option value="improcedente" selected>Despido Improcedente (33 días/año - máx. 24 mensualidades)</option>
+            <option value="objetivo">Despido Objetivo / Causas Económicas (20 días/año - máx. 12 mensualidades)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="start-date">Fecha de Inicio del Contrato</label>
+          <input type="date" id="start-date" value="2020-03-01" />
+        </div>
+
+        <div class="form-group">
+          <label for="end-date">Fecha de Despido / Extinción</label>
+          <input type="date" id="end-date" value="2026-11-15" />
+        </div>
+
+        <button type="button" id="btn-calc" class="btn-calculate">⚡ Calcular Indemnización</button>
+      </div>
+
+      <!-- RESULTADOS -->
+      <div class="card results-card">
+        <h2>Liquidación Estimada</h2>
+
+        <div class="stat-highlight">
+          <div class="stat-main">
+            <span class="stat-label">Indemnización Legal Neta (Exenta IRPF)</span>
+            <span class="stat-val" id="res-compensation">15.617,53 €</span>
+          </div>
+          <div class="stat-sub">
+            <span>Salario Diario: <strong id="res-daily-wage">71,23 €/día</strong></span>
+            <span>Antigüedad: <strong id="res-seniority">6 años y 9 meses</strong></span>
+          </div>
+        </div>
+
+        <div class="breakdown-list">
+          <div class="breakdown-item">
+            <span>Días Totales de Indemnización</span>
+            <strong id="res-total-days">219,2 días</strong>
+          </div>
+          <div class="breakdown-item">
+            <span>Límite Legal Máximo (Tope)</span>
+            <strong id="res-cap-limit">52.000,00 € (24 mensualidades)</strong>
+          </div>
+          <div class="breakdown-item">
+            <span>Tributación IRPF (Hasta 180.000 €)</span>
+            <strong class="text-success">0,00 € (100% Exenta)</strong>
+          </div>
+          <div class="breakdown-item net-total">
+            <span>Total a Percibir por Despido</span>
+            <strong id="res-grand-total" class="text-primary">15.617,53 €</strong>
+          </div>
+        </div>
+
+        <div class="legal-note-box">
+          <h4>📌 Nota sobre el Finiquito:</h4>
+          <p>
+            A esta cantidad de indemnización deberás añadir en tu finiquito los días trabajados del mes en curso, las vacaciones generadas no disfrutadas y la parte proporcional de las pagas extras devengadas.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <section class="tool-faqs">
+      <h2>Preguntas Frecuentes sobre el Despido en España</h2>
+      <div class="faq-accordion">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span>{faq.question}</span>
+              <span class="faq-arrow">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>{faq.answer}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <LegalDisclaimer />
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  function computeDismissal() {
+    const salary = Math.max(0, parseFloat(document.getElementById('annual-salary').value) || 0);
+    const type = document.getElementById('dismissal-type').value;
+    const sDateVal = document.getElementById('start-date').value;
+    const eDateVal = document.getElementById('end-date').value;
+
+    if (!sDateVal || !eDateVal) return;
+    const start = new Date(sDateVal);
+    const end = new Date(eDateVal);
+    if (end < start) return;
+
+    // Daily wage
+    const dailyWage = salary / 365;
+
+    // Compute months of seniority (rounded by month as required by Spanish labor law)
+    let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+    if (end.getDate() > start.getDate()) {
+      months += 1; // Any fraction of a month counts as a full month
+    }
+    months = Math.max(1, months);
+
+    const years = months / 12;
+    const yearsDisplay = Math.floor(months / 12);
+    const monthsDisplay = months % 12;
+
+    let daysPerYear = type === 'improcedente' ? 33 : 20;
+    let maxMonths = type === 'improcedente' ? 24 : 12;
+
+    // Reform check (12 Feb 2012)
+    const reformDate = new Date('2012-02-12');
+    let totalCompensation = 0;
+    let totalDays = 0;
+
+    if (type === 'improcedente' && start < reformDate) {
+      // Mixed calculation
+      const preMonths = Math.max(0, (reformDate.getFullYear() - start.getFullYear()) * 12 + (reformDate.getMonth() - start.getMonth()));
+      const postMonths = Math.max(0, months - preMonths);
+
+      const daysPre = (preMonths / 12) * 45;
+      const daysPost = (postMonths / 12) * 33;
+      totalDays = daysPre + daysPost;
+      totalCompensation = totalDays * dailyWage;
+
+      // Cap at 42 months if pre days alone are high, or 24 months
+      const capPre = (salary / 12) * 42;
+      const capPost = (salary / 12) * 24;
+      const maxCap = Math.max(capPost, Math.min(capPre, (daysPre * dailyWage)));
+      totalCompensation = Math.min(totalCompensation, maxCap);
+    } else {
+      totalDays = (months / 12) * daysPerYear;
+      totalCompensation = totalDays * dailyWage;
+      const capAmount = (salary / 12) * maxMonths;
+      totalCompensation = Math.min(totalCompensation, capAmount);
+    }
+
+    const maxLegalCap = (salary / 12) * maxMonths;
+
+    document.getElementById('res-compensation').textContent = totalCompensation.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    document.getElementById('res-daily-wage').textContent = dailyWage.toFixed(2).replace('.', ',') + ' €/día';
+    document.getElementById('res-seniority').textContent = `${yearsDisplay} años y ${monthsDisplay} meses`;
+    document.getElementById('res-total-days').textContent = totalDays.toFixed(1).replace('.', ',') + ' días';
+    document.getElementById('res-cap-limit').textContent = maxLegalCap.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ` € (${maxMonths} meses)`;
+    document.getElementById('res-grand-total').textContent = totalCompensation.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    computeDismissal();
+    const btn = document.getElementById('btn-calc');
+    if (btn) btn.addEventListener('click', computeDismissal);
+
+    ['annual-salary', 'dismissal-type', 'start-date', 'end-date'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', computeDismissal);
+    });
+  });
+</script>
+
+<style>
+  .tool-page { padding-bottom: 4rem; }
+  .breadcrumb { display: flex; gap: 0.5rem; color: var(--text-muted); font-size: 0.85rem; margin: 1.5rem 0; flex-wrap: wrap; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary); }
+
+  .tool-header { text-align: center; max-width: 800px; margin: 0 auto 2.5rem; }
+  .tool-badge { display: inline-block; padding: 0.35rem 0.9rem; background: rgba(99, 102, 241, 0.12); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 50px; font-size: 0.82rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tool-header h1 { font-size: 2.2rem; font-weight: 800; color: var(--text); margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+  .tool-subtitle { font-size: 1.05rem; color: var(--text-muted); line-height: 1.6; }
+
+  .calc-layout-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; margin-bottom: 3.5rem; }
+  .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; }
+  .card h2 { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; }
+
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+  .input-with-symbol { position: relative; display: flex; align-items: center; }
+  .input-with-symbol input, select, input[type="date"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-with-symbol input:focus, select:focus, input[type="date"]:focus { border-color: var(--primary); }
+  .input-with-symbol .symbol { position: absolute; right: 1rem; color: var(--text-muted); font-size: 0.9rem; pointer-events: none; }
+
+  .btn-calculate {
+    width: 100%;
+    padding: 0.85rem;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+
+  .stat-highlight {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .stat-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.25rem; }
+  .stat-val { font-size: 2.3rem; font-weight: 800; color: var(--primary); display: block; line-height: 1.1; margin-bottom: 0.75rem; }
+  .stat-sub { display: flex; justify-content: space-around; font-size: 0.88rem; color: var(--text-muted); border-top: 1px dashed rgba(99, 102, 241, 0.25); padding-top: 0.75rem; }
+  .stat-sub strong { color: var(--text); }
+
+  .breakdown-list { margin-bottom: 1.5rem; }
+  .breakdown-item { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border); font-size: 0.95rem; color: var(--text-muted); }
+  .breakdown-item strong { color: var(--text); }
+  .text-success { color: #34d399 !important; }
+  .text-primary { color: var(--primary) !important; font-size: 1.15rem !important; }
+  .net-total { border-top: 2px solid var(--border); padding-top: 1rem; font-weight: 700; }
+
+  .legal-note-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.1rem 1.25rem;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .legal-note-box h4 { color: var(--text); margin-bottom: 0.35rem; font-size: 0.95rem; }
+
+  .tool-faqs { margin-top: 3.5rem; margin-bottom: 3rem; }
+  .tool-faqs h2 { font-size: 1.6rem; font-weight: 800; color: var(--text); margin-bottom: 1.5rem; text-align: center; }
+  .faq-accordion { max-width: 850px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .faq-question { padding: 1rem 1.25rem; font-weight: 600; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; }
+  .faq-question::-webkit-details-marker { display: none; }
+  .faq-arrow { font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s; }
+  .faq-item[open] .faq-arrow { transform: rotate(180deg); color: var(--primary); }
+  .faq-answer { padding: 0 1.25rem 1.25rem; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+
+  @media (max-width: 850px) {
+    .calc-layout-grid { grid-template-columns: 1fr; }
+    .stat-sub { flex-direction: column; gap: 0.5rem; align-items: center; }
+  }
+</style>

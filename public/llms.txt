@@ -16,6 +16,8 @@
 - [Finanzas Digitales y Trabajo](https://guiatecnes.com/categoria/finanzas/): Fiscalidad, autónomos, IRPF y herramientas de cálculo económico.
 
 ## Herramientas Más Populares
+- [Calculadora de Factura Autónomo (IVA e IRPF)](https://guiatecnes.com/herramientas/calculadora-factura-autonomo-iva-irpf/): Cálculo legal de facturas profesionales en España con 21% de IVA y 15% o 7% de IRPF.
+- [Calculadora de Indemnización por Despido](https://guiatecnes.com/herramientas/calculadora-indemnizacion-despido/): Simulación de liquidación por despido improcedente (33 días) u objetivo (20 días).
 - [Calculadora de Sueldo Neto](https://guiatecnes.com/herramientas/calculadora-sueldo-neto/): Cálculo de nóminas con IRPF y Seguridad Social en España.
 - [Calculadora de Hipoteca](https://guiatecnes.com/herramientas/calculadora-hipoteca/): Simulación de cuotas mensuales fija y variable con sistema francés.
 - [Calculadora de Finiquito e Indemnización](https://guiatecnes.com/herramientas/calculadora-finiquito-indemnizacion/): Liquidación por despido o fin de contrato.
