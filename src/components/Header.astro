@@ -32,20 +32,24 @@ const activeLang = currentPath.startsWith('/en/') || currentPath === '/en'
   ? 'en'
   : currentPath.startsWith('/pt/') || currentPath === '/pt'
     ? 'pt'
-    : 'es';
+    : currentPath.startsWith('/fr/') || currentPath === '/fr'
+      ? 'fr'
+      : currentPath.startsWith('/de/') || currentPath === '/de'
+        ? 'de'
+        : 'es';
 
 const langRouteGroups = [
-  { es: '/', en: '/en/', pt: '/pt/' },
-  { es: '/herramientas/', en: '/en/tools/', pt: '/pt/ferramentas/' },
-  { es: '/herramientas/laboratorio-pruebas-hardware/', en: '/en/tools/hardware-test-lab/', pt: '/pt/ferramentas/laboratorio-testes-hardware/' },
-  { es: '/herramientas/asistente-diagnostico-tecnico/', en: '/en/tools/tech-diagnostic-wizard/', pt: '/pt/ferramentas/assistente-diagnostico-tecnico/' },
-  { es: '/herramientas/auditoria-privacidad-huella-digital/', en: '/en/tools/privacy-fingerprint-audit/', pt: '/pt/ferramentas/auditoria-privacidade-impressao-digital/' },
-  { es: '/herramientas/comprobador-seguridad-contrasenas/', en: '/en/tools/password-security-checker/', pt: '/pt/ferramentas/verificador-seguranca-senhas/' },
+  { es: '/', en: '/en/', pt: '/pt/', fr: '/fr/', de: '/de/' },
+  { es: '/herramientas/', en: '/en/tools/', pt: '/pt/ferramentas/', fr: '/fr/outils/', de: '/de/werkzeuge/' },
+  { es: '/herramientas/laboratorio-pruebas-hardware/', en: '/en/tools/hardware-test-lab/', pt: '/pt/ferramentas/laboratorio-testes-hardware/', fr: '/fr/outils/laboratoire-test-materiel/', de: '/de/werkzeuge/hardware-test-labor/' },
+  { es: '/herramientas/asistente-diagnostico-tecnico/', en: '/en/tools/tech-diagnostic-wizard/', pt: '/pt/ferramentas/assistente-diagnostico-tecnico/', fr: '/fr/outils/assistant-diagnostic-technique/', de: '/de/werkzeuge/technik-diagnose-assistent/' },
+  { es: '/herramientas/auditoria-privacidad-huella-digital/', en: '/en/tools/privacy-fingerprint-audit/', pt: '/pt/ferramentas/auditoria-privacidade-impressao-digital/', fr: '/fr/outils/audit-confidentialite-empreinte/', de: '/de/werkzeuge/datenschutz-fingerprint-check/' },
+  { es: '/herramientas/comprobador-seguridad-contrasenas/', en: '/en/tools/password-security-checker/', pt: '/pt/ferramentas/verificador-seguranca-senhas/', fr: '/fr/outils/verificateur-securite-mot-de-passe/', de: '/de/werkzeuge/passwort-sicherheit-pruefer/' },
 ];
 
 const normalizedPath = currentPath.endsWith('/') ? currentPath : `${currentPath}/`;
-const matchedGroup = langRouteGroups.find(g => g.es === normalizedPath || g.en === normalizedPath || g.pt === normalizedPath);
-const langUrls = matchedGroup || { es: '/', en: '/en/', pt: '/pt/' };
+const matchedGroup = langRouteGroups.find(g => Object.values(g).includes(normalizedPath));
+const langUrls = matchedGroup || { es: '/', en: '/en/', pt: '/pt/', fr: '/fr/', de: '/de/' };
 
 const navMain = activeLang === 'en'
   ? [
@@ -63,9 +67,25 @@ const navMain = activeLang === 'en'
         { href: '/pt/ferramentas/assistente-diagnostico-tecnico/', label: '🩺 Diagnóstico' },
         { href: '/pt/ferramentas/auditoria-privacidade-impressao-digital/', label: '🛡️ Privacidade' },
       ]
-    : mainLinks;
+    : activeLang === 'fr'
+      ? [
+          { href: '/fr/', label: 'Accueil' },
+          { href: '/fr/outils/', label: '🧰 Outils' },
+          { href: '/fr/outils/laboratoire-test-materiel/', label: '🖥️ Lab Matériel' },
+          { href: '/fr/outils/assistant-diagnostic-technique/', label: '🩺 Diagnostic' },
+          { href: '/fr/outils/audit-confidentialite-empreinte/', label: '🛡️ Confidentialité' },
+        ]
+      : activeLang === 'de'
+        ? [
+            { href: '/de/', label: 'Start' },
+            { href: '/de/werkzeuge/', label: '🧰 Werkzeuge' },
+            { href: '/de/werkzeuge/hardware-test-labor/', label: '🖥️ Hardware-Lab' },
+            { href: '/de/werkzeuge/technik-diagnose-assistent/', label: '🩺 Diagnose' },
+            { href: '/de/werkzeuge/datenschutz-fingerprint-check/', label: '🛡️ Datenschutz' },
+          ]
+        : mainLinks;
 
-const homeHref = activeLang === 'en' ? '/en/' : activeLang === 'pt' ? '/pt/' : '/';
+const homeHref = activeLang === 'es' ? '/' : `/${activeLang}/`;
 ---
 
 <header class="site-header">
@@ -106,6 +126,8 @@ const homeHref = activeLang === 'en' ? '/en/' : activeLang === 'pt' ? '/pt/' : '
         <a href={langUrls.es} class={`lang-pill ${activeLang === 'es' ? 'active' : ''}`} hreflang="es" title="Español">ES</a>
         <a href={langUrls.en} class={`lang-pill ${activeLang === 'en' ? 'active' : ''}`} hreflang="en" title="English">EN</a>
         <a href={langUrls.pt} class={`lang-pill ${activeLang === 'pt' ? 'active' : ''}`} hreflang="pt" title="Português">PT</a>
+        <a href={langUrls.fr} class={`lang-pill ${activeLang === 'fr' ? 'active' : ''}`} hreflang="fr" title="Français">FR</a>
+        <a href={langUrls.de} class={`lang-pill ${activeLang === 'de' ? 'active' : ''}`} hreflang="de" title="Deutsch">DE</a>
       </div>
       <button class="search-trigger theme-toggle search-btn-styled" aria-label="Buscar artículos (Ctrl+K)">
         <span>🔍</span>
@@ -130,6 +152,8 @@ const homeHref = activeLang === 'en' ? '/en/' : activeLang === 'pt' ? '/pt/' : '
       <a href={langUrls.es} class={`lang-pill ${activeLang === 'es' ? 'active' : ''}`}>🇪🇸 ES</a>
       <a href={langUrls.en} class={`lang-pill ${activeLang === 'en' ? 'active' : ''}`}>🇺🇸 EN</a>
       <a href={langUrls.pt} class={`lang-pill ${activeLang === 'pt' ? 'active' : ''}`}>🇧🇷 PT</a>
+      <a href={langUrls.fr} class={`lang-pill ${activeLang === 'fr' ? 'active' : ''}`}>🇫🇷 FR</a>
+      <a href={langUrls.de} class={`lang-pill ${activeLang === 'de' ? 'active' : ''}`}>🇩🇪 DE</a>
     </div>
     {(activeLang === 'es' ? [...mainLinks, ...moreLinks] : navMain).map(link => (
       <a href={link.href} class="mobile-link">{link.label}</a>

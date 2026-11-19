@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const alternates = {
+  es: '/',
+  en: '/en/',
+  pt: '/pt/',
+  fr: '/fr/',
+  de: '/de/'
+};
+
+const tools = [
+  {
+    title: 'Laboratoire de Test Matériel (Écran, Clavier, Audio & Manette)',
+    desc: 'Détectez les pixels morts sur votre écran, testez l’anti-ghosting du clavier, vérifiez le son stéréo et mesurez le drift de votre manette PS5/Xbox.',
+    url: '/fr/outils/laboratoire-test-materiel/',
+    icon: '🖥️',
+    badge: 'Matériel & Gaming',
+  },
+  {
+    title: 'Assistant de Diagnostic Technique Interactif',
+    desc: 'PC qui s’éteint tout seul, Wi-Fi sans internet, téléphone qui ne charge plus ? Répondez à 3 questions pour obtenir un diagnostic précis.',
+    url: '/fr/outils/assistant-diagnostic-technique/',
+    icon: '🩺',
+    badge: 'Dépannage en 3 Étapes',
+  },
+  {
+    title: 'Audit de Confidentialité & Empreinte Numérique',
+    desc: 'Testez en direct les fuites d’adresse IP via WebRTC (même sous VPN), analysez votre Canvas Fingerprint et votre score de confidentialité.',
+    url: '/fr/outils/audit-confidentialite-empreinte/',
+    icon: '🛡️',
+    badge: 'Cybersécurité',
+  },
+  {
+    title: 'Vérificateur de Sécurité de Mot de Passe',
+    desc: 'Calculez l’entropie mathématique de votre mot de passe et sa résistance face aux attaques par force brute 100% localement.',
+    url: '/fr/outils/verificateur-securite-mot-de-passe/',
+    icon: '🔒',
+    badge: 'Sécurité Locale',
+  }
+];
+---
+
+<BaseLayout
+  title="Outils Web Gratuits, Diagnostic Matériel et Confidentialité"
+  description="GuíaTecnes en Français : Laboratoire de test matériel en ligne, assistant de diagnostic PC/Mobile/Wi-Fi, audit WebRTC et testeur de mots de passe."
+  lang="fr"
+  alternates={alternates}
+>
+  <Header slot="header" />
+
+  <main class="lang-home container">
+    <section class="hero-card">
+      <div class="hero-badge">⚡ Utilitaires Web Gratuits · 100% Locaux</div>
+      <h1>Outils Matériel, Diagnostic & Confidentialité</h1>
+      <p class="hero-sub">
+        Sans téléchargement, sans suivi publicitaire et exécution instantanée dans votre navigateur. Testez votre écran, clavier, manette et sécurité en quelques secondes.
+      </p>
+      <div class="hero-cta-row">
+        <a href="/fr/outils/" class="btn-primary">Voir Tous les Outils →</a>
+        <a href="/fr/outils/laboratoire-test-materiel/" class="btn-secondary">🖥️ Ouvrir le Lab Matériel</a>
+      </div>
+    </section>
+
+    <section class="tools-section">
+      <h2>Outils les Plus Populaires</h2>
+      <div class="tools-grid">
+        {tools.map(t => (
+          <a href={t.url} class="tool-card">
+            <div class="tc-top">
+              <span class="tc-icon">{t.icon}</span>
+              <span class="tc-badge">{t.badge}</span>
+            </div>
+            <h3>{t.title}</h3>
+            <p>{t.desc}</p>
+            <span class="tc-link">Ouvrir l'Outil →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .lang-home { padding: 2.5rem 1rem 4rem; max-width: 1040px; margin: 0 auto; }
+  .hero-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 3rem 2rem; text-align: center; margin-bottom: 2.5rem; }
+  .hero-badge { display: inline-block; background: rgba(99, 102, 241, 0.14); color: #818cf8; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem; }
+  .hero-card h1 { font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1.15; margin-bottom: 1rem; }
+  .hero-sub { color: var(--text-muted); max-width: 680px; margin: 0 auto 1.75rem; font-size: 1.08rem; line-height: 1.6; }
+  .hero-cta-row { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary { background: var(--primary); color: #fff; padding: 0.85rem 1.5rem; border-radius: 10px; font-weight: 700; text-decoration: none; }
+  .btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 0.85rem 1.5rem; border-radius: 10px; font-weight: 600; text-decoration: none; }
+  .tools-section h2 { font-size: 1.5rem; margin-bottom: 1.25rem; }
+  .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+  .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; text-decoration: none; color: var(--text); display: flex; flex-direction: column; gap: 0.75rem; }
+  .tool-card:hover { border-color: var(--primary); }
+  .tc-top { display: flex; justify-content: space-between; align-items: center; }
+  .tc-icon { font-size: 1.85rem; }
+  .tc-badge { font-size: 0.75rem; font-weight: 700; background: var(--bg); border: 1px solid var(--border); padding: 0.25rem 0.65rem; border-radius: 999px; color: var(--text-muted); }
+  .tool-card h3 { font-size: 1.15rem; margin: 0; }
+  .tool-card p { font-size: 0.92rem; color: var(--text-muted); line-height: 1.5; margin: 0; flex: 1; }
+  .tc-link { font-size: 0.9rem; font-weight: 700; color: var(--primary); }
+</style>

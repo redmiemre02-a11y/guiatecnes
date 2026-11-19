@@ -1,0 +1,242 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+const alternates = {
+  es: '/herramientas/laboratorio-pruebas-hardware/',
+  en: '/en/tools/hardware-test-lab/',
+  pt: '/pt/ferramentas/laboratorio-testes-hardware/',
+  fr: '/fr/outils/laboratoire-test-materiel/',
+  de: '/de/werkzeuge/hardware-test-labor/'
+};
+
+const breadcrumbs = [
+  { name: 'Start', url: '/de/' },
+  { name: 'Werkzeuge', url: '/de/werkzeuge/' },
+  { name: 'Hardware-Test-Labor', url: '/de/werkzeuge/hardware-test-labor/' }
+];
+
+const faqs = [
+  {
+    question: 'Wie erkenne ich Pixelfehler auf meinem Monitor?',
+    answer: 'Starten Sie den Vollbild-Test im Tab Monitor und wechseln Sie zwischen Schwarz, Weiß, Rot, Grün und Blau. Ein dauerhaft schwarzer Punkt deutet auf einen toten Pixel hin.'
+  },
+  {
+    question: 'Wie prüfe ich Stick-Drift bei meinem PS5- oder Xbox-Controller?',
+    answer: 'Verbinden Sie den Controller per USB oder Bluetooth und drücken Sie eine Taste. Ohne die Sticks zu berühren sollten die X/Y-Achsen nahe 0.00 bleiben.'
+  }
+];
+---
+
+<BaseLayout
+  title="Online Hardware-Test-Labor | Monitor, Tastatur, Audio & Controller Drift"
+  description="Kostenlose Browser-Tools zum Testen Ihrer Hardware: Monitor-Pixelfehler, Tastatur-Anti-Ghosting, Stereo-Audio-Test und Controller-Stick-Drift."
+  lang="de"
+  alternates={alternates}
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb"><a href="/de/">Start</a><span>›</span><a href="/de/werkzeuge/">Werkzeuge</a><span>›</span><span>Hardware-Test-Labor</span></div>
+    <header class="tool-header">
+      <div class="tool-badge">🖥️ Live Browser-Diagnose · Ohne Download</div>
+      <h1>Online Hardware-Test-Labor</h1>
+      <p class="tool-subtitle">Prüfen Sie Monitor-Pixelfehler, Tastatur-Ghosting, Stereo-Lautsprecher und Gamepad-Drift direkt im Browser.</p>
+    </header>
+
+    <div class="lab-container card">
+      <div class="lab-tabs">
+        <button type="button" class="lab-tab active" data-tab="monitor">🖥️ Monitor & Pixel</button>
+        <button type="button" class="lab-tab" data-tab="keyboard">⌨️ Tastatur & Ghosting</button>
+        <button type="button" class="lab-tab" data-tab="audio">🔊 Stereo-Audio & Hz</button>
+        <button type="button" class="lab-tab" data-tab="gamepad">🎮 Controller / Drift</button>
+      </div>
+
+      <section id="tab-monitor" class="lab-panel active">
+        <h2>Pixelfehler- & Backlight-Bleed-Test</h2>
+        <div class="color-swatches">
+          <button type="button" class="swatch-btn" data-color="#000000" style="background:#000000;color:#fff;">Schwarz</button>
+          <button type="button" class="swatch-btn" data-color="#ffffff" style="background:#ffffff;color:#000;">Weiß</button>
+          <button type="button" class="swatch-btn" data-color="#ff0000" style="background:#ff0000;color:#fff;">Rot</button>
+          <button type="button" class="swatch-btn" data-color="#00ff00" style="background:#00ff00;color:#000;">Grün</button>
+          <button type="button" class="swatch-btn" data-color="#0000ff" style="background:#0000ff;color:#fff;">Blau</button>
+        </div>
+        <button type="button" id="btn-start-pixel" class="btn-primary">⛶ Vollbild-Test starten</button>
+      </section>
+
+      <section id="tab-keyboard" class="lab-panel">
+        <h2>Tastatur- & Anti-Ghosting-Tester</h2>
+        <div class="kb-stats">
+          <div class="stat-box"><span class="stat-label">Letzte Taste</span><strong id="kb-last-key" class="stat-val">—</strong></div>
+          <div class="stat-box"><span class="stat-label">Code</span><strong id="kb-last-code" class="stat-val">—</strong></div>
+          <div class="stat-box"><span class="stat-label">Gleichzeitig</span><strong id="kb-simultaneous" class="stat-val highlight">0</strong></div>
+          <div class="stat-box"><span class="stat-label">Max. Gleichzeitig</span><strong id="kb-max-sim" class="stat-val">0</strong></div>
+        </div>
+        <div class="kb-active-list-wrap"><div id="kb-active-pills" class="kb-pills">Keine Taste gedrückt</div></div>
+        <div class="kb-history-wrap"><div class="history-header"><span>Verlauf (<span id="kb-unique-count">0</span>)</span><button type="button" id="btn-kb-reset" class="btn-sm">Löschen</button></div><div id="kb-history" class="kb-history-grid"></div></div>
+      </section>
+
+      <section id="tab-audio" class="lab-panel">
+        <h2>Stereo-Lautsprecher & Frequenzgenerator</h2>
+        <div class="audio-controls-grid">
+          <button type="button" class="audio-btn" id="btn-audio-left"><span>◀️ Linker Kanal (L)</span><small>440 Hz</small></button>
+          <button type="button" class="audio-btn" id="btn-audio-right"><span>Rechter Kanal (R) ▶️</span><small>440 Hz</small></button>
+          <button type="button" class="audio-btn" id="btn-audio-both"><span>🔊 Beide Kanäle</span><small>440 Hz</small></button>
+        </div>
+        <div class="freq-tester card-inner">
+          <div class="freq-top"><label for="freq-slider">Frequenz: <strong id="freq-display">165 Hz</strong></label><button type="button" id="btn-freq-toggle" class="btn-primary">▶ Ton abspielen</button></div>
+          <input type="range" id="freq-slider" min="20" max="16000" value="165" step="5" />
+        </div>
+      </section>
+
+      <section id="tab-gamepad" class="lab-panel">
+        <h2>Gamepad- & Analog-Stick-Drift-Test</h2>
+        <div id="gp-status" class="gp-status">⏳ Warte auf Controller... Verbinden und beliebige Taste drücken.</div>
+        <div id="gp-dashboard" class="gp-dashboard" style="display:none;">
+          <div class="sticks-grid">
+            <div class="stick-card"><h3>Linker Stick</h3><div class="stick-pad"><div id="dot-l" class="stick-dot"></div></div><div>X: <strong id="lx-val">0.00</strong> | Y: <strong id="ly-val">0.00</strong></div></div>
+            <div class="stick-card"><h3>Rechter Stick</h3><div class="stick-pad"><div id="dot-r" class="stick-dot"></div></div><div>X: <strong id="rx-val">0.00</strong> | Y: <strong id="ry-val">0.00</strong></div></div>
+          </div>
+          <div id="gp-buttons" class="gp-buttons-grid"></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="seo-guide card">
+      <h2>Häufige Fragen</h2>
+      <div class="faq-list">{faqs.map(f => (<details class="faq-item"><summary>{f.question}</summary><p>{f.answer}</p></details>))}</div>
+    </section>
+  </main>
+
+  <div id="pixel-overlay" class="pixel-overlay" style="display:none;"><div id="pixel-hint" class="pixel-hint">Klicken oder → für nächste Farbe · ESC zum Beenden</div></div>
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  (function() {
+    const tabs = document.querySelectorAll('.lab-tab'), panels = document.querySelectorAll('.lab-panel');
+    tabs.forEach(t => t.addEventListener('click', () => {
+      const target = t.getAttribute('data-tab');
+      tabs.forEach(x => x.classList.toggle('active', x === t));
+      panels.forEach(p => p.classList.toggle('active', p.id === `tab-${target}`));
+    }));
+    const colors = ['#000000', '#ffffff', '#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff'];
+    let colorIdx = 0; const overlay = document.getElementById('pixel-overlay'), hint = document.getElementById('pixel-hint');
+    function startPixelTest(c) {
+      colorIdx = Math.max(0, colors.indexOf(c)); overlay.style.backgroundColor = colors[colorIdx]; overlay.style.display = 'flex';
+      hint.style.opacity = '1'; setTimeout(() => { hint.style.opacity = '0'; }, 2600);
+      if (overlay.requestFullscreen) overlay.requestFullscreen().catch(() => {});
+    }
+    document.querySelectorAll('.swatch-btn').forEach(b => b.addEventListener('click', () => startPixelTest(b.getAttribute('data-color'))));
+    document.getElementById('btn-start-pixel').addEventListener('click', () => startPixelTest('#000000'));
+    overlay.addEventListener('click', () => { colorIdx = (colorIdx + 1) % colors.length; overlay.style.backgroundColor = colors[colorIdx]; });
+    document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) overlay.style.display = 'none'; });
+    document.addEventListener('keydown', (e) => {
+      if (overlay.style.display === 'flex') {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); colorIdx = (colorIdx + 1) % colors.length; overlay.style.backgroundColor = colors[colorIdx]; }
+        else if (e.key === 'Escape') { overlay.style.display = 'none'; if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); }
+      }
+    });
+    const activeKeys = new Set(), testedCodes = new Set(); let maxSim = 0;
+    function updateKbUI() {
+      document.getElementById('kb-simultaneous').textContent = activeKeys.size;
+      if (activeKeys.size > maxSim) { maxSim = activeKeys.size; document.getElementById('kb-max-sim').textContent = maxSim; }
+      document.getElementById('kb-active-pills').innerHTML = activeKeys.size === 0 ? 'Keine Taste gedrückt' : Array.from(activeKeys).map(c => `<span class="key-pill">${c}</span>`).join('');
+    }
+    window.addEventListener('keydown', (e) => {
+      if (!document.getElementById('tab-keyboard').classList.contains('active')) return;
+      if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.code)) e.preventDefault();
+      document.getElementById('kb-last-key').textContent = e.key === ' ' ? 'Leertaste' : e.key;
+      document.getElementById('kb-last-code').textContent = e.code;
+      activeKeys.add(e.code);
+      if (!testedCodes.has(e.code)) { testedCodes.add(e.code); document.getElementById('kb-unique-count').textContent = testedCodes.size; const b = document.createElement('span'); b.className = 'tested-key'; b.textContent = e.code; document.getElementById('kb-history').prepend(b); }
+      updateKbUI();
+    });
+    window.addEventListener('keyup', (e) => { activeKeys.delete(e.code); updateKbUI(); });
+    document.getElementById('btn-kb-reset').addEventListener('click', () => { activeKeys.clear(); testedCodes.clear(); maxSim = 0; document.getElementById('kb-max-sim').textContent = '0'; document.getElementById('kb-unique-count').textContent = '0'; document.getElementById('kb-history').innerHTML = ''; updateKbUI(); });
+    let audioCtx = null; function getCtx() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); return audioCtx; }
+    function playChime(pan) {
+      const ctx = getCtx(), osc = ctx.createOscillator(), g = ctx.createGain(), p = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
+      osc.type = 'sine'; osc.frequency.setValueAtTime(440, ctx.currentTime); g.gain.setValueAtTime(0.001, ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.35, ctx.currentTime + 0.05); g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.9);
+      if (p) { p.pan.setValueAtTime(pan, ctx.currentTime); osc.connect(g).connect(p).connect(ctx.destination); } else osc.connect(g).connect(ctx.destination);
+      osc.start(); osc.stop(ctx.currentTime + 0.95);
+    }
+    document.getElementById('btn-audio-left').addEventListener('click', () => playChime(-1));
+    document.getElementById('btn-audio-right').addEventListener('click', () => playChime(1));
+    document.getElementById('btn-audio-both').addEventListener('click', () => playChime(0));
+    let sweepOsc = null, sweepGain = null; const freqSlider = document.getElementById('freq-slider'), freqDisplay = document.getElementById('freq-display'), btnFreq = document.getElementById('btn-freq-toggle');
+    freqSlider.addEventListener('input', () => { freqDisplay.textContent = `${freqSlider.value} Hz`; if (sweepOsc && audioCtx) sweepOsc.frequency.setValueAtTime(Number(freqSlider.value), audioCtx.currentTime); });
+    btnFreq.addEventListener('click', () => {
+      if (sweepOsc) { sweepOsc.stop(); sweepOsc.disconnect(); sweepOsc = null; btnFreq.textContent = '▶ Ton abspielen'; }
+      else { const ctx = getCtx(); sweepOsc = ctx.createOscillator(); sweepGain = ctx.createGain(); sweepOsc.frequency.setValueAtTime(Number(freqSlider.value), ctx.currentTime); sweepGain.gain.setValueAtTime(0.2, ctx.currentTime); sweepOsc.connect(sweepGain).connect(ctx.destination); sweepOsc.start(); btnFreq.textContent = '⏹ Stopp'; }
+    });
+    let gpLoop = null;
+    function pollGamepads() {
+      const gps = navigator.getGamepads ? navigator.getGamepads() : [], gp = Array.from(gps).find(g => g && g.connected);
+      const st = document.getElementById('gp-status'), dash = document.getElementById('gp-dashboard');
+      if (!gp) { st.textContent = '⏳ Warte auf Controller... Verbinden und Taste drücken.'; dash.style.display = 'none'; }
+      else {
+        st.textContent = `✅ Verbunden: ${gp.id}`; dash.style.display = 'block';
+        const lx = gp.axes[0] || 0, ly = gp.axes[1] || 0, rx = gp.axes[2] || 0, ry = gp.axes[3] || 0;
+        document.getElementById('lx-val').textContent = lx.toFixed(2); document.getElementById('ly-val').textContent = ly.toFixed(2);
+        document.getElementById('rx-val').textContent = rx.toFixed(2); document.getElementById('ry-val').textContent = ry.toFixed(2);
+        document.getElementById('dot-l').style.transform = `translate(${lx * 38}px, ${ly * 38}px)`;
+        document.getElementById('dot-r').style.transform = `translate(${rx * 38}px, ${ry * 38}px)`;
+        document.getElementById('gp-buttons').innerHTML = gp.buttons.map((b, i) => `<div class="gp-btn ${b.pressed ? 'pressed' : ''}">B${i}</div>`).join('');
+      }
+      if (document.getElementById('tab-gamepad').classList.contains('active')) gpLoop = requestAnimationFrame(pollGamepads); else gpLoop = null;
+    }
+    tabs.forEach(t => t.addEventListener('click', () => { if (t.getAttribute('data-tab') === 'gamepad' && !gpLoop) pollGamepads(); }));
+  })();
+</script>
+
+<style>
+  .tool-page { padding: 2rem 1rem 4rem; max-width: 960px; margin: 0 auto; }
+  .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2rem; }
+  .tool-badge { display: inline-block; background: rgba(16, 185, 129, 0.14); color: #34d399; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.75rem; }
+  .lab-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+  .lab-tab { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); padding: 0.65rem 1.05rem; border-radius: 10px; font-weight: 600; cursor: pointer; }
+  .lab-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .lab-panel { display: none; }
+  .lab-panel.active { display: block; }
+  .color-swatches { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1.25rem 0; }
+  .swatch-btn { padding: 0.75rem 1.1rem; border-radius: 10px; border: 2px solid var(--border); font-weight: 600; cursor: pointer; }
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 0.75rem 1.35rem; border-radius: 10px; font-weight: 600; cursor: pointer; }
+  .btn-sm { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 0.3rem 0.75rem; border-radius: 6px; cursor: pointer; }
+  .kb-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.85rem; margin: 1.25rem 0; }
+  .stat-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem; text-align: center; }
+  .stat-label { display: block; font-size: 0.78rem; color: var(--text-muted); }
+  .stat-val { font-size: 1.25rem; font-family: monospace; }
+  .stat-val.highlight { color: #34d399; }
+  .kb-active-list-wrap, .kb-history-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; margin-bottom: 1rem; }
+  .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+  .kb-pills { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .key-pill { background: var(--primary); color: #fff; padding: 0.25rem 0.65rem; border-radius: 6px; font-family: monospace; font-weight: 700; }
+  .kb-history-grid { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tested-key { background: var(--surface); border: 1px solid var(--border); padding: 0.2rem 0.55rem; border-radius: 5px; font-family: monospace; font-size: 0.8rem; }
+  .audio-controls-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.85rem; margin: 1.25rem 0; }
+  .audio-btn { background: var(--bg); border: 1.5px solid var(--border); color: var(--text); border-radius: 12px; padding: 1rem; cursor: pointer; display: flex; flex-direction: column; gap: 0.3rem; text-align: left; }
+  .card-inner { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+  .freq-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; }
+  #freq-slider { width: 100%; accent-color: var(--primary); }
+  .gp-status { background: var(--bg); border: 1px solid var(--border); padding: 1rem; border-radius: 10px; font-weight: 600; margin-bottom: 1.25rem; }
+  .sticks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+  .stick-card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; text-align: center; }
+  .stick-pad { width: 100px; height: 100px; border-radius: 50%; border: 2px dashed var(--border); margin: 0 auto 0.75rem; display: flex; align-items: center; justify-content: center; }
+  .stick-dot { width: 18px; height: 18px; border-radius: 50%; background: var(--primary); }
+  .gp-buttons-grid { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .gp-btn { padding: 0.35rem 0.65rem; border: 1px solid var(--border); border-radius: 6px; font-family: monospace; background: var(--bg); }
+  .gp-btn.pressed { background: #10b981; color: #fff; border-color: #10b981; }
+  .pixel-overlay { position: fixed; inset: 0; z-index: 999999; cursor: pointer; align-items: flex-end; justify-content: center; padding-bottom: 2.5rem; }
+  .pixel-hint { background: rgba(0,0,0,0.75); color: #fff; padding: 0.65rem 1.25rem; border-radius: 999px; transition: opacity 0.6s ease; pointer-events: none; }
+  .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.95rem 1.1rem; }
+  .faq-item summary { font-weight: 600; cursor: pointer; }
+  .faq-item p { margin: 0.7rem 0 0; font-size: 0.93rem; color: var(--text-muted); }
+</style>

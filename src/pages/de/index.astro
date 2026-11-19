@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const alternates = {
+  es: '/',
+  en: '/en/',
+  pt: '/pt/',
+  fr: '/fr/',
+  de: '/de/'
+};
+
+const tools = [
+  {
+    title: 'Hardware-Test-Labor (Monitor, Tastatur, Audio & Gamepad)',
+    desc: 'Prüfen Sie Ihren Monitor auf Pixelfehler & Backlight-Bleeding, testen Sie Tastatur-Ghosting, Stereo-Kanäle und Gamepad-Stick-Drift.',
+    url: '/de/werkzeuge/hardware-test-labor/',
+    icon: '🖥️',
+    badge: 'Hardware & Gaming',
+  },
+  {
+    title: 'Interaktiver Technik-Diagnose-Assistent',
+    desc: 'PC geht einfach aus, WLAN ohne Internet oder Handy lädt nicht? Beantworten Sie 3 Fragen für eine sofortige Schritt-für-Schritt-Lösung.',
+    url: '/de/werkzeuge/technik-diagnose-assistent/',
+    icon: '🩺',
+    badge: 'Fehlerbehebung',
+  },
+  {
+    title: 'Datenschutz- & Browser-Fingerprint-Check',
+    desc: 'Erkennen Sie WebRTC-IP-Lecks trotz VPN, prüfen Sie Ihren Canvas-Fingerprint und ermitteln Sie Ihren Live-Datenschutz-Score.',
+    url: '/de/werkzeuge/datenschutz-fingerprint-check/',
+    icon: '🛡️',
+    badge: 'Cybersicherheit',
+  },
+  {
+    title: 'Passwort-Sicherheit & Entropie-Prüfer',
+    desc: 'Berechnen Sie die mathematische Bit-Entropie Ihres Passworts 100% lokal im Browser ohne Datenübertragung.',
+    url: '/de/werkzeuge/passwort-sicherheit-pruefer/',
+    icon: '🔒',
+    badge: 'Lokale Sicherheit',
+  }
+];
+---
+
+<BaseLayout
+  title="Kostenlose Web-Tools, Hardware-Diagnose & Datenschutz-Check"
+  description="GuíaTecnes auf Deutsch: Online-Hardware-Testlabor für Monitor, Tastatur & Controller, interaktiver Diagnose-Assistent, WebRTC-Leak-Test und Passwort-Prüfer."
+  lang="de"
+  alternates={alternates}
+>
+  <Header slot="header" />
+
+  <main class="lang-home container">
+    <section class="hero-card">
+      <div class="hero-badge">⚡ Kostenlose Web-Tools · 100% Lokal im Browser</div>
+      <h1>Hardware-Tests, Diagnose & Datenschutz-Tools</h1>
+      <p class="hero-sub">
+        Ohne Download, ohne Tracking und sofort im Browser ausführbar. Testen Sie Monitor, Tastatur, Controller, Netzwerk und Sicherheit in Sekunden.
+      </p>
+      <div class="hero-cta-row">
+        <a href="/de/werkzeuge/" class="btn-primary">Alle Werkzeuge ansehen →</a>
+        <a href="/de/werkzeuge/hardware-test-labor/" class="btn-secondary">🖥️ Hardware-Labor öffnen</a>
+      </div>
+    </section>
+
+    <section class="tools-section">
+      <h2>Beliebte Werkzeuge</h2>
+      <div class="tools-grid">
+        {tools.map(t => (
+          <a href={t.url} class="tool-card">
+            <div class="tc-top"><span class="tc-icon">{t.icon}</span><span class="tc-badge">{t.badge}</span></div>
+            <h3>{t.title}</h3>
+            <p>{t.desc}</p>
+            <span class="tc-link">Tool öffnen →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .lang-home { padding: 2.5rem 1rem 4rem; max-width: 1040px; margin: 0 auto; }
+  .hero-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 3rem 2rem; text-align: center; margin-bottom: 2.5rem; }
+  .hero-badge { display: inline-block; background: rgba(99, 102, 241, 0.14); color: #818cf8; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem; }
+  .hero-card h1 { font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1.15; margin-bottom: 1rem; }
+  .hero-sub { color: var(--text-muted); max-width: 680px; margin: 0 auto 1.75rem; font-size: 1.08rem; line-height: 1.6; }
+  .hero-cta-row { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary { background: var(--primary); color: #fff; padding: 0.85rem 1.5rem; border-radius: 10px; font-weight: 700; text-decoration: none; }
+  .btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 0.85rem 1.5rem; border-radius: 10px; font-weight: 600; text-decoration: none; }
+  .tools-section h2 { font-size: 1.5rem; margin-bottom: 1.25rem; }
+  .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+  .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; text-decoration: none; color: var(--text); display: flex; flex-direction: column; gap: 0.75rem; }
+  .tool-card:hover { border-color: var(--primary); }
+  .tc-top { display: flex; justify-content: space-between; align-items: center; }
+  .tc-icon { font-size: 1.85rem; }
+  .tc-badge { font-size: 0.75rem; font-weight: 700; background: var(--bg); border: 1px solid var(--border); padding: 0.25rem 0.65rem; border-radius: 999px; color: var(--text-muted); }
+  .tool-card h3 { font-size: 1.15rem; margin: 0; }
+  .tool-card p { font-size: 0.92rem; color: var(--text-muted); line-height: 1.5; margin: 0; flex: 1; }
+  .tc-link { font-size: 0.9rem; font-weight: 700; color: var(--primary); }
+</style>

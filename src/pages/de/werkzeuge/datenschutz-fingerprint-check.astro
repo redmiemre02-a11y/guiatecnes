@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+const alternates = {
+  es: '/herramientas/auditoria-privacidad-huella-digital/',
+  en: '/en/tools/privacy-fingerprint-audit/',
+  pt: '/pt/ferramentas/auditoria-privacidade-impressao-digital/',
+  fr: '/fr/outils/audit-confidentialite-empreinte/',
+  de: '/de/werkzeuge/datenschutz-fingerprint-check/'
+};
+
+const breadcrumbs = [
+  { name: 'Start', url: '/de/' },
+  { name: 'Werkzeuge', url: '/de/werkzeuge/' },
+  { name: 'Datenschutz-Check', url: '/de/werkzeuge/datenschutz-fingerprint-check/' }
+];
+---
+
+<BaseLayout
+  title="Datenschutz- & Browser-Fingerprint-Check | WebRTC IP-Leak Test"
+  description="Prüfen Sie in Echtzeit, welche Daten Ihr Browser preisgibt: WebRTC-IP-Leak trotz VPN, Canvas-Fingerprint, WebGL-GPU und Datenschutz-Score."
+  lang="de"
+  alternates={alternates}
+  breadcrumbs={breadcrumbs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb"><a href="/de/">Start</a><span>›</span><a href="/de/werkzeuge/">Werkzeuge</a><span>›</span><span>Datenschutz-Check</span></div>
+    <header class="tool-header">
+      <div class="tool-badge">🛡️ Cybersicherheit · 100% Lokal</div>
+      <h1>Datenschutz- & Fingerprint-Check</h1>
+      <p class="tool-subtitle">Finden Sie heraus, wie eindeutig Ihr Browser ohne Cookies durch Hardware-Metadaten und WebRTC verfolgt werden kann.</p>
+    </header>
+
+    <section class="audit-hero card">
+      <div class="score-circle" id="score-circle"><span class="score-num" id="privacy-score">--</span><span class="score-max">/ 100</span></div>
+      <div class="score-info">
+        <h2 id="score-title">Bereit für den Browser-Check</h2>
+        <p id="score-desc">Klicken Sie unten für den lokalen Test auf WebRTC-Leaks, Canvas-Fingerprint und WebGL.</p>
+        <button type="button" id="btn-run-audit" class="btn-primary">🔍 Jetzt Prüfung starten</button>
+      </div>
+    </section>
+
+    <section id="audit-results" class="audit-grid" style="display:none;">
+      <div class="audit-card card"><div class="card-head"><span>🌐</span><h3>WebRTC IP-Leak</h3><span class="status-pill" id="webrtc-pill">...</span></div><p class="card-val" id="webrtc-val">Prüfe...</p></div>
+      <div class="audit-card card"><div class="card-head"><span>🎨</span><h3>Canvas Fingerprint</h3><span class="status-pill" id="canvas-pill">...</span></div><p class="card-val mono" id="canvas-val">—</p></div>
+      <div class="audit-card card"><div class="card-head"><span>🎮</span><h3>Grafikkarte (WebGL)</h3><span class="status-pill" id="webgl-pill">...</span></div><p class="card-val mono" id="webgl-val">—</p></div>
+      <div class="audit-card card"><div class="card-head"><span>💻</span><h3>Hardware & System</h3><span class="status-pill warn">Metadaten</span></div><ul class="meta-list" id="hw-list"></ul></div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  (function() {
+    function djb2(s) { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h) + s.charCodeAt(i); return (h >>> 0).toString(16).toUpperCase().padStart(8, '0'); }
+    function getCanvas() { try { const c = document.createElement('canvas'); c.width = 240; c.height = 60; const ctx = c.getContext('2d'); ctx.textBaseline = 'top'; ctx.font = '14px Arial'; ctx.fillStyle = '#f60'; ctx.fillRect(10, 10, 80, 30); ctx.fillStyle = '#069'; ctx.fillText('GuiaTecnes_FP_2026!', 14, 16); return djb2(c.toDataURL()); } catch (e) { return 'BLOCKIERT'; } }
+    function getGL() { try { const gl = document.createElement('canvas').getContext('webgl'); if (!gl) return { exposed: false, renderer: 'Deaktiviert' }; const d = gl.getExtension('WEBGL_debug_renderer_info'); return d ? { exposed: true, renderer: gl.getParameter(d.UNMASKED_RENDERER_WEBGL) } : { exposed: false, renderer: 'Versteckt' }; } catch (e) { return { exposed: false, renderer: 'Blockiert' }; } }
+    function checkRTC(cb) {
+      const R = window.RTCPeerConnection || window.webkitRTCPeerConnection; if (!R) return cb({ status: 'safe', msg: 'WebRTC deaktiviert.' });
+      try {
+        const pc = new R({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] }), ips = new Set();
+        pc.createDataChannel(''); pc.createOffer().then(o => pc.setLocalDescription(o)).catch(() => {});
+        pc.onicecandidate = (ice) => { if (ice && ice.candidate && ice.candidate.candidate) { const m = ice.candidate.candidate.match(/([0-9]{1,3}(\.[0-9]{1,3}){3})/); if (m && m[1]) ips.add(m[1]); } };
+        setTimeout(() => { try { pc.close(); } catch (e) {} const l = Array.from(ips); cb(l.length === 0 ? { status: 'safe', msg: 'Keine sichtbaren IP-Leaks.' } : { status: 'leak', msg: `Erkannte IPs: ${l.join(', ')}` }); }, 1400);
+      } catch (e) { cb({ status: 'safe', msg: 'WebRTC eingeschränkt.' }); }
+    }
+    document.getElementById('btn-run-audit').addEventListener('click', () => {
+      const btn = document.getElementById('btn-run-audit'); btn.disabled = true; btn.textContent = '⏳ Prüfe...';
+      document.getElementById('audit-results').style.display = 'grid';
+      const fp = getCanvas(); document.getElementById('canvas-val').textContent = `Hash: #${fp}`;
+      const cp = document.getElementById('canvas-pill'); cp.textContent = fp === 'BLOCKIERT' ? 'Geschützt' : 'Trackbar'; cp.className = fp === 'BLOCKIERT' ? 'status-pill safe' : 'status-pill warn';
+      const gl = getGL(); document.getElementById('webgl-val').textContent = gl.renderer;
+      const gp = document.getElementById('webgl-pill'); gp.textContent = gl.exposed ? 'Sichtbar' : 'Versteckt'; gp.className = gl.exposed ? 'status-pill warn' : 'status-pill safe';
+      const cores = navigator.hardwareConcurrency || 'Versteckt';
+      document.getElementById('hw-list').innerHTML = `<li><strong>CPU-Kerne:</strong> ${cores}</li><li><strong>Bildschirm:</strong> ${window.screen.width} × ${window.screen.height}</li><li><strong>Zeitzone:</strong> ${Intl.DateTimeFormat().resolvedOptions().timeZone}</li>`;
+      checkRTC((res) => {
+        const rp = document.getElementById('webrtc-pill'); document.getElementById('webrtc-val').textContent = res.msg;
+        rp.textContent = res.status === 'safe' ? 'Sicher' : 'Leak'; rp.className = res.status === 'safe' ? 'status-pill safe' : 'status-pill danger';
+        let score = 100; if (res.status === 'leak') score -= 30; if (fp !== 'BLOCKIERT') score -= 20; if (gl.exposed) score -= 15; if (cores !== 'Versteckt') score -= 10;
+        document.getElementById('privacy-score').textContent = score;
+        document.getElementById('score-title').textContent = score >= 80 ? 'Hoher Datenschutz' : score >= 55 ? 'Mittlere Sichtbarkeit' : 'Hohe Sichtbarkeit';
+        document.getElementById('score-circle').style.borderColor = score >= 80 ? '#10b981' : score >= 55 ? '#f59e0b' : '#ef4444';
+        btn.disabled = false; btn.textContent = '🔄 Erneut prüfen';
+      });
+    });
+  })();
+</script>
+
+<style>
+  .tool-page { padding: 2rem 1rem 4rem; max-width: 980px; margin: 0 auto; }
+  .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2rem; }
+  .tool-badge { display: inline-block; background: rgba(239, 68, 68, 0.14); color: #f87171; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .audit-hero { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .score-circle { width: 120px; height: 120px; border-radius: 50%; border: 6px solid var(--primary); display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg); }
+  .score-num { font-size: 2.2rem; font-weight: 800; line-height: 1; }
+  .score-info { flex: 1; min-width: 240px; }
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 0.75rem 1.4rem; border-radius: 10px; font-weight: 600; cursor: pointer; }
+  .audit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .audit-card { margin-bottom: 0; display: flex; flex-direction: column; gap: 0.65rem; }
+  .card-head { display: flex; align-items: center; gap: 0.5rem; }
+  .card-head h3 { font-size: 1.05rem; margin: 0; flex: 1; }
+  .status-pill { font-size: 0.74rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 999px; }
+  .status-pill.safe { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+  .status-pill.warn { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+  .status-pill.danger { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+  .mono { font-family: monospace; background: var(--bg); padding: 0.45rem 0.65rem; border-radius: 8px; border: 1px solid var(--border); word-break: break-word; }
+  .meta-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.88rem; color: var(--text-muted); }
+</style>

@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+const alternates = {
+  es: '/herramientas/',
+  en: '/en/tools/',
+  pt: '/pt/ferramentas/',
+  fr: '/fr/outils/',
+  de: '/de/werkzeuge/'
+};
+
+const tools = [
+  { title: 'Hardware-Test-Labor', desc: 'Monitor-Pixelfehler, Tastatur-Ghosting, Stereo-Audio und Gamepad-Drift online testen.', url: '/de/werkzeuge/hardware-test-labor/', icon: '🖥️', badge: 'Hardware' },
+  { title: 'Technik-Diagnose-Assistent', desc: '3-Schritte-Fehlerdiagnose für Windows-PC, Smartphone und WLAN.', url: '/de/werkzeuge/technik-diagnose-assistent/', icon: '🩺', badge: 'Diagnose' },
+  { title: 'Datenschutz- & Fingerprint-Check', desc: 'WebRTC-IP-Leak-Test, Canvas-Fingerprint und Browser-Datenschutz-Score.', url: '/de/werkzeuge/datenschutz-fingerprint-check/', icon: '🛡️', badge: 'Sicherheit' },
+  { title: 'Passwort-Sicherheit-Prüfer', desc: 'Entropie in Bits berechnen und Brute-Force-Resistenz lokal prüfen.', url: '/de/werkzeuge/passwort-sicherheit-pruefer/', icon: '🔒', badge: 'Kryptografie' }
+];
+---
+
+<BaseLayout
+  title="Kostenlose Online-Werkzeuge Verzeichnis"
+  description="Alle kostenlosen Browser-Tools auf Deutsch: Hardware-Testlabor, Diagnose-Assistent, WebRTC-Check und Passwort-Prüfer."
+  lang="de"
+  alternates={alternates}
+>
+  <Header slot="header" />
+  <main class="tool-dir container">
+    <header class="dir-header"><h1>Kostenlose Online-Werkzeuge</h1><p>Schnelle, datenschutzfreundliche Web-Tools direkt im Browser.</p></header>
+    <div class="tools-grid">
+      {tools.map(t => (
+        <a href={t.url} class="tool-card">
+          <div class="tc-top"><span class="tc-icon">{t.icon}</span><span class="tc-badge">{t.badge}</span></div>
+          <h2>{t.title}</h2><p>{t.desc}</p><span class="tc-link">Öffnen →</span>
+        </a>
+      ))}
+    </div>
+  </main>
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tool-dir { padding: 2.5rem 1rem 4rem; max-width: 1020px; margin: 0 auto; }
+  .dir-header { text-align: center; margin-bottom: 2.5rem; }
+  .dir-header h1 { font-size: 2.2rem; margin-bottom: 0.6rem; }
+  .dir-header p { color: var(--text-muted); font-size: 1.05rem; }
+  .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+  .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; text-decoration: none; color: var(--text); display: flex; flex-direction: column; gap: 0.75rem; }
+  .tool-card:hover { border-color: var(--primary); }
+  .tc-top { display: flex; justify-content: space-between; align-items: center; }
+  .tc-icon { font-size: 1.85rem; }
+  .tc-badge { font-size: 0.75rem; font-weight: 700; background: var(--bg); border: 1px solid var(--border); padding: 0.25rem 0.65rem; border-radius: 999px; color: var(--text-muted); }
+  .tool-card h2 { font-size: 1.2rem; margin: 0; }
+  .tool-card p { font-size: 0.92rem; color: var(--text-muted); line-height: 1.5; margin: 0; flex: 1; }
+  .tc-link { font-size: 0.9rem; font-weight: 700; color: var(--primary); }
+</style>

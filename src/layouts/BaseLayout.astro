@@ -19,6 +19,8 @@ interface AlternateLinks {
   es?: string;
   en?: string;
   pt?: string;
+  fr?: string;
+  de?: string;
 }
 
 interface Props {
@@ -32,7 +34,7 @@ interface Props {
   author?: string;
   faqs?: FAQItem[];
   breadcrumbs?: BreadcrumbItem[];
-  lang?: 'es' | 'en' | 'pt';
+  lang?: 'es' | 'en' | 'pt' | 'fr' | 'de';
   alternates?: AlternateLinks;
 }
 
@@ -51,8 +53,13 @@ const {
   alternates,
 } = Astro.props;
 
-const activeLang: 'es' | 'en' | 'pt' = lang || (Astro.url.pathname.startsWith('/en/') || Astro.url.pathname === '/en' ? 'en' : Astro.url.pathname.startsWith('/pt/') || Astro.url.pathname === '/pt' ? 'pt' : 'es');
-const ogLocale = activeLang === 'en' ? 'en_US' : activeLang === 'pt' ? 'pt_BR' : 'es_ES';
+const activeLang: 'es' | 'en' | 'pt' | 'fr' | 'de' = lang || (
+  Astro.url.pathname.startsWith('/en/') || Astro.url.pathname === '/en' ? 'en' :
+  Astro.url.pathname.startsWith('/pt/') || Astro.url.pathname === '/pt' ? 'pt' :
+  Astro.url.pathname.startsWith('/fr/') || Astro.url.pathname === '/fr' ? 'fr' :
+  Astro.url.pathname.startsWith('/de/') || Astro.url.pathname === '/de' ? 'de' : 'es'
+);
+const ogLocale = activeLang === 'en' ? 'en_US' : activeLang === 'pt' ? 'pt_BR' : activeLang === 'fr' ? 'fr_FR' : activeLang === 'de' ? 'de_DE' : 'es_ES';
 const currencyCode = activeLang === 'en' ? 'USD' : activeLang === 'pt' ? 'BRL' : 'EUR';
 
 const siteName = 'GuíaTecnes';
@@ -62,7 +69,9 @@ const fullImageURL = image.startsWith('http') ? image : new URL(image, siteURL).
 const isToolPage = type === 'tool' || (
   (Astro.url.pathname.startsWith('/herramientas/') && Astro.url.pathname !== '/herramientas/') ||
   (Astro.url.pathname.startsWith('/en/tools/') && Astro.url.pathname !== '/en/tools/') ||
-  (Astro.url.pathname.startsWith('/pt/ferramentas/') && Astro.url.pathname !== '/pt/ferramentas/')
+  (Astro.url.pathname.startsWith('/pt/ferramentas/') && Astro.url.pathname !== '/pt/ferramentas/') ||
+  (Astro.url.pathname.startsWith('/fr/outils/') && Astro.url.pathname !== '/fr/outils/') ||
+  (Astro.url.pathname.startsWith('/de/werkzeuge/') && Astro.url.pathname !== '/de/werkzeuge/')
 );
 
 const schemaWebSite = {
@@ -74,7 +83,11 @@ const schemaWebSite = {
     ? "Your ultimate guide to free web tools, hardware diagnostics, privacy audits, and practical tech solutions."
     : activeLang === 'pt'
       ? "Seu guia definitivo de ferramentas web gratuitas, diagnósticos de hardware, privacidade e soluções práticas."
-      : "Tu guía definitiva de herramientas de IA, alternativas de software, tutoriales y solución de errores en español.",
+      : activeLang === 'fr'
+        ? "Votre guide ultime d'outils web gratuits, diagnostics matériel, confidentialité et solutions techniques."
+        : activeLang === 'de'
+          ? "Ihr Leitfaden für kostenlose Web-Tools, Hardware-Diagnose, Datenschutz-Audits und technische Lösungen."
+          : "Tu guía definitiva de herramientas de IA, alternativas de software, tutoriales y solución de errores en español.",
   "inLanguage": activeLang,
   "potentialAction": {
     "@type": "SearchAction",
@@ -209,6 +222,8 @@ const schemaFAQ = faqs.length > 0 ? {
       {alternates.es && <link rel="alternate" hreflang="es" href={`${siteURL}${alternates.es}`} />}
       {alternates.en && <link rel="alternate" hreflang="en" href={`${siteURL}${alternates.en}`} />}
       {alternates.pt && <link rel="alternate" hreflang="pt" href={`${siteURL}${alternates.pt}`} />}
+      {alternates.fr && <link rel="alternate" hreflang="fr" href={`${siteURL}${alternates.fr}`} />}
+      {alternates.de && <link rel="alternate" hreflang="de" href={`${siteURL}${alternates.de}`} />}
       <link rel="alternate" hreflang="x-default" href={`${siteURL}${alternates.es || alternates.en || Astro.url.pathname}`} />
     </>
   ) : (

@@ -1,0 +1,194 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+const alternates = {
+  es: '/herramientas/asistente-diagnostico-tecnico/',
+  en: '/en/tools/tech-diagnostic-wizard/',
+  pt: '/pt/ferramentas/assistente-diagnostico-tecnico/',
+  fr: '/fr/outils/assistant-diagnostic-technique/',
+  de: '/de/werkzeuge/technik-diagnose-assistent/'
+};
+
+const breadcrumbs = [
+  { name: 'Accueil', url: '/fr/' },
+  { name: 'Outils', url: '/fr/outils/' },
+  { name: 'Diagnostic Technique', url: '/fr/outils/assistant-diagnostic-technique/' }
+];
+
+const faqs = [
+  {
+    question: 'Comment fonctionne l’assistant de diagnostic technique ?',
+    answer: 'Sélectionnez votre appareil (PC, Smartphone ou Wi-Fi), indiquez le symptôme principal et répondez à une question rapide pour identifier la cause exacte de la panne.'
+  }
+];
+---
+
+<BaseLayout
+  title="Assistant de Diagnostic Technique Interactif | PC, Mobile & Wi-Fi"
+  description="Diagnostiquez en 30 secondes pourquoi votre PC s’éteint, le Wi-Fi n’a pas d’internet ou le téléphone ne charge plus."
+  lang="fr"
+  alternates={alternates}
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb"><a href="/fr/">Accueil</a><span>›</span><a href="/fr/outils/">Outils</a><span>›</span><span>Diagnostic Technique</span></div>
+    <header class="tool-header">
+      <div class="tool-badge">🩺 Dépannage en 3 Étapes</div>
+      <h1>Assistant de Diagnostic Technique</h1>
+      <p class="tool-subtitle">Répondez à 3 questions simples pour trouver l'origine de votre panne informatique ou réseau.</p>
+    </header>
+
+    <div class="wizard-shell card">
+      <div class="wizard-progress">
+        <div class="step-pill active" id="pill-1"><span class="step-num">1</span> Appareil</div>
+        <div class="step-line"></div>
+        <div class="step-pill" id="pill-2"><span class="step-num">2</span> Symptôme</div>
+        <div class="step-line"></div>
+        <div class="step-pill" id="pill-3"><span class="step-num">3</span> Vérification</div>
+        <div class="step-line"></div>
+        <div class="step-pill" id="pill-4"><span class="step-num">✓</span> Solution</div>
+      </div>
+
+      <section id="step-1" class="wizard-step active">
+        <h2 class="step-title">Quel appareil rencontre un problème ?</h2>
+        <div class="options-grid">
+          <button type="button" class="option-card" data-device="pc"><span class="opt-icon">💻</span><strong class="opt-name">PC ou Portable Windows</strong><span class="opt-desc">Extinctions soudaines, lenteur ou écran qui clignote.</span></button>
+          <button type="button" class="option-card" data-device="phone"><span class="opt-icon">📱</span><strong class="opt-name">Smartphone (Android / iPhone)</strong><span class="opt-desc">Ne charge plus ou alertes suspectes.</span></button>
+          <button type="button" class="option-card" data-device="wifi"><span class="opt-icon">📡</span><strong class="opt-name">Wi-Fi & Box Internet</strong><span class="opt-desc">Connecté sans internet ou signal faible.</span></button>
+        </div>
+      </section>
+
+      <section id="step-2" class="wizard-step">
+        <button type="button" class="btn-back" id="back-to-1">← Retour</button>
+        <h2 class="step-title">Quel est le symptôme principal ?</h2>
+        <div class="options-grid" id="symptom-options"></div>
+      </section>
+
+      <section id="step-3" class="wizard-step">
+        <button type="button" class="btn-back" id="back-to-2">← Retour</button>
+        <h2 class="step-title" id="step-3-title">Question rapide</h2>
+        <div class="options-grid" id="detail-options"></div>
+      </section>
+
+      <section id="step-4" class="wizard-step">
+        <div class="diagnosis-header">
+          <div class="diag-badge-row"><span class="diag-severity" id="diag-severity"></span><span class="diag-category" id="diag-category"></span></div>
+          <h2 id="diag-title"></h2>
+          <p id="diag-summary"></p>
+        </div>
+        <h3>🛠️ Plan d'Action Étape par Étape</h3>
+        <ol id="diag-steps" class="action-list"></ol>
+        <button type="button" id="btn-restart" class="btn-primary">🔄 Nouveau Diagnostic</button>
+      </section>
+    </div>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  (function() {
+    const kb = {
+      pc: {
+        symptoms: [
+          {
+            id: 'shutdown', icon: '🔌', name: 'S’éteint tout seul sans écran bleu', desc: 'Coupure nette en jeu ou tâche lourde.',
+            question: 'À quel moment cela se produit-il ?',
+            details: [
+              { id: 'load', icon: '🔥', name: 'En jeu / charge élevée (ventilateurs bruyants)', desc: 'Air très chaud.', diagnosis: { title: 'Surchauffe Critique du Processeur / GPU', severity: 'Température Critique', category: 'Refroidissement', summary: 'Le processeur dépasse 95-105 °C et la carte mère coupe le courant par sécurité.', steps: ['Nettoyez les ventilateurs et grilles avec de l’air comprimé.', 'Remplacez la pâte thermique si le PC a plus de 2 ans.'] } },
+              { id: 'rand', icon: '⚡', name: 'Aléatoirement même au repos', desc: 'Même sur le bureau.', diagnosis: { title: 'Alimentation (PSU) ou Prise Électrique Instable', severity: 'Défaut Électrique', category: 'Alimentation', summary: 'L’alimentation ne tient plus les rails 12V ou la multiprise provoque des microcoupures.', steps: ['Branchez le PC directement sur une prise murale.', 'Vérifiez l’Observateur d’événements Windows pour l’erreur "Kernel-Power 41".'] } }
+            ]
+          }
+        ]
+      },
+      phone: {
+        symptoms: [
+          {
+            id: 'charge', icon: '🔋', name: 'Le câble bouge ou ne charge pas', desc: 'Faux contact dans le port.',
+            question: 'La prise s’enfonce-t-elle complètement ?',
+            details: [
+              { id: 'lint', icon: '🧹', name: 'Le câble a du jeu et se débranche facilement', desc: 'Mauvais contact.', diagnosis: { title: 'Poussière Compactée dans le Port USB-C / Lightning', severity: 'Solution Rapide', category: 'Entretien', summary: 'Les peluches de poche s’entassent au fond du connecteur.', steps: ['Éteignez complètement le téléphone.', 'N’utilisez JAMAIS d’aiguille métallique. Utilisez un cure-dent en bois fin pour extraire délicatement la poussière.'] } }
+            ]
+          }
+        ]
+      },
+      wifi: {
+        symptoms: [
+          {
+            id: 'nonet', icon: '❌', name: 'Wi-Fi connecté mais "Pas d’accès Internet"', desc: 'Aucune page ne charge.',
+            question: 'Cela touche-t-il TOUS vos appareils ou UN seul ?',
+            details: [
+              { id: 'all', icon: '🏠', name: 'TOUS les appareils de la maison', desc: 'Personne n’a internet.', diagnosis: { title: 'Perte de Synchro Box / Fibre Opérateur', severity: 'Réseau / FAI', category: 'Fibre & Box', summary: 'La box a perdu le signal fibre externe.', steps: ['Vérifiez les voyants rouges (PON/LOS) sur la box.', 'Débranchez la box électriquement pendant 60 secondes complètes puis rebranchez.'] } },
+              { id: 'one', icon: '💻', name: 'Uniquement MON appareil', desc: 'Les autres fonctionnent.', diagnosis: { title: 'Conflit DNS/IP Local ou Heure Incorrecte', severity: 'Réglage Local', category: 'Configuration', summary: 'Un cache DNS corrompu ou une mauvaise heure système bloque les certificats HTTPS.', steps: ['Vérifiez la date et l’heure du système.', 'Oubliez le réseau Wi-Fi et reconnectez-vous.', 'Utilisez les DNS 1.1.1.1 ou 8.8.8.8.'] } }
+            ]
+          }
+        ]
+      }
+    };
+    const steps = ['step-1', 'step-2', 'step-3', 'step-4'].map(id => document.getElementById(id));
+    const pills = ['pill-1', 'pill-2', 'pill-3', 'pill-4'].map(id => document.getElementById(id));
+    function showStep(idx) {
+      steps.forEach((s, i) => s.classList.toggle('active', i === idx));
+      pills.forEach((p, i) => { p.classList.toggle('active', i === idx); p.classList.toggle('done', i < idx); });
+    }
+    document.querySelectorAll('[data-device]').forEach(btn => btn.addEventListener('click', () => {
+      const dev = kb[btn.getAttribute('data-device')];
+      const box = document.getElementById('symptom-options');
+      box.innerHTML = dev.symptoms.map(s => `<button type="button" class="option-card" data-sym="${s.id}"><span class="opt-icon">${s.icon}</span><strong class="opt-name">${s.name}</strong><span class="opt-desc">${s.desc}</span></button>`).join('');
+      box.querySelectorAll('[data-sym]').forEach(sb => sb.addEventListener('click', () => {
+        const sym = dev.symptoms.find(x => x.id === sb.getAttribute('data-sym'));
+        document.getElementById('step-3-title').textContent = sym.question;
+        const dbox = document.getElementById('detail-options');
+        dbox.innerHTML = sym.details.map(d => `<button type="button" class="option-card" data-det="${d.id}"><span class="opt-icon">${d.icon}</span><strong class="opt-name">${d.name}</strong><span class="opt-desc">${d.desc}</span></button>`).join('');
+        dbox.querySelectorAll('[data-det]').forEach(db => db.addEventListener('click', () => {
+          const det = sym.details.find(x => x.id === db.getAttribute('data-det'));
+          document.getElementById('diag-severity').textContent = det.diagnosis.severity;
+          document.getElementById('diag-category').textContent = det.diagnosis.category;
+          document.getElementById('diag-title').textContent = det.diagnosis.title;
+          document.getElementById('diag-summary').textContent = det.diagnosis.summary;
+          document.getElementById('diag-steps').innerHTML = det.diagnosis.steps.map(x => `<li>${x}</li>`).join('');
+          showStep(3);
+        }));
+        showStep(2);
+      }));
+      showStep(1);
+    }));
+    document.getElementById('back-to-1').addEventListener('click', () => showStep(0));
+    document.getElementById('back-to-2').addEventListener('click', () => showStep(1));
+    document.getElementById('btn-restart').addEventListener('click', () => showStep(0));
+  })();
+</script>
+
+<style>
+  .tool-page { padding: 2rem 1rem 4rem; max-width: 960px; margin: 0 auto; }
+  .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2rem; }
+  .tool-badge { display: inline-block; background: rgba(99, 102, 241, 0.14); color: #818cf8; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.75rem; }
+  .wizard-progress { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); gap: 0.4rem; }
+  .step-pill { display: flex; align-items: center; gap: 0.45rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); opacity: 0.55; }
+  .step-pill.active { color: var(--primary); opacity: 1; }
+  .step-pill.done { color: #10b981; opacity: 0.9; }
+  .step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; }
+  .step-pill.active .step-num { background: var(--primary); color: #fff; }
+  .step-line { flex: 1; height: 2px; background: var(--border); }
+  .wizard-step { display: none; }
+  .wizard-step.active { display: block; }
+  .btn-back { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 0.4rem 0.85rem; border-radius: 8px; cursor: pointer; margin-bottom: 1rem; }
+  .step-title { font-size: 1.35rem; margin-bottom: 1.25rem; text-align: center; }
+  .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+  .option-card { text-align: left; background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; padding: 1.25rem; cursor: pointer; display: flex; flex-direction: column; gap: 0.45rem; color: var(--text); }
+  .opt-icon { font-size: 1.85rem; }
+  .diagnosis-header { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.28); border-radius: 12px; padding: 1.35rem; margin-bottom: 1.5rem; }
+  .diag-badge-row { display: flex; gap: 0.6rem; margin-bottom: 0.75rem; }
+  .diag-severity { background: #10b981; color: #fff; font-size: 0.78rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 6px; }
+  .diag-category { background: var(--surface); border: 1px solid var(--border); font-size: 0.78rem; padding: 0.25rem 0.65rem; border-radius: 6px; }
+  .action-list { padding-left: 1.35rem; display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1.5rem; }
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 0.75rem 1.35rem; border-radius: 10px; font-weight: 600; cursor: pointer; }
+</style>

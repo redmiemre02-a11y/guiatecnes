@@ -6,6 +6,8 @@
 - [Herramientas Interactivas Gratuitas (Español)](https://guiatecnes.com/herramientas/): Más de 75 utilidades web (calculadoras de sueldo neto, IRPF, hipotecas, finiquito, test de velocidad WiFi, conversores y generadores).
 - [Global English Tech Portal (/en/)](https://guiatecnes.com/en/): Free hardware test lab, tech diagnostic wizard, WebRTC privacy audit, and password entropy checker in English.
 - [Portal em Português (/pt/)](https://guiatecnes.com/pt/): Ferramentas online gratuitas de hardware, diagnóstico técnico, privacidade WebRTC e senhas para Brasil e Portugal.
+- [Portail en Français (/fr/)](https://guiatecnes.com/fr/): Outils gratuits de test matériel, diagnostic technique, confidentialité WebRTC et mots de passe.
+- [Deutsches Portal (/de/)](https://guiatecnes.com/de/): Kostenlose Online-Tools für Hardware-Tests, Technik-Diagnose, WebRTC-Datenschutz und Passwortsicherheit.
 - [Archivo Completo del Blog](https://guiatecnes.com/blog/): Directorio de todas las guías, comparativas y análisis técnicos.
 - [Directorio de Categorías](https://guiatecnes.com/categoria/): Navegación temática por 19 categorías especializadas.
 
