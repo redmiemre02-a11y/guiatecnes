@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+const alternates = {
+  es: '/herramientas/generador-qr/',
+  en: '/en/tools/qr-code-generator/',
+  pt: '/pt/ferramentas/gerador-qr-gratis/',
+  fr: '/fr/outils/generateur-qr-gratuit/',
+  de: '/de/werkzeuge/qr-code-generator/'
+};
+
+const breadcrumbs = [
+  { name: 'Accueil', url: '/fr/' },
+  { name: 'Outils', url: '/fr/outils/' },
+  { name: 'Générateur QR Code', url: '/fr/outils/generateur-qr-gratuit/' }
+];
+---
+
+<BaseLayout
+  title="Générateur de Code QR Gratuit (Sans Expiration & PNG HD)"
+  description="Créez des codes QR personnalisés gratuits pour vos liens, réseaux Wi-Fi ou textes. Téléchargement PNG haute qualité sans inscription."
+  lang="fr"
+  alternates={alternates}
+  breadcrumbs={breadcrumbs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb"><a href="/fr/">Accueil</a><span>›</span><a href="/fr/outils/">Outils</a><span>›</span><span>Générateur QR Code</span></div>
+    <header class="tool-header">
+      <div class="tool-badge">📲 Outil Gratuit · Sans Expiration</div>
+      <h1>Générateur de Code QR Gratuit</h1>
+      <p class="tool-subtitle">Générez des codes QR statiques permanents pour liens, mots de passe Wi-Fi ou textes en PNG.</p>
+    </header>
+
+    <div class="qr-grid">
+      <div class="card">
+        <div class="tabs">
+          <button type="button" class="tab-btn active" data-type="url">🔗 Lien / URL</button>
+          <button type="button" class="tab-btn" data-type="wifi">📶 Réseau Wi-Fi</button>
+          <button type="button" class="tab-btn" data-type="text">📝 Texte</button>
+        </div>
+        <div class="tab-content" id="content-url"><label for="input-url">URL de destination :</label><input type="url" id="input-url" value="https://guiatecnes.com/fr/" /></div>
+        <div class="tab-content" id="content-wifi" style="display:none;"><label for="wifi-ssid">Nom du réseau (SSID) :</label><input type="text" id="wifi-ssid" placeholder="Mon_WiFi" /><label for="wifi-pass" style="margin-top:0.75rem;">Mot de passe Wi-Fi :</label><input type="text" id="wifi-pass" placeholder="Mot de passe" /></div>
+        <div class="tab-content" id="content-text" style="display:none;"><label for="input-text">Texte :</label><textarea id="input-text" rows="3" placeholder="Écrivez ici..."></textarea></div>
+        <div class="color-options"><div><label for="qr-fg">Couleur :</label><input type="color" id="qr-fg" value="#0f172a" /></div><div><label for="qr-bg">Fond :</label><input type="color" id="qr-bg" value="#ffffff" /></div></div>
+        <button type="button" id="btn-create-qr" class="btn-primary">⚡ Générer le Code QR</button>
+      </div>
+      <div class="card preview-card">
+        <h3>Aperçu</h3>
+        <div class="qr-box"><img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https%3A%2F%2Fguiatecnes.com%2Ffr%2F&color=0f172a&bgcolor=ffffff&margin=1" alt="QR Code" width="220" height="220" /></div>
+        <button type="button" id="btn-download" class="btn-download">💾 Télécharger PNG</button>
+      </div>
+    </div>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  (function() {
+    let activeType = 'url'; const tabs = document.querySelectorAll('.tab-btn'), contents = { url: document.getElementById('content-url'), wifi: document.getElementById('content-wifi'), text: document.getElementById('content-text') }, qrImg = document.getElementById('qr-img');
+    tabs.forEach(t => t.addEventListener('click', () => { activeType = t.getAttribute('data-type'); tabs.forEach(x => x.classList.toggle('active', x === t)); Object.keys(contents).forEach(k => contents[k].style.display = k === activeType ? 'block' : 'none'); }));
+    function buildData() { if (activeType === 'url') return document.getElementById('input-url').value.trim() || 'https://guiatecnes.com/fr/'; if (activeType === 'wifi') return `WIFI:T:WPA;S:${document.getElementById('wifi-ssid').value.trim()};P:${document.getElementById('wifi-pass').value.trim()};;`; return document.getElementById('input-text').value.trim() || 'GuíaTecnes'; }
+    function updateQR() { qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(buildData())}&color=${document.getElementById('qr-fg').value.replace('#','')}&bgcolor=${document.getElementById('qr-bg').value.replace('#','')}&margin=2`; }
+    document.getElementById('btn-create-qr').addEventListener('click', updateQR);
+    document.getElementById('btn-download').addEventListener('click', async () => { updateQR(); try { const r = await fetch(qrImg.src), b = await r.blob(), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'qrcode-guiatecnes.png'; a.click(); } catch (e) { window.open(qrImg.src, '_blank'); } });
+  })();
+</script>
+
+<style>
+  .tool-page { padding: 2rem 1rem 4rem; max-width: 960px; margin: 0 auto; }
+  .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2rem; }
+  .tool-badge { display: inline-block; background: rgba(99, 102, 241, 0.14); color: #818cf8; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .qr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1.5rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .tabs { display: flex; gap: 0.45rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .tab-btn { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); padding: 0.55rem 0.9rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
+  .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  label { display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 0.4rem; }
+  input[type="url"], input[type="text"], textarea { width: 100%; padding: 0.7rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
+  .color-options { display: flex; gap: 1.25rem; margin: 1.15rem 0; }
+  .btn-primary, .btn-download { width: 100%; background: var(--primary); color: #fff; border: none; padding: 0.8rem; border-radius: 10px; font-weight: 700; cursor: pointer; }
+  .btn-download { background: #10b981; margin-top: 1rem; }
+  .preview-card { text-align: center; }
+  .qr-box { background: #fff; padding: 1rem; border-radius: 12px; display: inline-block; margin: 0.75rem 0; }
+</style>
