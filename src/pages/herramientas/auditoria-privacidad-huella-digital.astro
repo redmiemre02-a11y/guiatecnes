@@ -1,0 +1,376 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas/' },
+  { name: 'Auditoría de Privacidad y Huella Digital', url: '/herramientas/auditoria-privacidad-huella-digital/' }
+];
+
+const faqs = [
+  {
+    question: '¿Qué es la huella digital del navegador (Browser Fingerprinting)?',
+    answer: 'Es una técnica avanzada de rastreo web que combina decenas de características técnicas de tu dispositivo (resolución de pantalla, modelo de tarjeta gráfica, fuentes instaladas, renderizado Canvas y zona horaria) para identificarte de forma única, incluso si navegas en modo incógnito o borras todas las cookies.'
+  },
+  {
+    question: '¿Qué es una fuga WebRTC y por qué afecta a quienes usan VPN?',
+    answer: 'WebRTC es una tecnología integrada en Chrome, Edge y Firefox para videollamadas en el navegador. En ocasiones, puede revelar tu dirección IP real local o pública a una web mediante peticiones STUN directas, saltándose el túnel cifrado de tu VPN.'
+  },
+  {
+    question: '¿Esta herramienta guarda mi huella digital o mis direcciones IP?',
+    answer: 'No. Toda la auditoría se ejecuta íntegramente dentro de la memoria de tu navegador mediante JavaScript local. Ningún dato de tu dispositivo o dirección IP se almacena en nuestros servidores.'
+  },
+  {
+    question: '¿Cómo puedo reducir mi huella digital y mejorar mi privacidad?',
+    answer: 'Puedes utilizar navegadores centrados en la privacidad con protección anti-fingerprinting integrada (como Brave o Firefox con la configuración resistFingerprinting activada), instalar bloqueadores de rastreadores como uBlock Origin y desactivar WebRTC para conexiones no solicitadas.'
+  }
+];
+---
+
+<BaseLayout
+  title="Auditoría de Privacidad y Huella Digital Online | Test WebRTC y Fingerprint"
+  description="Analiza qué datos expone tu navegador en tiempo real: test de fuga WebRTC, huella Canvas Fingerprint, GPU WebGL y puntuación de privacidad."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas/">Herramientas</a>
+      <span>›</span>
+      <span>Auditoría de Privacidad</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🛡️ Ciberseguridad · Análisis Local</div>
+      <h1>Auditoría de Huella Digital y Fugas de Privacidad</h1>
+      <p class="tool-subtitle">
+        Descubre en segundos cuánta información técnica única expone tu navegador a los rastreadores web, aunque uses modo incógnito o VPN.
+      </p>
+    </header>
+
+    <!-- SCORE & ACTION -->
+    <section class="audit-hero card">
+      <div class="score-circle" id="score-circle">
+        <span class="score-num" id="privacy-score">--</span>
+        <span class="score-max">/ 100</span>
+      </div>
+      <div class="score-info">
+        <h2 id="score-title">Listo para auditar tu navegador</h2>
+        <p id="score-desc">Pulsa el botón para ejecutar la inspección local de WebRTC, Canvas Fingerprint, WebGL y APIs expuestas.</p>
+        <button type="button" id="btn-run-audit" class="btn-primary">🔍 Ejecutar Auditoría Completa Ahora</button>
+      </div>
+    </section>
+
+    <!-- RESULTS GRID -->
+    <section id="audit-results" class="audit-grid" style="display:none;">
+      <div class="audit-card card">
+        <div class="card-head">
+          <span class="c-icon">🌐</span>
+          <h3>Fuga de IP por WebRTC</h3>
+          <span class="status-pill" id="webrtc-pill">Analizando...</span>
+        </div>
+        <p class="card-val" id="webrtc-val">Comprobando candidatos ICE...</p>
+        <p class="card-explain">Las peticiones WebRTC pueden revelar tu IP local o pública real incluso utilizando una VPN si no están restringidas.</p>
+      </div>
+
+      <div class="audit-card card">
+        <div class="card-head">
+          <span class="c-icon">🎨</span>
+          <h3>Canvas Fingerprint ID</h3>
+          <span class="status-pill" id="canvas-pill">Detectado</span>
+        </div>
+        <p class="card-val mono" id="canvas-val">—</p>
+        <p class="card-explain">Cada tarjeta gráfica y sistema operativo dibuja los píxeles de forma ligeramente distinta, creando una firma matemática única.</p>
+      </div>
+
+      <div class="audit-card card">
+        <div class="card-head">
+          <span class="c-icon">🎮</span>
+          <h3>Tarjeta Gráfica (WebGL)</h3>
+          <span class="status-pill" id="webgl-pill">Expuesto</span>
+        </div>
+        <p class="card-val mono" id="webgl-val">—</p>
+        <p class="card-explain">Las webs pueden consultar el modelo exacto de tu GPU y drivers mediante WebGL para perfilar tu dispositivo.</p>
+      </div>
+
+      <div class="audit-card card">
+        <div class="card-head">
+          <span class="c-icon">💻</span>
+          <h3>Hardware y Sistema</h3>
+          <span class="status-pill warn">Metadatos</span>
+        </div>
+        <ul class="meta-list" id="hw-list"></ul>
+      </div>
+
+      <div class="audit-card card">
+        <div class="card-head">
+          <span class="c-icon">🛡️</span>
+          <h3>Protección Anti-Rastreo</h3>
+          <span class="status-pill" id="shield-pill">Revisado</span>
+        </div>
+        <ul class="meta-list" id="shield-list"></ul>
+      </div>
+
+      <div class="audit-card card">
+        <div class="card-head">
+          <span class="c-icon">🌍</span>
+          <h3>Zona Horaria e Idioma</h3>
+          <span class="status-pill warn">Geolocalización Pasiva</span>
+        </div>
+        <ul class="meta-list" id="locale-list"></ul>
+      </div>
+    </section>
+
+    <section class="seo-guide card">
+      <h2>¿Cómo proteger tu huella digital hoy mismo?</h2>
+      <ul>
+        <li><strong>Navegador recomendado:</strong> Brave bloquea por defecto las huellas Canvas/WebGL aleatorizándolas en cada sesión. Firefox también ofrece protección estricta activando la opción <em>Protección contra el rastreo mejorada: Estricta</em>.</li>
+        <li><strong>Bloqueo de WebRTC:</strong> Si utilizas una VPN, verifica que tu cliente tenga activado el bloqueo de fugas WebRTC o instala una extensión como <em>uBlock Origin</em> activando la casilla "Impedir que WebRTC revele las direcciones IP locales".</li>
+        <li><strong>Consistencia de zona horaria:</strong> Si usas una VPN conectada a otro país pero tu ordenador mantiene la hora de España (<code>Europe/Madrid</code>), los sistemas antifraude detectan la discrepancia al instante.</li>
+      </ul>
+
+      <h3>Preguntas Frecuentes</h3>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  (function() {
+    function djb2Hash(str) {
+      let hash = 5381;
+      for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) + hash) + str.charCodeAt(i);
+      }
+      return (hash >>> 0).toString(16).toUpperCase().padStart(8, '0');
+    }
+
+    function getCanvasFingerprint() {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = 240;
+        canvas.height = 60;
+        const ctx = canvas.getContext('2d');
+        ctx.textBaseline = 'top';
+        ctx.font = '14px Arial';
+        ctx.fillStyle = '#f60';
+        ctx.fillRect(10, 10, 80, 30);
+        ctx.fillStyle = '#069';
+        ctx.fillText('GuiaTecnes_FP_2026!', 14, 16);
+        const data = canvas.toDataURL();
+        return djb2Hash(data);
+      } catch (e) {
+        return 'BLOQUEADO';
+      }
+    }
+
+    function getWebGLInfo() {
+      try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (!gl) return { exposed: false, renderer: 'WebGL Desactivado' };
+        const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+        if (!dbg) return { exposed: false, renderer: 'Oculto por el navegador' };
+        const renderer = gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL);
+        return { exposed: true, renderer: renderer || 'Desconocido' };
+      } catch (e) {
+        return { exposed: false, renderer: 'Bloqueado' };
+      }
+    }
+
+    function checkWebRTC(callback) {
+      const RTCPeer = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
+      if (!RTCPeer) {
+        callback({ status: 'safe', ips: [], msg: 'WebRTC está completamente desactivado en este navegador.' });
+        return;
+      }
+      try {
+        const pc = new RTCPeer({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+        const foundIPs = new Set();
+        let done = false;
+
+        pc.createDataChannel('');
+        pc.createOffer().then(o => pc.setLocalDescription(o)).catch(() => {});
+
+        pc.onicecandidate = (ice) => {
+          if (!ice || !ice.candidate || !ice.candidate.candidate) return;
+          const cand = ice.candidate.candidate;
+          const ipMatch = cand.match(/([0-9]{1,3}(\.[0-9]{1,3}){3})/);
+          if (ipMatch && ipMatch[1]) {
+            foundIPs.add(ipMatch[1]);
+          }
+        };
+
+        setTimeout(() => {
+          if (done) return;
+          done = true;
+          try { pc.close(); } catch (e) {}
+          const ips = Array.from(foundIPs);
+          if (ips.length === 0) {
+            callback({ status: 'safe', ips: [], msg: 'Sin fugas IP visibles (protegido o usando mDNS).' });
+          } else {
+            callback({ status: 'leak', ips, msg: `IPs detectadas vía WebRTC: ${ips.join(', ')}` });
+          }
+        }, 1400);
+      } catch (e) {
+        callback({ status: 'safe', ips: [], msg: 'WebRTC restringido por políticas del navegador.' });
+      }
+    }
+
+    document.getElementById('btn-run-audit').addEventListener('click', () => {
+      const btn = document.getElementById('btn-run-audit');
+      btn.disabled = true;
+      btn.textContent = '⏳ Analizando navegador...';
+
+      document.getElementById('audit-results').style.display = 'grid';
+
+      // Canvas
+      const fpHash = getCanvasFingerprint();
+      document.getElementById('canvas-val').textContent = `Firma: #${fpHash}`;
+      const canvasPill = document.getElementById('canvas-pill');
+      if (fpHash === 'BLOQUEADO') {
+        canvasPill.textContent = 'Protegido';
+        canvasPill.className = 'status-pill safe';
+      } else {
+        canvasPill.textContent = 'Rastreable';
+        canvasPill.className = 'status-pill warn';
+      }
+
+      // WebGL
+      const glInfo = getWebGLInfo();
+      document.getElementById('webgl-val').textContent = glInfo.renderer;
+      const webglPill = document.getElementById('webgl-pill');
+      webglPill.textContent = glInfo.exposed ? 'Expuesto' : 'Oculto';
+      webglPill.className = glInfo.exposed ? 'status-pill warn' : 'status-pill safe';
+
+      // Hardware
+      const cores = navigator.hardwareConcurrency || 'Oculto';
+      const ram = navigator.deviceMemory ? `${navigator.deviceMemory} GB+` : 'Oculto';
+      const screenRes = `${window.screen.width} × ${window.screen.height} px (DPR ${window.devicePixelRatio})`;
+      document.getElementById('hw-list').innerHTML = `
+        <li><strong>Núcleos CPU:</strong> ${cores}</li>
+        <li><strong>Memoria RAM estimada:</strong> ${ram}</li>
+        <li><strong>Resolución Pantalla:</strong> ${screenRes}</li>
+        <li><strong>Plataforma:</strong> ${navigator.platform || 'Oculta'}</li>
+      `;
+
+      // Shield & Locale
+      const dnt = navigator.doNotTrack === '1' || window.doNotTrack === '1';
+      const gpc = navigator.globalPrivacyControl === true;
+      const cookies = navigator.cookieEnabled;
+      document.getElementById('shield-list').innerHTML = `
+        <li><strong>Global Privacy Control (GPC):</strong> ${gpc ? '✅ Activo' : '❌ Inactivo'}</li>
+        <li><strong>Do Not Track (DNT):</strong> ${dnt ? '✅ Activo' : '⚠️ Inactivo'}</li>
+        <li><strong>Cookies habilitadas:</strong> ${cookies ? 'Sí' : 'Bloqueadas'}</li>
+      `;
+
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Desconocida';
+      document.getElementById('locale-list').innerHTML = `
+        <li><strong>Zona Horaria:</strong> ${tz}</li>
+        <li><strong>Idioma Principal:</strong> ${navigator.language}</li>
+        <li><strong>Idiomas Secundarios:</strong> ${(navigator.languages || []).join(', ')}</li>
+      `;
+
+      // WebRTC + Final Score
+      checkWebRTC((res) => {
+        const rtcPill = document.getElementById('webrtc-pill');
+        document.getElementById('webrtc-val').textContent = res.msg;
+        if (res.status === 'safe') {
+          rtcPill.textContent = 'Seguro';
+          rtcPill.className = 'status-pill safe';
+        } else {
+          rtcPill.textContent = 'Posible Fuga';
+          rtcPill.className = 'status-pill danger';
+        }
+
+        let score = 100;
+        if (res.status === 'leak') score -= 30;
+        if (fpHash !== 'BLOQUEADO') score -= 20;
+        if (glInfo.exposed) score -= 15;
+        if (!gpc && !dnt) score -= 10;
+        if (cores !== 'Oculto') score -= 10;
+
+        document.getElementById('privacy-score').textContent = score;
+        const titleEl = document.getElementById('score-title');
+        const descEl = document.getElementById('score-desc');
+        const circleEl = document.getElementById('score-circle');
+
+        if (score >= 80) {
+          titleEl.textContent = 'Nivel de Privacidad Alto';
+          descEl.textContent = 'Tu navegador oculta correctamente la mayoría de vectores críticos de rastreo.';
+          circleEl.style.borderColor = '#10b981';
+        } else if (score >= 55) {
+          titleEl.textContent = 'Exposición Media a Rastreadores';
+          descEl.textContent = 'Tu navegador comparte metadatos de hardware y huella gráfica que permiten identificarte entre sesiones.';
+          circleEl.style.borderColor = '#f59e0b';
+        } else {
+          titleEl.textContent = 'Alta Exposición de Huella Digital';
+          descEl.textContent = 'Se han detectado múltiples parámetros identificativos y posibles fugas WebRTC. Sigue los consejos de abajo para blindarte.';
+          circleEl.style.borderColor = '#ef4444';
+        }
+
+        btn.disabled = false;
+        btn.textContent = '🔄 Repetir Auditoría';
+      });
+    });
+  })();
+</script>
+
+<style>
+  .tool-page { padding: 2rem 1rem 4rem; max-width: 980px; margin: 0 auto; }
+  .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2rem; }
+  .tool-badge { display: inline-block; background: rgba(239, 68, 68, 0.14); color: #f87171; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; border: 1px solid rgba(239, 68, 68, 0.28); }
+  .tool-header h1 { font-size: clamp(1.75rem, 3.5vw, 2.4rem); line-height: 1.2; margin-bottom: 0.75rem; }
+  .tool-subtitle { color: var(--text-muted); font-size: 1.05rem; max-width: 720px; margin: 0 auto; line-height: 1.6; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .audit-hero { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .score-circle { width: 120px; height: 120px; border-radius: 50%; border: 6px solid var(--primary); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; background: var(--bg); }
+  .score-num { font-size: 2.2rem; font-weight: 800; line-height: 1; }
+  .score-max { font-size: 0.82rem; color: var(--text-muted); }
+  .score-info { flex: 1; min-width: 240px; }
+  .score-info h2 { font-size: 1.35rem; margin-bottom: 0.4rem; }
+  .score-info p { color: var(--text-muted); margin-bottom: 1rem; line-height: 1.5; }
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 0.75rem 1.4rem; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 0.96rem; }
+  .btn-primary:disabled { opacity: 0.65; cursor: wait; }
+
+  .audit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .audit-card { margin-bottom: 0; display: flex; flex-direction: column; gap: 0.65rem; }
+  .card-head { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .c-icon { font-size: 1.35rem; }
+  .card-head h3 { font-size: 1.05rem; margin: 0; flex: 1; }
+  .status-pill { font-size: 0.74rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 999px; background: var(--bg); border: 1px solid var(--border); }
+  .status-pill.safe { background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.35); }
+  .status-pill.warn { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border-color: rgba(245, 158, 11, 0.35); }
+  .status-pill.danger { background: rgba(239, 68, 68, 0.15); color: #ef4444; border-color: rgba(239, 68, 68, 0.35); }
+
+  .card-val { font-weight: 700; font-size: 0.95rem; margin: 0; word-break: break-word; }
+  .mono { font-family: monospace; background: var(--bg); padding: 0.45rem 0.65rem; border-radius: 8px; border: 1px solid var(--border); }
+  .card-explain { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.45; }
+  .meta-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.88rem; color: var(--text-muted); }
+
+  .seo-guide h2 { font-size: 1.35rem; margin-bottom: 0.9rem; }
+  .seo-guide h3 { font-size: 1.15rem; margin: 1.5rem 0 0.85rem; }
+  .seo-guide ul { padding-left: 1.25rem; color: var(--text-muted); line-height: 1.65; display: flex; flex-direction: column; gap: 0.5rem; }
+  .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.95rem 1.1rem; }
+  .faq-item summary { font-weight: 600; cursor: pointer; color: var(--text); }
+  .faq-item p { margin: 0.7rem 0 0; font-size: 0.93rem; color: var(--text-muted); line-height: 1.55; }
+</style>

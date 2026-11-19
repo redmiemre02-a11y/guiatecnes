@@ -16,6 +16,8 @@
 - [Finanzas Digitales y Trabajo](https://guiatecnes.com/categoria/finanzas/): Fiscalidad, autónomos, IRPF y herramientas de cálculo económico.
 
 ## Herramientas Más Populares
+- [Comparador de Tarifas de Fibra y Móvil España 2026](https://guiatecnes.com/herramientas/comparador-tarifas-fibra-movil/): Comparador interactivo de tarifas de Digi, O2, Lowi, Pepephone, Simyo y Movistar con coste anual real.
+- [Auditoría de Privacidad y Huella Digital Online](https://guiatecnes.com/herramientas/auditoria-privacidad-huella-digital/): Test en vivo de fuga IP por WebRTC, Canvas Fingerprint, WebGL y puntuación de privacidad del navegador.
 - [Asistente de Diagnóstico Técnico Interactivo](https://guiatecnes.com/herramientas/asistente-diagnostico-tecnico/): Árbol lógico en 3 pasos para diagnosticar averías en PC Windows, móviles Android/iPhone, WiFi y Bluetooth.
 - [Laboratorio de Pruebas de Hardware Online](https://guiatecnes.com/herramientas/laboratorio-pruebas-hardware/): Suite de diagnóstico local para detectar píxeles muertos en monitor, ghosting de teclado, estéreo de audio y drift de mandos.
 - [Calculadora de Plusvalía Municipal (IIVTNU)](https://guiatecnes.com/herramientas/calculadora-plusvalia-municipal/): Cálculo del impuesto municipal por venta o donación comparando método real vs objetivo tras la reforma legal.

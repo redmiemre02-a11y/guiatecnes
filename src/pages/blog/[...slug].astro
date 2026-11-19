@@ -75,6 +75,28 @@ if (post.body) {
 function getRelevantTool(title: string, tags: string[]) {
   const text = (title + ' ' + tags.join(' ')).toLowerCase();
 
+  if (text.includes('fibra') || text.includes('operadora') || text.includes('tarifa') || text.includes('digi') || text.includes('movistar') || text.includes('o2') || text.includes('lowi') || text.includes('vodafone') || text.includes('orange')) {
+    return {
+      title: 'Comparador Inteligente de Fibra y Móvil 2026',
+      desc: 'Compara Digi, O2, Lowi, Pepephone y Movistar por velocidad, datos, cobertura real y calcula cuánto ahorrarías al año.',
+      btn: 'Comparar Tarifas Gratis',
+      url: '/herramientas/comparador-tarifas-fibra-movil/',
+      icon: '📡',
+      badge: 'Telecom & Ahorro'
+    };
+  }
+
+  if (text.includes('vpn') || text.includes('huella') || text.includes('rastreo') || text.includes('webrtc') || text.includes('navegador privado') || text.includes('anonimato') || text.includes('incognito')) {
+    return {
+      title: 'Auditoría de Privacidad y Huella Digital Online',
+      desc: 'Comprueba en segundos si tu navegador o VPN filtra tu IP por WebRTC y descubre qué huella Canvas Fingerprint expones.',
+      btn: 'Auditar Mi Navegador',
+      url: '/herramientas/auditoria-privacidad-huella-digital/',
+      icon: '🛡️',
+      badge: 'Privacidad en Vivo'
+    };
+  }
+
   if (text.includes('teclado') || text.includes('monitor') || text.includes('calibrar') || text.includes('pixel') || text.includes('píxel') || text.includes('mando') || text.includes('gamepad') || text.includes('altavoces')) {
     return {
       title: 'Laboratorio de Pruebas de Hardware en el Navegador',
