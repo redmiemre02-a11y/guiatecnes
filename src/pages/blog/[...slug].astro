@@ -75,6 +75,28 @@ if (post.body) {
 function getRelevantTool(title: string, tags: string[]) {
   const text = (title + ' ' + tags.join(' ')).toLowerCase();
 
+  if (text.includes('teclado') || text.includes('monitor') || text.includes('calibrar') || text.includes('pixel') || text.includes('píxel') || text.includes('mando') || text.includes('gamepad') || text.includes('altavoces')) {
+    return {
+      title: 'Laboratorio de Pruebas de Hardware en el Navegador',
+      desc: 'Comprueba píxeles muertos en tu monitor, detecta ghosting en tu teclado, prueba canales estéreo o mide el drift de tu mando sin descargar nada.',
+      btn: 'Abrir Laboratorio Hardware',
+      url: '/herramientas/laboratorio-pruebas-hardware/',
+      icon: '🖥️',
+      badge: 'Pruebas Físicas en Vivo'
+    };
+  }
+
+  if (text.includes('apaga') || text.includes('parpadea') || text.includes('bluetooth') || text.includes('sin internet') || text.includes('averia') || text.includes('avería') || text.includes('reparar')) {
+    return {
+      title: 'Asistente Interactivo de Diagnóstico Técnico',
+      desc: '¿Tu ordenador, móvil o WiFi sigue fallando? Responde 3 preguntas en nuestro árbol lógico y descubre la causa exacta de la avería.',
+      btn: 'Iniciar Diagnóstico en 3 Pasos',
+      url: '/herramientas/asistente-diagnostico-tecnico/',
+      icon: '🩺',
+      badge: 'Diagnóstico Interactivo'
+    };
+  }
+
   if (text.includes('plusvalia') || text.includes('plusvalía') || text.includes('iivtnu') || text.includes('catastral') || text.includes('inmueble') || text.includes('vivienda') || text.includes('herencia')) {
     return {
       title: 'Calculadora de Plusvalía Municipal (IIVTNU)',

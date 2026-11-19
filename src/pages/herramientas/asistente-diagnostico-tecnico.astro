@@ -1,0 +1,829 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import LegalDisclaimer from '../../components/LegalDisclaimer.astro';
+
+const breadcrumbs = [
+  { name: 'Inicio', url: '/' },
+  { name: 'Herramientas', url: '/herramientas/' },
+  { name: 'Asistente de Diagnóstico Técnico', url: '/herramientas/asistente-diagnostico-tecnico/' }
+];
+
+const faqs = [
+  {
+    question: '¿Cómo funciona el Asistente de Diagnóstico Técnico de GuíaTecnes?',
+    answer: 'El asistente utiliza un árbol de decisión lógica basado en las averías reales más frecuentes de hardware, redes y sistemas operativos. Al responder 3 preguntas rápidas sobre los síntomas de tu dispositivo, descarta fallos de software frente a problemas físicos y te entrega un plan de acción ordenado por probabilidad.'
+  },
+  {
+    question: '¿Es seguro aplicar las soluciones propuestas si mi equipo está en garantía?',
+    answer: 'Todas las soluciones de software, reinicios de red, actualización de controladores o limpieza externa son completamente seguras. Sin embargo, si el diagnóstico apunta a un fallo de hardware interno (como batería hinchada, fuente de alimentación dañada o placa base), nunca abras el equipo si aún conserva la garantía oficial del fabricante.'
+  },
+  {
+    question: '¿Se recopilan datos sobre mi ordenador o teléfono móvil?',
+    answer: 'No. El asistente funciona al 100% en tu navegador mediante lógica local. No escanea tu equipo ni envía datos personales a servidores externos.'
+  },
+  {
+    question: '¿Qué hago si ninguno de los pasos soluciona mi problema técnico?',
+    answer: 'Cuando un fallo persiste tras descartar errores de configuración, controladores y caché (por ejemplo, si un ordenador no da vídeo tras probar otro cable y monitor, o un móvil no carga con otro cargador oficial), es muy probable que exista un daño físico en un componente electrónico que requiera servicio técnico especializado.'
+  }
+];
+---
+
+<BaseLayout
+  title="Asistente de Diagnóstico Técnico Interactivo | Soluciona Averías PC, Móvil y WiFi"
+  description="Diagnostica en 30 segundos por qué falla tu PC, móvil, WiFi o pantalla. Responde 3 preguntas rápidas y obtén el diagnóstico exacto con pasos de solución."
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span>›</span>
+      <a href="/herramientas/">Herramientas</a>
+      <span>›</span>
+      <span>Asistente de Diagnóstico Técnico</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🩺 Diagnóstico Interactivo en 3 Pasos</div>
+      <h1>Asistente Inteligente de Diagnóstico Técnico</h1>
+      <p class="tool-subtitle">
+        ¿Tu ordenador se apaga, el WiFi va lento o tu móvil no carga? Selecciona los síntomas en nuestro árbol lógico para identificar la causa exacta y cómo repararla.
+      </p>
+    </header>
+
+    <!-- PROGRESS STEPPER -->
+    <div class="wizard-shell card">
+      <div class="wizard-progress">
+        <div class="step-pill active" id="pill-1"><span class="step-num">1</span> Dispositivo</div>
+        <div class="step-line"></div>
+        <div class="step-pill" id="pill-2"><span class="step-num">2</span> Síntoma</div>
+        <div class="step-line"></div>
+        <div class="step-pill" id="pill-3"><span class="step-num">3</span> Verificación</div>
+        <div class="step-line"></div>
+        <div class="step-pill" id="pill-4"><span class="step-num">✓</span> Diagnóstico</div>
+      </div>
+
+      <!-- STEP 1: DEVICE -->
+      <section id="step-1" class="wizard-step active">
+        <h2 class="step-title">¿Con qué dispositivo o sistema tienes problemas?</h2>
+        <div class="options-grid device-grid">
+          <button type="button" class="option-card" data-device="pc">
+            <span class="opt-icon">💻</span>
+            <strong class="opt-name">PC o Portátil (Windows / Mac)</strong>
+            <span class="opt-desc">Apagones, lentitud extrema, pantalla negra o errores de sistema.</span>
+          </button>
+          <button type="button" class="option-card" data-device="movil">
+            <span class="opt-icon">📱</span>
+            <strong class="opt-name">Móvil (Android / iPhone)</strong>
+            <span class="opt-desc">Batería agotada rápido, no carga, sospecha de virus o sobrecalentamiento.</span>
+          </button>
+          <button type="button" class="option-card" data-device="wifi">
+            <span class="opt-icon">📡</span>
+            <strong class="opt-name">WiFi, Router e Internet</strong>
+            <span class="opt-desc">Conectado sin internet, microcortes, baja velocidad en habitaciones.</span>
+          </button>
+          <button type="button" class="option-card" data-device="perifericos">
+            <span class="opt-icon">🎧</span>
+            <strong class="opt-name">Pantalla, Audio y Bluetooth</strong>
+            <span class="opt-desc">Parpadeo de monitor, retraso de sonido Bluetooth o dispositivos no detectados.</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- STEP 2: SYMPTOM -->
+      <section id="step-2" class="wizard-step">
+        <div class="step-nav-top">
+          <button type="button" class="btn-back" id="back-to-1">← Cambiar dispositivo</button>
+        </div>
+        <h2 class="step-title" id="step-2-title">¿Cuál es el síntoma principal?</h2>
+        <div class="options-grid" id="symptom-options"></div>
+      </section>
+
+      <!-- STEP 3: CLARIFICATION QUESTION -->
+      <section id="step-3" class="wizard-step">
+        <div class="step-nav-top">
+          <button type="button" class="btn-back" id="back-to-2">← Cambiar síntoma</button>
+        </div>
+        <h2 class="step-title" id="step-3-title">Pregunta de descarte técnico</h2>
+        <div class="options-grid" id="detail-options"></div>
+      </section>
+
+      <!-- STEP 4: FINAL DIAGNOSIS -->
+      <section id="step-4" class="wizard-step">
+        <div class="diagnosis-header">
+          <div class="diag-badge-row">
+            <span class="diag-severity" id="diag-severity">Probabilidad Alta</span>
+            <span class="diag-category" id="diag-category">Hardware / Red</span>
+          </div>
+          <h2 id="diag-title">Diagnóstico</h2>
+          <p id="diag-summary" class="diag-summary"></p>
+        </div>
+
+        <div class="diag-body">
+          <div class="diag-steps-box">
+            <h3>🛠️ Plan de Acción Paso a Paso</h3>
+            <ol id="diag-steps" class="action-list"></ol>
+          </div>
+
+          <div class="diag-links-box" id="diag-links-wrap">
+            <h3>📚 Guías y Herramientas Recomendadas</h3>
+            <div id="diag-links" class="related-links"></div>
+          </div>
+        </div>
+
+        <div class="diag-footer-actions">
+          <button type="button" id="btn-copy-diag" class="btn-primary">📋 Copiar Resumen del Diagnóstico</button>
+          <button type="button" id="btn-restart" class="btn-secondary">🔄 Realizar Otro Diagnóstico</button>
+        </div>
+      </section>
+    </div>
+
+    <LegalDisclaimer />
+
+    <section class="seo-guide card">
+      <h2>¿Por qué usar un asistente lógico antes de llevar tu dispositivo al servicio técnico?</h2>
+      <p>
+        Más del <strong>65% de las incidencias informáticas cotidianas</strong> (como un router que muestra "conectado sin internet", un ordenador que sufre tirones repentinos o unos auriculares Bluetooth que no emparejan) no son averías físicas irreparables, sino bloqueos temporales de caché, conflictos de controladores o interferencias de canal.
+      </p>
+      <p>
+        Seguir una metodología de descarte ordenada evita gastos innecesarios en reparaciones y te permite identificar cuándo un problema se resuelve en 2 minutos desde casa y cuándo existe realmente un componente dañado (como una fuente de alimentación defectuosa o una batería degradada).
+      </p>
+
+      <h3>Preguntas Frecuentes</h3>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  (function() {
+    const knowledgeBase = {
+      pc: {
+        label: 'PC / Portátil',
+        symptoms: [
+          {
+            id: 'pc-apaga',
+            icon: '🔌',
+            name: 'Se apaga solo de repente sin pantallazo azul',
+            desc: 'El equipo corta la corriente en mitad de un juego, vídeo o trabajo.',
+            question: '¿En qué momento exacto ocurre el apagón?',
+            details: [
+              {
+                id: 'carga',
+                icon: '🔥',
+                name: 'Al jugar, renderizar o exigir potencia (ventiladores al máximo)',
+                desc: 'Notas aire muy caliente saliendo del equipo antes del corte.',
+                diagnosis: {
+                  title: 'Protección Térmica por Sobrecalentamiento (Thermal Shutdown)',
+                  severity: 'Causa Crítica de Temperatura',
+                  category: 'Refrigeración / Pasta Térmica',
+                  summary: 'La CPU o tarjeta gráfica supera los 95-105 °C y la placa base corta la corriente en milisegundos para evitar que el chip se funda.',
+                  steps: [
+                    'Comprueba si las rejillas de ventilación o filtros antipolvo están obstruidos por pelusas y límpialos con aire comprimido (sujetando las aspas para que no giren).',
+                    'Si es un portátil, asegúrate de no usarlo sobre mantas o camas; colócalo sobre una superficie dura y eleva ligeramente la parte trasera.',
+                    'Monitoriza las temperaturas en reposo y carga usando software gratuito como HWInfo64 o CoreTemp.',
+                    'Si tiene más de 2-3 años y supera los 90 °C fácilmente, es necesario sustituir la pasta térmica del procesador.'
+                  ],
+                  links: [
+                    { text: 'Guía completa: Mi PC se apaga solo sin pantallazo azul (Soluciones)', url: '/blog/mi-pc-se-apaga-solo-sin-pantallazo-azul-solucion/' }
+                  ]
+                }
+              },
+              {
+                id: 'aleatorio',
+                icon: '⚡',
+                name: 'De forma aleatoria incluso sin hacer casi nada',
+                desc: 'Ocurre navegando en el escritorio o al mover ligeramente el cable.',
+                diagnosis: {
+                  title: 'Inestabilidad en Fuente de Alimentación (PSU) o Regleta Eléctrica',
+                  severity: 'Fallo Eléctrico',
+                  category: 'Hardware / Alimentación',
+                  summary: 'La fuente de alimentación no logra mantener estables los raíles de 12V o la regleta/enchufe produce microcortes de tensión.',
+                  steps: [
+                    'Conecta el PC directamente a una toma de pared distinta, evitando regletas viejas o ladrones sobrecargados.',
+                    'Revisa que el cable de alimentación esté encajado firmemente hasta el fondo en la fuente y el enchufe.',
+                    'En portátiles, desconecta el cargador temporalmente para comprobar si ocurre igual solo con batería (descarta cargador defectuoso).',
+                    'Abre el "Visor de Eventos" de Windows -> Registros de Windows -> Sistema y busca errores críticos "Kernel-Power 41" para confirmar corte brusco de energía.'
+                  ],
+                  links: [
+                    { text: 'Guía: Mi PC se apaga solo sin pantallazo azul', url: '/blog/mi-pc-se-apaga-solo-sin-pantallazo-azul-solucion/' },
+                    { text: 'Calculadora de Consumo Eléctrico de PC (Vatios)', url: '/herramientas/calculadora-consumo-electrico-pc/' }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            id: 'pc-lento',
+            icon: '🐢',
+            name: 'El ordenador va extremadamente lento o se congela',
+            desc: 'Tarda minutos en abrir programas y el cursor se atasca.',
+            question: 'Al abrir el Administrador de Tareas (Ctrl+Shift+Esc), ¿qué componente está al 100%?',
+            details: [
+              {
+                id: 'disco100',
+                icon: '💾',
+                name: 'El Disco (HDD/SSD) está clavado al 100%',
+                desc: 'La luz del disco duro no deja de parpadear.',
+                diagnosis: {
+                  title: 'Cuello de Botella en Almacenamiento o Disco Mecánico Saturado',
+                  severity: 'Degradación de Rendimiento',
+                  category: 'Almacenamiento / Windows',
+                  summary: 'Windows 10/11 satura con facilidad los discos duros mecánicos (HDD) tradicionales o SSD casi llenos por debajo del 10% libre.',
+                  steps: [
+                    'Libera espacio hasta dejar al menos un 15-20% de capacidad libre en la unidad C:.',
+                    'Desactiva aplicaciones innecesarias en la pestaña "Aplicaciones de arranque" del Administrador de Tareas.',
+                    'Ejecuta un diagnóstico S.M.A.R.T. con CrystalDiskInfo para descartar sectores dañados físicos en el disco.',
+                    'Si sigues usando un disco mecánico HDD como disco principal, migrar a un SSD multiplicará por 5 la velocidad real del equipo.'
+                  ],
+                  links: [
+                    { text: 'Conversor de Almacenamiento y Capacidad Real', url: '/herramientas/conversor-almacenamiento/' }
+                  ]
+                }
+              },
+              {
+                id: 'ramcpu',
+                icon: '🧠',
+                name: 'La Memoria RAM o CPU está al 90-100%',
+                desc: 'El navegador o procesos en segundo plano consumen todo.',
+                diagnosis: {
+                  title: 'Saturación de Memoria RAM o Malware en Segundo Plano',
+                  severity: 'Saturación de Procesos',
+                  category: 'Sistema Operativo / Software',
+                  summary: 'Tienes demasiadas pestañas o programas residentes compitiendo por memoria, o un proceso corrupto consumiendo ciclos de CPU.',
+                  steps: [
+                    'Ordena los procesos por consumo de CPU/Memoria en el Administrador de Tareas y localiza el programa culpable.',
+                    'Activa el ahorro de memoria en tu navegador (Chrome/Edge) para suspender pestañas inactivas.',
+                    'Realiza un análisis completo sin conexión con Windows Defender (Examen de Microsoft Defender Offline) para descartar mineros ocultos.',
+                    'Reinicia el equipo usando la opción "Reiniciar" (no "Apagar", ya que el inicio rápido conserva caché de sesión).'
+                  ],
+                  links: [
+                    { text: 'Comprobador de Seguridad de Contraseñas', url: '/herramientas/comprobador-seguridad-contrasenas/' }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            id: 'pc-pantalla',
+            icon: '🖥️',
+            name: 'La pantalla parpadea o hace cosas raras en Windows',
+            desc: 'Destellos negros, líneas rápidas o parpadeo al abrir ventanas.',
+            question: '¿El parpadeo ocurre también en el Administrador de Tareas (Ctrl+Shift+Esc)?',
+            details: [
+              {
+                id: 'parpadeo-no',
+                icon: '🪟',
+                name: 'NO parpadea en el Administrador de Tareas',
+                desc: 'El Administrador de Tareas se ve estable, el resto parpadea.',
+                diagnosis: {
+                  title: 'Incompatibilidad de Software o Servicio Corrupto en Windows',
+                  severity: 'Fallo de Software',
+                  category: 'Sistema / Drivers',
+                  summary: 'Cuando el Administrador de Tareas no parpadea, la pantalla física y la gráfica están sanas; el fallo proviene de una aplicación de terceros o conflicto del Explorador de Windows.',
+                  steps: [
+                    'Desinstala aplicaciones recientes de personalización de escritorio o antivirus de terceros.',
+                    'Actualiza los drivers de tu tarjeta gráfica (NVIDIA, AMD o Intel) realizando una "Instalación Limpia".',
+                    'Prueba a reiniciar el controlador gráfico al instante pulsando la combinación de teclas: Win + Ctrl + Shift + B.'
+                  ],
+                  links: [
+                    { text: 'Guía: Pantalla parpadea en Windows 11 y cómo actualizar drivers', url: '/blog/pantalla-parpadea-windows-11-actualizar-drivers-solucion/' }
+                  ]
+                }
+              },
+              {
+                id: 'parpadeo-si',
+                icon: '🔌',
+                name: 'SÍ parpadea incluso el Administrador de Tareas',
+                desc: 'Toda la imagen falla por igual en cualquier pantalla.',
+                diagnosis: {
+                  title: 'Fallo de Controlador Gráfico, Cable HDMI/DP o Frecuencia de Refresco',
+                  severity: 'Prioridad Alta',
+                  category: 'Drivers / Cableado',
+                  summary: 'El problema afecta al controlador de vídeo base, la tasa de hercios (Hz) o al cable físico que transmite la señal.',
+                  steps: [
+                    'Pulsa Win + Ctrl + Shift + B para reiniciar el driver de vídeo de Windows.',
+                    'Cambia o desconecta y vuelve a enchufar firmemente el cable HDMI/DisplayPort en ambos extremos.',
+                    'Ve a Configuración -> Sistema -> Pantalla -> Pantalla avanzada y prueba a bajar temporalmente la frecuencia de actualización (por ejemplo de 144Hz a 60Hz) o desactivar VRR/G-Sync.',
+                    'Arranca en Modo Seguro para desinstalar el driver con DDU (Display Driver Uninstaller) y reinstalar la versión oficial estable.'
+                  ],
+                  links: [
+                    { text: 'Guía: Pantalla parpadea en Windows 11 (Soluciones)', url: '/blog/pantalla-parpadea-windows-11-actualizar-drivers-solucion/' },
+                    { text: 'Diferencias entre cables HDMI 2.0 y HDMI 2.1', url: '/blog/diferencias-cables-hdmi-2-0-vs-2-1-smart-tv-consola/' }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      movil: {
+        label: 'Móvil Android / iPhone',
+        symptoms: [
+          {
+            id: 'movil-carga',
+            icon: '🔋',
+            name: 'No carga, carga muy lento o se descarga rapidísimo',
+            desc: 'El porcentaje no sube o cae de golpe del 30% al 0%.',
+            question: '¿Qué ocurre al conectar el cable cargador?',
+            details: [
+              {
+                id: 'cable-suelto',
+                icon: '🧹',
+                name: 'El cable baila o hay que moverlo para que cargue',
+                desc: 'Hace falso contacto dependiendo de la postura.',
+                diagnosis: {
+                  title: 'Suciedad Compactada en el Puerto de Carga (USB-C / Lightning)',
+                  severity: 'Solución Inmediata en Casa',
+                  category: 'Mantenimiento Físico',
+                  summary: 'Las pelusas del pantalón se compactan en el fondo del conector cada vez que enchufas el cable, impidiendo que los pines hagan contacto total.',
+                  steps: [
+                    'Apaga completamente el teléfono móvil antes de tocar el puerto.',
+                    'NUNCA uses agujas ni objetos metálicos (pueden hacer cortocircuito). Utiliza un palillo de madera fino o plástico muy fino.',
+                    'Raspa suavemente el fondo alrededor de la lengüeta central para extraer la pelusa prensada.',
+                    'Prueba con otro cable certificado y otro adaptador de pared para descartar rotura interna del cable.'
+                  ],
+                  links: [
+                    { text: 'Calculadora de Tiempo de Carga de Batería', url: '/herramientas/calculadora-tiempo-carga-bateria/' }
+                  ]
+                }
+              },
+              {
+                id: 'bateria-degradada',
+                icon: '📉',
+                name: 'Carga bien, pero la batería dura muy poco o se calienta',
+                desc: 'El móvil tiene más de 2 años y cae rápido el porcentaje.',
+                diagnosis: {
+                  title: 'Degradación Química de la Batería o App Consumiendo en Segundo Plano',
+                  severity: 'Desgaste / Software',
+                  category: 'Batería',
+                  summary: 'Las baterías de litio pierden capacidad útil tras 500-800 ciclos de carga completos, o una app descontrolada mantiene el procesador activo.',
+                  steps: [
+                    'Entra en Ajustes -> Batería -> Uso de batería y verifica si una sola aplicación consume más del 25-30% sin haberla usado.',
+                    'Revisa la Salud de Batería (en iPhone en Ajustes -> Batería; en Android mediante código o apps de diagnóstico). Si está por debajo del 80%, conviene reemplazar la batería.',
+                    'Desactiva temporalmente la búsqueda WiFi/Bluetooth en segundo plano y reduce el brillo automático.',
+                    'Evita usar el móvil para juegos pesados mientras está enchufado a carga rápida.'
+                  ],
+                  links: [
+                    { text: 'Cómo saber la salud y ciclos reales de tu batería', url: '/blog/saber-salud-ciclos-bateria-android-iphone-real/' }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            id: 'movil-virus',
+            icon: '🛡️',
+            name: 'Anuncios raros, batería drenada o sospecha de virus',
+            desc: 'Aparecen ventanas emergentes solas o la app bancaria falla.',
+            question: '¿Has instalado recientemente alguna app fuera de Google Play / App Store (archivo APK)?',
+            details: [
+              {
+                id: 'si-apk',
+                icon: '⚠️',
+                name: 'Sí, instalé un APK o di permisos desde un enlace SMS/WhatsApp',
+                desc: 'Descargué una app externa o acepté un aviso web.',
+                diagnosis: {
+                  title: 'Posible Adware o Troyano Activo con Permisos de Accesibilidad',
+                  severity: 'Alerta Alta de Seguridad',
+                  category: 'Ciberseguridad Móvil',
+                  summary: 'Las apps instaladas fuera de tiendas oficiales suelen ocultar adware o spyware que se esconde sin icono o bloquea su propia desinstalación usando permisos de administrador.',
+                  steps: [
+                    'Activa el Modo Avión de inmediato si sospechas de robo bancario o control remoto.',
+                    'Ve a Ajustes -> Aplicaciones -> Busca apps sin nombre o con icono genérico al final o principio de la lista y desinstálalas.',
+                    'Si no te deja desinstalarla, ve a Ajustes -> Seguridad -> Aplicaciones de administración del dispositivo y revoca su permiso primero.',
+                    'Revisa también "Accesibilidad" en Ajustes y desactiva cualquier servicio extraño.',
+                    'Cambia tus contraseñas críticas desde otro dispositivo limpio.'
+                  ],
+                  links: [
+                    { text: 'Guía: Cómo saber si tu móvil tiene virus o está intervenido', url: '/blog/como-saber-si-movil-tiene-virus-esta-intervenido/' },
+                    { text: 'Comprobador de Seguridad de Contraseñas', url: '/herramientas/comprobador-seguridad-contrasenas/' }
+                  ]
+                }
+              },
+              {
+                id: 'no-apk',
+                icon: '🌐',
+                name: 'No, solo navego en Chrome/Safari y salen notificaciones falsas',
+                desc: 'Aparecen alertas de "Tu móvil tiene 5 virus" en la barra superior.',
+                diagnosis: {
+                  title: 'Notificaciones Push Maliciosas del Navegador (No es un virus real)',
+                  severity: 'Riesgo Bajo / Molestia',
+                  category: 'Navegador Web',
+                  summary: 'No tienes un virus instalado. Al pulsar "Permitir" en una web engañosa, le diste permiso a esa página para enviarte spam por notificaciones.',
+                  steps: [
+                    'Abre tu navegador (Chrome/Edge) -> Ajustes -> Configuración del sitio -> Notificaciones.',
+                    'Revisa la lista de sitios "Permitidos" y elimina o bloquea cualquier dominio desconocido o sospechoso.',
+                    'Borra la caché y cookies de navegación del navegador.',
+                    'Activa un DNS Privado seguro (como dns.adguard-dns.com) en Ajustes -> Redes para bloquear publicidad engañosa.'
+                  ],
+                  links: [
+                    { text: 'Guía: Cómo bloquear anuncios en Android sin apps con DNS privado', url: '/blog/bloquear-anuncios-android-sin-apps-dns-privado/' },
+                    { text: 'Cómo saber si mi móvil tiene virus o está intervenido', url: '/blog/como-saber-si-movil-tiene-virus-esta-intervenido/' }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      wifi: {
+        label: 'WiFi y Conexión a Internet',
+        symptoms: [
+          {
+            id: 'wifi-sin-internet',
+            icon: '❌',
+            name: 'WiFi conectado pero pone "Sin acceso a Internet"',
+            desc: 'El icono de WiFi tiene señal, pero no carga ninguna web.',
+            question: '¿El fallo ocurre en TODOS los dispositivos de casa o solo en uno?',
+            details: [
+              {
+                id: 'todos',
+                icon: '🏠',
+                name: 'En TODOS los dispositivos (móviles, TV y PC)',
+                desc: 'Nadie tiene internet en casa aunque el WiFi esté encendido.',
+                diagnosis: {
+                  title: 'Caída de Sincronización del Router / ONT o Avería del Operador',
+                  severity: 'Red Doméstica / ISP',
+                  category: 'Router y Fibra',
+                  summary: 'Tu red WiFi local funciona, pero el router ha perdido la conexión con la red de fibra externa de tu operadora o los servidores DNS están caídos.',
+                  steps: [
+                    'Observa las luces del router: si la luz "PON", "LOS" o "Internet" parpadea en rojo, el cable de fibra óptica está doblado, desconectado o hay avería en tu calle.',
+                    'Realiza un ciclo eléctrico real: desenchufa el router de la corriente durante 60 segundos completos y vuelve a enchufarlo.',
+                    'Comprueba que el cable fino de fibra (punta verde/azul) esté bien encajado sin ángulos cerrados.',
+                    'Si tras 3 minutos sigue la luz roja, llama a tu operadora.'
+                  ],
+                  links: [
+                    { text: 'Guía: WiFi conectado sin internet (Soluciones paso a paso)', url: '/blog/wifi-conectado-sin-internet-solucion-android-windows/' }
+                  ]
+                }
+              },
+              {
+                id: 'solo-uno',
+                icon: '💻',
+                name: 'Solo falla en MI ordenador o móvil (los demás van bien)',
+                desc: 'Otros dispositivos navegan con normalidad.',
+                diagnosis: {
+                  title: 'Conflicto de IP Local, DNS Corrupto o Fecha/Hora Desajustada',
+                  severity: 'Solución Rápida Local',
+                  category: 'Configuración de Red',
+                  summary: 'El problema está exclusivamente en la tarjeta de red, caché DNS o configuración IP de ese dispositivo concreto.',
+                  steps: [
+                    'Verifica que la fecha y hora del sistema sean exactas (una hora incorrecta bloquea los certificados HTTPS de todas las webs).',
+                    'Haz "Olvidar esta red" WiFi y vuelve a conectarte introduciendo la contraseña.',
+                    'Cambia los DNS manualmente en tu dispositivo a Cloudflare (1.1.1.1) o Google (8.8.8.8).',
+                    'En Windows, abre CMD como administrador y ejecuta: ipconfig /flushdns y netsh winsock reset, luego reinicia.'
+                  ],
+                  links: [
+                    { text: 'Test de Velocidad WiFi en Vivo', url: '/herramientas/test-velocidad/' },
+                    { text: 'Guía: WiFi conectado sin internet en Android y Windows', url: '/blog/wifi-conectado-sin-internet-solucion-android-windows/' }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            id: 'wifi-lento',
+            icon: '🐌',
+            name: 'Internet vuela junto al router, pero en mi cuarto va fatal',
+            desc: 'Se corta Netflix, el ping sube y descarga lentísimo lejos del salón.',
+            question: '¿A qué banda WiFi estás conectado y cuántos muros hay en medio?',
+            details: [
+              {
+                id: 'paredes',
+                icon: '🧱',
+                name: 'Hay 2 o más tabiques gruesos / otra planta de distancia',
+                desc: 'El router está en el salón y la habitación al final del pasillo.',
+                diagnosis: {
+                  title: 'Atenuación Física de Señal WiFi 5 GHz por Muros y Distancia',
+                  severity: 'Cobertura Física',
+                  category: 'Infraestructura WiFi',
+                  summary: 'Las redes modernas de 5 GHz ofrecen máxima velocidad pero tienen muy poca penetración a través de paredes de ladrillo, azulejos de baño o forjados.',
+                  steps: [
+                    'Realiza un test de velocidad en el salón y otro en tu habitación para medir la pérdida real.',
+                    'Si estás en la red 5G y pierdes cobertura, prueba a conectarte a la banda 2.4 GHz (llega más lejos) o separa los nombres de ambas redes en el router.',
+                    'Evita esconder el router dentro de muebles cerrados o detrás del televisor.',
+                    'Para llevar velocidad real a una habitación lejana, evita repetidores baratos de enchufe y opta por sistema WiFi Mesh o PLC con toma eléctrica directa.'
+                  ],
+                  links: [
+                    { text: 'Por qué el WiFi va lento en mi habitación: Solución PLC vs Repetidor', url: '/blog/por-que-wifi-lento-habitacion-solucion-plc-repetidor/' },
+                    { text: 'Test de Ping y Latencia en Tiempo Real', url: '/herramientas/test-ping/' }
+                  ]
+                }
+              },
+              {
+                id: 'saturacion',
+                icon: '📡',
+                name: 'Estoy cerca, pero hay muchos vecinos o desconexiones',
+                desc: 'Vivo en un edificio con decenas de redes WiFi cercanas.',
+                diagnosis: {
+                  title: 'Congestión de Canal WiFi por Interferencias de Vecinos',
+                  severity: 'Optimización de Router',
+                  category: 'Canales y Frecuencias',
+                  summary: 'Los routers de operadora suelen venir todos configurados en los mismos canales automáticos saturados (canales 1, 6, 11 o 36), generando colisiones de paquetes.',
+                  steps: [
+                    'Accede a la puerta de enlace de tu router (normalmente 192.168.1.1).',
+                    'Cambia el canal de la banda 2.4 GHz manualmente a uno menos congestionado (1, 6 u 11) usando una app analizadora WiFi.',
+                    'Activa la banda de 5 GHz y elige canales limpios (entre el 36 y 48, o 100+).',
+                    'Comprueba que no haya dispositivos extraños robando ancho de banda en tu red.'
+                  ],
+                  links: [
+                    { text: 'Cómo saber quién te roba el WiFi y bloquearlo', url: '/blog/saber-quien-roba-wifi-y-bloquearlo-desde-movil/' },
+                    { text: 'Trucos para aumentar la velocidad WiFi sin pagar más', url: '/blog/trucos-wifi-aumentar-velocidad-fibra-cobertura/' }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      perifericos: {
+        label: 'Pantalla, Audio y Bluetooth',
+        symptoms: [
+          {
+            id: 'bt-no-detecta',
+            icon: '🎧',
+            name: 'El Bluetooth no detecta auriculares o tiene retraso de audio',
+            desc: 'Windows o el móvil no encuentran el dispositivo o el sonido va tarde.',
+            question: '¿Qué problema exacto experimentas con el Bluetooth?',
+            details: [
+              {
+                id: 'bt-emparejar',
+                icon: '🔍',
+                name: 'No aparece en la lista para emparejar',
+                desc: 'Busco dispositivos pero no sale nada nuevo.',
+                diagnosis: {
+                  title: 'Falta de Modo Emparejamiento (Pairing Mode) o Bluetooth Ocupado',
+                  severity: 'Configuración / Driver',
+                  category: 'Bluetooth',
+                  summary: 'Los auriculares ya están conectados automáticamente a otro dispositivo cercano (como tu móvil) o no están activados en modo descubrimiento.',
+                  steps: [
+                    'Apaga temporalmente el Bluetooth de otros dispositivos cercanos (móvil, tablet) a los que los auriculares se conecten solos.',
+                    'Pon los auriculares en "Modo Emparejamiento" real: mantén pulsado el botón de encendido/caja 5-7 segundos hasta que la luz parpadee rápido en azul/blanco o rojo/azul.',
+                    'En Windows 11, abre "Servicios" (services.msc), busca "Servicio de compatibilidad con Bluetooth" y asegúrate de que esté en Ejecución.',
+                    'Si persiste, actualiza el driver Bluetooth desde el Administrador de Dispositivos.'
+                  ],
+                  links: [
+                    { text: 'Bluetooth no encuentra dispositivos en Windows 11 y Android', url: '/blog/bluetooth-no-encuentra-dispositivos-windows-11-android/' }
+                  ]
+                }
+              },
+              {
+                id: 'bt-delay',
+                icon: '⏱️',
+                name: 'El audio llega con retraso respecto al vídeo o juegos',
+                desc: 'Las bocas se mueven antes de oír la voz.',
+                diagnosis: {
+                  title: 'Latencia de Códec Bluetooth Estándar (SBC) o Perfil Manos Libres (HFP)',
+                  severity: 'Optimización Audio',
+                  category: 'Códecs Inalámbricos',
+                  summary: 'Si Windows activa el micrófono integrado de unos auriculares Bluetooth, reduce drásticamente la calidad y aumenta la latencia. Además el códec SBC estándar tiene retrasos de 150-250ms.',
+                  steps: [
+                    'En Windows, ve a Configuración de sonido -> Entrada y selecciona el micrófono del portátil en lugar del micrófono de tus auriculares (desactiva el modo "Hands-Free Telephony").',
+                    'En Android, activa Opciones de Desarrollador y selecciona códecs de baja latencia como aptX Adaptive o AAC si tus auriculares lo soportan.',
+                    'En reproductores como VLC en PC o Smart TV, puedes sincronizar el audio al milisegundo pulsando las teclas J o K.'
+                  ],
+                  links: [
+                    { text: 'Reducir retraso de audio Bluetooth en Windows 11 (Códecs A2DP)', url: '/blog/reducir-retraso-audio-bluetooth-windows-11-codecs-a2dp/' },
+                    { text: 'Audio y vídeo desincronizados en Smart TV y VLC', url: '/blog/audio-video-desincronizados-smart-tv-vlc-retraso-ms-solucion/' }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            id: 'pantalla-calidad',
+            icon: '📺',
+            name: 'Imagen borrosa, colores raros o dudas sobre la pantalla',
+            desc: 'El monitor no se ve nítido o sospechas de píxeles fallando.',
+            question: '¿Qué notas en tu monitor o televisor?',
+            details: [
+              {
+                id: 'borroso',
+                icon: '👓',
+                name: 'Las letras se ven borrosas o muy grandes/pequeñas',
+                desc: 'Sensación de baja nitidez en textos y menús.',
+                diagnosis: {
+                  title: 'Resolución No Nativa o Escalado DPI Desajustado en el Sistema',
+                  severity: 'Ajuste de Pantalla',
+                  category: 'Imagen y Resolución',
+                  summary: 'El ordenador está enviando una resolución inferior a la nativa real del panel, o el escalado ClearType/DPI no coincide con el tamaño físico del monitor.',
+                  steps: [
+                    'Entra en Configuración -> Pantalla y asegúrate de seleccionar la resolución marcada como "(Recomendada)" (ej. 1920x1080 o 3840x2160).',
+                    'Ajusta el Escalado (100%, 125% o 150%) sin bajar la resolución.',
+                    'En Windows, escribe "ClearType" en el buscador y completa el calibrador rápido de nitidez de texto.',
+                    'Verifica estar usando un cable HDMI o DisplayPort moderno (evita cables VGA analógicos).'
+                  ],
+                  links: [
+                    { text: 'Cómo calibrar tu monitor sin calibrador físico', url: '/blog/calibrar-monitor-teletrabajo-diseno-sin-calibrador-fisico/' },
+                    { text: 'Calculadora de PPI y Nitidez Retina para Pantallas', url: '/herramientas/calculadora-ppi-nitidez-pantalla/' }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    let state = {
+      device: null,
+      symptom: null,
+      diagnosis: null
+    };
+
+    const steps = [
+      document.getElementById('step-1'),
+      document.getElementById('step-2'),
+      document.getElementById('step-3'),
+      document.getElementById('step-4')
+    ];
+    const pills = [
+      document.getElementById('pill-1'),
+      document.getElementById('pill-2'),
+      document.getElementById('pill-3'),
+      document.getElementById('pill-4')
+    ];
+
+    function showStep(stepIndex) {
+      steps.forEach((s, idx) => s.classList.toggle('active', idx === stepIndex));
+      pills.forEach((p, idx) => {
+        p.classList.toggle('active', idx === stepIndex);
+        p.classList.toggle('done', idx < stepIndex);
+      });
+    }
+
+    // Step 1 click
+    document.querySelectorAll('[data-device]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const devKey = btn.getAttribute('data-device');
+        state.device = devKey;
+        const devObj = knowledgeBase[devKey];
+        document.getElementById('step-2-title').textContent = `¿Qué problema presenta tu ${devObj.label}?`;
+
+        const symContainer = document.getElementById('symptom-options');
+        symContainer.innerHTML = devObj.symptoms.map(s => `
+          <button type="button" class="option-card" data-symptom="${s.id}">
+            <span class="opt-icon">${s.icon}</span>
+            <strong class="opt-name">${s.name}</strong>
+            <span class="opt-desc">${s.desc}</span>
+          </button>
+        `).join('');
+
+        symContainer.querySelectorAll('[data-symptom]').forEach(sBtn => {
+          sBtn.addEventListener('click', () => {
+            const symId = sBtn.getAttribute('data-symptom');
+            state.symptom = devObj.symptoms.find(x => x.id === symId);
+            renderStep3();
+          });
+        });
+
+        showStep(1);
+      });
+    });
+
+    function renderStep3() {
+      document.getElementById('step-3-title').textContent = state.symptom.question;
+      const detContainer = document.getElementById('detail-options');
+      detContainer.innerHTML = state.symptom.details.map(d => `
+        <button type="button" class="option-card" data-detail="${d.id}">
+          <span class="opt-icon">${d.icon}</span>
+          <strong class="opt-name">${d.name}</strong>
+          <span class="opt-desc">${d.desc}</span>
+        </button>
+      `).join('');
+
+      detContainer.querySelectorAll('[data-detail]').forEach(dBtn => {
+        dBtn.addEventListener('click', () => {
+          const detId = dBtn.getAttribute('data-detail');
+          const detailObj = state.symptom.details.find(x => x.id === detId);
+          state.diagnosis = detailObj.diagnosis;
+          renderDiagnosis();
+        });
+      });
+
+      showStep(2);
+    }
+
+    function renderDiagnosis() {
+      const diag = state.diagnosis;
+      document.getElementById('diag-severity').textContent = diag.severity;
+      document.getElementById('diag-category').textContent = diag.category;
+      document.getElementById('diag-title').textContent = diag.title;
+      document.getElementById('diag-summary').textContent = diag.summary;
+
+      const listEl = document.getElementById('diag-steps');
+      listEl.innerHTML = diag.steps.map(st => `<li>${st}</li>`).join('');
+
+      const linksEl = document.getElementById('diag-links');
+      if (diag.links && diag.links.length > 0) {
+        document.getElementById('diag-links-wrap').style.display = 'block';
+        linksEl.innerHTML = diag.links.map(l => `
+          <a href="${l.url}" class="related-link-card">
+            <span>🔗 ${l.text}</span>
+            <span class="arrow">→</span>
+          </a>
+        `).join('');
+      } else {
+        document.getElementById('diag-links-wrap').style.display = 'none';
+      }
+
+      showStep(3);
+    }
+
+    document.getElementById('back-to-1').addEventListener('click', () => showStep(0));
+    document.getElementById('back-to-2').addEventListener('click', () => showStep(1));
+    document.getElementById('btn-restart').addEventListener('click', () => showStep(0));
+
+    document.getElementById('btn-copy-diag').addEventListener('click', () => {
+      if (!state.diagnosis) return;
+      const text = `DIAGNÓSTICO TÉCNICO (GuíaTecnes):\n${state.diagnosis.title}\n\nResumen: ${state.diagnosis.summary}\n\nPasos:\n${state.diagnosis.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}`;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('btn-copy-diag');
+        const orig = btn.textContent;
+        btn.textContent = '✅ ¡Diagnóstico Copiado!';
+        setTimeout(() => btn.textContent = orig, 2200);
+      });
+    });
+  })();
+</script>
+
+<style>
+  .tool-page { padding: 2rem 1rem 4rem; max-width: 960px; margin: 0 auto; }
+  .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--primary); }
+  .tool-header { text-align: center; margin-bottom: 2rem; }
+  .tool-badge { display: inline-block; background: rgba(99, 102, 241, 0.14); color: #818cf8; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; border: 1px solid rgba(99, 102, 241, 0.28); }
+  .tool-header h1 { font-size: clamp(1.75rem, 3.5vw, 2.4rem); line-height: 1.2; margin-bottom: 0.75rem; }
+  .tool-subtitle { color: var(--text-muted); font-size: 1.05rem; max-width: 720px; margin: 0 auto; line-height: 1.6; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.75rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .wizard-progress { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); overflow-x: auto; gap: 0.4rem; }
+  .step-pill { display: flex; align-items: center; gap: 0.45rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); white-space: nowrap; opacity: 0.55; transition: all 0.2s ease; }
+  .step-pill.active { color: var(--primary); opacity: 1; }
+  .step-pill.done { color: #10b981; opacity: 0.9; }
+  .step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; }
+  .step-pill.active .step-num { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .step-pill.done .step-num { background: #10b981; color: #fff; border-color: #10b981; }
+  .step-line { flex: 1; height: 2px; background: var(--border); min-width: 14px; }
+
+  .wizard-step { display: none; animation: fadeStep 0.25s ease; }
+  .wizard-step.active { display: block; }
+  @keyframes fadeStep { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .step-nav-top { margin-bottom: 1rem; }
+  .btn-back { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 0.4rem 0.85rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 500; }
+  .btn-back:hover { color: var(--text); border-color: var(--primary); }
+
+  .step-title { font-size: 1.35rem; margin-bottom: 1.25rem; text-align: center; }
+
+  .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+  .option-card { text-align: left; background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; padding: 1.25rem; cursor: pointer; display: flex; flex-direction: column; gap: 0.45rem; transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s; color: var(--text); }
+  .option-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(99, 102, 241, 0.15); }
+  .opt-icon { font-size: 1.85rem; margin-bottom: 0.2rem; }
+  .opt-name { font-size: 1.05rem; font-weight: 700; line-height: 1.3; }
+  .opt-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.45; }
+
+  .diagnosis-header { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.28); border-radius: 12px; padding: 1.35rem; margin-bottom: 1.5rem; }
+  .diag-badge-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+  .diag-severity { background: #10b981; color: #fff; font-size: 0.78rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 6px; }
+  .diag-category { background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); font-size: 0.78rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 6px; }
+  .diagnosis-header h2 { font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--text); }
+  .diag-summary { color: var(--text-muted); font-size: 0.98rem; line-height: 1.55; margin: 0; }
+
+  .diag-steps-box h3, .diag-links-box h3 { font-size: 1.1rem; margin-bottom: 0.9rem; }
+  .action-list { padding-left: 1.35rem; display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 1.75rem; }
+  .action-list li { line-height: 1.55; color: var(--text); font-size: 0.96rem; }
+
+  .related-links { display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1.5rem; }
+  .related-link-card { display: flex; justify-content: space-between; align-items: center; padding: 0.9rem 1.15rem; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--primary); font-weight: 600; font-size: 0.95rem; transition: border-color 0.2s; }
+  .related-link-card:hover { border-color: var(--primary); }
+
+  .diag-footer-actions { display: flex; gap: 0.85rem; flex-wrap: wrap; border-top: 1px solid var(--border); padding-top: 1.25rem; }
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 0.75rem 1.35rem; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 0.95rem; }
+  .btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 0.75rem 1.35rem; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 0.95rem; }
+  .btn-primary:hover { opacity: 0.92; }
+  .btn-secondary:hover { border-color: var(--primary); }
+
+  .seo-guide h2 { font-size: 1.35rem; margin-bottom: 0.9rem; }
+  .seo-guide h3 { font-size: 1.15rem; margin: 1.5rem 0 0.85rem; }
+  .seo-guide p { color: var(--text-muted); line-height: 1.68; margin-bottom: 1rem; }
+  .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.95rem 1.1rem; }
+  .faq-item summary { font-weight: 600; cursor: pointer; color: var(--text); }
+  .faq-item p { margin: 0.7rem 0 0; font-size: 0.93rem; }
+</style>
