@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+const alternates = {
+  es: '/herramientas/formateador-json/',
+  en: '/en/tools/json-formatter-validator/',
+  pt: '/pt/ferramentas/formatador-validador-json/',
+  fr: '/fr/outils/formateur-validateur-json/',
+  de: '/de/werkzeuge/json-formatierer-validator/'
+};
+
+const breadcrumbs = [
+  { name: 'Home', url: '/en/' },
+  { name: 'Tools', url: '/en/tools/' },
+  { name: 'JSON Formatter & Validator', url: '/en/tools/json-formatter-validator/' }
+];
+
+const faqs = [
+  {
+    question: 'Is my JSON data sent to any server?',
+    answer: 'No. All JSON validation, beautifying, and minification runs 100% locally inside your browser using native JavaScript.'
+  },
+  {
+    question: 'What is the difference between Beautify and Minify?',
+    answer: 'Beautify adds readable indentation (2 or 4 spaces) and line breaks for debugging. Minify removes all whitespace to reduce payload size for APIs.'
+  }
+];
+---
+
+<BaseLayout
+  title="Online JSON Formatter & Validator | Beautify & Minify Free"
+  description="Format, validate, and minify JSON data in real time. Instant syntax error detection, 2/4 space indentation, and 100% client-side privacy."
+  lang="en"
+  alternates={alternates}
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb"><a href="/en/">Home</a><span>›</span><a href="/en/tools/">Tools</a><span>›</span><span>JSON Formatter</span></div>
+    <header class="tool-header">
+      <div class="tool-badge">{} 100% Local Developer Tool</div>
+      <h1>Online JSON Formatter & Validator</h1>
+      <p class="tool-subtitle">Beautify, validate syntax errors, and minify JSON payloads instantly without leaving your browser.</p>
+    </header>
+
+    <div class="card">
+      <div class="toolbar">
+        <button type="button" id="btn-format-2" class="btn-primary">✨ Beautify (2 spaces)</button>
+        <button type="button" id="btn-format-4" class="btn-sec">✨ Beautify (4 spaces)</button>
+        <button type="button" id="btn-minify" class="btn-sec">📦 Minify</button>
+        <button type="button" id="btn-copy" class="btn-sec">📋 Copy</button>
+        <button type="button" id="btn-clear" class="btn-sec">🗑️ Clear</button>
+      </div>
+      <div id="json-status" class="status-bar">Paste your JSON below and choose an action</div>
+      <textarea id="json-input" rows="14" spellcheck="false" placeholder='{"name": "GuíaTecnes", "status": "ok", "tools": [1, 2, 3]}'></textarea>
+    </div>
+
+    <section class="seo-guide card">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">{faqs.map(f => (<details class="faq-item"><summary>{f.question}</summary><p>{f.answer}</p></details>))}</div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  (function() {
+    const ta = document.getElementById('json-input'), st = document.getElementById('json-status');
+    function run(mode) {
+      const raw = ta.value.trim();
+      if (!raw) { st.textContent = '⚠️ Please enter some JSON first'; st.className = 'status-bar warn'; return; }
+      try {
+        const parsed = JSON.parse(raw);
+        ta.value = mode === 0 ? JSON.stringify(parsed) : JSON.stringify(parsed, null, mode);
+        st.textContent = '✅ Valid JSON'; st.className = 'status-bar ok';
+      } catch (e) {
+        st.textContent = `❌ Invalid JSON: ${e.message}`; st.className = 'status-bar err';
+      }
+    }
+    document.getElementById('btn-format-2').addEventListener('click', () => run(2));
+    document.getElementById('btn-format-4').addEventListener('click', () => run(4));
+    document.getElementById('btn-minify').addEventListener('click', () => run(0));
+    document.getElementById('btn-clear').addEventListener('click', () => { ta.value = ''; st.textContent = 'Cleared'; st.className = 'status-bar'; });
+    document.getElementById('btn-copy').addEventListener('click', () => {
+      navigator.clipboard.writeText(ta.value);
+      st.textContent = '📋 Copied to clipboard!'; st.className = 'status-bar ok';
+    });
+  })();
+</script>
+
+<style>
+  .tool-page { padding: 2rem 1rem 4rem; max-width: 960px; margin: 0 auto; }
+  .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2rem; }
+  .tool-badge { display: inline-block; background: rgba(99, 102, 241, 0.14); color: #818cf8; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 0.55rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
+  .btn-sec { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 0.55rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
+  .status-bar { padding: 0.65rem 1rem; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); font-size: 0.88rem; margin-bottom: 0.85rem; font-weight: 600; }
+  .status-bar.ok { border-color: #10b981; color: #10b981; }
+  .status-bar.err { border-color: #ef4444; color: #ef4444; }
+  .status-bar.warn { border-color: #f59e0b; color: #f59e0b; }
+  textarea { width: 100%; font-family: monospace; font-size: 0.9rem; padding: 1rem; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); resize: vertical; }
+  .faq-list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
+  .faq-item { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.95rem 1.1rem; }
+  .faq-item summary { font-weight: 600; cursor: pointer; }
+  .faq-item p { margin: 0.7rem 0 0; font-size: 0.93rem; color: var(--text-muted); }
+</style>

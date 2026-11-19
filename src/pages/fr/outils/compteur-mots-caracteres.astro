@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+const alternates = {
+  es: '/herramientas/contador-palabras/',
+  en: '/en/tools/word-character-counter/',
+  pt: '/pt/ferramentas/contador-palavras-caracteres/',
+  fr: '/fr/outils/compteur-mots-caracteres/',
+  de: '/de/werkzeuge/woerter-zeichen-zaehler/'
+};
+
+const breadcrumbs = [
+  { name: 'Accueil', url: '/fr/' },
+  { name: 'Outils', url: '/fr/outils/' },
+  { name: 'Compteur de Mots', url: '/fr/outils/compteur-mots-caracteres/' }
+];
+---
+
+<BaseLayout
+  title="Compteur de Mots et Caractères en Ligne Gratuit"
+  description="Comptez les mots, caractères avec et sans espaces, phrases et temps de lecture en temps réel."
+  lang="fr"
+  alternates={alternates}
+  breadcrumbs={breadcrumbs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb"><a href="/fr/">Accueil</a><span>›</span><a href="/fr/outils/">Outils</a><span>›</span><span>Compteur de Mots</span></div>
+    <header class="tool-header">
+      <div class="tool-badge">📝 Rédaction & SEO</div>
+      <h1>Compteur de Mots et Caractères</h1>
+      <p class="tool-subtitle">Analysez le nombre de mots, caractères, phrases et le temps de lecture instantanément.</p>
+    </header>
+
+    <div class="card">
+      <div class="stats-grid">
+        <div class="stat-box"><span class="stat-label">Mots</span><strong id="cnt-words">0</strong></div>
+        <div class="stat-box"><span class="stat-label">Caractères</span><strong id="cnt-chars">0</strong></div>
+        <div class="stat-box"><span class="stat-label">Sans Espaces</span><strong id="cnt-nospaces">0</strong></div>
+        <div class="stat-box"><span class="stat-label">Phrases</span><strong id="cnt-sentences">0</strong></div>
+        <div class="stat-box"><span class="stat-label">Lecture</span><strong id="cnt-read">0 min</strong></div>
+      </div>
+      <textarea id="text-input" rows="12" placeholder="Écrivez ou collez votre texte ici..."></textarea>
+    </div>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  (function() {
+    const ta = document.getElementById('text-input');
+    ta.addEventListener('input', () => {
+      const txt = ta.value, words = txt.trim() ? txt.trim().split(/\s+/).length : 0;
+      document.getElementById('cnt-words').textContent = words;
+      document.getElementById('cnt-chars').textContent = txt.length;
+      document.getElementById('cnt-nospaces').textContent = txt.replace(/\s/g, '').length;
+      document.getElementById('cnt-sentences').textContent = txt.trim() ? txt.split(/[.!?]+/).filter(Boolean).length : 0;
+      document.getElementById('cnt-read').textContent = words === 0 ? '0 min' : `${Math.max(1, Math.ceil(words / 200))} min`;
+    });
+  })();
+</script>
+
+<style>
+  .tool-page { padding: 2rem 1rem 4rem; max-width: 920px; margin: 0 auto; }
+  .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2rem; }
+  .tool-badge { display: inline-block; background: rgba(99, 102, 241, 0.14); color: #818cf8; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.85rem; margin-bottom: 1.25rem; }
+  .stat-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem; text-align: center; }
+  .stat-label { display: block; font-size: 0.78rem; color: var(--text-muted); }
+  .stat-box strong { font-size: 1.4rem; color: var(--primary); }
+  textarea { width: 100%; padding: 1rem; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 1rem; resize: vertical; }
+</style>

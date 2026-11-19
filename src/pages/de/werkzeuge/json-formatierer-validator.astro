@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+const alternates = {
+  es: '/herramientas/formateador-json/',
+  en: '/en/tools/json-formatter-validator/',
+  pt: '/pt/ferramentas/formatador-validador-json/',
+  fr: '/fr/outils/formateur-validateur-json/',
+  de: '/de/werkzeuge/json-formatierer-validator/'
+};
+
+const breadcrumbs = [
+  { name: 'Start', url: '/de/' },
+  { name: 'Werkzeuge', url: '/de/werkzeuge/' },
+  { name: 'JSON Formatierer', url: '/de/werkzeuge/json-formatierer-validator/' }
+];
+---
+
+<BaseLayout
+  title="Online JSON Formatierer & Validator Kostenlos"
+  description="Formatieren, validieren und minifizieren Sie JSON-Code in Echtzeit direkt im Browser. 100% lokal ohne Datenübertragung."
+  lang="de"
+  alternates={alternates}
+  breadcrumbs={breadcrumbs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb"><a href="/de/">Start</a><span>›</span><a href="/de/werkzeuge/">Werkzeuge</a><span>›</span><span>JSON Formatierer</span></div>
+    <header class="tool-header">
+      <div class="tool-badge">{} 100% Lokales Entwickler-Tool</div>
+      <h1>Online JSON Formatierer & Validator</h1>
+      <p class="tool-subtitle">JSON-Daten sofort verschönern, Syntaxfehler prüfen und minifizieren – direkt im Browser.</p>
+    </header>
+
+    <div class="card">
+      <div class="toolbar">
+        <button type="button" id="btn-format-2" class="btn-primary">✨ Formatieren (2 Leerz.)</button>
+        <button type="button" id="btn-format-4" class="btn-sec">✨ Formatieren (4 Leerz.)</button>
+        <button type="button" id="btn-minify" class="btn-sec">📦 Minifizieren</button>
+        <button type="button" id="btn-copy" class="btn-sec">📋 Kopieren</button>
+        <button type="button" id="btn-clear" class="btn-sec">🗑️ Leeren</button>
+      </div>
+      <div id="json-status" class="status-bar">JSON unten einfügen und Aktion wählen</div>
+      <textarea id="json-input" rows="14" spellcheck="false" placeholder='{"name": "GuíaTecnes", "status": "ok"}'></textarea>
+    </div>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  (function() {
+    const ta = document.getElementById('json-input'), st = document.getElementById('json-status');
+    function run(mode) {
+      const raw = ta.value.trim(); if (!raw) { st.textContent = '⚠️ Bitte zuerst JSON eingeben'; st.className = 'status-bar warn'; return; }
+      try { const p = JSON.parse(raw); ta.value = mode === 0 ? JSON.stringify(p) : JSON.stringify(p, null, mode); st.textContent = '✅ Gültiges JSON'; st.className = 'status-bar ok'; }
+      catch (e) { st.textContent = `❌ Ungültiges JSON: ${e.message}`; st.className = 'status-bar err'; }
+    }
+    document.getElementById('btn-format-2').addEventListener('click', () => run(2));
+    document.getElementById('btn-format-4').addEventListener('click', () => run(4));
+    document.getElementById('btn-minify').addEventListener('click', () => run(0));
+    document.getElementById('btn-clear').addEventListener('click', () => { ta.value = ''; st.textContent = 'Geleert'; st.className = 'status-bar'; });
+    document.getElementById('btn-copy').addEventListener('click', () => { navigator.clipboard.writeText(ta.value); st.textContent = '📋 Kopiert!'; st.className = 'status-bar ok'; });
+  })();
+</script>
+
+<style>
+  .tool-page { padding: 2rem 1rem 4rem; max-width: 960px; margin: 0 auto; }
+  .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2rem; }
+  .tool-badge { display: inline-block; background: rgba(99, 102, 241, 0.14); color: #818cf8; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 0.55rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
+  .btn-sec { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 0.55rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
+  .status-bar { padding: 0.65rem 1rem; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); font-size: 0.88rem; margin-bottom: 0.85rem; font-weight: 600; }
+  .status-bar.ok { border-color: #10b981; color: #10b981; }
+  .status-bar.err { border-color: #ef4444; color: #ef4444; }
+  .status-bar.warn { border-color: #f59e0b; color: #f59e0b; }
+  textarea { width: 100%; font-family: monospace; font-size: 0.9rem; padding: 1rem; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); resize: vertical; }
+</style>
