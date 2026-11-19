@@ -1,0 +1,305 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+const alternates = {
+  es: '/herramientas/laboratorio-pruebas-hardware/',
+  en: '/en/tools/hardware-test-lab/',
+  pt: '/pt/ferramentas/laboratorio-testes-hardware/'
+};
+
+const breadcrumbs = [
+  { name: 'Início', url: '/pt/' },
+  { name: 'Ferramentas', url: '/pt/ferramentas/' },
+  { name: 'Laboratório de Hardware', url: '/pt/ferramentas/laboratorio-testes-hardware/' }
+];
+
+const faqs = [
+  {
+    question: 'Como detectar pixels mortos ou travados no monitor?',
+    answer: 'Ative o modo Tela Cheia na aba Monitor e alterne entre Preto, Branco, Vermelho, Verde e Azul. Um ponto preto em todas as cores indica um pixel morto; um ponto colorido brilhante no fundo preto indica um subpixel travado.'
+  },
+  {
+    question: 'Como verificar o drift no controle de PS5, Xbox ou PC?',
+    answer: 'Conecte o controle via USB ou Bluetooth, abra a aba Controle / Drift e aperte qualquer botão. Sem tocar nos analógicos, observe os valores X e Y; se oscilarem além de ±0.05, há desgaste (drift) no analógico.'
+  }
+];
+---
+
+<BaseLayout
+  title="Laboratório de Testes de Hardware Online | Monitor, Teclado, Áudio e Controle"
+  description="Suíte gratuita no navegador para testar seu hardware: pixels mortos no monitor, anti-ghosting do teclado, áudio estéreo/Hz e drift no controle PS5/Xbox."
+  lang="pt"
+  alternates={alternates}
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/pt/">Início</a>
+      <span>›</span>
+      <a href="/pt/ferramentas/">Ferramentas</a>
+      <span>›</span>
+      <span>Laboratório de Hardware</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🖥️ Diagnóstico Online · Sem Downloads</div>
+      <h1>Laboratório de Testes de Hardware</h1>
+      <p class="tool-subtitle">
+        Verifique pixels mortos no monitor, anti-ghosting no teclado, canais estéreo dos fones e drift nos analógicos do seu controle em segundos.
+      </p>
+    </header>
+
+    <div class="lab-container card">
+      <div class="lab-tabs" role="tablist">
+        <button type="button" class="lab-tab active" data-tab="monitor">🖥️ Monitor e Pixels</button>
+        <button type="button" class="lab-tab" data-tab="keyboard">⌨️ Teclado e Ghosting</button>
+        <button type="button" class="lab-tab" data-tab="audio">🔊 Áudio Estéreo e Hz</button>
+        <button type="button" class="lab-tab" data-tab="gamepad">🎮 Controle / Drift</button>
+      </div>
+
+      <section id="tab-monitor" class="lab-panel active">
+        <h2>Teste de Pixels Mortos e Vazamento de Luz (IPS Glow)</h2>
+        <p class="panel-desc">
+          Limpe a tela, inicie o modo <strong>Tela Cheia</strong> e clique (ou aperte Seta Direita) para alternar entre cores puras.
+        </p>
+        <div class="color-swatches">
+          <button type="button" class="swatch-btn" data-color="#000000" style="background:#000000;color:#fff;">Preto (Vazamento)</button>
+          <button type="button" class="swatch-btn" data-color="#ffffff" style="background:#ffffff;color:#000;">Branco (Manchas)</button>
+          <button type="button" class="swatch-btn" data-color="#ff0000" style="background:#ff0000;color:#fff;">Vermelho</button>
+          <button type="button" class="swatch-btn" data-color="#00ff00" style="background:#00ff00;color:#000;">Verde</button>
+          <button type="button" class="swatch-btn" data-color="#0000ff" style="background:#0000ff;color:#fff;">Azul</button>
+        </div>
+        <button type="button" id="btn-start-pixel" class="btn-primary">⛶ Iniciar Teste em Tela Cheia</button>
+        <p class="hint-text">Pressione <code>ESC</code> a qualquer momento para sair.</p>
+      </section>
+
+      <section id="tab-keyboard" class="lab-panel">
+        <h2>Testador de Teclado e Anti-Ghosting</h2>
+        <p class="panel-desc">Pressione várias teclas juntas para verificar o limite simultâneo (N-Key Rollover) e teclas com falha.</p>
+        <div class="kb-stats">
+          <div class="stat-box"><span class="stat-label">Última Tecla</span><strong id="kb-last-key" class="stat-val">—</strong></div>
+          <div class="stat-box"><span class="stat-label">Código</span><strong id="kb-last-code" class="stat-val">—</strong></div>
+          <div class="stat-box"><span class="stat-label">Simultâneas Agora</span><strong id="kb-simultaneous" class="stat-val highlight">0</strong></div>
+          <div class="stat-box"><span class="stat-label">Máx. Simultâneas</span><strong id="kb-max-sim" class="stat-val">0</strong></div>
+        </div>
+        <div class="kb-active-list-wrap">
+          <span class="mini-label">Teclas pressionadas agora:</span>
+          <div id="kb-active-pills" class="kb-pills">Nenhuma tecla</div>
+        </div>
+        <div class="kb-history-wrap">
+          <div class="history-header">
+            <span class="mini-label">Histórico testado (<span id="kb-unique-count">0</span> únicas):</span>
+            <button type="button" id="btn-kb-reset" class="btn-sm">Limpar</button>
+          </div>
+          <div id="kb-history" class="kb-history-grid"></div>
+        </div>
+      </section>
+
+      <section id="tab-audio" class="lab-panel">
+        <h2>Teste de Áudio Estéreo (Esquerdo / Direito) e Frequência</h2>
+        <p class="panel-desc">Verifique se seus fones estão invertidos ou gere frequências puras diretamente pelo navegador.</p>
+        <div class="audio-controls-grid">
+          <button type="button" class="audio-btn" id="btn-audio-left"><span>◀️ Canal Esquerdo (L)</span><small>440 Hz · Apenas lado esquerdo</small></button>
+          <button type="button" class="audio-btn" id="btn-audio-right"><span>Canal Direito (R) ▶️</span><small>440 Hz · Apenas lado direito</small></button>
+          <button type="button" class="audio-btn" id="btn-audio-both"><span>🔊 Ambos os Canais</span><small>440 Hz · Estéreo central</small></button>
+        </div>
+        <div class="freq-tester card-inner">
+          <div class="freq-top">
+            <label for="freq-slider">Frequência Pura: <strong id="freq-display">165 Hz</strong></label>
+            <button type="button" id="btn-freq-toggle" class="btn-primary">▶ Tocar Som</button>
+          </div>
+          <input type="range" id="freq-slider" min="20" max="16000" value="165" step="5" />
+        </div>
+      </section>
+
+      <section id="tab-gamepad" class="lab-panel">
+        <h2>Teste de Controle e Detecção de Drift</h2>
+        <p class="panel-desc">Conecte seu controle PS5, Xbox ou PC e <strong>pressione qualquer botão</strong> para reconhecê-lo.</p>
+        <div id="gp-status" class="gp-status">⏳ Aguardando controle... Conecte e aperte um botão.</div>
+        <div id="gp-dashboard" class="gp-dashboard" style="display:none;">
+          <div class="sticks-grid">
+            <div class="stick-card"><h3>Analógico Esquerdo (L)</h3><div class="stick-pad"><div id="dot-l" class="stick-dot"></div></div><div class="axis-readout">X: <strong id="lx-val">0.00</strong> | Y: <strong id="ly-val">0.00</strong></div></div>
+            <div class="stick-card"><h3>Analógico Direito (R)</h3><div class="stick-pad"><div id="dot-r" class="stick-dot"></div></div><div class="axis-readout">X: <strong id="rx-val">0.00</strong> | Y: <strong id="ry-val">0.00</strong></div></div>
+          </div>
+          <div class="gp-buttons-wrap"><h3>Botões Ativos:</h3><div id="gp-buttons" class="gp-buttons-grid"></div></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="seo-guide card">
+      <h2>Perguntas Frequentes</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item"><summary>{faq.question}</summary><p>{faq.answer}</p></details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <div id="pixel-overlay" class="pixel-overlay" style="display:none;">
+    <div id="pixel-hint" class="pixel-hint">Clique ou aperte → para mudar a cor · ESC para sair</div>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  (function() {
+    const tabs = document.querySelectorAll('.lab-tab');
+    const panels = document.querySelectorAll('.lab-panel');
+    tabs.forEach(t => t.addEventListener('click', () => {
+      const target = t.getAttribute('data-tab');
+      tabs.forEach(x => x.classList.toggle('active', x === t));
+      panels.forEach(p => p.classList.toggle('active', p.id === `tab-${target}`));
+    }));
+
+    const colors = ['#000000', '#ffffff', '#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff'];
+    let colorIdx = 0;
+    const overlay = document.getElementById('pixel-overlay');
+    const hint = document.getElementById('pixel-hint');
+    function startPixelTest(c) {
+      colorIdx = Math.max(0, colors.indexOf(c));
+      overlay.style.backgroundColor = colors[colorIdx];
+      overlay.style.display = 'flex';
+      hint.style.opacity = '1';
+      setTimeout(() => { hint.style.opacity = '0'; }, 2600);
+      if (overlay.requestFullscreen) overlay.requestFullscreen().catch(() => {});
+    }
+    document.querySelectorAll('.swatch-btn').forEach(b => b.addEventListener('click', () => startPixelTest(b.getAttribute('data-color'))));
+    document.getElementById('btn-start-pixel').addEventListener('click', () => startPixelTest('#000000'));
+    overlay.addEventListener('click', () => { colorIdx = (colorIdx + 1) % colors.length; overlay.style.backgroundColor = colors[colorIdx]; });
+    document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) overlay.style.display = 'none'; });
+    document.addEventListener('keydown', (e) => {
+      if (overlay.style.display === 'flex') {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); colorIdx = (colorIdx + 1) % colors.length; overlay.style.backgroundColor = colors[colorIdx]; }
+        else if (e.key === 'Escape') { overlay.style.display = 'none'; if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); }
+      }
+    });
+
+    const activeKeys = new Set(), testedCodes = new Set(); let maxSim = 0;
+    function updateKbUI() {
+      document.getElementById('kb-simultaneous').textContent = activeKeys.size;
+      if (activeKeys.size > maxSim) { maxSim = activeKeys.size; document.getElementById('kb-max-sim').textContent = maxSim; }
+      document.getElementById('kb-active-pills').innerHTML = activeKeys.size === 0 ? '<span class="muted">Nenhuma tecla</span>' : Array.from(activeKeys).map(c => `<span class="key-pill">${c}</span>`).join('');
+    }
+    window.addEventListener('keydown', (e) => {
+      if (!document.getElementById('tab-keyboard').classList.contains('active')) return;
+      if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.code)) e.preventDefault();
+      document.getElementById('kb-last-key').textContent = e.key === ' ' ? 'Espaço' : e.key;
+      document.getElementById('kb-last-code').textContent = e.code;
+      activeKeys.add(e.code);
+      if (!testedCodes.has(e.code)) {
+        testedCodes.add(e.code); document.getElementById('kb-unique-count').textContent = testedCodes.size;
+        const badge = document.createElement('span'); badge.className = 'tested-key'; badge.textContent = e.code;
+        document.getElementById('kb-history').prepend(badge);
+      }
+      updateKbUI();
+    });
+    window.addEventListener('keyup', (e) => { activeKeys.delete(e.code); updateKbUI(); });
+    document.getElementById('btn-kb-reset').addEventListener('click', () => {
+      activeKeys.clear(); testedCodes.clear(); maxSim = 0;
+      document.getElementById('kb-last-key').textContent = '—'; document.getElementById('kb-last-code').textContent = '—';
+      document.getElementById('kb-max-sim').textContent = '0'; document.getElementById('kb-unique-count').textContent = '0';
+      document.getElementById('kb-history').innerHTML = ''; updateKbUI();
+    });
+
+    let audioCtx = null;
+    function getAudioCtx() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); return audioCtx; }
+    function playChime(panVal) {
+      const ctx = getAudioCtx(), osc = ctx.createOscillator(), gain = ctx.createGain(), panner = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
+      osc.type = 'sine'; osc.frequency.setValueAtTime(440, ctx.currentTime);
+      gain.gain.setValueAtTime(0.001, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.35, ctx.currentTime + 0.05); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.9);
+      if (panner) { panner.pan.setValueAtTime(panVal, ctx.currentTime); osc.connect(gain).connect(panner).connect(ctx.destination); } else { osc.connect(gain).connect(ctx.destination); }
+      osc.start(); osc.stop(ctx.currentTime + 0.95);
+    }
+    document.getElementById('btn-audio-left').addEventListener('click', () => playChime(-1));
+    document.getElementById('btn-audio-right').addEventListener('click', () => playChime(1));
+    document.getElementById('btn-audio-both').addEventListener('click', () => playChime(0));
+
+    let sweepOsc = null, sweepGain = null;
+    const freqSlider = document.getElementById('freq-slider'), freqDisplay = document.getElementById('freq-display'), btnFreqToggle = document.getElementById('btn-freq-toggle');
+    freqSlider.addEventListener('input', () => { freqDisplay.textContent = `${freqSlider.value} Hz`; if (sweepOsc && audioCtx) sweepOsc.frequency.setValueAtTime(Number(freqSlider.value), audioCtx.currentTime); });
+    btnFreqToggle.addEventListener('click', () => {
+      if (sweepOsc) { sweepOsc.stop(); sweepOsc.disconnect(); sweepOsc = null; btnFreqToggle.textContent = '▶ Tocar Som'; }
+      else {
+        const ctx = getAudioCtx(); sweepOsc = ctx.createOscillator(); sweepGain = ctx.createGain();
+        sweepOsc.type = 'sine'; sweepOsc.frequency.setValueAtTime(Number(freqSlider.value), ctx.currentTime); sweepGain.gain.setValueAtTime(0.2, ctx.currentTime);
+        sweepOsc.connect(sweepGain).connect(ctx.destination); sweepOsc.start(); btnFreqToggle.textContent = '⏹ Parar Som';
+      }
+    });
+
+    let gpLoop = null;
+    function pollGamepads() {
+      const gps = navigator.getGamepads ? navigator.getGamepads() : [], activeGp = Array.from(gps).find(g => g && g.connected);
+      const statusEl = document.getElementById('gp-status'), dashEl = document.getElementById('gp-dashboard');
+      if (!activeGp) { statusEl.textContent = '⏳ Aguardando controle... Conecte e aperte um botão.'; dashEl.style.display = 'none'; }
+      else {
+        statusEl.textContent = `✅ Conectado: ${activeGp.id}`; dashEl.style.display = 'block';
+        const lx = activeGp.axes[0] || 0, ly = activeGp.axes[1] || 0, rx = activeGp.axes[2] || 0, ry = activeGp.axes[3] || 0;
+        document.getElementById('lx-val').textContent = lx.toFixed(2); document.getElementById('ly-val').textContent = ly.toFixed(2);
+        document.getElementById('rx-val').textContent = rx.toFixed(2); document.getElementById('ry-val').textContent = ry.toFixed(2);
+        document.getElementById('dot-l').style.transform = `translate(${lx * 38}px, ${ly * 38}px)`;
+        document.getElementById('dot-r').style.transform = `translate(${rx * 38}px, ${ry * 38}px)`;
+        document.getElementById('gp-buttons').innerHTML = activeGp.buttons.map((b, i) => `<div class="gp-btn ${b.pressed ? 'pressed' : ''}">B${i}</div>`).join('');
+      }
+      if (document.getElementById('tab-gamepad').classList.contains('active')) gpLoop = requestAnimationFrame(pollGamepads); else gpLoop = null;
+    }
+    tabs.forEach(t => t.addEventListener('click', () => { if (t.getAttribute('data-tab') === 'gamepad' && !gpLoop) pollGamepads(); }));
+    window.addEventListener('gamepadconnected', () => { if (document.getElementById('tab-gamepad').classList.contains('active') && !gpLoop) pollGamepads(); });
+  })();
+</script>
+
+<style>
+  .tool-page { padding: 2rem 1rem 4rem; max-width: 960px; margin: 0 auto; }
+  .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2rem; }
+  .tool-badge { display: inline-block; background: rgba(16, 185, 129, 0.14); color: #34d399; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; border: 1px solid rgba(16, 185, 129, 0.28); }
+  .tool-header h1 { font-size: clamp(1.75rem, 3.5vw, 2.4rem); margin-bottom: 0.75rem; }
+  .tool-subtitle { color: var(--text-muted); font-size: 1.05rem; max-width: 720px; margin: 0 auto; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.75rem; }
+  .lab-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+  .lab-tab { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); padding: 0.65rem 1.05rem; border-radius: 10px; font-weight: 600; cursor: pointer; }
+  .lab-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .lab-panel { display: none; }
+  .lab-panel.active { display: block; }
+  .color-swatches { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1.25rem 0; }
+  .swatch-btn { padding: 0.75rem 1.1rem; border-radius: 10px; border: 2px solid var(--border); font-weight: 600; cursor: pointer; }
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 0.75rem 1.35rem; border-radius: 10px; font-weight: 600; cursor: pointer; }
+  .btn-sm { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 0.3rem 0.75rem; border-radius: 6px; cursor: pointer; }
+  .kb-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.85rem; margin: 1.25rem 0; }
+  .stat-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem; text-align: center; }
+  .stat-label { display: block; font-size: 0.78rem; color: var(--text-muted); }
+  .stat-val { font-size: 1.25rem; font-family: monospace; }
+  .stat-val.highlight { color: #34d399; }
+  .kb-active-list-wrap, .kb-history-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; margin-bottom: 1rem; }
+  .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+  .kb-pills { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .key-pill { background: var(--primary); color: #fff; padding: 0.25rem 0.65rem; border-radius: 6px; font-family: monospace; font-weight: 700; }
+  .kb-history-grid { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tested-key { background: var(--surface); border: 1px solid var(--border); padding: 0.2rem 0.55rem; border-radius: 5px; font-family: monospace; font-size: 0.8rem; }
+  .audio-controls-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.85rem; margin: 1.25rem 0; }
+  .audio-btn { background: var(--bg); border: 1.5px solid var(--border); color: var(--text); border-radius: 12px; padding: 1rem; cursor: pointer; display: flex; flex-direction: column; gap: 0.3rem; text-align: left; }
+  .card-inner { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+  .freq-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; }
+  #freq-slider { width: 100%; accent-color: var(--primary); }
+  .gp-status { background: var(--bg); border: 1px solid var(--border); padding: 1rem; border-radius: 10px; font-weight: 600; margin-bottom: 1.25rem; }
+  .sticks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+  .stick-card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; text-align: center; }
+  .stick-pad { width: 100px; height: 100px; border-radius: 50%; border: 2px dashed var(--border); margin: 0 auto 0.75rem; display: flex; align-items: center; justify-content: center; }
+  .stick-dot { width: 18px; height: 18px; border-radius: 50%; background: var(--primary); }
+  .gp-buttons-grid { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .gp-btn { padding: 0.35rem 0.65rem; border: 1px solid var(--border); border-radius: 6px; font-family: monospace; background: var(--bg); }
+  .gp-btn.pressed { background: #10b981; color: #fff; border-color: #10b981; }
+  .pixel-overlay { position: fixed; inset: 0; z-index: 999999; cursor: pointer; align-items: flex-end; justify-content: center; padding-bottom: 2.5rem; }
+  .pixel-hint { background: rgba(0,0,0,0.75); color: #fff; padding: 0.65rem 1.25rem; border-radius: 999px; transition: opacity 0.6s ease; pointer-events: none; }
+  .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.95rem 1.1rem; }
+  .faq-item summary { font-weight: 600; cursor: pointer; }
+  .faq-item p { margin: 0.7rem 0 0; font-size: 0.93rem; color: var(--text-muted); }
+</style>

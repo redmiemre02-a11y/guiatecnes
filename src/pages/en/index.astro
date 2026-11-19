@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const alternates = {
+  es: '/',
+  en: '/en/',
+  pt: '/pt/'
+};
+
+const tools = [
+  {
+    title: 'Hardware Test Lab (Monitor, Keyboard, Audio & Gamepad)',
+    desc: 'Test your monitor for dead pixels & IPS glow, check keyboard N-key rollover/ghosting, test stereo speakers & frequency response, and measure controller analog drift.',
+    url: '/en/tools/hardware-test-lab/',
+    icon: '🖥️',
+    badge: 'Hardware Suite',
+  },
+  {
+    title: 'Interactive Tech Diagnostic Wizard',
+    desc: 'PC shutting down, WiFi connected without internet, phone not charging, or Bluetooth audio lag? Answer 3 fast questions for an instant step-by-step fix.',
+    url: '/en/tools/tech-diagnostic-wizard/',
+    icon: '🩺',
+    badge: '3-Step Troubleshooter',
+  },
+  {
+    title: 'Browser Privacy & Fingerprint Audit',
+    desc: 'Run a 100% local scan to detect WebRTC IP leaks behind VPNs, inspect your Canvas Fingerprint hash, WebGL GPU exposure, and get a live Privacy Score.',
+    url: '/en/tools/privacy-fingerprint-audit/',
+    icon: '🛡️',
+    badge: 'Cybersecurity',
+  },
+  {
+    title: 'Password Strength & Entropy Checker',
+    desc: 'Calculate mathematical bit entropy and realistic brute-force cracking times locally in your browser without sending a single keystroke over the internet.',
+    url: '/en/tools/password-security-checker/',
+    icon: '🔒',
+    badge: 'Local Cryptography',
+  }
+];
+---
+
+<BaseLayout
+  title="Free Tech Tools, Hardware Diagnostics & Privacy Audits"
+  description="GuíaTecnes Global: Free browser-based hardware testing lab, interactive tech troubleshooting wizard, WebRTC privacy leak checker, and password entropy auditor."
+  lang="en"
+  alternates={alternates}
+>
+  <Header slot="header" />
+
+  <main class="en-home container">
+    <section class="hero-card">
+      <div class="hero-badge">⚡ Global Tech Utilities · 100% Client-Side</div>
+      <h1>Free Interactive Tech Tools & Diagnostics</h1>
+      <p class="hero-sub">
+        Zero downloads, zero tracking, instant browser execution. Test your monitor, keyboard, controller, network privacy, and troubleshoot hardware issues in seconds.
+      </p>
+      <div class="hero-cta-row">
+        <a href="/en/tools/" class="btn-primary">Explore All English Tools →</a>
+        <a href="/en/tools/hardware-test-lab/" class="btn-secondary">🖥️ Launch Hardware Lab</a>
+      </div>
+    </section>
+
+    <section class="tools-section">
+      <h2>Most Popular Global Utilities</h2>
+      <div class="tools-grid">
+        {tools.map(t => (
+          <a href={t.url} class="tool-card">
+            <div class="tc-top">
+              <span class="tc-icon">{t.icon}</span>
+              <span class="tc-badge">{t.badge}</span>
+            </div>
+            <h3>{t.title}</h3>
+            <p>{t.desc}</p>
+            <span class="tc-link">Open Tool →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="lang-banner card">
+      <h2>🌐 Available in Multiple Languages</h2>
+      <p>
+        GuíaTecnes serves millions of users worldwide. Switch anytime between
+        <a href="/">Español (ES / LATAM)</a>,
+        <a href="/en/">English (Global)</a>, and
+        <a href="/pt/">Português (Brasil / PT)</a>.
+      </p>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .en-home { padding: 2.5rem 1rem 4rem; max-width: 1040px; margin: 0 auto; }
+  .hero-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 3rem 2rem; text-align: center; margin-bottom: 2.5rem; }
+  .hero-badge { display: inline-block; background: rgba(99, 102, 241, 0.14); color: #818cf8; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem; border: 1px solid rgba(99, 102, 241, 0.28); }
+  .hero-card h1 { font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1.15; margin-bottom: 1rem; }
+  .hero-sub { color: var(--text-muted); max-width: 680px; margin: 0 auto 1.75rem; font-size: 1.08rem; line-height: 1.6; }
+  .hero-cta-row { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary { background: var(--primary); color: #fff; padding: 0.85rem 1.5rem; border-radius: 10px; font-weight: 700; text-decoration: none; }
+  .btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 0.85rem 1.5rem; border-radius: 10px; font-weight: 600; text-decoration: none; }
+
+  .tools-section h2 { font-size: 1.5rem; margin-bottom: 1.25rem; }
+  .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem; }
+  .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; text-decoration: none; color: var(--text); display: flex; flex-direction: column; gap: 0.75rem; transition: border-color 0.2s, transform 0.15s; }
+  .tool-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+  .tc-top { display: flex; justify-content: space-between; align-items: center; }
+  .tc-icon { font-size: 1.85rem; }
+  .tc-badge { font-size: 0.75rem; font-weight: 700; background: var(--bg); border: 1px solid var(--border); padding: 0.25rem 0.65rem; border-radius: 999px; color: var(--text-muted); }
+  .tool-card h3 { font-size: 1.15rem; margin: 0; line-height: 1.3; }
+  .tool-card p { font-size: 0.92rem; color: var(--text-muted); line-height: 1.5; margin: 0; flex: 1; }
+  .tc-link { font-size: 0.9rem; font-weight: 700; color: var(--primary); }
+
+  .lang-banner.card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; text-align: center; }
+  .lang-banner h2 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+  .lang-banner p { color: var(--text-muted); margin: 0; }
+  .lang-banner a { color: var(--primary); font-weight: 600; }
+</style>

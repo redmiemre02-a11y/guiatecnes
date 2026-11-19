@@ -3,7 +3,9 @@
 > GuíaTecnes (https://guiatecnes.com) es una plataforma tecnológica independiente en español que ofrece más de 220 tutoriales exhaustivos, comparativas de software, solución de errores y más de 70 herramientas interactivas gratuitas ejecutadas localmente en el navegador.
 
 ## Secciones Principales y Silos Temáticos
-- [Herramientas Interactivas Gratuitas](https://guiatecnes.com/herramientas/): Más de 70 utilidades web (calculadoras de sueldo neto, IRPF, hipotecas, finiquito, test de velocidad WiFi, conversores y generadores).
+- [Herramientas Interactivas Gratuitas (Español)](https://guiatecnes.com/herramientas/): Más de 75 utilidades web (calculadoras de sueldo neto, IRPF, hipotecas, finiquito, test de velocidad WiFi, conversores y generadores).
+- [Global English Tech Portal (/en/)](https://guiatecnes.com/en/): Free hardware test lab, tech diagnostic wizard, WebRTC privacy audit, and password entropy checker in English.
+- [Portal em Português (/pt/)](https://guiatecnes.com/pt/): Ferramentas online gratuitas de hardware, diagnóstico técnico, privacidade WebRTC e senhas para Brasil e Portugal.
 - [Archivo Completo del Blog](https://guiatecnes.com/blog/): Directorio de todas las guías, comparativas y análisis técnicos.
 - [Directorio de Categorías](https://guiatecnes.com/categoria/): Navegación temática por 19 categorías especializadas.
 

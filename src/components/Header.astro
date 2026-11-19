@@ -28,41 +28,85 @@ const moreLinks = [
 ];
 
 const currentPath = Astro.url.pathname;
+const activeLang = currentPath.startsWith('/en/') || currentPath === '/en'
+  ? 'en'
+  : currentPath.startsWith('/pt/') || currentPath === '/pt'
+    ? 'pt'
+    : 'es';
+
+const langRouteGroups = [
+  { es: '/', en: '/en/', pt: '/pt/' },
+  { es: '/herramientas/', en: '/en/tools/', pt: '/pt/ferramentas/' },
+  { es: '/herramientas/laboratorio-pruebas-hardware/', en: '/en/tools/hardware-test-lab/', pt: '/pt/ferramentas/laboratorio-testes-hardware/' },
+  { es: '/herramientas/asistente-diagnostico-tecnico/', en: '/en/tools/tech-diagnostic-wizard/', pt: '/pt/ferramentas/assistente-diagnostico-tecnico/' },
+  { es: '/herramientas/auditoria-privacidad-huella-digital/', en: '/en/tools/privacy-fingerprint-audit/', pt: '/pt/ferramentas/auditoria-privacidade-impressao-digital/' },
+  { es: '/herramientas/comprobador-seguridad-contrasenas/', en: '/en/tools/password-security-checker/', pt: '/pt/ferramentas/verificador-seguranca-senhas/' },
+];
+
+const normalizedPath = currentPath.endsWith('/') ? currentPath : `${currentPath}/`;
+const matchedGroup = langRouteGroups.find(g => g.es === normalizedPath || g.en === normalizedPath || g.pt === normalizedPath);
+const langUrls = matchedGroup || { es: '/', en: '/en/', pt: '/pt/' };
+
+const navMain = activeLang === 'en'
+  ? [
+      { href: '/en/', label: 'Home' },
+      { href: '/en/tools/', label: '🧰 Tools' },
+      { href: '/en/tools/hardware-test-lab/', label: '🖥️ Hardware Lab' },
+      { href: '/en/tools/tech-diagnostic-wizard/', label: '🩺 Troubleshooter' },
+      { href: '/en/tools/privacy-fingerprint-audit/', label: '🛡️ Privacy Audit' },
+    ]
+  : activeLang === 'pt'
+    ? [
+        { href: '/pt/', label: 'Início' },
+        { href: '/pt/ferramentas/', label: '🧰 Ferramentas' },
+        { href: '/pt/ferramentas/laboratorio-testes-hardware/', label: '🖥️ Lab Hardware' },
+        { href: '/pt/ferramentas/assistente-diagnostico-tecnico/', label: '🩺 Diagnóstico' },
+        { href: '/pt/ferramentas/auditoria-privacidade-impressao-digital/', label: '🛡️ Privacidade' },
+      ]
+    : mainLinks;
+
+const homeHref = activeLang === 'en' ? '/en/' : activeLang === 'pt' ? '/pt/' : '/';
 ---
 
 <header class="site-header">
   <div class="container header-inner">
-    <a href="/" class="logo">
+    <a href={homeHref} class="logo">
       <span class="logo-icon">⚡</span>
       <span class="logo-text">GuíaTecnes</span>
     </a>
 
     <nav class="main-nav" id="main-nav">
-      {mainLinks.map(link => (
+      {navMain.map(link => (
         <a href={link.href} class={`nav-link ${currentPath === link.href ? 'active' : ''}`}>
           {link.label}
         </a>
       ))}
 
-      <!-- Dropdown: Más categorías -->
-      <div class="dropdown">
-        <button class="nav-link dropdown-btn" aria-haspopup="true" aria-expanded="false" id="dropdown-btn">
-          Más ▾
-        </button>
-        <div class="dropdown-menu" id="dropdown-menu" role="menu">
-          <div class="dropdown-grid">
-            {moreLinks.map(link => (
-              <a href={link.href} class="dropdown-item" role="menuitem">
-                <span class="di-label">{link.label}</span>
-                <span class="di-desc">{link.desc}</span>
-              </a>
-            ))}
+      {activeLang === 'es' && (
+        <div class="dropdown">
+          <button class="nav-link dropdown-btn" aria-haspopup="true" aria-expanded="false" id="dropdown-btn">
+            Más ▾
+          </button>
+          <div class="dropdown-menu" id="dropdown-menu" role="menu">
+            <div class="dropdown-grid">
+              {moreLinks.map(link => (
+                <a href={link.href} class="dropdown-item" role="menuitem">
+                  <span class="di-label">{link.label}</span>
+                  <span class="di-desc">{link.desc}</span>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </nav>
 
     <div class="header-actions">
+      <div class="lang-switcher" aria-label="Language selector">
+        <a href={langUrls.es} class={`lang-pill ${activeLang === 'es' ? 'active' : ''}`} hreflang="es" title="Español">ES</a>
+        <a href={langUrls.en} class={`lang-pill ${activeLang === 'en' ? 'active' : ''}`} hreflang="en" title="English">EN</a>
+        <a href={langUrls.pt} class={`lang-pill ${activeLang === 'pt' ? 'active' : ''}`} hreflang="pt" title="Português">PT</a>
+      </div>
       <button class="search-trigger theme-toggle search-btn-styled" aria-label="Buscar artículos (Ctrl+K)">
         <span>🔍</span>
         <kbd class="search-kbd">Ctrl K</kbd>
@@ -82,7 +126,12 @@ const currentPath = Astro.url.pathname;
 
   <!-- Mobile nav (all links) -->
   <nav class="mobile-nav" id="mobile-nav">
-    {[...mainLinks, ...moreLinks].map(link => (
+    <div class="mobile-lang-row">
+      <a href={langUrls.es} class={`lang-pill ${activeLang === 'es' ? 'active' : ''}`}>🇪🇸 ES</a>
+      <a href={langUrls.en} class={`lang-pill ${activeLang === 'en' ? 'active' : ''}`}>🇺🇸 EN</a>
+      <a href={langUrls.pt} class={`lang-pill ${activeLang === 'pt' ? 'active' : ''}`}>🇧🇷 PT</a>
+    </div>
+    {(activeLang === 'es' ? [...mainLinks, ...moreLinks] : navMain).map(link => (
       <a href={link.href} class="mobile-link">{link.label}</a>
     ))}
   </nav>
@@ -784,6 +833,42 @@ const currentPath = Astro.url.pathname;
   .btn-clear-all-favs:hover {
     background: #ef4444;
     color: #ffffff;
+  }
+
+  .lang-switcher {
+    display: inline-flex;
+    align-items: center;
+    background: var(--bg-card, rgba(255, 255, 255, 0.04));
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 8px;
+    padding: 2px;
+    gap: 2px;
+  }
+  .lang-pill {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.25rem 0.45rem;
+    border-radius: 6px;
+    color: var(--text-muted, #94a3b8);
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .lang-pill:hover {
+    color: var(--text, #f8fafc);
+  }
+  .lang-pill.active {
+    background: var(--primary, #6366f1);
+    color: #ffffff;
+  }
+  .mobile-lang-row {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem 0.75rem;
+    border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+    margin-bottom: 0.25rem;
+  }
+  @media (max-width: 640px) {
+    .lang-switcher { display: none; }
   }
 
 </style>

@@ -1,0 +1,204 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+const alternates = {
+  es: '/herramientas/asistente-diagnostico-tecnico/',
+  en: '/en/tools/tech-diagnostic-wizard/',
+  pt: '/pt/ferramentas/assistente-diagnostico-tecnico/'
+};
+
+const breadcrumbs = [
+  { name: 'Início', url: '/pt/' },
+  { name: 'Ferramentas', url: '/pt/ferramentas/' },
+  { name: 'Assistente de Diagnóstico', url: '/pt/ferramentas/assistente-diagnostico-tecnico/' }
+];
+
+const faqs = [
+  {
+    question: 'Como funciona o Assistente de Diagnóstico Técnico?',
+    answer: 'Escolha seu dispositivo (PC, Celular ou Wi-Fi), selecione o sintoma e responda a uma pergunta rápida para receber a causa mais provável e o passo a passo da solução.'
+  }
+];
+---
+
+<BaseLayout
+  title="Assistente Interativo de Diagnóstico Técnico | PC, Celular e Wi-Fi"
+  description="Descubra em 30 segundos por que seu PC desliga sozinho, o Wi-Fi está sem internet ou o celular não carrega com nosso diagnóstico interativo."
+  lang="pt"
+  alternates={alternates}
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/pt/">Início</a>
+      <span>›</span>
+      <a href="/pt/ferramentas/">Ferramentas</a>
+      <span>›</span>
+      <span>Diagnóstico Técnico</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🩺 Diagnóstico em 3 Passos</div>
+      <h1>Assistente de Diagnóstico Técnico</h1>
+      <p class="tool-subtitle">Responda 3 perguntas rápidas para identificar a causa do problema e resolver sem gastar com assistência desnecessária.</p>
+    </header>
+
+    <div class="wizard-shell card">
+      <div class="wizard-progress">
+        <div class="step-pill active" id="pill-1"><span class="step-num">1</span> Dispositivo</div>
+        <div class="step-line"></div>
+        <div class="step-pill" id="pill-2"><span class="step-num">2</span> Sintoma</div>
+        <div class="step-line"></div>
+        <div class="step-pill" id="pill-3"><span class="step-num">3</span> Verificação</div>
+        <div class="step-line"></div>
+        <div class="step-pill" id="pill-4"><span class="step-num">✓</span> Diagnóstico</div>
+      </div>
+
+      <section id="step-1" class="wizard-step active">
+        <h2 class="step-title">Qual dispositivo está com problema?</h2>
+        <div class="options-grid">
+          <button type="button" class="option-card" data-device="pc"><span class="opt-icon">💻</span><strong class="opt-name">PC ou Notebook Windows</strong><span class="opt-desc">Desliga sozinho, lentidão extrema ou tela piscando.</span></button>
+          <button type="button" class="option-card" data-device="phone"><span class="opt-icon">📱</span><strong class="opt-name">Celular (Android / iPhone)</strong><span class="opt-desc">Não carrega direito ou suspeita de vírus.</span></button>
+          <button type="button" class="option-card" data-device="wifi"><span class="opt-icon">📡</span><strong class="opt-name">Wi-Fi e Internet</strong><span class="opt-desc">Conectado sem internet ou sinal fraco.</span></button>
+        </div>
+      </section>
+
+      <section id="step-2" class="wizard-step">
+        <button type="button" class="btn-back" id="back-to-1">← Voltar</button>
+        <h2 class="step-title" id="step-2-title">Selecione o sintoma</h2>
+        <div class="options-grid" id="symptom-options"></div>
+      </section>
+
+      <section id="step-3" class="wizard-step">
+        <button type="button" class="btn-back" id="back-to-2">← Voltar</button>
+        <h2 class="step-title" id="step-3-title">Pergunta de descarte</h2>
+        <div class="options-grid" id="detail-options"></div>
+      </section>
+
+      <section id="step-4" class="wizard-step">
+        <div class="diagnosis-header">
+          <div class="diag-badge-row"><span class="diag-severity" id="diag-severity"></span><span class="diag-category" id="diag-category"></span></div>
+          <h2 id="diag-title"></h2>
+          <p id="diag-summary"></p>
+        </div>
+        <h3>🛠️ Passo a Passo da Solução</h3>
+        <ol id="diag-steps" class="action-list"></ol>
+        <div class="diag-footer-actions">
+          <button type="button" id="btn-restart" class="btn-primary">🔄 Novo Diagnóstico</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  (function() {
+    const kb = {
+      pc: {
+        label: 'PC',
+        symptoms: [
+          {
+            id: 'shutdown', icon: '🔌', name: 'Desliga sozinho sem tela azul', desc: 'Corta a energia durante jogos ou uso.',
+            question: 'Quando acontece o desligamento?',
+            details: [
+              { id: 'load', icon: '🔥', name: 'Em jogos ou tarefas pesadas (ventoinha alta)', desc: 'Sai ar muito quente.', diagnosis: { title: 'Desligamento por Superaquecimento', severity: 'Temperatura Crítica', category: 'Refrigeração', summary: 'O processador ou placa de vídeo ultrapassa 95-105 °C e a placa-mãe corta a energia.', steps: ['Limpe a poeira das ventoinhas com ar comprimido.', 'Troque a pasta térmica se tiver mais de 2 anos.'] } },
+              { id: 'rand', icon: '⚡', name: 'Aleatoriamente sem esforço', desc: 'Mesmo na área de trabalho.', diagnosis: { title: 'Instabilidade na Fonte (PSU) ou Tomada', severity: 'Falha Elétrica', category: 'Energia', summary: 'A fonte não sustenta a tensão de 12V ou há mau contato no filtro de linha.', steps: ['Teste diretamente em outra tomada de parede.', 'Verifique erros "Kernel-Power 41" no Visualizador de Eventos do Windows.'] } }
+            ]
+          }
+        ]
+      },
+      phone: {
+        label: 'Celular',
+        symptoms: [
+          {
+            id: 'charge', icon: '🔋', name: 'Cabo fica frouxo ou não carrega', desc: 'Precisa mexer no cabo para carregar.',
+            question: 'O plugue entra até o final?',
+            details: [
+              { id: 'lint', icon: '🧹', name: 'Fica frouxo ou não encaixa direito', desc: 'Falha dependendo da posição.', diagnosis: { title: 'Sujeira Compactada na Porta USB-C / Lightning', severity: 'Solução Caseira Rápida', category: 'Limpeza', summary: 'Fiapos do bolso se acumulam no fundo do conector.', steps: ['Desligue o aparelho.', 'NUNCA use agulha metálica. Use um palito de dente de madeira para remover o pó prensado.', 'Teste com outro cabo original.'] } }
+            ]
+          }
+        ]
+      },
+      wifi: {
+        label: 'Wi-Fi',
+        symptoms: [
+          {
+            id: 'nonet', icon: '❌', name: 'Wi-Fi conectado, mas "Sem Internet"', desc: 'Sinal cheio mas não abre sites.',
+            question: 'Acontece em TODOS os aparelhos ou só em UM?',
+            details: [
+              { id: 'all', icon: '🏠', name: 'Em TODOS os aparelhos da casa', desc: 'Ninguém navega.', diagnosis: { title: 'Queda de Sinal no Roteador / Operadora', severity: 'Rede / Provedor', category: 'Fibra e Roteador', summary: 'O roteador perdeu sincronia com a fibra externa.', steps: ['Veja se a luz PON/LOS está piscando em vermelho.', 'Tire o roteador da tomada por 60 segundos completos e religue.'] } },
+              { id: 'one', icon: '💻', name: 'Apenas no MEU aparelho', desc: 'Os outros funcionam.', diagnosis: { title: 'Conflito de DNS/IP ou Data/Hora Errada', severity: 'Ajuste Local', category: 'Configuração', summary: 'Cache DNS corrompido ou relógio desajustado bloqueia HTTPS.', steps: ['Corrija a data e hora do aparelho.', 'Esqueça a rede Wi-Fi e conecte novamente.', 'Altere o DNS para 1.1.1.1 ou 8.8.8.8.'] } }
+            ]
+          }
+        ]
+      }
+    };
+    const steps = ['step-1', 'step-2', 'step-3', 'step-4'].map(id => document.getElementById(id));
+    const pills = ['pill-1', 'pill-2', 'pill-3', 'pill-4'].map(id => document.getElementById(id));
+    function showStep(idx) {
+      steps.forEach((s, i) => s.classList.toggle('active', i === idx));
+      pills.forEach((p, i) => { p.classList.toggle('active', i === idx); p.classList.toggle('done', i < idx); });
+    }
+    document.querySelectorAll('[data-device]').forEach(btn => btn.addEventListener('click', () => {
+      const dev = kb[btn.getAttribute('data-device')];
+      const box = document.getElementById('symptom-options');
+      box.innerHTML = dev.symptoms.map(s => `<button type="button" class="option-card" data-sym="${s.id}"><span class="opt-icon">${s.icon}</span><strong class="opt-name">${s.name}</strong><span class="opt-desc">${s.desc}</span></button>`).join('');
+      box.querySelectorAll('[data-sym]').forEach(sb => sb.addEventListener('click', () => {
+        const sym = dev.symptoms.find(x => x.id === sb.getAttribute('data-sym'));
+        document.getElementById('step-3-title').textContent = sym.question;
+        const dbox = document.getElementById('detail-options');
+        dbox.innerHTML = sym.details.map(d => `<button type="button" class="option-card" data-det="${d.id}"><span class="opt-icon">${d.icon}</span><strong class="opt-name">${d.name}</strong><span class="opt-desc">${d.desc}</span></button>`).join('');
+        dbox.querySelectorAll('[data-det]').forEach(db => db.addEventListener('click', () => {
+          const det = sym.details.find(x => x.id === db.getAttribute('data-det'));
+          document.getElementById('diag-severity').textContent = det.diagnosis.severity;
+          document.getElementById('diag-category').textContent = det.diagnosis.category;
+          document.getElementById('diag-title').textContent = det.diagnosis.title;
+          document.getElementById('diag-summary').textContent = det.diagnosis.summary;
+          document.getElementById('diag-steps').innerHTML = det.diagnosis.steps.map(x => `<li>${x}</li>`).join('');
+          showStep(3);
+        }));
+        showStep(2);
+      }));
+      showStep(1);
+    }));
+    document.getElementById('back-to-1').addEventListener('click', () => showStep(0));
+    document.getElementById('back-to-2').addEventListener('click', () => showStep(1));
+    document.getElementById('btn-restart').addEventListener('click', () => showStep(0));
+  })();
+</script>
+
+<style>
+  .tool-page { padding: 2rem 1rem 4rem; max-width: 960px; margin: 0 auto; }
+  .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2rem; }
+  .tool-badge { display: inline-block; background: rgba(99, 102, 241, 0.14); color: #818cf8; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.75rem; }
+  .wizard-progress { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); gap: 0.4rem; }
+  .step-pill { display: flex; align-items: center; gap: 0.45rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); opacity: 0.55; }
+  .step-pill.active { color: var(--primary); opacity: 1; }
+  .step-pill.done { color: #10b981; opacity: 0.9; }
+  .step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; }
+  .step-pill.active .step-num { background: var(--primary); color: #fff; }
+  .step-line { flex: 1; height: 2px; background: var(--border); }
+  .wizard-step { display: none; }
+  .wizard-step.active { display: block; }
+  .btn-back { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 0.4rem 0.85rem; border-radius: 8px; cursor: pointer; margin-bottom: 1rem; }
+  .step-title { font-size: 1.35rem; margin-bottom: 1.25rem; text-align: center; }
+  .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+  .option-card { text-align: left; background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; padding: 1.25rem; cursor: pointer; display: flex; flex-direction: column; gap: 0.45rem; color: var(--text); }
+  .opt-icon { font-size: 1.85rem; }
+  .diagnosis-header { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.28); border-radius: 12px; padding: 1.35rem; margin-bottom: 1.5rem; }
+  .diag-badge-row { display: flex; gap: 0.6rem; margin-bottom: 0.75rem; }
+  .diag-severity { background: #10b981; color: #fff; font-size: 0.78rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 6px; }
+  .diag-category { background: var(--surface); border: 1px solid var(--border); font-size: 0.78rem; padding: 0.25rem 0.65rem; border-radius: 6px; }
+  .action-list { padding-left: 1.35rem; display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1.5rem; }
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 0.75rem 1.35rem; border-radius: 10px; font-weight: 600; cursor: pointer; }
+</style>

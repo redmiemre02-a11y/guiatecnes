@@ -1,0 +1,354 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+const alternates = {
+  es: '/herramientas/asistente-diagnostico-tecnico/',
+  en: '/en/tools/tech-diagnostic-wizard/',
+  pt: '/pt/ferramentas/assistente-diagnostico-tecnico/'
+};
+
+const breadcrumbs = [
+  { name: 'Home', url: '/en/' },
+  { name: 'Tools', url: '/en/tools/' },
+  { name: 'Tech Diagnostic Wizard', url: '/en/tools/tech-diagnostic-wizard/' }
+];
+
+const faqs = [
+  {
+    question: 'How does the Interactive Tech Diagnostic Wizard work?',
+    answer: 'Select your device category (Windows/Mac PC, Phone, WiFi, or Audio/Display), pick the exact symptom, and answer one quick elimination question to receive the most probable root cause and step-by-step fix.'
+  },
+  {
+    question: 'Does this tool scan my computer or access personal files?',
+    answer: 'No. All troubleshooting steps run locally via pure logic in your browser without scanning your hardware or transmitting any private information.'
+  }
+];
+---
+
+<BaseLayout
+  title="Interactive Tech Diagnostic Wizard | Fix PC, Phone & WiFi Issues in 3 Steps"
+  description="Diagnose why your PC shuts down, WiFi says no internet, phone won't charge, or Bluetooth audio lags in 30 seconds with our interactive troubleshooting tree."
+  lang="en"
+  alternates={alternates}
+  breadcrumbs={breadcrumbs}
+  faqs={faqs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb">
+      <a href="/en/">Home</a>
+      <span>›</span>
+      <a href="/en/tools/">Tools</a>
+      <span>›</span>
+      <span>Tech Diagnostic Wizard</span>
+    </div>
+
+    <header class="tool-header">
+      <div class="tool-badge">🩺 3-Step Interactive Troubleshooting</div>
+      <h1>Interactive Tech Diagnostic Wizard</h1>
+      <p class="tool-subtitle">
+        Identify why your computer, smartphone, WiFi, or display is misbehaving and get an actionable repair plan in 30 seconds.
+      </p>
+    </header>
+
+    <div class="wizard-shell card">
+      <div class="wizard-progress">
+        <div class="step-pill active" id="pill-1"><span class="step-num">1</span> Device</div>
+        <div class="step-line"></div>
+        <div class="step-pill" id="pill-2"><span class="step-num">2</span> Symptom</div>
+        <div class="step-line"></div>
+        <div class="step-pill" id="pill-3"><span class="step-num">3</span> Check</div>
+        <div class="step-line"></div>
+        <div class="step-pill" id="pill-4"><span class="step-num">✓</span> Diagnosis</div>
+      </div>
+
+      <section id="step-1" class="wizard-step active">
+        <h2 class="step-title">Which device or system is having issues?</h2>
+        <div class="options-grid">
+          <button type="button" class="option-card" data-device="pc">
+            <span class="opt-icon">💻</span>
+            <strong class="opt-name">Windows / Mac PC & Laptop</strong>
+            <span class="opt-desc">Random shutdowns, extreme slowness, screen flickering.</span>
+          </button>
+          <button type="button" class="option-card" data-device="phone">
+            <span class="opt-icon">📱</span>
+            <strong class="opt-name">Smartphone (Android / iPhone)</strong>
+            <span class="opt-desc">Won't charge, battery draining fast, or adware popups.</span>
+          </button>
+          <button type="button" class="option-card" data-device="wifi">
+            <span class="opt-icon">📡</span>
+            <strong class="opt-name">WiFi, Router & Internet</strong>
+            <span class="opt-desc">Connected with no internet, weak signal in bedrooms.</span>
+          </button>
+        </div>
+      </section>
+
+      <section id="step-2" class="wizard-step">
+        <div class="step-nav-top">
+          <button type="button" class="btn-back" id="back-to-1">← Change device</button>
+        </div>
+        <h2 class="step-title" id="step-2-title">Select the primary symptom</h2>
+        <div class="options-grid" id="symptom-options"></div>
+      </section>
+
+      <section id="step-3" class="wizard-step">
+        <div class="step-nav-top">
+          <button type="button" class="btn-back" id="back-to-2">← Change symptom</button>
+        </div>
+        <h2 class="step-title" id="step-3-title">Quick elimination question</h2>
+        <div class="options-grid" id="detail-options"></div>
+      </section>
+
+      <section id="step-4" class="wizard-step">
+        <div class="diagnosis-header">
+          <div class="diag-badge-row">
+            <span class="diag-severity" id="diag-severity">High Probability</span>
+            <span class="diag-category" id="diag-category">Hardware</span>
+          </div>
+          <h2 id="diag-title">Diagnosis</h2>
+          <p id="diag-summary" class="diag-summary"></p>
+        </div>
+        <div class="diag-steps-box">
+          <h3>🛠️ Step-by-Step Action Plan</h3>
+          <ol id="diag-steps" class="action-list"></ol>
+        </div>
+        <div class="diag-footer-actions">
+          <button type="button" id="btn-copy-diag" class="btn-primary">📋 Copy Diagnosis</button>
+          <button type="button" id="btn-restart" class="btn-secondary">🔄 Start New Diagnosis</button>
+        </div>
+      </section>
+    </div>
+
+    <section class="seo-guide card">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">
+        {faqs.map(faq => (
+          <details class="faq-item">
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  (function() {
+    const kb = {
+      pc: {
+        label: 'PC / Laptop',
+        symptoms: [
+          {
+            id: 'shutdown', icon: '🔌', name: 'Shuts down suddenly without BSOD', desc: 'Cuts power during games or heavy tasks.',
+            question: 'When does the shutdown happen?',
+            details: [
+              {
+                id: 'load', icon: '🔥', name: 'Under gaming/rendering load (fans loud & hot)', desc: 'Hot air coming out of vents.',
+                diagnosis: {
+                  title: 'Thermal Protection Shutdown', severity: 'Critical Temperature', category: 'Cooling / Thermal Paste',
+                  summary: 'CPU or GPU exceeds 95-105 °C and the motherboard cuts power immediately to prevent permanent silicon damage.',
+                  steps: [
+                    'Clean dust from cooling fans and heatsinks using compressed air (hold fan blades still).',
+                    'Monitor live CPU/GPU temperatures with HWInfo64.',
+                    'If over 2-3 years old, replace dried thermal paste on the processor.'
+                  ]
+                }
+              },
+              {
+                id: 'random', icon: '⚡', name: 'Randomly even at idle desktop', desc: 'Happens when browsing or nudging cables.',
+                diagnosis: {
+                  title: 'Power Supply (PSU) Instability or Loose Wall Outlet', severity: 'Electrical Fault', category: 'Power Delivery',
+                  summary: 'The power supply fails to hold stable 12V rails or the power strip causes micro-brownouts.',
+                  steps: [
+                    'Plug directly into a different wall outlet, bypassing old power strips.',
+                    'Check Windows Event Viewer -> System for critical "Kernel-Power 41" events.',
+                    'Test with a known-good power cable or PSU.'
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            id: 'flicker', icon: '🖥️', name: 'Screen flickers in Windows 11', desc: 'Black flashes or artifacts.',
+            question: 'Does Task Manager (Ctrl+Shift+Esc) also flicker?',
+            details: [
+              {
+                id: 'no', icon: '🪟', name: 'NO, Task Manager stays steady', desc: 'Only desktop/apps flicker.',
+                diagnosis: {
+                  title: 'Incompatible Third-Party App or Shell Extension', severity: 'Software Conflict', category: 'Windows OS',
+                  summary: 'If Task Manager does not flicker, your display hardware and GPU are healthy.',
+                  steps: ['Uninstall recently added desktop/antivirus utilities.', 'Press Win + Ctrl + Shift + B to reset the graphics driver.']
+                }
+              },
+              {
+                id: 'yes', icon: '🔌', name: 'YES, Task Manager flickers too', desc: 'Entire display signal glitches.',
+                diagnosis: {
+                  title: 'Display Driver, HDMI/DP Cable, or Refresh Rate Issue', severity: 'High Priority', category: 'GPU / Cable',
+                  summary: 'The display controller or physical video cable cannot sustain the current refresh rate.',
+                  steps: ['Swap or reseat your HDMI/DisplayPort cable.', 'Lower refresh rate temporarily in Display Settings (e.g. 144Hz to 60Hz).', 'Perform a clean GPU driver reinstall using DDU in Safe Mode.']
+                }
+              }
+            ]
+          }
+        ]
+      },
+      phone: {
+        label: 'Smartphone',
+        symptoms: [
+          {
+            id: 'charge', icon: '🔋', name: 'Won’t charge or cable feels loose', desc: 'Charging stops when cable moves.',
+            question: 'How does the charger plug fit into the port?',
+            details: [
+              {
+                id: 'loose', icon: '🧹', name: 'Cable wiggles or doesn’t click all the way in', desc: 'Fails unless held at an angle.',
+                diagnosis: {
+                  title: 'Compacted Pocket Lint Inside Charging Port', severity: 'Quick Home Fix', category: 'Port Maintenance',
+                  summary: 'Lint packs tightly at the bottom of USB-C/Lightning ports over months, blocking full pin contact.',
+                  steps: ['Power off the phone completely.', 'NEVER use metal needles. Use a thin wooden/plastic toothpick to gently scoop out packed lint.', 'Test with another certified cable.']
+                }
+              }
+            ]
+          },
+          {
+            id: 'ads', icon: '🛡️', name: 'Weird popups or virus suspicion', desc: 'Fake security alerts appearing.',
+            question: 'Did you install any APK/app outside official app stores?',
+            details: [
+              {
+                id: 'no-apk', icon: '🌐', name: 'No, only fake alerts in Chrome/Safari notifications', desc: 'Banner says "5 viruses detected".',
+                diagnosis: {
+                  title: 'Malicious Browser Push Notifications (Not a Real Virus)', severity: 'Low Risk', category: 'Web Browser',
+                  summary: 'Clicking "Allow" on a shady website granted notification spam permission.',
+                  steps: ['Open Chrome/Safari -> Site Settings -> Notifications.', 'Remove/Block unfamiliar domains from the Allowed list.']
+                }
+              }
+            ]
+          }
+        ]
+      },
+      wifi: {
+        label: 'WiFi & Network',
+        symptoms: [
+          {
+            id: 'no-net', icon: '❌', name: 'WiFi connected, "No Internet Access"', desc: 'Full bars but pages won’t load.',
+            question: 'Does it happen on ALL home devices or only ONE?',
+            details: [
+              {
+                id: 'all', icon: '🏠', name: 'On ALL devices (phones, TV, PC)', desc: 'Nobody has internet.',
+                diagnosis: {
+                  title: 'Router/ONT Sync Drop or ISP Outage', severity: 'ISP / Router', category: 'Fiber & Router',
+                  summary: 'Local WiFi works, but the router lost upstream fiber synchronization.',
+                  steps: ['Check router lights (red blinking PON/LOS indicates fiber line issue).', 'Unplug the router from power for 60 full seconds, then reconnect.']
+                }
+              },
+              {
+                id: 'one', icon: '💻', name: 'Only on MY device', desc: 'Other devices browse normally.',
+                diagnosis: {
+                  title: 'Local DNS/IP Conflict or Incorrect System Clock', severity: 'Local Fix', category: 'Network Settings',
+                  summary: 'Corrupted local DNS cache or wrong system date blocks HTTPS handshakes.',
+                  steps: ['Verify system date & time are accurate.', 'Forget the WiFi network and reconnect.', 'Switch DNS to 1.1.1.1 or 8.8.8.8.']
+                }
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    let state = { device: null, symptom: null, diagnosis: null };
+    const steps = ['step-1', 'step-2', 'step-3', 'step-4'].map(id => document.getElementById(id));
+    const pills = ['pill-1', 'pill-2', 'pill-3', 'pill-4'].map(id => document.getElementById(id));
+
+    function showStep(idx) {
+      steps.forEach((s, i) => s.classList.toggle('active', i === idx));
+      pills.forEach((p, i) => {
+        p.classList.toggle('active', i === idx);
+        p.classList.toggle('done', i < idx);
+      });
+    }
+
+    document.querySelectorAll('[data-device]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const dev = kb[btn.getAttribute('data-device')];
+        state.device = dev;
+        document.getElementById('step-2-title').textContent = `What symptom does your ${dev.label} show?`;
+        const box = document.getElementById('symptom-options');
+        box.innerHTML = dev.symptoms.map(s => `<button type="button" class="option-card" data-sym="${s.id}"><span class="opt-icon">${s.icon}</span><strong class="opt-name">${s.name}</strong><span class="opt-desc">${s.desc}</span></button>`).join('');
+        box.querySelectorAll('[data-sym]').forEach(sb => sb.addEventListener('click', () => {
+          state.symptom = dev.symptoms.find(x => x.id === sb.getAttribute('data-sym'));
+          document.getElementById('step-3-title').textContent = state.symptom.question;
+          const dbox = document.getElementById('detail-options');
+          dbox.innerHTML = state.symptom.details.map(d => `<button type="button" class="option-card" data-det="${d.id}"><span class="opt-icon">${d.icon}</span><strong class="opt-name">${d.name}</strong><span class="opt-desc">${d.desc}</span></button>`).join('');
+          dbox.querySelectorAll('[data-det]').forEach(db => db.addEventListener('click', () => {
+            const det = state.symptom.details.find(x => x.id === db.getAttribute('data-det'));
+            state.diagnosis = det.diagnosis;
+            document.getElementById('diag-severity').textContent = det.diagnosis.severity;
+            document.getElementById('diag-category').textContent = det.diagnosis.category;
+            document.getElementById('diag-title').textContent = det.diagnosis.title;
+            document.getElementById('diag-summary').textContent = det.diagnosis.summary;
+            document.getElementById('diag-steps').innerHTML = det.diagnosis.steps.map(x => `<li>${x}</li>`).join('');
+            showStep(3);
+          }));
+          showStep(2);
+        }));
+        showStep(1);
+      });
+    });
+
+    document.getElementById('back-to-1').addEventListener('click', () => showStep(0));
+    document.getElementById('back-to-2').addEventListener('click', () => showStep(1));
+    document.getElementById('btn-restart').addEventListener('click', () => showStep(0));
+    document.getElementById('btn-copy-diag').addEventListener('click', () => {
+      if (!state.diagnosis) return;
+      const txt = `${state.diagnosis.title}\n${state.diagnosis.summary}\n\nSteps:\n${state.diagnosis.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}`;
+      navigator.clipboard.writeText(txt);
+    });
+  })();
+</script>
+
+<style>
+  .tool-page { padding: 2rem 1rem 4rem; max-width: 960px; margin: 0 auto; }
+  .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2rem; }
+  .tool-badge { display: inline-block; background: rgba(99, 102, 241, 0.14); color: #818cf8; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; border: 1px solid rgba(99, 102, 241, 0.28); }
+  .tool-header h1 { font-size: clamp(1.75rem, 3.5vw, 2.4rem); line-height: 1.2; margin-bottom: 0.75rem; }
+  .tool-subtitle { color: var(--text-muted); font-size: 1.05rem; max-width: 720px; margin: 0 auto; line-height: 1.6; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.75rem; }
+  .wizard-progress { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); gap: 0.4rem; overflow-x: auto; }
+  .step-pill { display: flex; align-items: center; gap: 0.45rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); opacity: 0.55; }
+  .step-pill.active { color: var(--primary); opacity: 1; }
+  .step-pill.done { color: #10b981; opacity: 0.9; }
+  .step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; }
+  .step-pill.active .step-num { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .step-pill.done .step-num { background: #10b981; color: #fff; border-color: #10b981; }
+  .step-line { flex: 1; height: 2px; background: var(--border); min-width: 14px; }
+  .wizard-step { display: none; }
+  .wizard-step.active { display: block; }
+  .btn-back { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 0.4rem 0.85rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; margin-bottom: 1rem; }
+  .step-title { font-size: 1.35rem; margin-bottom: 1.25rem; text-align: center; }
+  .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+  .option-card { text-align: left; background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; padding: 1.25rem; cursor: pointer; display: flex; flex-direction: column; gap: 0.45rem; color: var(--text); }
+  .option-card:hover { border-color: var(--primary); }
+  .opt-icon { font-size: 1.85rem; }
+  .opt-name { font-size: 1.05rem; font-weight: 700; }
+  .opt-desc { font-size: 0.88rem; color: var(--text-muted); }
+  .diagnosis-header { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.28); border-radius: 12px; padding: 1.35rem; margin-bottom: 1.5rem; }
+  .diag-badge-row { display: flex; gap: 0.6rem; margin-bottom: 0.75rem; }
+  .diag-severity { background: #10b981; color: #fff; font-size: 0.78rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 6px; }
+  .diag-category { background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); font-size: 0.78rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 6px; }
+  .action-list { padding-left: 1.35rem; display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1.5rem; }
+  .diag-footer-actions { display: flex; gap: 0.85rem; flex-wrap: wrap; border-top: 1px solid var(--border); padding-top: 1.25rem; }
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 0.75rem 1.35rem; border-radius: 10px; font-weight: 600; cursor: pointer; }
+  .btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 0.75rem 1.35rem; border-radius: 10px; font-weight: 600; cursor: pointer; }
+  .seo-guide h2 { font-size: 1.3rem; margin-bottom: 0.9rem; }
+  .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq-item { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.95rem 1.1rem; }
+  .faq-item summary { font-weight: 600; cursor: pointer; }
+  .faq-item p { margin: 0.7rem 0 0; font-size: 0.93rem; color: var(--text-muted); }
+</style>

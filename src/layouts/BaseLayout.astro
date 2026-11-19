@@ -15,6 +15,12 @@ interface BreadcrumbItem {
   url: string;
 }
 
+interface AlternateLinks {
+  es?: string;
+  en?: string;
+  pt?: string;
+}
+
 interface Props {
   title: string;
   description: string;
@@ -26,6 +32,8 @@ interface Props {
   author?: string;
   faqs?: FAQItem[];
   breadcrumbs?: BreadcrumbItem[];
+  lang?: 'es' | 'en' | 'pt';
+  alternates?: AlternateLinks;
 }
 
 const {
@@ -39,21 +47,35 @@ const {
   author = 'Experto Tech',
   faqs = [],
   breadcrumbs = [],
+  lang,
+  alternates,
 } = Astro.props;
+
+const activeLang: 'es' | 'en' | 'pt' = lang || (Astro.url.pathname.startsWith('/en/') || Astro.url.pathname === '/en' ? 'en' : Astro.url.pathname.startsWith('/pt/') || Astro.url.pathname === '/pt' ? 'pt' : 'es');
+const ogLocale = activeLang === 'en' ? 'en_US' : activeLang === 'pt' ? 'pt_BR' : 'es_ES';
+const currencyCode = activeLang === 'en' ? 'USD' : activeLang === 'pt' ? 'BRL' : 'EUR';
 
 const siteName = 'GuíaTecnes';
 const siteURL = (Astro.site?.toString() || 'https://guiatecnes.com').replace(/\/$/, '');
 const fullImageURL = image.startsWith('http') ? image : new URL(image, siteURL).toString();
 
-const isToolPage = type === 'tool' || (Astro.url.pathname.startsWith('/herramientas/') && Astro.url.pathname !== '/herramientas' && Astro.url.pathname !== '/herramientas/');
+const isToolPage = type === 'tool' || (
+  (Astro.url.pathname.startsWith('/herramientas/') && Astro.url.pathname !== '/herramientas/') ||
+  (Astro.url.pathname.startsWith('/en/tools/') && Astro.url.pathname !== '/en/tools/') ||
+  (Astro.url.pathname.startsWith('/pt/ferramentas/') && Astro.url.pathname !== '/pt/ferramentas/')
+);
 
 const schemaWebSite = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": siteName,
   "url": siteURL,
-  "description": "Tu guía definitiva de herramientas de IA, alternativas de software, tutoriales y solución de errores en español.",
-  "inLanguage": "es",
+  "description": activeLang === 'en'
+    ? "Your ultimate guide to free web tools, hardware diagnostics, privacy audits, and practical tech solutions."
+    : activeLang === 'pt'
+      ? "Seu guia definitivo de ferramentas web gratuitas, diagnósticos de hardware, privacidade e soluções práticas."
+      : "Tu guía definitiva de herramientas de IA, alternativas de software, tutoriales y solución de errores en español.",
+  "inLanguage": activeLang,
   "potentialAction": {
     "@type": "SearchAction",
     "target": {
@@ -76,9 +98,9 @@ const schemaWebApplication = isToolPage ? {
   "offers": {
     "@type": "Offer",
     "price": "0",
-    "priceCurrency": "EUR"
+    "priceCurrency": currencyCode
   },
-  "inLanguage": "es"
+  "inLanguage": activeLang
 } : null;
 
 const schemaArticle = type === 'article' ? {
@@ -138,7 +160,7 @@ const schemaFAQ = faqs.length > 0 ? {
 ---
 
 <!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<html lang={activeLang} data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -182,8 +204,19 @@ const schemaFAQ = faqs.length > 0 ? {
   <title>{title} | {siteName}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalURL} />
-  <link rel="alternate" hreflang="es" href={canonicalURL} />
-  <link rel="alternate" hreflang="x-default" href={canonicalURL} />
+  {alternates ? (
+    <>
+      {alternates.es && <link rel="alternate" hreflang="es" href={`${siteURL}${alternates.es}`} />}
+      {alternates.en && <link rel="alternate" hreflang="en" href={`${siteURL}${alternates.en}`} />}
+      {alternates.pt && <link rel="alternate" hreflang="pt" href={`${siteURL}${alternates.pt}`} />}
+      <link rel="alternate" hreflang="x-default" href={`${siteURL}${alternates.es || alternates.en || Astro.url.pathname}`} />
+    </>
+  ) : (
+    <>
+      <link rel="alternate" hreflang={activeLang} href={canonicalURL} />
+      <link rel="alternate" hreflang="x-default" href={canonicalURL} />
+    </>
+  )}
   <link rel="alternate" type="application/rss+xml" title="GuíaTecnes RSS Feed" href="/rss.xml" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 
@@ -197,7 +230,7 @@ const schemaFAQ = faqs.length > 0 ? {
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content={title} />
   <meta property="og:site_name" content={siteName} />
-  <meta property="og:locale" content="es_ES" />
+  <meta property="og:locale" content={ogLocale} />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
