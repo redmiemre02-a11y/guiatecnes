@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+const alternates = {
+  es: '/herramientas/test-velocidad/',
+  en: '/en/tools/internet-speed-test/',
+  pt: '/pt/ferramentas/teste-velocidade-internet/',
+  fr: '/fr/outils/test-vitesse-internet/',
+  de: '/de/werkzeuge/internet-geschwindigkeit-test/'
+};
+
+const breadcrumbs = [
+  { name: 'Accueil', url: '/fr/' },
+  { name: 'Outils', url: '/fr/outils/' },
+  { name: 'Test Débit Internet', url: '/fr/outils/test-vitesse-internet/' }
+];
+---
+
+<BaseLayout
+  title="Test de Débit Internet & Wi-Fi Gratuit (Speedtest en Ligne)"
+  description="Mesurez votre débit réel fibre, Wi-Fi ou 5G (Mbps) et votre ping en temps réel dans votre navigateur sans logiciel."
+  lang="fr"
+  alternates={alternates}
+  breadcrumbs={breadcrumbs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb"><a href="/fr/">Accueil</a><span>›</span><a href="/fr/outils/">Outils</a><span>›</span><span>Test Débit</span></div>
+    <header class="tool-header">
+      <div class="tool-badge">⚡ Speedtest en Temps Réel</div>
+      <h1>Test de Débit Internet & Wi-Fi</h1>
+      <p class="tool-subtitle">Mesurez votre vitesse de téléchargement réelle (Mbps) et votre ping directement en ligne.</p>
+    </header>
+
+    <div class="card speedtest-card">
+      <div class="gauge-wrapper">
+        <svg class="gauge-svg" viewBox="0 0 200 120">
+          <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="var(--border)" stroke-width="14" stroke-linecap="round" />
+          <path id="gauge-progress" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#speed-grad)" stroke-width="14" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="251.2" />
+          <defs><linearGradient id="speed-grad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#6366f1" /><stop offset="50%" stop-color="#06b6d4" /><stop offset="100%" stop-color="#10b981" /></linearGradient></defs>
+        </svg>
+        <div class="speed-center"><span class="speed-number" id="speed-val">0.0</span><span class="speed-unit">Mbps</span><span class="test-phase" id="test-phase">Cliquez DÉMARRER</span></div>
+      </div>
+      <button type="button" id="start-btn" class="btn-primary">🚀 Démarrer le Test</button>
+      <div class="metrics-grid">
+        <div class="metric-card"><span class="metric-label">Ping</span><strong id="ping-val">-- ms</strong></div>
+        <div class="metric-card"><span class="metric-label">Débit Descendant</span><strong id="down-val">-- Mbps</strong></div>
+        <div class="metric-card"><span class="metric-label">Qualité</span><strong id="qual-val">--</strong></div>
+      </div>
+    </div>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  (function() {
+    const startBtn = document.getElementById('start-btn'), speedVal = document.getElementById('speed-val'), phase = document.getElementById('test-phase'), pingVal = document.getElementById('ping-val'), downVal = document.getElementById('down-val'), qualVal = document.getElementById('qual-val'), arc = document.getElementById('gauge-progress');
+    function setGauge(m) { arc.style.strokeDashoffset = 251.2 - (Math.min(Math.max(m, 0), 300) / 300) * 251.2; }
+    startBtn.addEventListener('click', async () => {
+      startBtn.disabled = true; phase.textContent = 'Mesure du Ping...';
+      try {
+        const p0 = performance.now(); await fetch('https://speed.cloudflare.com/__down?bytes=1000', { cache: 'no-store' });
+        pingVal.textContent = `${Math.round(performance.now() - p0)} ms`;
+        phase.textContent = 'Test Téléchargement...';
+        let total = 0; const t0 = performance.now();
+        for (const bytes of [2000000, 6000000, 10000000]) {
+          const r = await fetch(`https://speed.cloudflare.com/__down?bytes=${bytes}`, { cache: 'no-store' });
+          const b = await r.arrayBuffer(); total += b.byteLength;
+          const m = (total * 8) / (((performance.now() - t0) / 1000) * 1000000);
+          speedVal.textContent = m.toFixed(1); setGauge(m);
+        }
+        const fin = (total * 8) / (((performance.now() - t0) / 1000) * 1000000);
+        speedVal.textContent = fin.toFixed(1); downVal.textContent = `${fin.toFixed(1)} Mbps`;
+        qualVal.textContent = fin >= 100 ? 'Ultra Rapide (4K+)' : fin >= 35 ? 'Rapide (HD/4K)' : 'Basique';
+        phase.textContent = 'Terminé';
+      } catch (e) { phase.textContent = 'Erreur réseau'; }
+      startBtn.disabled = false; startBtn.textContent = '🔄 Relancer';
+    });
+  })();
+</script>
+
+<style>
+  .tool-page { padding: 2rem 1rem 4rem; max-width: 820px; margin: 0 auto; }
+  .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2rem; }
+  .tool-badge { display: inline-block; background: rgba(99, 102, 241, 0.14); color: #818cf8; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.5rem; text-align: center; }
+  .gauge-wrapper { position: relative; max-width: 280px; margin: 0 auto 1.25rem; }
+  .gauge-svg { width: 100%; display: block; }
+  .speed-center { position: absolute; inset: 35% 0 0; display: flex; flex-direction: column; align-items: center; }
+  .speed-number { font-size: 2.6rem; font-weight: 800; line-height: 1; }
+  .speed-unit { font-size: 0.9rem; color: var(--text-muted); }
+  .test-phase { font-size: 0.82rem; color: var(--primary); font-weight: 600; margin-top: 0.25rem; }
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 0.85rem 1.75rem; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 1rem; margin-bottom: 1.5rem; }
+  .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .metric-card { background: var(--bg); border: 1px solid var(--border); padding: 1rem; border-radius: 10px; }
+  .metric-label { display: block; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+</style>

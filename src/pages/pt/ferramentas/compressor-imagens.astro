@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+const alternates = {
+  es: '/herramientas/compresor-imagenes/',
+  en: '/en/tools/image-compressor/',
+  pt: '/pt/ferramentas/compressor-imagens/',
+  fr: '/fr/outils/compresseur-images/',
+  de: '/de/werkzeuge/bilder-komprimieren/'
+};
+
+const breadcrumbs = [
+  { name: 'Início', url: '/pt/' },
+  { name: 'Ferramentas', url: '/pt/ferramentas/' },
+  { name: 'Compressor de Imagens', url: '/pt/ferramentas/compressor-imagens/' }
+];
+---
+
+<BaseLayout
+  title="Compressor de Imagens Online Grátis (JPG, PNG e WebP)"
+  description="Comprima e reduza o tamanho de fotos JPG, PNG e WebP em até 80% sem perder qualidade, direto no seu navegador."
+  lang="pt"
+  alternates={alternates}
+  breadcrumbs={breadcrumbs}
+>
+  <Header slot="header" />
+
+  <main class="tool-page container">
+    <div class="breadcrumb"><a href="/pt/">Início</a><span>›</span><a href="/pt/ferramentas/">Ferramentas</a><span>›</span><span>Compressor de Imagens</span></div>
+    <header class="tool-header">
+      <div class="tool-badge">🖼️ Otimização 100% Privada</div>
+      <h1>Compressor de Imagens Online Grátis</h1>
+      <p class="tool-subtitle">Reduza o peso de suas fotos JPG, PNG e WebP no navegador sem enviar nenhum arquivo para servidores.</p>
+    </header>
+
+    <div class="card">
+      <div class="drop-zone" id="drop-zone">
+        <span class="drop-icon">📁</span>
+        <h3>Arraste suas fotos aqui ou clique para enviar</h3>
+        <p>Compatível com JPG, PNG e WebP</p>
+        <input type="file" id="file-input" accept="image/*" multiple style="display:none;" />
+        <button type="button" class="btn-primary" id="btn-select">Selecionar Imagens</button>
+      </div>
+      <div class="settings-row" id="settings-box" style="display:none;">
+        <div><label for="quality-slider">Qualidade: <strong id="quality-val">80%</strong></label><input type="range" id="quality-slider" min="10" max="95" value="80" /></div>
+        <div><label for="format-select">Formato:</label><select id="format-select"><option value="image/webp">WebP (Menor tamanho)</option><option value="image/jpeg">JPG / JPEG</option><option value="image/png">PNG</option></select></div>
+      </div>
+      <div id="results-list" class="results-list"></div>
+    </div>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script is:inline>
+  (function() {
+    const drop = document.getElementById('drop-zone'), input = document.getElementById('file-input'), btnSel = document.getElementById('btn-select'), settings = document.getElementById('settings-box'), qSlider = document.getElementById('quality-slider'), qVal = document.getElementById('quality-val'), fmtSel = document.getElementById('format-select'), results = document.getElementById('results-list');
+    let filesList = [];
+    btnSel.addEventListener('click', () => input.click());
+    drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('drag'); });
+    drop.addEventListener('dragleave', () => drop.classList.remove('drag'));
+    drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('drag'); handleFiles(e.dataTransfer.files); });
+    input.addEventListener('change', () => handleFiles(input.files));
+    qSlider.addEventListener('input', () => { qVal.textContent = `${qSlider.value}%`; processAll(); });
+    fmtSel.addEventListener('change', processAll);
+    function handleFiles(fl) { filesList = Array.from(fl).filter(f => f.type.startsWith('image/')); if (filesList.length) { settings.style.display = 'grid'; processAll(); } }
+    function fmtBytes(b) { return b < 1024 ? b + ' B' : b < 1048576 ? (b / 1024).toFixed(1) + ' KB' : (b / 1048576).toFixed(2) + ' MB'; }
+    function processAll() {
+      results.innerHTML = ''; const q = Number(qSlider.value) / 100, mime = fmtSel.value, ext = mime === 'image/webp' ? 'webp' : mime === 'image/png' ? 'png' : 'jpg';
+      filesList.forEach(file => {
+        const img = new Image(), url = URL.createObjectURL(file);
+        img.onload = () => {
+          const c = document.createElement('canvas'); c.width = img.width; c.height = img.height; c.getContext('2d').drawImage(img, 0, 0);
+          c.toBlob(blob => {
+            if (!blob) return; const saved = Math.max(0, Math.round((1 - blob.size / file.size) * 100));
+            const row = document.createElement('div'); row.className = 'res-item';
+            row.innerHTML = `<div><strong>${file.name}</strong><div class="res-meta">${fmtBytes(file.size)} → <span class="green">${fmtBytes(blob.size)}</span> (-${saved}%)</div></div><a href="${URL.createObjectURL(blob)}" download="comprimido-${file.name.replace(/\.[^.]+$/, '')}.${ext}" class="btn-dl">⬇ Baixar</a>`;
+            results.appendChild(row); URL.revokeObjectURL(url);
+          }, mime, q);
+        };
+        img.src = url;
+      });
+    }
+  })();
+</script>
+
+<style>
+  .tool-page { padding: 2rem 1rem 4rem; max-width: 860px; margin: 0 auto; }
+  .breadcrumb { display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .tool-header { text-align: center; margin-bottom: 2rem; }
+  .tool-badge { display: inline-block; background: rgba(16, 185, 129, 0.14); color: #34d399; padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.5rem; }
+  .drop-zone { border: 2px dashed var(--border); border-radius: 14px; padding: 2.25rem 1rem; text-align: center; background: var(--bg); }
+  .drop-icon { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+  .btn-primary { background: var(--primary); color: #fff; border: none; padding: 0.75rem 1.4rem; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 0.75rem; }
+  .settings-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+  .settings-row select, .settings-row input { width: 100%; margin-top: 0.4rem; }
+  .settings-row select { padding: 0.55rem; border-radius: 8px; background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+  .results-list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.25rem; }
+  :global(.res-item) { display: flex; justify-content: space-between; align-items: center; gap: 1rem; background: var(--bg); border: 1px solid var(--border); padding: 0.9rem 1.1rem; border-radius: 10px; flex-wrap: wrap; }
+  :global(.res-meta) { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem; }
+  :global(.green) { color: #10b981; font-weight: 700; }
+  :global(.btn-dl) { background: #10b981; color: #fff; padding: 0.45rem 0.9rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.88rem; }
+</style>
